@@ -205,8 +205,10 @@ Smallest first. Each ships with the test that fails before it and passes after.
    gate's. Test: the self-test asserts session mode prints nothing when nothing is owed and
    writes no file. *Built 2026-11-03.* The gate's `--session` still answers, by calling the
    same `session_lines()`, so there is one reader whichever entry point runs. When youtube
-   cannot be read the session line says so instead of printing nothing, so silence always
-   means clean.
+   cannot be read the session line says so instead of printing nothing. One silence is still
+   not clean: the hook line in settings.json drops the tool's own errors (`2>/dev/null || true`),
+   so a tool that fails to start prints nothing; `make intake` or the self-test is how that
+   is caught.
 5. **Step 0 and prioritize-design** read the list (prose). Check: run step 0 once against
    youtube main and see it name one of today's 19. *Not done 2026-11-03:* the two skill files
    were not in this change's files. The list itself was run against youtube main 1f1ec57 and
