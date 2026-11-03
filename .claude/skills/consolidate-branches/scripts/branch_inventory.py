@@ -627,25 +627,29 @@ def self_test():
                            cwd=repo, env=env, capture_output=True)
 
         g("checkout", "-q", "main")
+        before = git(repo, "rev-parse", "HEAD")
         (repo / "pic.png").write_bytes(b"held text")
         g("add", "pic.png")
         dated("note.txt", "a note\n", "note with a picture", 950_000_000)
         dated("note.txt", "a note\nmore\n", "more on the note", 950_000_100)
         g("push", "-q", "origin", "main")
         g("branch", "old-history")                                   # left on the pre-rewrite commits
-        g("reset", "-q", "--hard", "HEAD~2")                         # the held-text picture gone
+        g("reset", "-q", "--hard", before)                           # the held-text picture gone
         dated("note.txt", "a note\n", "note with a picture", 950_000_000)
         dated("note.txt", "a note\nmore\n", "more on the note", 950_000_100)
+        dated("third.txt", "a third\n", "a third note", 950_000_200)
         if git(repo, "ls-tree", "--name-only", "HEAD", "pic.png"):
             bad.append("the rewrite fixture still holds pic.png on main")
         g("push", "-q", "-f", "origin", "main")
         g("fetch", "-q", "origin")
-        g("checkout", "-q", "-b", "picked", "main")                  # a cherry-pick shares subject and
-        g("cherry-pick", "-q", "old-history~1")                      # date with its twin, not a parent
-        (repo / "extra.txt").write_text("x\n")
-        g("add", "extra.txt")
-        g("commit", "-q", "-m", "extra on picked")
+        g("checkout", "-q", "-b", "picked", before)                  # a cherry-pick shares subject and
+        (repo / "extra.txt").write_text("x\n")                      # date with its twin, not a parent:
+        g("add", "extra.txt")                                        # without the parent check the
+        g("commit", "-q", "-m", "extra on picked")                   # guard would name extra.txt
+        g("cherry-pick", "main")                                     # (cherry-pick takes no -q)
         g("checkout", "-q", "main")
+        if git(repo, "rev-list", "--count", "origin/main..picked") != "2":
+            bad.append("the cherry-pick fixture did not build (its branch is not two commits off main)")
         if stripped_files(repo, "old-history", "origin/main") != ["pic.png"]:
             bad.append(f"stripped_files did not name pic.png on the old history: "
                        f"{stripped_files(repo, 'old-history', 'origin/main')}")
