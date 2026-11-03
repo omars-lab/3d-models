@@ -426,9 +426,46 @@ def push_dir(repo):
     raise SystemExit(f"snapshot: {repo} is bare and has no worktree to push from; add one, or pass --no-push")
 
 
+def stripped_files(repo, tip, base):
+    """Files a tip on a rewritten history still carries that the rewrite removed from the default.
+
+    `git filter-repo` keeps every subject and author date, so a commit off the default whose twin
+    (same subject, same author date) sits on the default, with the two parents twins as well, is
+    the pre-rewrite copy of that commit. Whatever the tip side adds against its twin is what the
+    rewrite stripped (hifth, 2026-10-08: two pictures of held text), and pushing the tip would put
+    those files back on GitHub. The newest such pair decides. A cherry-pick shares a subject and
+    date with its twin but not a parent, so it is not one; an ordinary branch has no twin at all
+    and gets an empty list.
+    """
+    def parsed(rev_range):
+        for line in git(repo, "log", "--format=%H%x09%P%x09%at%x09%s", rev_range).splitlines():
+            sha, parents, at, subj = line.split("\t", 3)
+            yield sha, parents.split(), (at, subj)
+
+    twins, parent_of = {}, {}
+    for sha, parents, key in parsed(base):
+        twins.setdefault(key, sha)
+        parent_of[sha] = parents[0] if parents else None
+    keys = {}
+    for sha, parents, key in parsed(f"{base}..{tip}"):
+        keys[sha] = (parents[0] if parents else None, key)
+    for sha, (parent, key) in keys.items():
+        twin = twins.get(key)
+        if not twin:
+            continue
+        parent_key = keys[parent][1] if parent in keys else None
+        parent_twin = twins.get(parent_key) if parent_key else parent
+        if parent_twin != parent_of.get(twin):
+            continue
+        return [l.split("\t", 1)[1] for l in git(repo, "diff", "--name-status", twin, sha).splitlines()
+                if l.startswith("A")]
+    return []
+
+
 def snapshot(repo, refs, date, push=True):
-    """Write refs/snapshots/<date>/<branch> for each ref; refuse to move an existing one."""
-    repo, written = Path(repo).resolve(), []
+    """Write refs/snapshots/<date>/<branch> for each ref; refuse to move an existing one, and
+    refuse to push a tip that would put back files a history rewrite removed (stripped_files)."""
+    repo, written, tips = Path(repo).resolve(), [], {}
     for ref in refs:
         given, _, ref = ref.rpartition("=")                     # name=ref names a detached head
         sha = git(repo, "rev-parse", "-q", "--verify", f"{ref}^{{commit}}")
@@ -448,8 +485,19 @@ def snapshot(repo, refs, date, push=True):
         if target in written:                                   # a branch and its remote twin at one tip
             continue
         written.append(target)
+        tips[target] = sha
         print(f"{target} {sha}")
     if push and written:
+        base = default_ref(repo)
+        stuck = {t: stripped_files(repo, sha, base) for t, sha in tips.items()}
+        stuck = {t: files for t, files in stuck.items() if files}
+        if stuck:
+            lines = "\n".join(f"  {t}: {', '.join(files)}" for t, files in stuck.items())
+            raise SystemExit(
+                f"snapshot: nothing pushed. These tips sit on a history that was rewritten under them "
+                f"and still carry files the rewrite removed from {base}:\n{lines}\n"
+                "  Pushing them would put those files back on GitHub. The refs are written locally; "
+                "prove the tips dead by tree (rules.md) and snapshot with --no-push only.")
         code, _, err = run(push_dir(repo), "git", "push", "-q", "origin", *[f"{t}:{t}" for t in written])
         print(f"pushed {len(written)} snapshot refs to origin" if code == 0 else f"push failed: {err}")
         return code
@@ -569,6 +617,51 @@ def self_test():
         if snapshot(bare, ["main"], "2000-01-03") != 0 \
                 or not git(origin, "rev-parse", "-q", "--verify", "refs/snapshots/2000-01-03/main"):
             bad.append("a bare repo's snapshot did not push through its worktree")
+
+        def dated(path, text, msg, at):                              # hifth's shape: main rewritten under a
+            env = dict(os.environ, GIT_AUTHOR_DATE=f"@{at} +0000", GIT_COMMITTER_DATE=f"@{at} +0000")
+            (repo / path).write_text(text)                           # branch, same subjects and dates,
+            g("add", path)
+            subprocess.run(["git", "-c", "user.name=t", "-c", "user.email=t@t", "-c", "commit.gpgsign=false",
+                            "-c", "core.hooksPath=/dev/null", "commit", "-q", "-m", msg],
+                           cwd=repo, env=env, capture_output=True)
+
+        g("checkout", "-q", "main")
+        (repo / "pic.png").write_bytes(b"held text")
+        g("add", "pic.png")
+        dated("note.txt", "a note\n", "note with a picture", 950_000_000)
+        dated("note.txt", "a note\nmore\n", "more on the note", 950_000_100)
+        g("push", "-q", "origin", "main")
+        g("branch", "old-history")                                   # left on the pre-rewrite commits
+        g("reset", "-q", "--hard", "HEAD~2")                         # the held-text picture gone
+        dated("note.txt", "a note\n", "note with a picture", 950_000_000)
+        dated("note.txt", "a note\nmore\n", "more on the note", 950_000_100)
+        if git(repo, "ls-tree", "--name-only", "HEAD", "pic.png"):
+            bad.append("the rewrite fixture still holds pic.png on main")
+        g("push", "-q", "-f", "origin", "main")
+        g("fetch", "-q", "origin")
+        g("checkout", "-q", "-b", "picked", "main")                  # a cherry-pick shares subject and
+        g("cherry-pick", "-q", "old-history~1")                      # date with its twin, not a parent
+        (repo / "extra.txt").write_text("x\n")
+        g("add", "extra.txt")
+        g("commit", "-q", "-m", "extra on picked")
+        g("checkout", "-q", "main")
+        if stripped_files(repo, "old-history", "origin/main") != ["pic.png"]:
+            bad.append(f"stripped_files did not name pic.png on the old history: "
+                       f"{stripped_files(repo, 'old-history', 'origin/main')}")
+        if stripped_files(repo, "picked", "origin/main"):
+            bad.append("stripped_files took a cherry-pick for a rewritten twin")
+        try:
+            snapshot(repo, ["old-history"], "2000-01-04")
+            bad.append("snapshot pushed a tip that carries a removed file")
+        except SystemExit:
+            pass
+        if git(origin, "rev-parse", "-q", "--verify", "refs/snapshots/2000-01-04/old-history"):
+            bad.append("the removed file's tip reached origin")
+        if git(repo, "rev-parse", "refs/snapshots/2000-01-04/old-history") != git(repo, "rev-parse", "old-history"):
+            bad.append("the refused snapshot was not written locally")
+        if snapshot(repo, ["old-history"], "2000-01-05", push=False) != 0:
+            bad.append("--no-push did not take the old-history tip")
 
         g("checkout", "-q", "unique")
         if survives(repo, repo / "d.txt", "main~0", ["unique"]) != 0:

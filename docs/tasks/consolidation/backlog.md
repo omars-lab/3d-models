@@ -47,12 +47,7 @@ PRs, 0 stashes. So there is no conflict to work by hand in this repo today; when
 
 Left by the 2026-10-27 pass:
 
-1. **The snapshot step should refuse to push a removed picture.** `branch_inventory.py snapshot`
-   pushes by default, and on hifth that would put back the two held-text pictures its 2026-10-08
-   history rewrite removed. Today only a line in `rules.md` stops it. The fix: before pushing,
-   refuse any tip whose history holds a file `origin/<default>` no longer has, and add a
-   self-test case for it. Found by the 2026-10-27 pass.
-2. **bikar's pre-push hook runs the full test suite even for a tag on a commit main already
+1. **bikar's pre-push hook runs the full test suite even for a tag on a commit main already
    passed.** Omar made the call on 2026-11-03 ("do all the things to do"). The skip is in bikar
    PR #365, narrow and fail-closed like the deletion skip beside it: only a push made entirely of
    tags whose commits origin/main already holds skips; a tag off main, a tag with a branch, or no
