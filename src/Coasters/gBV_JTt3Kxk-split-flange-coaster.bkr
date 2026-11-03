@@ -17,10 +17,32 @@
 # `--check` on the whole file gates each half and each piece color on its own,
 # the way `--piece` does. Print each --piece on its own.
 #
-# No alignment pegs: at the cut, the strap between two undercuts is only the
-# strap less two flanges wide, too narrow for a 2 mm peg and its socket wall at
-# 1.25 times. The halves line up on their outline instead, and the pieces between
-# them hold them in step.
+# Alignment pegs sit at strap junctions only. Along a strap, the rib between two
+# undercuts is the strap less two flanges wide, too narrow for a peg and its
+# socket wall at 1.25 times; where straps meet there is room, and the split
+# kernel measures each site from the undercut, so it puts them there. split-02
+# (3d-models) printed with no pegs, and its halves came apart in the hand. The
+# widest junction at size 112.5 has 1.920 mm of room (measured 2026-10-22, the
+# same at piece gap 0.2 and 0.25), and a peg needs half its diameter plus half
+# its gap plus 0.9 mm of wall: a 2 mm peg needs 1.925 at gap 0.05 and does not
+# fit, and a 1.7 mm peg fits up to gap 0.3. Smaller coasters have less: the
+# widest junction is 1.615 mm at size 100, 1.357 at 90 and 1.101 at 80, too
+# little for any useful peg. So `stud` defaults to 0, no pegs, as `id` does,
+# and the plate that prints it at 112.5 sets it (split-03: 1.7).
+#
+# Pin rings and bosses (2026-10-23, 3d-models split-06: "more pins around central
+# star", "too many pins around border"). A ring puts its pegs evenly round a
+# circle, the first at its turn, each moved to the roomiest spot within 1.5 mm;
+# a peg with no room there is refused by name. With `stud_boss 1` the undercut
+# is filled in a disc round each peg, so a peg needs room only from the hole at
+# the face: round the middle star, where the undercuts leave no junction room, a
+# ring of ten 1.2 mm pegs then fits. The rings and the boss are all 0 by default,
+# which builds exactly as before.
+#
+# `room` shortens each piece by that much, so the halves close on each other and
+# not on a piece. split-02's halves, with pieces of the full height, closed with
+# a space between them; pieces as tall as the gap between the halves' floors
+# may be why, which a print with `room` above 0 tests.
 #
 # The defaults are 1.25 times the minimal coaster (sheets-04d, 3d-models): size
 # 112.5, strap 3.75, height 4.4. The strap follows the size, so `size` alone
@@ -39,6 +61,58 @@ param half = $height / 2   # mm, where the coaster is cut: half its height
 param flange = 0.8 range 0.8..1.2   # mm, how far the undercut reaches into the strap on each side; the piece's flange is as wide less the gap
 param gap = 0.25 range 0..0.5   # mm per face between a piece and its pocket; loose enough to drop in (CAL-LSE-01)
 param spacing = 2 range 1..10   # mm, the least gap between two pieces of a ring on the bed (`pack zipper spacing`)
+param room = 0 range 0..0.6   # mm, how much shorter than the closed coaster each piece is, so the halves meet each other; 0 is the full height split-02 printed
+param halves = 0 range 0..1 step 1   # 1 prints each loose piece as two halves cut at its middle, each on one of its faces, so both faces print smooth on the bed (3d-models cut-pieces-joins design, D-120); the pins or the slide below hold the two halves together
+param slope = 0 range 0..0.4 step 0.1   # mm, stairs under each piece's flange, each this much out from the boss per this much up, so the step out prints as a 45° slope at that layer height and not a ledge over air; 0 is the ledge split-07 printed, whose stars' faces curved (3d-models split-10, 2026-10-27). A piece with a slide is refused it
+param pin = 0 range 0..2   # mm, with halves: the diameter of the pins that join each piece's two halves, 0 for none; each pin stands on the lower half and goes into a hole in the upper (3d-models cut-pieces-joins design, step 2)
+param pin_gap = 0.25 range 0..0.5 step 0.05   # mm, how much wider a pin's hole is than the pin, across; 0.25 is split-06's stud gap, the same pin, nozzle and filament
+param pin_wall = 0.9 range 0.4..1.5 step 0.05   # mm, the band kept round each pin's hole; 0.9 is two lines
+param pin_spacing = 0 range 0..20   # mm, the least distance between two pins on one piece; 0 is the least that fits, the pin, its gap and one wall
+param pins_middle = 0 range 0..7 step 1   # how many pins join each half of the middle piece (orbit 0); three or more stand one in the middle and the rest evenly round it near the edge, so 5 is a middle and four round, 7 a middle and six
+param pins_kite = 0 range 0..6 step 1   # the same for each kite (orbit 1); a kite has room for one at 1.2 mm
+param pins_hex = 0 range 0..6 step 1   # the same for each hexagon (orbit 2)
+param pins_star = 0 range 0..6 step 1   # the same for each star (orbit 3); with pins_star_ring 1 three fit on star-1's star at 1.2 mm, close together, or wider apart at 1.0 or 0.8 mm
+param pins_outer = 0 range 0..6 step 1   # the same for each outer piece (orbit 4)
+param pins_star_ring = 0 range 0..1 step 1   # 1 stands each star's pins evenly on one circle round its middle with none in it, so 3 make a triangle centred on the star (3d-models star-1)
+param slide = 0 range 0..6   # mm, with halves: the width at its root of a dovetail rail on each lower half's cut face, which slides into a slot in the upper half, 0 for none; the rail runs across the face, the slot edge to edge (3d-models cut-pieces-joins design, step 3; sld-1's rail is 4)
+param slide_gap = 0.01 range -0.1..0.3 step 0.01   # mm per side between rail and slot; sld-1's 0.10, 0.15 and 0.20 all slid and held (D-120), but on this coaster's hexagons split-10 found 0.15 to 0.05 all wiggled, and hexfit-1 tried 0.15 down to -0.04: Omar, 2026-10-29, "4 might have been the best, 1 too loose, 6 too tight", so 0.01 (4 dots) over 0.15 (1) and -0.02 (6), tried on the hexagon with a 4 mm rail 0.8 tall and the slot one layer deeper (3d-models hexfit-1). Under 0 the slot is that much narrower than the rail, a press fit, down to -0.1 (CAL-FIT-01's press step)
+param slide_height = 0.8 range 0.4..1.2 step 0.2   # mm, the rail's height in whole 0.2 mm layers; the slot is slide_slot_extra layers deeper, and 0.5 mm of band must be left under it where it runs out past the face
+param slide_slot_extra = 1 range 0..1 step 1   # whole 0.2 mm layers the slot runs on past the rail's top: 1 (sld-1's) leaves air over the rail so the cut faces close flat, 0 makes the slot exactly as deep as the rail
+param slide_middle = 0 range 0..1 step 1   # 1 joins each half of the middle piece (orbit 0) with the slide; a face that turns inward is refused
+param slide_kite = 0 range 0..1 step 1   # the same for each kite (orbit 1)
+param slide_hex = 0 range 0..1 step 1   # the same for each hexagon (orbit 2)
+param slide_star = 0 range 0..1 step 1   # the same for each star (orbit 3)
+param slide_outer = 0 range 0..1 step 1   # the same for each outer piece (orbit 4)
+param dots_middle = 0 range 0..8 step 1   # with halves: how many dots are sunk into each half's cut face of the middle piece (orbit 0), hidden once the halves close, so an experiment plate's versions of a piece can be told apart off the bed (3d-models split-10, 2026-10-27); 0 for none, and past 6 in two rows
+param dots_kite = 0 range 0..8 step 1   # the same for each kite (orbit 1)
+param dots_hex = 0 range 0..8 step 1   # the same for each hexagon (orbit 2)
+param dots_star = 0 range 0..8 step 1   # the same for each star (orbit 3)
+param dots_outer = 0 range 0..8 step 1   # the same for each outer piece (orbit 4)
+param dots_bottom = 0 range 0..1 step 1   # 1 puts every piece's dots into its lower half's bed face (the face it prints on) instead of both cut faces, so they leave the cut face to the slide (3d-models hex fit plate, 2026-10-28); 0 keeps them on the cut faces
+param stud = 0 range 0..1.9   # mm, the alignment peg's diameter, 0 for none; 1.7 at size 112.5, where a 2 mm peg has no junction with room for its socket, and none below that (see the note above). 1.9 fits at 112.5 only up to gap 0.05
+param stud_gap = 0.05 range -0.1..0.5 step 0.05   # mm, how much wider a socket is than its peg, across; 0.05 is the snug fit the split kernel takes when none is written (CAL-FIT-01). SPL-1 printed every rung to 0.15 too tight to close by hand, so the range runs on to 0.5
+param stud_spacing = 25 range 3..60   # mm, the least distance between two pegs; the kernel puts them only at strap junctions here, where the undercuts leave room for a socket
+param stud_wall = 0.9 range 0.4..1.5 step 0.05   # mm, the wall kept round each socket on the cut face; it sets the disc round each peg, so how far it bites each piece's flange. 0.9 is two lines, what split-06 printed; 0.4, one line, is the least the kernel takes
+param stud_ring1 = 0 range 0..60   # mm, the radius of a ring of pegs round the centre; 0 for none. Any ring turns off the automatic pick, so every peg is one a ring names (see the note on pin rings above)
+param stud_ring1_n = 0 range 0..20 step 1   # how many pegs stand evenly round ring 1
+param stud_ring1_turn = 0 range -180..180   # degrees counterclockwise from +x where ring 1's first peg stands
+param stud_ring2 = 0 range 0..60   # mm, a second ring of pegs, as ring 1
+param stud_ring2_n = 0 range 0..20 step 1
+param stud_ring2_turn = 0 range -180..180
+param stud_ring3 = 0 range 0..60   # mm, a third ring of pegs, as ring 1
+param stud_ring3_n = 0 range 0..20 step 1
+param stud_ring3_turn = 0 range -180..180
+param stud_ring4 = 0 range 0..60   # mm, a fourth ring of pegs, as ring 1
+param stud_ring4_n = 0 range 0..20 step 1
+param stud_ring4_turn = 0 range -180..180
+param stud_ring5 = 0 range 0..60   # mm, a fifth ring of pegs, as ring 1
+param stud_ring5_n = 0 range 0..20 step 1
+param stud_ring5_turn = 0 range -180..180
+param stud_boss = 0 range 0..1 step 1   # 1 fills the undercut in a disc round each peg in both halves, and notches each piece's flange to match, so a peg needs room only from the hole at the face, not from the undercut
+param wedge = 360 range 36..360   # degrees, print only the faces whose centres lie in this angle, a test slice of both halves with whole pegs and sockets; 360 is the whole coaster. The range starts at 36, two face centres' worth, as on the lip coaster
+param wedge_from = 9 range 0..359   # degrees counterclockwise from +x where the wedge starts; every face centre sits on a multiple of 18 degrees, so 9 puts the edges halfway between them
+param wedge_center = 0 range 0..1   # 1 also keeps the middle piece and its opening in the wedge; the middle sits on the coaster's centre, so no angle holds it otherwise (3d-models split-04, a fit test of every piece kind)
+param id = 0 range 0..9 step 1   # the prototype's id, 0 for none, cut into the lower half's bottom so two closed coasters can be told apart (3d-models feedback page 2026-10-06: "every prototype should have an id"); 1 to 9 but 4, which is refused: a 4's hole closes up under a 2.4 mm cap, and this bottom has room only at 2 mm; measured at size 112.5, while 80, 90 and 100 leave no room for any id, so none by default, so the plate that prints it sets it
 param unit = ($size - $strap) / 2.0001   # mm per GeoGebra unit — the art spans K units; the strap adds strap/2 each side
 
 blueprint gBV_JTt3Kxk_scaffold
@@ -391,9 +465,13 @@ coaster Coaster
   inscribe gBV_JTt3Kxk
   base $height
   strap width $strap
-  loose where orbit == 0 clearance $gap pack zipper spacing $spacing
-  loose where orbit == 1 clearance $gap pack zipper spacing $spacing
-  loose where orbit == 2 clearance $gap pack zipper spacing $spacing
-  loose where orbit == 3 clearance $gap pack zipper spacing $spacing
-  loose where orbit == 4 clearance $gap pack zipper spacing $spacing
-  split at $half hold flange $flange
+  loose where orbit == 0 clearance $gap pack zipper spacing $spacing mark dots $dots_middle bottom $dots_bottom pins $pins_middle slide $slide_middle
+  loose where orbit == 1 clearance $gap pack zipper spacing $spacing mark dots $dots_kite bottom $dots_bottom pins $pins_kite slide $slide_kite
+  loose where orbit == 2 clearance $gap pack zipper spacing $spacing mark dots $dots_hex bottom $dots_bottom pins $pins_hex slide $slide_hex
+  loose where orbit == 3 clearance $gap pack zipper spacing $spacing mark dots $dots_star bottom $dots_bottom pins $pins_star ring $pins_star_ring slide $slide_star
+  loose where orbit == 4 clearance $gap pack zipper spacing $spacing mark dots $dots_outer bottom $dots_bottom pins $pins_outer slide $slide_outer
+  split at $half studs $stud gap $stud_gap spacing $stud_spacing wall $stud_wall ring $stud_ring1 $stud_ring1_n turn $stud_ring1_turn ring $stud_ring2 $stud_ring2_n turn $stud_ring2_turn ring $stud_ring3 $stud_ring3_n turn $stud_ring3_turn ring $stud_ring4 $stud_ring4_n turn $stud_ring4_turn ring $stud_ring5 $stud_ring5_n turn $stud_ring5_turn boss $stud_boss hold flange $flange room $room halves $halves slope $slope pin $pin gap $pin_gap wall $pin_wall spacing $pin_spacing slide $slide gap $slide_gap height $slide_height extra $slide_slot_extra wedge $wedge from $wedge_from center $wedge_center
+  # A 2 mm cap, not the 2.5 default: the undercut starts 0.6 mm up, level with the
+  # letters' floor, so the id must sit under the rib the undercuts leave, and at
+  # 2.5 mm no spot along a strap or at a junction has room.
+  mark $id on bottom cap 2

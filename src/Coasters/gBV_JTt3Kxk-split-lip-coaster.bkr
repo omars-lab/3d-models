@@ -44,6 +44,11 @@ param lip = 0.8 range 0.8..1.3   # mm, how far the lip reaches over a piece on e
 param gap = 0.25 range 0..0.5   # mm per face between a piece and its pocket; loose enough to drop in (CAL-LSE-01)
 param spacing = 2 range 1..10   # mm, the least gap between two pieces of a ring on the bed (`pack zipper spacing`)
 param stud = 2 range 1.6..3   # mm, the alignment peg's diameter
+param stud_gap = 0.05 range -0.1..0.5 step 0.05   # mm, how much wider a socket is than its peg, across; 0.05 is the snug fit the split kernel takes when none is written (CAL-FIT-01), below 0 a press fit. SPL-1 printed every rung to 0.15 too tight to close by hand, so the range runs on to 0.5 for SPL-2's answer
+param stud_spacing = 25 range 3..60   # mm, the least distance between two pegs; 25 gives the whole coaster ten. The kernel refuses pegs so close that less than a socket wall stands between two sockets
+param wedge = 360 range 36..360   # degrees, print only the faces whose centres lie in this angle, a test slice of both halves with whole pegs and sockets; 360 is the whole coaster, and 72 is the stud-layout plate's slice. An 18-degree slice from 9 keeps only the faces at 18 degrees, which touch at a corner, and the split refuses that; the range starts at 36, two face centres' worth (18 and 36), which builds
+param wedge_from = 9 range 0..359   # degrees counterclockwise from +x where the wedge starts; every face centre here sits on a multiple of 18 degrees, so 9 puts the edges halfway between them, and the kernel refuses an edge through a face's centre
+param id = 0 range 0..9 step 1   # the prototype's id, 0 for none, cut into the lower half's bottom so two closed coasters can be told apart (3d-models feedback page 2026-10-06: "every prototype should have an id"); at size 112.5 every id 1 to 9 fits, and of 10 to 99 only 11, 12, 14, 15, 17, 71 and 77 do; size 80 leaves no room, so none by default, so the plate that prints it sets it
 param unit = ($size - $strap) / 2.0001   # mm per GeoGebra unit — the art spans K units; the strap adds strap/2 each side
 
 blueprint gBV_JTt3Kxk_scaffold
@@ -398,4 +403,5 @@ coaster Coaster
   loose where orbit == 1 clearance $gap pack zipper spacing $spacing
   loose where orbit == 2 clearance $gap pack zipper spacing $spacing
   loose where orbit == 4 clearance $gap pack zipper spacing $spacing
-  split at $half studs $stud spacing 25 hold lip $lip
+  split at $half studs $stud gap $stud_gap spacing $stud_spacing hold lip $lip wedge $wedge from $wedge_from
+  mark $id on bottom
