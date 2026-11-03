@@ -1,0 +1,55 @@
+# star-3 — the flat star (no slope) with star-2's three 1.2 mm pins on a triangle
+#
+# star-2 printed the sloped star with three pins on a triangle round its middle, at 1.2, 1.0 and
+# 0.8 mm. Omar, 2026-11-02, on star-2's hub page: "the right two's pins broke and turned", and
+# "left most was best", the 1.2 mm one. So three 1.2 mm pins on a triangle are now the star's
+# default in bikar (bikar's change for star-3). star-2 left the flat star out for room on its
+# faces; this plate gives it the same pins.
+#
+# One thing changes from split-10's STAR-STOCK: its one middle pin becomes the triangle
+# (`pins_star 3, pins_star_ring 1, pin_wall 0.9`, as star-2's TRI-12). Everything else is
+# STAR-STOCK's: halves 1, no slope, no supports, the 0.1 mm piece gap. So this plate asks only
+# whether the triangle holds the flat star's halves, not which star is best.
+#
+# Left off, and why:
+#   - supports or a slope: split-10 printed those beside STAR-STOCK and Omar has not judged them
+#     yet; changing them here too would mix two questions.
+#   - the 1.0 mm triangle: not named in star-2's answers, so it stays untried, not out.
+#
+#   version    pin     band round each hole   tell
+#   FLAT-TRI   1.2 mm  0.9 mm                 copy 1: 1 dot on the lower half's bottom
+#                                             copy 2: no dots
+#
+# The flat star has room for one dot only, on the cut face or on the bottom (bikar refuses a row
+# of two on the cut face, 0.07 mm short, measured 2026-11-03). star-2's TRI-12 copies already
+# carry one dot on the cut face and one on the bottom, so here copy 1 has the bottom dot and
+# copy 2 none. Tell these apart from star-2's by the step under each half: flat here, a 45° ramp
+# on star-2.
+#
+# No color here: the send picks it.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/star-3.yaml --plate-type textured_plate --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: SR3
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 3, pins_star_ring: 1, pin_wall: 0.9, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36, dots_star: 1, dots_bottom: 1 }
+    count:  1
+    label:  FLAT-TRI-1
+    no_id:  "1 dot on the lower half's bottom, the face on the table; the only other star here has none. bikar: no carved id fits on a star half (a one-letter id needs 3.1 x 3.5 mm of flat face with 0.8 mm to every edge)"
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 3, pins_star_ring: 1, pin_wall: 0.9, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36, dots_star: 0 }
+    count:  1
+    label:  FLAT-TRI-2
+    no_id:  "no dots: the only other star here has one dot on its bottom. bikar: no carved id fits on a star half (a one-letter id needs 3.1 x 3.5 mm of flat face with 0.8 mm to every edge)"
+    object_settings: { infill_wall_overlap: "55%" }
