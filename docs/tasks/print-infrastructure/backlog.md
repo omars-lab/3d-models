@@ -24,18 +24,19 @@ plate, then anything you can't see before sending, then config ergonomics.
    per print, and nothing more. Packing by hand has come up once (sheets-04d, rows), so per
    the [skill precedent](../../design/process/dsl-extension-skill-evaluation.md) a second plate
    that wants packing comes before the skill. Session task board, 2026-10-03.
-3. **Orders phase 4: the hub's Orders tab and the Lab's "Add to order" button.** The last phase
-   of the [order-driven Lab design](../../design/coaster/order-driven-lab-design.md#11-the-build-in-order-of-value-for-the-work)
-   §11: Plan, Price (with its Scenarios view) and Inventory pages in a hub Orders tab, and one
-   "Add to order" button in bikar's Coaster Lab. Phases 1 to 3 already work from the terminal
-   (`bambu order plan`, `bambu shelf show`, `bambu order price`). Checked 2026-11-02: neither
-   3d-model-hub nor bikar main has the pages or the button yet. The two calls it waited on look
-   answered in the decisions log on 2026-10-08: the pages live in the hub (D-112), and the price
-   is cost plus a markup checked against a market band (D-113); the third, no order files in this
-   repo, is D-101. The design's §10 has no Decided line for the first two yet, so add those when
-   this is taken. Done when a real-browser run shows "Add to order" opening the hub's Plan page
-   with the design filled in, and its numbers equal phase 1's JSON. From the session task board,
-   2026-11-02.
+3. **Orders phase 4 is the storefront repo's; what stays here is two Decided lines.** The
+   hub's Orders tab (Plan, Price with its Scenarios view, Inventory) and the Lab's "Add to
+   order" button, the last phase of the
+   [order-driven Lab design](../../design/coaster/order-driven-lab-design.md#11-the-build-in-order-of-value-for-the-work)
+   §11, are built from the storefront repo, tracked in its open list
+   (`~/Workspace/git-naqshcoffee/coffee-house-storefront/docs/tasks/open.md`), by the session that owns every storefront item (handed over 2026-11-03,
+   after the end-of-work hook had this session pick it; Omar: it is the store side's). Phases
+   1 to 3 already work from the terminal (`bambu order plan`, `bambu shelf show`,
+   `bambu order price`). What stays here: when Omar confirms the two calls the design's §10
+   still lists open, record them as Decided lines, the pages live in the hub (D-112) and the
+   price is cost plus a markup checked against a market band (D-113); the decisions log has
+   both since 2026-10-08 but §10 does not. The third, no order files in this repo, is D-101.
+   Do not fill in an answer for him.
 
 ## Waiting on Omar
 

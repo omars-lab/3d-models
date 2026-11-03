@@ -40,10 +40,16 @@ MESSAGE = (
     "[next-for-customers] A stretch of work just finished. Before you hand back, "
     "call the advisor and ask it: what is the next most important thing to do for "
     "our customers and users (the people who buy and use the coasters, the store, "
-    "the gallery and the Lab)? If no advisor tool is attached, answer it yourself "
-    "from the backlogs in docs/tasks/. End your closing message with a short "
-    "\"Next for customers\" section: the one pick, why it matters to them, and "
-    "whether it is already on a backlog. Name it; do not start it in this turn."
+    "the gallery and the Lab), among the work this session owns? Which work that "
+    "is: the routing rule in .claude/loop-prompts/README.md, under \"Which session "
+    "runs which loop\". If no advisor tool is attached, or it does not answer, "
+    "answer it yourself from the backlogs in docs/tasks/ that the rule gives this "
+    "session. End your closing message with a short \"Next for customers\" "
+    "section: the one pick, why it matters to them, and whether it is already on "
+    "a backlog. Name it; do not start it in this turn. If the most important thing "
+    "belongs to another session or repo by that rule (anything a shopper or the "
+    "store touches is the storefront repo's), say so and point at its backlog "
+    "instead of picking it."
 )
 
 

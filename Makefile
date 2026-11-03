@@ -28,7 +28,7 @@ openscad := $(shell \
 # conda env did — and the error said "pip install pillow", which was the wrong
 # advice. Point this at the interpreter that has the deps instead:
 #   make deploy PYTHON=/path/to/python3
-PYTHON ?= python3
+PYTHON ?= $(shell for p in python3 $(HOME)/miniconda3/envs/py3/bin/python3 /usr/local/bin/miniconda3/envs/py3/bin/python3; do "$$p" -c 'import PIL' >/dev/null 2>&1 && { echo "$$p"; exit 0; }; done; echo python3)
 
 # `?=`, not `:=`, so the environment can point this somewhere else without
 # putting it on every command line.
@@ -1030,6 +1030,11 @@ validate-plate-checks: pillow-check
 # validate-coaster-pictures and validate-plate-checks on a machine where only
 # web-images carried this guard. Targets stay at the end of the file so the
 # use-case map's line pins above do not move.
+# PYTHON's default (line 31) is the first of python3 and the two usual conda
+# envs that imports Pillow, falling back to python3 so the message below still
+# says what to do. On 2026-11-03 Homebrew's python3 (3.14, no Pillow) was first
+# on PATH: Omar's deploy and this session's validate both had to pass PYTHON=
+# by hand. PYTHON=/path/to/python3 on the command line still wins.
 pillow-check:
 	@command -v $(PYTHON) >/dev/null || { echo "no interpreter at '$(PYTHON)'"; exit 1; }
 	@$(PYTHON) -c "import PIL" 2>/dev/null || { \
