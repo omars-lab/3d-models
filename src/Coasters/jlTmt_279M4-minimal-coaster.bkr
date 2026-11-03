@@ -9,6 +9,8 @@ param size = 90 range 40..120   # mm, finished coaster span across the strap net
 param height = 4 range 1.4..16   # mm, strap wall height
 param strap = 3 range 1.6..5   # mm, strap width — the freestanding wall, floored at CAL-CST-07 (1.6 mm)
 param round = 1 range 0..1.5   # mm, top-edge quarter-round run — CV10 needs 2*round <= strap
+param tip = 0 range 0..1.5   # mm, hole-point round: each sharp point of a strap hole rounded to this radius; 0 is sharp
+param weld = 0 range 0..2.4   # mm, soft weld: the straps melt together over this blend where they join; 0 is sharp, keep tip or weld at 0
 param unit = ($size - $strap) / 3.8998   # mm per GeoGebra unit — the art spans K units; the strap adds strap/2 each side
 
 blueprint jlTmt_279M4_scaffold
@@ -379,3 +381,4 @@ coaster Coaster
   base $height
   strap width $strap
   edge fillet $round top
+  holes round $tip weld $weld
