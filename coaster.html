@@ -16,14 +16,14 @@
       name="description"
       content="Tune a 3D-printable rosette coaster with sliders — the structural CV validators run live beside the mesh gate, each showing the measured number against the print floor it is held to."
     />
-    <script type="module" crossorigin src="./assets/coaster-DSOERfxq.js"></script>
-    <link rel="modulepreload" crossorigin href="./assets/dist-BNWJmsMB.js">
-    <link rel="modulepreload" crossorigin href="./assets/style-Cll6CKon.js">
+    <script type="module" crossorigin src="./assets/coaster-CRWSFbZ1.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/dist-BP_Ypa5l.js">
+    <link rel="modulepreload" crossorigin href="./assets/style-DgxJjrNw.js">
     <link rel="modulepreload" crossorigin href="./assets/modulepreload-polyfill-EeOZK34R.js">
     <link rel="modulepreload" crossorigin href="./assets/dom-nvzSSa2H.js">
-    <link rel="modulepreload" crossorigin href="./assets/worker-host-C9v6Wbum.js">
+    <link rel="modulepreload" crossorigin href="./assets/worker-host-z_LGL_0i.js">
     <link rel="stylesheet" crossorigin href="./assets/style-Cndi3zTB.css">
-    <link rel="stylesheet" crossorigin href="./assets/coaster-B-Tw5RpJ.css">
+    <link rel="stylesheet" crossorigin href="./assets/coaster-DyVeGlfO.css">
   </head>
   <body>
     <header class="lab-header">
@@ -94,6 +94,33 @@
           </p>
           <p class="target-note">Or click a piece in the picture to pick its ring.</p>
         </section>
+        <section id="piece-colors-section" hidden>
+          <h2>Piece colors</h2>
+          <div id="piece-preview" class="piece-preview"></div>
+          <p class="target-note">
+            Seen from above, finishes drawn roughly: silk and metal with a sheen, sparkle with
+            flecks, translucent see-through. Point at a row to light its pieces; click a piece to
+            pick its row.
+          </p>
+          <label class="pc-pick">
+            <input type="checkbox" id="piece-pick-one" />
+            Color one piece: click a piece to give it a color of its own. It prints apart from its
+            group, as its own <code>--piece</code>.
+          </label>
+          <div id="piece-color-rows"></div>
+          <h3>Themes</h3>
+          <div id="piece-themes"></div>
+          <h3>Gradient</h3>
+          <div id="piece-gradient" class="piece-gradient"></div>
+          <h3>Contrast hints</h3>
+          <ul id="piece-hints" class="piece-hints"></ul>
+          <p class="target-note">
+            Hints only suggest; nothing changes a color for you. The share link carries the colors
+            and never the print target.
+          </p>
+          <h3>Cost estimate</h3>
+          <div id="piece-estimate" class="piece-estimate"></div>
+        </section>
         <section>
           <h2>Structural checks</h2>
           <p class="fit-intro">
@@ -119,6 +146,32 @@
           <button id="stl-button" disabled>Download STL</button>
           <button id="copy-link">Copy link</button>
         </section>
+        <section id="saves-section">
+          <h2>Saved coasters</h2>
+          <p class="fit-intro">
+            Keep the coaster on screen under a name, in this browser. A save holds what a link holds
+            (the coaster, its knobs and its colors), never the print target. Export writes them all
+            to a file you can keep or send; Import reads one back.
+          </p>
+          <div class="save-new">
+            <input
+              id="save-name"
+              type="text"
+              maxlength="60"
+              placeholder="Name this coaster"
+              aria-label="Name for this saved coaster"
+            />
+            <button id="save-button" type="button" disabled>Save</button>
+          </div>
+          <ul id="save-list" class="save-list"></ul>
+          <div class="save-file">
+            <button id="save-export" type="button" disabled>Export</button>
+            <label class="save-import">
+              Import
+              <input id="save-import" type="file" accept=".json,application/json" />
+            </label>
+          </div>
+        </section>
         <section>
           <h2>Mesh gate</h2>
           <div id="gate-panel" class="gate-panel"></div>
@@ -139,6 +192,10 @@
           aria-label="3D coaster preview — drag to rotate, scroll to zoom, click a piece to pick its ring"
         ></canvas>
         <div id="pick-chip" class="pick-chip" role="status" aria-live="polite" hidden></div>
+        <p id="tint-note" class="tint-note" role="note" hidden>
+          The 3D view stays bronze: loose pieces are separate parts, so it cannot tint them. The
+          colored picture is under Piece colors.
+        </p>
         <div id="spinner" class="spinner" hidden>
           <span id="spinner-label">computing&hellip;</span>
           <button id="stop-button" class="stop-button" hidden>Stop</button>
