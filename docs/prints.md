@@ -18,6 +18,7 @@ The reader is deliberately plain markdown at this rung (S6). The gallery-facing
 
 One line per print, written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from each record's `feedback.lesson`.
 
+- Three pins on a triangle round the sloped star's middle: 1.2 mm pins held best, and 0.8 mm pins snapped and let the halves turn. Bottom dots under grid supports came out as clean as star-1's. 0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers. ([2026-11-02-star-2](prints/2026-11-02-star-2/index.md))
 - A 0.6 mm, three-layer PLA card sized to the paper works as a tracing stencil, on Omar's word: "stencil was good". 0.4 mm nozzle, 0.20 mm layers. ([2026-10-30-cedar-stencil-1](prints/2026-10-30-cedar-stencil-1/index.md))
 - On the flange coaster's hexagon dovetail, 0.01 mm a side (4 dots) held best; the old 0.15 mm was too loose and 0.02 mm past zero too tight. Cutting the slot to the rail's own depth did not stop the halves rocking up and down. 0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers. ([2026-10-28-hexfit-1](prints/2026-10-28-hexfit-1/index.md))
 - On the flange coaster's pinned slice (1.2 mm pins, 0.25 mm play, split-06's pin rings), a 0.9 mm wall round each pin socket left the set shaking when closed; 0.7 and 0.45 mm walls did not shake, and Omar picked the 0.7 mm set. 0.4 mm nozzle, 0.20 mm layers, setting 8, sliced as Textured PEI for the gold plate. ([2026-10-25-split-08](prints/2026-10-25-split-08/index.md))
@@ -58,6 +59,19 @@ a print comes back, its record and this page ship in the same PR (the
 <!-- records:start -->
 
 Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from the records; newest first.
+
+### [2026-11-02-star-2](prints/2026-11-02-star-2/index.md)
+
+- **Plate:** [star-2](design/plates/star-2.md) — the sloped star with three pins on a triangle, at three pin sizes
+- **Lesson:** Three pins on a triangle round the sloped star's middle: 1.2 mm pins held best, and 0.8 mm pins snapped and let the halves turn. Bottom dots under grid supports came out as clean as star-1's. 0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers.
+- **Nozzle:** 0.4 mm, left nozzle, type HS01 (standard flow, hardened steel)
+- **Pieces:** 6 (1 keep, 2 drop, 3 not-judged)
+- **What happened:** Omar: "left most was best"; "the right two's pins broke and turned", "very thin and fragile"; bottoms "As clean".
+- **Why:** Worked out, not measured: a 0.8 mm pin is about two wall lines across at these widths, which Omar found too thin to place and too fragile to take the press; with a pin broken, the halves turn.
+- **What it changed:** The star takes three 1.2 mm pins on the 2.37 mm triangle, and 0.8 mm is out. Bottom dots stay allowed under grid supports. The 1.0 mm pins were not named, so they are neither in nor out.
+- **Photos of the print:** none. Rendered pictures from the plate page: [first-layer](design/plates/star-2-media/first-layer.png), [bed](design/plates/star-2-media/bed.png), [bottom-dots](design/plates/star-2-media/bottom-dots.png)
+
+![render, not a photo: first-layer](design/plates/star-2-media/first-layer.png)
 
 ### [2026-10-30-cedar-stencil-1](prints/2026-10-30-cedar-stencil-1/index.md)
 
@@ -393,7 +407,7 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 
 ![photo: all five pieces, the pegs pair pushed together at the top](prints/2026-09-26-minis-03/photos/plate-overview.jpg)
 
-26 records; 0 measured with a tool, so no bet has moved yet.
+27 records; 0 measured with a tool, so no bet has moved yet.
 
 <!-- records:end -->
 

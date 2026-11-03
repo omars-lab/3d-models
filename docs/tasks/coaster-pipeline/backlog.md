@@ -120,13 +120,11 @@ Sending a print and which filament to load.
   on Omar taking the halves off the bed and judging them on the hub, whose judging page now shows
   the first-layer picture with supports and brim (3d-models #847). Then the records session writes
   its print record (updated 2026-11-02).
-- **[star-2](../../design/plates/star-2.md), the sloped star with three pins on a triangle — printed,
-  waiting to be judged** (print session) — built 2026-11-01 (3d-models #842, bikar #364): 1.2, 1.0
-  and 0.8 mm pins, two copies each, all on grid supports, each copy told apart by its dots. Omar
-  said yes in green on 2026-11-01. It was sent in green on 2026-11-02 at 18:05 UTC and finished at
-  18:29 UTC with every piece in place; its print log and timelapse are on the page. It waits on
-  Omar taking the halves off the bed and judging them on the hub. Then the print session writes
-  its print record.
+- **The star with three 1.2 mm pins, as the coaster's default** (print session) — star-2's
+  record keeps three 1.2 mm pins on a triangle and drops 0.8 mm (Omar: "left most was best", "the
+  right two's pins broke and turned"). Next: make that triangle the star's default in bikar, and
+  give the stock star (no slope) the same pins, which star-2 left out for room. The 1.0 mm pins
+  were not named, so they stay untried rather than out. Found 2026-11-02 by star-2's record.
 - **stud-1, pkt-2 and split-01** (print session) — on hold until the stud gap from the spl-2 print
   is settled. Then each one needs Omar's yes before the print session sends it.
 - **Cut the pieces too, so every face is a first layer** — waiting on Omar's two answers in the
