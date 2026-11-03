@@ -3,6 +3,7 @@ status: decided
 decisions:
   - D-081
   - D-126
+  - D-127
 ---
 
 # Multicolor constructions — the consolidated design
@@ -127,6 +128,17 @@ Both researchers agree: the author picks, nothing is merged automatically.
 2. `fill void where orbit == N color <Name>`. Several orbits may share a palette name; that is how
    a design has more classes than spools (7apC5Q9QS-8 has 16 classes).
 3. Unfilled orbits keep the base color (how depends on §3).
+
+**Decided 2026-11-03 (provisional):** on CS-1, the radial coaster
+(`patterns/Constructions/GimTvN9hw4U-radial-coaster.bkr` on bikar main, bikar PR #270), the fill
+stays **A, the snowflake**: orbits 1, 3, 5 and 7 filled, the *odd* preset, which is the file's
+default today. It is the one of the four drawn fills (A odd, B even, C the centre pair, D the
+outer pair) that reads as a shape of its own, and the recommended pick on the
+[2026-09-29 open-calls page](../../working-model/feedback-requests/2026-09-29-open-calls.md).
+Omar picked none of the four there and said he would choose in the Coaster Lab (the picker,
+bikar PR #288), so this is a default, not his taste call: the file keeps A until his Lab pick
+replaces it, and the file is not edited for this line. Picked by Claude under Omar's 2026-11-03
+blanket authorization; Omar's Lab pick overturns it. → D-127
 
 ## 3. The look: flush or lowered fills
 
