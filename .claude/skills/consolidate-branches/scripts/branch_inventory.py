@@ -39,6 +39,39 @@ STORE_GLOB = "coffee-house*"
 
 def default_repos():
     return [GIT / r for r in DEFAULT_REPOS] + sorted(STORE.glob(STORE_GLOB))
+
+
+def unique_repos(paths):
+    """One entry per repository: a worktree of a repo already in the list is dropped, with a note.
+
+    The store glob `coffee-house*` matched `coffee-house-storefront-tasks`, a worktree of the
+    storefront, and listed the repo twice (2026-11-03) with the keep rule, keyed by repo name,
+    applied only the first time.
+    """
+    seen, kept = {}, []
+    for p in paths:
+        common, own = git(p, "rev-parse", "--path-format=absolute", "--git-common-dir", "--git-dir").splitlines()
+        if common in seen:                                      # the main checkout wins whichever
+            main, other = (p, seen[common]) if own == common else (seen[common], p)  # order the glob gave
+            print(f"## {other.name}: a worktree of {main.name}, listed once", file=sys.stderr)
+            kept[kept.index(seen[common])] = seen[common] = main
+            continue
+        seen[common] = p
+        kept.append(p)
+    return kept
+
+
+def repo_path(arg):
+    """A repo argument is a path, or a bare name under ~/Workspace/git when no such path exists.
+
+    `inventory bikar` run from a 3d-models worktree used to look for `./bikar`, find nothing and
+    skip the repo as "not a git repo" (2026-11-03); the bare names the usage line lists are what
+    people type.
+    """
+    p = Path(arg)
+    if not p.exists() and "/" not in arg and (GIT / arg).exists():
+        return GIT / arg
+    return p
 RULES = Path(__file__).resolve().parent.parent / "rules.md"
 DEAD = {"ancestor", "no-changes", "content-on-default", "content-in-pr", "changes-on-default"}
 
@@ -617,6 +650,10 @@ def self_test():
         if snapshot(bare, ["main"], "2000-01-03") != 0 \
                 or not git(origin, "rev-parse", "-q", "--verify", "refs/snapshots/2000-01-03/main"):
             bad.append("a bare repo's snapshot did not push through its worktree")
+        if unique_repos([bare, tree, repo]) != [bare, repo]:
+            bad.append(f"unique_repos kept a worktree as a second repo: {unique_repos([bare, tree, repo])}")
+        if unique_repos([tree, bare]) != [bare]:
+            bad.append("unique_repos kept the worktree when the glob listed it before its repo")
 
         def dated(path, text, msg, at):                              # hifth's shape: main rewritten under a
             env = dict(os.environ, GIT_AUTHOR_DATE=f"@{at} +0000", GIT_COMMITTER_DATE=f"@{at} +0000")
@@ -727,7 +764,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
     inv = sub.add_parser("inventory", help="classify every branch, worktree and stash; plan the cleanup")
-    inv.add_argument("repos", nargs="*", help="repo paths (default: DEFAULT_REPOS under ~/Workspace/git)")
+    inv.add_argument("repos", nargs="*",
+                     help="repo paths, or bare names under ~/Workspace/git (default: DEFAULT_REPOS there)")
     inv.add_argument("--json", action="store_true", help="print the inventory as JSON")
     inv.add_argument("--no-prs", action="store_true", help="skip the GitHub PR lookup")
     inv.add_argument("--no-fetch", action="store_true", help="do not fetch origin first")
@@ -760,12 +798,15 @@ def main():
         return survives(Path(a.repo).resolve(), a.merged_file, a.merge_base, a.sides)
 
     rules = load_rules()
-    paths = [Path(p) for p in a.repos] or default_repos()
+    paths = [repo_path(p) for p in a.repos] or default_repos()
     results = []
+    repos = []
     for p in paths:
         if not (p / ".git").exists() and not (p / "HEAD").exists():
             print(f"## {p.name}: not a git repo, skipped", file=sys.stderr)
             continue
+        repos.append(p)
+    for p in unique_repos(repos):
         results.append(inventory(p, rules, prs=not a.no_prs, fetch=not a.no_fetch))
     if a.json:
         for r in results:
