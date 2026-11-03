@@ -2,7 +2,7 @@
 plate: star-3
 recipe: star-3.yaml
 iteration: 1
-stage: proposed
+stage: approved
 times_printed: 0
 runs: []
 answers: "With three 1.2 mm pins on a triangle round its middle, as star-2 picked, do the flat star's halves close and stop turning?"
@@ -92,6 +92,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-11-03 | approved | Omar, in chat: "Yes, in green (Recommended)" | iteration 1 @ e516ba6d94 in #00AE42 | |
 
 ## Timeline
 

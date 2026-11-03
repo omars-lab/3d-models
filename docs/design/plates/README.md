@@ -20,7 +20,7 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 
 | # | Plate | Stage | Value | Hours | ROI | Risk | What it answers |
 |---|---|---|---|---|---|---|---|
-| 1 | [star-3](star-3.md) | proposed | 4 | 0.2 | 25.81 | ok | With three 1.2 mm pins on a triangle round its middle, as star-2 picked, do the flat star's halves close and stop turning? |
+| 1 | [star-3](star-3.md) | approved | 4 | 0.2 | 25.81 | ok | With three 1.2 mm pins on a triangle round its middle, as star-2 picked, do the flat star's halves close and stop turning? |
 | 2 | [sheets-04g-fit3](sheets-04g-fit3.md) | proposed | 10 | 1.4 | 7.37 | watch | Does the 0.025 mm middle piece win again beside its two controls in a fresh coaster, and does a 0.075 mm kite go in easier than the 0.05 one and still stay in? |
 | 3 | [theme-night-sky-11600](theme-night-sky-11600.md) | waiting | 1 | 0.2 | 6.39 | ok | Night sky, one of its 4 plates: do its Kite ×10 come out as the theme draws them, in PLA Matte Marine Blue (11600)? |
 | 4 | [stud-1](stud-1.md) | waiting | 6 | 1.0 | 5.75 | ok | How far apart should a split coaster's studs be: does a slice of split-01's lip coaster hold together and line up with its studs 25, 15 or 10 mm apart? |
