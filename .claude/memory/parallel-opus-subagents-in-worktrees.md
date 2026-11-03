@@ -36,3 +36,5 @@ now a project skill + nudge in 3d-models (PR #263): `.claude/skills/delegate-par
 holds the pattern, and `.claude/hooks/delegate-nudge.py` (UserPromptSubmit) points at it
 when ≥3 harness tasks are pending and unblocked. So: invoke `/delegate-parallel-work` rather
 than re-deriving the mechanics, and expect the nudge to fire when the backlog is fan-out-ready.
+
+**Several agents in one worktree** (2026-11-02, "carve out independent sub agents to work on our branch"): two agents and the main session committed by name (`git commit -- <path>`) on one branch in `3d-models-tasks`, no conflicts. They raced on `index.lock` three times. What worked was waiting for the lock in the background (`until [ ! -e <gitdir>/index.lock ]; do sleep 2; done`) or until the agent finished, not retrying the commit, and never deleting the lock.
