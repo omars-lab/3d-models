@@ -30,10 +30,11 @@ PRs, 0 stashes. So there is no conflict to work by hand in this repo today; when
    one, `git push origin --delete` for a remote one. Never two in one command.
 3. **Worktrees.** Keep the standing ones: the main checkout, `-tasks` and `-work` (the
    plates-and-feedback session's), `-hub-ro` and `-hub-rw` (the hub reads and writes there),
-   `-pm` and `-master-ro` (dropping them is Omar's, item 6 below). Fast-forward a clean detached
-   one that lags master with `git checkout --detach origin/master`. A subagent worktree whose
-   session has closed, whose branch is an ancestor of master and which is clean holds nothing, but
-   the rules say leave it, so it is listed for Omar rather than removed.
+   and `-else` (this session's, one reused worktree for every PR it opens). Fast-forward a clean
+   detached one that lags master with `git checkout --detach origin/master`. A subagent worktree
+   whose session has closed, whose branch is an ancestor of master and which is clean holds
+   nothing: snapshot its tip, remove it, delete its branch (Omar, 2026-11-03: "do all the things
+   to do", which covered the three leftover copies).
 4. **When a branch does hold unmerged work:** snapshot the branch and master both, start a fresh
    branch off `origin/master`, merge the work in, open each conflicted file and keep both sides
    (never `-X ours`/`theirs`, never `checkout --ours`/`--theirs`), prove nothing was lost with
@@ -51,33 +52,16 @@ Left by the 2026-10-27 pass:
    history rewrite removed. Today only a line in `rules.md` stops it. The fix: before pushing,
    refuse any tip whose history holds a file `origin/<default>` no longer has, and add a
    self-test case for it. Found by the 2026-10-27 pass.
-2. **Waiting on Omar: purge hifth's GitHub.** About 130 old-history branches, about 60
-   `refs/snapshots/2026-10-04/*` and `2026-10-08/*` refs, and `refs/pull/*` (needs GitHub
-   Support) still hold the removed pictures. Found by the 2026-10-27 pass.
-3. **Waiting on Omar: bikar's pattern upload to Supabase fails.** The "Sync patterns to Supabase"
-   run on bikar main last worked 2026-10-10. Every run since 2026-10-22, 13 of them, fails the
-   same way: all 187 patterns compile, then the upload stops within a quarter second with
-   `fetch failed`. Nothing in the sync script, the workflow or the packages changed between the
-   last good run and the first bad one, so the cause is the Supabase project or the
-   `SUPABASE_URL` secret. Twelve quiet days fits a free project paused for inactivity. The bikar
-   studio's pattern list is read from that table, so nothing merged since 2026-10-10, the 0.01 mm
-   dovetail gap included, reaches it. Unpausing the project or fixing the secret is Omar's;
-   after that, re-run the latest failed run. Found 2026-10-29.
-4. **Waiting on Omar: deploy the public gallery.** Checked 2026-11-02: gh-pages was last deployed
-   2026-09-30 (from master 42ef7de), so the split coaster cards CS-16 and CS-17 (#583, #591, added
-   2026-10-06) and everything since are not live. `make deploy` changes the public site, so it
-   runs on Omar's yes. Found 2026-10-29.
-5. **Warn when the gallery falls behind master.** Nothing keeps the gallery current: no hook or
+2. **Warn when the gallery falls behind master.** Nothing keeps the gallery current: no hook or
    Make target deploys it, and nothing says it is stale. `status.html` shows the last deploy, but
    only to someone who opens it, and five weeks went by unseen. Add a check to `make validate`
    that compares the gh-pages tip's source commit with master and prints a warning (not a
    failure) when files the gallery ships have changed for more than a week. Deploying itself
    stays a manual step, because it publishes. Found 2026-11-02.
-6. **Waiting on Omar: which leftover backup copies to drop.** The duplicate `-pm` and
-   `-master-ro` worktrees here, hifth's merged remote branches and review-md's two branches hold
-   nothing their main lacks, but each removal is his call. The list is in the
-   [`branch-state-across-repos`](../../../.claude/memory/branch-state-across-repos.md) memory.
-   Found by the 2026-10-08 pass, still open 2026-11-02.
-7. **Waiting on Omar: bikar's pre-push hook runs the full test suite even for a tag on a commit
-   main already passed.** An edit to skip it was refused as a way round a check, so whether to
-   skip it is his call. Found 2026-09-21, still open 2026-11-02.
+3. **bikar's pre-push hook runs the full test suite even for a tag on a commit main already
+   passed.** Omar made the call on 2026-11-03 ("do all the things to do"). The skip is in bikar
+   PR #365, narrow and fail-closed like the deletion skip beside it: only a push made entirely of
+   tags whose commits origin/main already holds skips; a tag off main, a tag with a branch, or no
+   stdin still runs the suite, and the wiring test proves all three. Waiting to merge; its local
+   CI verdict is recorded but not yet posted to the PR (`make local.ci-post` from a bikar
+   session). Found 2026-09-21.
