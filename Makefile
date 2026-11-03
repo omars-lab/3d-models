@@ -587,13 +587,7 @@ index_images:
 
 # Post-process raw renders into transparent, autocropped web images
 # (build/images/web/) that the gallery uses. Requires pillow.
-web-images:
-	@command -v $(PYTHON) >/dev/null || { echo "no interpreter at '$(PYTHON)'"; exit 1; }
-	@$(PYTHON) -c "import PIL" 2>/dev/null || { \
-		echo "Pillow required, and $$($(PYTHON) -c 'import sys;print(sys.executable)') does not have it."; \
-		echo "  install it there:  $(PYTHON) -m pip install pillow"; \
-		echo "  or use one that does:  make $@ PYTHON=/path/to/python3"; \
-		exit 1; }
+web-images: pillow-check
 	cd ${ROOT_DIR} && $(PYTHON) build/process_images.py
 
 # Publish the static gallery to the gh-pages branch via a dedicated worktree,
@@ -909,7 +903,7 @@ validate-move-doc:
 # picture bikar drew has transparent corners, no see-through pixel inside the
 # coaster, a coaster in it, and nothing cut off at the frame. Self-test first, so
 # a green run means the by-design failures fired. Skips when nothing is rendered.
-validate-coaster-pictures:
+validate-coaster-pictures: pillow-check
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/coaster_pictures.py --self-test
 	$(PYTHON) ${ROOT_DIR}/.claude/gates/coaster_pictures.py
 
@@ -1025,8 +1019,21 @@ validate-color-map:
 # (split-06's bitten kite refused through the real script), then the list itself: every entry
 # reads and every file it names is in the repo. Never reaches the printer.
 .PHONY: validate-plate-checks
-validate-plate-checks:
+validate-plate-checks: pillow-check
 	@[ -d $(ROOT_DIR)/tools/bambu/node_modules ] || npm ci --silent --prefix $(ROOT_DIR)/tools/bambu
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/place-pins/scripts/ledge_check.py --self-test
 	npm --prefix $(BAMBU_DIR) run --silent test -- src/plate-checks.test.ts
 	cd $(ROOT_DIR) && tools/bambu/bin/bambu plate-checks verify
+
+# Every target that imports Pillow depends on this, so a python3 without it says
+# what to do instead of a traceback. On 2026-11-03 `make validate` tracebacked in
+# validate-coaster-pictures and validate-plate-checks on a machine where only
+# web-images carried this guard. Targets stay at the end of the file so the
+# use-case map's line pins above do not move.
+pillow-check:
+	@command -v $(PYTHON) >/dev/null || { echo "no interpreter at '$(PYTHON)'"; exit 1; }
+	@$(PYTHON) -c "import PIL" 2>/dev/null || { \
+		echo "Pillow required, and $$($(PYTHON) -c 'import sys;print(sys.executable)') does not have it."; \
+		echo "  install it there:  $(PYTHON) -m pip install pillow"; \
+		echo "  or use one that does:  make <target> PYTHON=/path/to/python3"; \
+		exit 1; }
