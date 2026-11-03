@@ -353,9 +353,9 @@ Alongside it: the coaster still closes and passes the mesh check; the symmetry n
 
 1. **Now, no code: look at the full dome.** Figure 14 already compares round 0, 1 and 1.5. Omar
    picks whether 1.5 becomes the default.
-2. **Decide on a printed edge coupon** (open call 1). If Omar prints one and the steps cannot be
-   seen or felt, treat options 5–8 as pure style. (The edge work itself no longer waits on it:
-   step 3 is built.)
+2. **Decide on a printed edge coupon** (call 1, decided provisionally in §6, D-123: yes, and the
+   coupon is sampler sheet 1). If Omar prints it and the steps cannot be seen or felt, treat
+   options 5–8 as pure style. (The edge work itself no longer waits on it: step 3 is built.)
 3. **Build option 3** (edge between grid points) in bikar's coaster builder: walls, top and flat
    bottom from the traced edge, the round-over following it, the standard centre-value rule for
    corner pinches. Checked by §4 with rounding on, the mesh check and the symmetry number.
