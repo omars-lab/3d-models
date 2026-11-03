@@ -11,9 +11,11 @@ covers settled (P4.3), and the standard-size plate (P5.2) built from the measure
 Split coasters and split pieces are the main goal since 2026-10-06 (Omar: "i want to wrap up
 consturciotn and move back to split coasters and split inflills"), so they come first.
 
-Two sessions share this loop (agreed 2026-10-31). The print session owns every send, watch and
-print log, and any plate built or rebuilt for a print. The records session writes the print
-records and does the rest. Each item says whose it is.
+The plates-and-feedback session owns this whole loop since 2026-11-03: sends, watches, print
+logs, plates built or rebuilt, the hub's questions and comments, and the print records
+([who runs which loop](../../../.claude/loop-prompts/README.md#which-session-runs-which-loop)).
+Items below still tagged "print session" or "records session" are both its; that split ended when
+the coaster-print session closed on 2026-11-02.
 
 1. **The hexagon pieces' halves still rock up and down.** On hexfit-1 the side-to-side play is
    settled (0.01 mm a side, now bikar's default), but Omar said "both rock" of the stock piece
