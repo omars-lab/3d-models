@@ -124,9 +124,11 @@ Sending a print and which filament to load.
   its print record (updated 2026-11-02).
 - **The star with three 1.2 mm pins, as the coaster's default** (print session) — star-2's
   record keeps three 1.2 mm pins on a triangle and drops 0.8 mm (Omar: "left most was best", "the
-  right two's pins broke and turned"). Next: make that triangle the star's default in bikar, and
-  give the stock star (no slope) the same pins, which star-2 left out for room. The 1.0 mm pins
-  were not named, so they stay untried rather than out. Found 2026-11-02 by star-2's record.
+  right two's pins broke and turned"). On 2026-11-03 the triangle became the star's default in
+  bikar (bikar branch `star-three-pin-default`), and [star-3](../../design/plates/star-3.md) gives
+  the flat star (no slope) the same pins: two copies, about 9 minutes. Next: Omar's yes and a color
+  for star-3, then the print and his answers on the hub. The 1.0 mm pins were not named, so they
+  stay untried rather than out. Found 2026-11-02 by star-2's record.
 - **stud-1, pkt-2 and split-01** (print session) — on hold until the stud gap from the spl-2 print
   is settled. Then each one needs Omar's yes before the print session sends it.
 - **Cut the pieces too, so every face is a first layer** — waiting on Omar's two answers in the
