@@ -407,6 +407,16 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
      the two-digit ids, split-01 has room for 11, 12, 14, 15, 17, 71 and 77, though its `id`
      range stops at 9; split-02 has room for none of 10 to 19.
 
+10. **The gBV theme "All Bambu Green" needs shopper wording before the store lists it.**
+    Its name names a filament brand and its mood is a dated working note ("The plate as it
+    went out on 2026-10-04…"), in
+    [`themes.yaml`](../../design/coaster/themes/gbv/themes.yaml) and the theme page
+    [`gbv-themes.md`](../../design/coaster/themes/gbv-themes.md). Until it has a name and
+    mood a shopper could read, it must not go into the store's design-rights list, so no
+    shopper sees it. Handed here by the storefront session on 2026-11-03 (its CS-9 "R fix"
+    note is item 1 above, the nmEjCTzMbDg hold). Low priority: nothing printed or listed
+    rests on it.
+
 ## Handed to the video loop
 
 GO candidates not yet reconstructed go to the youtube repo's ladder, not here. Name the id

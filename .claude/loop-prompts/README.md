@@ -19,7 +19,8 @@ pass runs; the backlog says *what* is next; the done list says what shipped.
 ## Which session runs which loop
 
 Two sessions share this repo. Omar split the work between them on 2026-11-03 so the printing
-one stays focused.
+one stays focused. A third kind of work, what a shopper or the store touches, is not this
+repo's at all; see the paragraph after the two bullets.
 
 - **The plates-and-feedback session** runs the coaster-pipeline loop in full: building and
   iterating plates, sending them, watching prints, opening the hub for Omar's answers and page
@@ -28,9 +29,21 @@ one stays focused.
   the comment server, a plate's slice and preflight. A decision of Omar's whose answer changes a
   plate recipe (the stud gap, the split-with-studs calls) stays with it too.
 - **The other session** takes everything else: consolidation, catalog-expansion, parked, the rest
-  of print-infrastructure (hub features that are not about plates or judging, such as the Orders
-  tab; the plate-packing skill; the gallery and its deploy), and the bookkeeping of Omar's other
+  of print-infrastructure (hub features that are not about plates, judging or orders; the
+  plate-packing skill; the gallery and its deploy), and the bookkeeping of Omar's other
   decisions: recording D- ids when he answers a design's open calls, and the FAQ review.
+
+Anything a shopper or the store touches (orders, pricing, the store pages, the Lab's buy path,
+the hub's Orders tab) is owned by the coffee-house-storefront repo, and its open list is
+`~/Workspace/git-naqshcoffee/coffee-house-storefront/docs/tasks/open.md` (parked items in its
+`docs/tasks/backlog.md`, each saying what brings it back). Neither session here picks those:
+a backlog line here points at that file, and the end-of-work hook
+([`next-for-customers.py`](../hooks/next-for-customers.py)) names them and points there rather
+than choosing them. The rule names the repo and file, not a session, because session names change
+from day to day (real-shoppers-store-launch, 2026-11-03, after the hook had this session pick the
+Orders tab). Two things stay here: recording the D- ids when Omar answers a store design's open
+calls, and any theme or coaster wording the store will show, since the pictures and themes are
+built here.
 
 The lists stay by loop and the sessions split by kind of work, so an item can sit in a backlog
 the other session reads and still be plates' by this rule. When in doubt, ask "does this move a
