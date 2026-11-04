@@ -95,3 +95,18 @@ same way before its push, and the PR body names the verdict on the final tip.
   no nvm Node on PATH, so the pre-push strict gate could not start. The refs were already
   written locally; the push was re-run with PATH set. Every bikar push, background or not,
   needs the PATH line first (3d-models #876).
+
+## Gallery deploy
+
+- Omar asked for the gallery deployed so the blossom coaster shows live. The recipe in memory
+  held: restore the live build from gh-pages, `make coasters`, then `make deploy`, both with
+  bikar main and the Pillow Python. One false alarm: a file listing I tacked onto the coaster
+  build failed because the web-sized pictures are made later, inside the deploy.
+
+- `make coasters` left a tracked source file changed. It copies each coaster's `.bkr` from
+  bikar, and bikar already had the star-pin default master lacks, so the live site carries
+  bikar's copy, which matches the STLs. Syncing it into master is the plates session's call.
+
+- The first live probe of the blossom STL answered 503 and the second, a minute later, 200 with
+  every byte. Probe twice before calling a just-built Pages file missing.
+
