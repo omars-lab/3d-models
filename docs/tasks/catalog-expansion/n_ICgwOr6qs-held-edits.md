@@ -96,15 +96,9 @@ below the marker, modelled on the 88q note:
     }
 
 ## index.html + docs/site-graph.json — the gallery card
-    git apply /private/tmp/claude-501/-Users-omareid-Workspace-git-3d-models/e778ebdd-03d8-4cb5-9096-0e141345d0f5/scratchpad/n_I/gallery-card.patch
-adds the card after the 88q card (three lines) and moves the three site-graph anchors
-index.html:699 -> 702 and :700 -> 703 (offsets taken on 2026-11-03 17:00; if the gallery moved since, re-check the three "at" lines and the UC23 pin). Hook 20 then needs the use-case map's pin
-`3d-models:index.html:L700 "breakdown.html?orb="` (UC23, use-cases.md line 130) moved to L703:
-    python3 .claude/skills/maintain-use-cases/validate.py --refresh  (reports it)
-    python3 .claude/skills/maintain-use-cases/validate.py --repair   (moves it)
-Until the card is in, `make coasters` goes red the first time it runs with the blossom coaster
-on bikar main (build/brick_previews.py: "no gallery card in index.html COASTERS for:
-n_ICgwOr6qs-minimal").
+
+Already landed in #872 (commit 738948c0): the card after the 88q card, the site-graph anchors
+moved, the use-case map's UC23 pin repaired. Nothing left here.
 
 ## Gates to run by path before the commit
     python3 .claude/gates/constructions_ledger.py
