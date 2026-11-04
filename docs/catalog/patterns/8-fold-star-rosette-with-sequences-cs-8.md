@@ -11,6 +11,7 @@ catalog id: CS-8
 bikar files:
   - patterns/Constructions/rDuxHF3xMOc.bkr
   - patterns/Constructions/rDuxHF3xMOc-coaster.bkr
+  - patterns/Constructions/rDuxHF3xMOc-cup-band.bkr
   - patterns/Constructions/rDuxHF3xMOc-minimal-frame-coaster.bkr
 tags:
   - 8-fold
@@ -21,7 +22,7 @@ tags:
 
 # 8-fold Star Rosette with Sequences (CS-8)
 
-Rebuilt step by step from [Sarah Brewer's video](https://www.youtube.com/watch?v=rDuxHF3xMOc), written in naqsh and made in 2 coaster styles. Its catalog id is CS-8.
+Rebuilt step by step from [Sarah Brewer's video](https://www.youtube.com/watch?v=rDuxHF3xMOc), written in naqsh and made in 3 coaster styles. Its catalog id is CS-8.
 
 ## Pictures
 
@@ -39,6 +40,10 @@ The pattern's straps raised on a full slab.
 A solid frame round the edge, the straps standing inside it, every empty space cut through.
 
 ![minimal frame](../media/rDuxHF3xMOc/rDuxHF3xMOc-minimal-frame.png)
+
+### cup-band
+
+No picture yet: Coaster Lab has no thumbnail for this file.
 
 ## Checks against the video
 

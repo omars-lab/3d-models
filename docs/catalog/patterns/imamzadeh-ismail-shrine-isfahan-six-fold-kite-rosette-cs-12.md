@@ -11,6 +11,7 @@ catalog id: CS-12
 bikar files:
   - patterns/Constructions/bknVRSMcLj0.bkr
   - patterns/Constructions/bknVRSMcLj0-coaster.bkr
+  - patterns/Constructions/bknVRSMcLj0-cup-band.bkr
 tags:
   - 6-fold
   - rosette
@@ -19,7 +20,7 @@ tags:
 
 # Imamzadeh Isma'il Shrine, Isfahan — six-fold kite rosette (CS-12)
 
-Rebuilt step by step from [Sarah Brewer's video](https://www.youtube.com/watch?v=bknVRSMcLj0), written in naqsh and made in 1 coaster style. Its catalog id is CS-12.
+Rebuilt step by step from [Sarah Brewer's video](https://www.youtube.com/watch?v=bknVRSMcLj0), written in naqsh and made in 2 coaster styles. Its catalog id is CS-12.
 
 ## Pictures
 
@@ -31,6 +32,10 @@ name, for example #plain.
 The pattern's straps raised on a full slab.
 
 ![plain](../media/bknVRSMcLj0/bknVRSMcLj0-plain.png)
+
+### cup-band
+
+No picture yet: Coaster Lab has no thumbnail for this file.
 
 ## Checks against the video
 

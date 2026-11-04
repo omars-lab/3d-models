@@ -11,6 +11,7 @@ catalog id: CS-10
 bikar files:
   - patterns/Constructions/n3IidKfXE1I.bkr
   - patterns/Constructions/n3IidKfXE1I-coaster.bkr
+  - patterns/Constructions/n3IidKfXE1I-cup-band.bkr
 tags:
   - star
   - rosette
@@ -19,7 +20,7 @@ tags:
 
 # Variable-angled 12-6-4 Star Rosette (CS-10)
 
-Rebuilt step by step from [Sarah Brewer's video](https://www.youtube.com/watch?v=n3IidKfXE1I), written in naqsh and made in 1 coaster style. Its catalog id is CS-10.
+Rebuilt step by step from [Sarah Brewer's video](https://www.youtube.com/watch?v=n3IidKfXE1I), written in naqsh and made in 2 coaster styles. Its catalog id is CS-10.
 
 ## Pictures
 
@@ -31,6 +32,10 @@ name, for example #plain.
 The pattern's straps raised on a full slab.
 
 ![plain](../media/n3IidKfXE1I/n3IidKfXE1I-plain.png)
+
+### cup-band
+
+No picture yet: Coaster Lab has no thumbnail for this file.
 
 ## Checks against the video
 

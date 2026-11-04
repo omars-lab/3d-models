@@ -10,6 +10,7 @@ creator:
 catalog id: CS-17
 bikar files:
   - patterns/Constructions/88q-u2eWZqg.bkr
+  - patterns/Constructions/88q-u2eWZqg-cup-band.bkr
   - patterns/Constructions/88q-u2eWZqg-minimal-coaster.bkr
 tags:
   - rosette
@@ -18,7 +19,7 @@ tags:
 
 # A 16-petal rosette in one unbroken line (CS-17)
 
-Rebuilt step by step from [the video](https://www.youtube.com/watch?v=88q-u2eWZqg), written in naqsh and made in 1 coaster style. Its catalog id is CS-17.
+Rebuilt step by step from [the video](https://www.youtube.com/watch?v=88q-u2eWZqg), written in naqsh and made in 2 coaster styles. Its catalog id is CS-17.
 
 ## Pictures
 
@@ -30,6 +31,10 @@ name, for example #minimal.
 The straps alone: no slab, every empty space in the pattern is a hole, top edges rounded over.
 
 ![minimal](../media/88q-u2eWZqg/88q-u2eWZqg-minimal.png)
+
+### cup-band
+
+No picture yet: Coaster Lab has no thumbnail for this file.
 
 ## Checks against the video
 
