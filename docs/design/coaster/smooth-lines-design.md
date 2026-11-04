@@ -8,9 +8,13 @@ Omar, 2026-09-29: *"our coaster lines are rough; put together options for making
 with web research and pictures we can review in Obsidian. One option should be lines influenced by
 the SKIMS font design."*
 
-*Status: draft, the one to act on. Option 3 is built (bikar #291, 2026-10-01: every coaster wall
-now runs between grid points, and `tools/edge_stairs.py` shows all six sides of CS-1 straight);
-nothing else here is built, and nothing is printed. It merges two independent
+*Status: draft, the one to act on. Built: option 3 (bikar #291, 2026-10-01: every coaster wall
+now runs between grid points, and `tools/edge_stairs.py` shows all six sides of CS-1 straight),
+option 5 as the `tip` knob (bikar #325, #328) and option 8 light as the `weld` knob (bikar #329),
+both 0 by default. Nothing else here is built, and nothing is printed: the sampler sheets that
+would settle the four calls in [§6](#6-open-calls-for-omar) are built and waiting. The four calls
+were decided provisionally on 2026-11-03 under Omar's blanket authorization (D-123); each sheet's
+reading, or Omar, can overturn its call. It merges two independent
 research passes — researcher A ([PR #433](https://github.com/omars-lab/3d-models/pull/433),
 measured on the CS-2 coaster) and researcher B
 ([PR #432](https://github.com/omars-lab/3d-models/pull/432), measured on CS-1) — both merged
@@ -349,9 +353,9 @@ Alongside it: the coaster still closes and passes the mesh check; the symmetry n
 
 1. **Now, no code: look at the full dome.** Figure 14 already compares round 0, 1 and 1.5. Omar
    picks whether 1.5 becomes the default.
-2. **Decide on a printed edge coupon** (open call 1). If Omar prints one and the steps cannot be
-   seen or felt, treat options 5–8 as pure style. (The edge work itself no longer waits on it:
-   step 3 is built.)
+2. **Decide on a printed edge coupon** (call 1, decided provisionally in §6, D-123: yes, and the
+   coupon is sampler sheet 1). If Omar prints it and the steps cannot be seen or felt, treat
+   options 5–8 as pure style. (The edge work itself no longer waits on it: step 3 is built.)
 3. **Build option 3** (edge between grid points) in bikar's coaster builder: walls, top and flat
    bottom from the traced edge, the round-over following it, the standard centre-value rule for
    corner pinches. Checked by §4 with rounding on, the mesh check and the symmetry number.
@@ -364,14 +368,15 @@ Alongside it: the coaster still closes and passes the mesh check; the symmetry n
    coaster, refused beside loose pieces and split; the mesh check passes on all ten minimal and
    minimal-frame coasters at 0.3, 0.75 and 1.5 mm. Every minimal coaster now carries it as a
    `tip` knob, 0 by default (bikar #328), and [sampler sheet 2](../plates/sheets-02.md) is
-   built to compare the values in the hand. Whether it is on by default is still call 2.
+   built to compare the values in the hand. Whether it is on by default is call 2, decided
+   provisionally in §6 (D-123): on, at a value inside 0.3 to 0.75 mm, once sheet 2 is read.
 5. **Add option 8 light** (SKIMS soft weld) as a style knob, order-free blend; strong as a look.
    *Done, bikar #329 (2026-10-07):* `holes weld <mm>` on a straps-only coaster; the blend is
    order-free (a smooth minimum of the distances to a hole's two nearest sides) and only adds
    strap. Refused beside `round`, loose pieces and split. Every minimal coaster carries it as a
    `weld` knob, 0 by default, and the mesh check passes on all seven at 0.6, 1.2 and 2.4 mm.
    [Sampler sheet 3](../plates/sheets-03.md) is built to compare them in the hand. How much, if
-   any, is still call 3.
+   any, is call 3, decided provisionally in §6 (D-123): light, as a knob, off by default.
 6. Later looks: option 7 (width), the pillow top, option 6 (mitred).
 7. **Option 4 only if** open call 2 says star points must stay needle-sharp and the coupon shows the
    shaved tip is visible.
@@ -388,14 +393,25 @@ before building. It differs from A's first choice (the exact outline) for the co
 ## 6. Open calls for Omar
 
 To decide these with samples in the hand, see the [sampler sheets](sampler-sheets-design.md):
-true-size windows of the coasters on a labeled card, one sheet per call.
+true-size windows of the coasters on a labeled card, one sheet per call. All four were decided
+provisionally on 2026-11-03 (D-123), each taking the recommended pick; the Decided line under
+each names the sheet whose reading can overturn it.
 
 **Call 1 — print a small edge coupon first?** Whether to print is always yours.
 
 | | Buys | Costs | Implies |
 |---|---|---|---|
-| **Yes, print a coupon** (recommended): a CS-2 star corner and a CS-1 crossing, today's edge, round 1 and 1.5 | settles whether the steps show (the true edge is now built, so the coupon compares it against the staircase) | one small print while printing is paused | if the steps don't show, steps 3–4 drop to nice-to-haves |
+| **Yes, print a coupon** (recommended): a CS-2 star corner and a CS-1 crossing, today's edge, round 1 and 1.5 | settles whether the steps show (the true edge is now built, so the coupon compares it against the staircase) | one small print while printing is paused | if the steps don't show, what is left of the edge work (the shaved star tips, interlock insides and relief boundaries still on the grid, §5 step 3) and options 5 to 8 are style, not fixes |
 | No, build option 3 anyway | no print needed | may build something no one can see | step 3 goes ahead on the STL numbers alone |
+
+**Decided 2026-11-03 (provisional):** yes, a printed coupon is the way to settle whether the steps
+show, and it already exists as [sampler sheet 1](../plates/sheets-01.md), built and waiting: a
+CS-1 crossing, a CS-2 star and a gBV star, each at today's edge, the true edge, and the true edge
+with the full dome, on one labeled card, so the comparison is the staircase against the true edge
+and round 1 against round 1.5. Whether and when it prints stays Omar's and the plates session's;
+if the steps cannot be seen or felt, what is left of the edge work (§5 step 3) and options 5 to 8
+are style, not fixes. Picked by Claude under Omar's 2026-11-03 blanket authorization; the coupon
+reading, or Omar, can overturn it. → [D-123](../../working-model/decisions-log.md#d-123--smoother-lines-the-four-taste-calls-taken-as-recommended-provisionally)
 
 **Call 2 — star points: sharp or softened?**
 
@@ -405,6 +421,13 @@ true-size windows of the coasters on a labeled card, one sheet per call.
 | Needle-sharp | the traditional crisp point | needs option 4, the most code | a second wall builder in bikar |
 | Softened a lot, 1.5 mm | a flower-like, very soft look | the stars stop being stars | a different pattern, better as a look than a default |
 
+**Decided 2026-11-03 (provisional):** softened a little, 0.3 to 0.75 mm: the `tip` knob (option 5,
+bikar #325) goes on by default on the minimal coasters at a value inside that range, the exact
+value read off [sampler sheet 2](../plates/sheets-02.md); option 4 is not needed, and 1.5 mm stays
+a look, not a default. The default change is implied, not made: every minimal coaster still
+carries `tip` at 0 (bikar #328) until the sheet is read. Picked by Claude under Omar's 2026-11-03
+blanket authorization; the sheet reading, or Omar, can overturn it. → [D-123](../../working-model/decisions-log.md#d-123--smoother-lines-the-four-taste-calls-taken-as-recommended-provisionally)
+
 **Call 3 — how much SKIMS?**
 
 | | Buys | Costs | Implies |
@@ -413,6 +436,13 @@ true-size windows of the coasters on a labeled card, one sheet per call.
 | Strong | a bold, bubbly style | octagons become circles; the pattern changes | a named style, not a default |
 | None | today's look | — | options 5 and 9 carry the softness |
 
+**Decided 2026-11-03 (provisional):** light, as a knob, off by default: the `weld` knob (option 8,
+bikar #329) stays at 0 on every minimal coaster, and a coaster that wants the melted look sets it
+to a light value (the researchers drew light as 0.6 mm on CS-2 and 1.2 mm on CS-1; the number is
+read off [sampler sheet 3](../plates/sheets-03.md)); strong stays a named look, never a default.
+Nothing to build and no default change. Picked by Claude under Omar's 2026-11-03 blanket
+authorization; the sheet reading, or Omar, can overturn it. → [D-123](../../working-model/decisions-log.md#d-123--smoother-lines-the-four-taste-calls-taken-as-recommended-provisionally)
+
 **Call 4 — the top.**
 
 | | Buys | Costs | Implies |
@@ -420,6 +450,13 @@ true-size windows of the coasters on a labeled card, one sheet per call.
 | **Try the full dome (round 1.5) now** (recommended) | the softest top, no code | slightly less volume | a default change if you like it |
 | Keep round 1 | no change | — | — |
 | Pillow top | flat middle, soft shoulders | new code | pairs with the bubble-lettering work |
+
+**Decided 2026-11-03 (provisional):** try the full dome, round 1.5, now: it needs no code
+(`edge fillet $round top` already takes 1.5, option 9), and whether it becomes the default is read
+off [sampler sheet 1](../plates/sheets-01.md), rows B and C. Until that reading, round 1 stays the
+default on every coaster; the default change is implied, not made, and the pillow top stays
+unbuilt. Picked by Claude under Omar's 2026-11-03 blanket authorization; the sheet reading, or
+Omar, can overturn it. → [D-123](../../working-model/decisions-log.md#d-123--smoother-lines-the-four-taste-calls-taken-as-recommended-provisionally)
 
 ## 7. Where this came from
 

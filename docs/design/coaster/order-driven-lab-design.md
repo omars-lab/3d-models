@@ -1141,9 +1141,13 @@ Tick one box per call. My pick is first, with its reason. A call with no tick st
 out from real prints. The planner stays public in this repo either way.
 
 - [ ] A. Order files in this repo
-- [ ] B. The hub (recommended)
+- [x] B. The hub (recommended)
 - [ ] C. The Coaster Lab in the browser
 - [ ] D. A spreadsheet
+
+**Decided 2026-10-08:** the hub; Plan, Price and Stock are private hub pages reading the iCloud
+order folder, and the public Lab gets one "Add to order" button and holds no prices →
+[D-112](../../working-model/decisions-log.md#d-112--the-order-pages-live-in-the-hub).
 
 ### Call 2: how the price is set
 
@@ -1162,9 +1166,14 @@ out from real prints. The planner stays public in this repo either way.
 and it keeps the market in view. Either way, the settings from Omar's own records come from real
 orders, his print logs and his bill.
 
-- [ ] Cost-plus with a market band (recommended)
+- [x] Cost-plus with a market band (recommended)
 - [ ] Market price
 - [ ] Value price
+
+**Decided 2026-10-08:** cost plus a markup, checked against researched market prices, with a
+"make and sell X a month" view; a price below break-even is shown and tagged and quoting it needs
+a reason (call 5) →
+[D-113](../../working-model/decisions-log.md#d-113--price-is-cost-plus-a-markup-checked-against-researched-market-prices-with-a-make-and-sell-x-a-month-view).
 
 ### Call 3: orders as files in git
 
@@ -1184,7 +1193,7 @@ This repo is public. A committed customer name is public for good, even after it
 add a repo for a store that has none yet. What git would check about an order (who changed it,
 when) the hub's store records itself.
 
-- [ ] Never in this repo (recommended)
+- [x] Never in this repo (recommended)
 - [ ] In this repo, a code instead of the customer's name
 - [ ] In a private repo
 
@@ -1209,7 +1218,7 @@ been priced yet. The trigger to look at B again: three priced orders where Omar 
 opinion beyond the scenarios.
 
 - [ ] A. The Scenarios view and its check, no skill (recommended)
-- [ ] B. The view, plus a price-persona skill
+- [x] B. The view, plus a price-persona skill
 - [ ] C. A pricing skill instead of a view
 - [ ] D. No view: call 2's one price only
 
@@ -1235,9 +1244,12 @@ A launch price, or a market pick for a five-color order, can come out below brea
 **Pick "shown and tagged"**, because a launch price below cost is a choice Omar may want to make
 on purpose, and the tag plus the reason keep it from happening by accident.
 
-- [ ] Shown and tagged; quoting it takes a reason (recommended)
+- [x] Shown and tagged; quoting it takes a reason (recommended)
 - [ ] Never shown
 - [ ] Shown, no tag
+
+**Decided 2026-10-08:** shown and tagged, quoting it needs a reason (call 22 of the same day) →
+[D-113](../../working-model/decisions-log.md#d-113--price-is-cost-plus-a-markup-checked-against-researched-market-prices-with-a-make-and-sell-x-a-month-view).
 
 ## 11. The build, in order of value for the work
 

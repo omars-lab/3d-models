@@ -6777,3 +6777,176 @@ half's id on its outer face on a coupon) stands where there is room.
 
 **What would reverse it:** the wells showing through or weakening the face on a piece Omar wants
 to keep, or a plate whose versions need more than eight counts.
+
+## D-123 — Smoother lines: the four taste calls taken as recommended, provisionally
+
+Claude, 2026-11-03, under Omar's blanket authorization of that day ("authorizing you to do all
+this", the list that named the open design calls). Omar had meant to settle these with the sampler
+sheets in hand, so each pick is provisional: the sheet or coupon reading, or Omar, overturns it.
+The calls are §6 of the [smooth-lines design](../design/coaster/smooth-lines-design.md#6-open-calls-for-omar).
+
+### The options on the table
+
+- **Call 1, print a small edge coupon first:** yes (the pick), or build option 3 on the STL
+  numbers alone.
+- **Call 2, star points:** softened a little, 0.3 to 0.75 mm (the pick); needle-sharp, which
+  needs a second wall builder; or softened a lot, 1.5 mm, a different pattern.
+- **Call 3, how much SKIMS weld:** light, as a knob, off by default (the pick); strong, a named
+  style; or none.
+- **Call 4, the top:** try the full dome, round 1.5, now (the pick); keep round 1; or a pillow top,
+  new code.
+
+### What was picked
+
+The recommended pick on every call. The coupon already exists as sampler sheet 1, built and
+waiting; whether and when it prints stays Omar's and the plates-and-feedback session's. The
+softened points mean the `tip` knob (bikar #325) goes on by default at a value sheet 2 picks;
+until then every minimal coaster keeps `tip` at 0. The light weld is the `weld` knob (bikar #329),
+already at 0; sheet 3 picks the light value. The full dome is `edge fillet $round top` at 1.5, no
+code; it becomes the default only if sheet 1's rows B and C read well. Nothing was built for this
+decision; what each pick implies is written in the design as implied, not made.
+
+**What would reverse it:** a sheet or coupon reading that goes the other way, or Omar's own
+look at the pieces. Each call reverses on its own; the others stand.
+
+## D-124 — Loose pieces: a guided mode in the Lab, raised fills on every fill coaster, the F1 gap ladder as drawn, provisionally
+
+Claude, 2026-11-03, under Omar's blanket authorization of that day, for calls 2 to 4 of §7 of the
+[loose-pieces design](../design/coaster/loose-pieces-design.md#7-open-calls-for-omar). Call 1 was
+Omar's, D-090. Provisional as D-123 is: the sheet reading, or Omar, overturns each.
+
+### The options on the table
+
+- **Call 2, where the guided page lives:** a guided mode in the Coaster Lab (the pick), a separate
+  page next to it, or a written how-to with no new UI.
+- **Call 3, raised fills:** on every fill coaster, the same slider going up (the pick), or only
+  through loose pieces where a taller piece is a raised fill.
+- **Call 4, LP-1's gaps:** 0.05, 0.10, 0.15 and 0.20 mm per face on ring 1 plus ring 5 at 0.15
+  (the pick), other gaps, or wait for KEY-1 and T1 to print first.
+
+### What was picked
+
+The recommended pick on each. The guided mode keeps one copy of every panel and the same share
+link; the step bar and the parts list are implied, not built. Raised fills on every fill coaster
+is one refusal and one kernel rule, implied, not built; loose pieces keep giving proud and recessed
+fills meanwhile (bikar #313). The gap ladder brackets the CAL-FIT-01 default the way the key
+ladder does and is the F1 slab-frame reading still to come; the floorless frames that printed
+since (sheets-04g-fit and -fit2, bet CAL-LSE-01: 0.05 fits a kite, 0.025 won for the middle
+piece) are a lower bound the plates-and-feedback session may use to shift the F1 ladder down when
+it proposes the plate. Printing is Omar's and that session's; no plate, recipe or `.bkr` changed.
+
+**What would reverse it:** the three pictures for call 2 read differently by Omar; sheet 5's
+fill-height reading; the F1 plate's own reading for the gaps. A separate guided page stays
+possible later as a hosting call, since the Lab sits behind the organization's sign-in.
+
+## D-126 — Fills flush by build order, colors from the themes gallery; the §10 plate decides the look
+
+Claude, 2026-11-03, under Omar's blanket authorization of that day, closing D-081's open ends
+(the look of a filled orbit, and its colors) in §3 of the
+[multicolor design](../design/coaster/multicolor-design.md#3-the-look-flush-or-lowered-fills).
+Provisional: the sample plate of that design's §10, flush beside a 0.6 mm lowered fill, is where
+Omar makes the taste call, and this stands only until that plate is judged.
+
+### The options on the table
+
+- **Flush** (the pick): fills rise to the strap height, 1.2 mm; built and gated in bikar #261.
+- **Lowered**: fills below the straps, 0.4 to 0.8 mm; fewer multicolor layers, bleed hidden,
+  unmeasured on the X2D.
+- Face-down mosaic, stained glass, full-height plugs, height terraces: each loses the raised
+  straps or needs a refusal lifted; none picked.
+- **Colors:** invent a palette, or take the color-themes gallery and its review-theme scores.
+
+### What was picked
+
+Flush, as the build-order default the design already states; the lowered fill stays the
+fill-height knob to build next, one code path, not a second mode. No palette was invented. The
+themes come from the color-themes gallery and the review-theme scores: on gBV, the one
+construction with a scored gallery, Black and gold and Silk black and gold tie at 3.8, scored by
+six simulated personas, not customer research. Omar's own first-to-print pick (D-106) stands.
+Those themes were scored on an openwork loose-piece coaster, so they carry to a filled coaster
+only as candidates; the §10 plate's construction gets its own themes through the same two skills
+first.
+
+**What would reverse it:** the §10 plate judged, or Omar's look at it; a measured purge or bleed
+result that makes lowered the better default.
+
+## D-127 — CS-1's radial fill stays A, the snowflake, until Omar picks in the Lab
+
+Claude, 2026-11-03, under Omar's blanket authorization of that day, for the fill of CS-1's rings
+(§2.4 of the [multicolor design](../design/coaster/multicolor-design.md), backlog item 5 of the
+catalog expansion, review thread kpdekz).
+
+### The options on the table
+
+- **A, orbits 1, 3, 5 and 7:** a six-armed snowflake round an open centre star (the pick).
+- **B, orbits 0, 2, 4 and 6:** the centre and alternate rings, mostly solid.
+- **C, orbits 0 and 1:** a solid centre in an open lattice.
+- **D, orbits 6 and 7:** a solid rim round an open centre.
+
+### What was picked
+
+A, already the default in bikar's `GimTvN9hw4U-radial-coaster.bkr` (bikar #270): the one of the
+four that reads as a shape of its own, and the recommended pick on the 2026-09-29 open-calls
+page. This is a standing default, not Omar's taste call: he said he would choose in the Coaster
+Lab, whose ring picker is on bikar main (#288), and his Lab pick replaces it. The `.bkr` was not
+edited.
+
+**What would reverse it:** Omar saving a different fill in the Lab.
+
+## D-128 — The P5.3 frame block is closed unbuilt; the first off-frame point a rewrite cannot save reopens it
+
+Claude, 2026-11-03, under Omar's blanket authorization of that day, for P5.3 of the
+[construction import design](../constructions/geogebra-construction-import-design.md#52-root-frame-and-free-values-d-062),
+the `frame` block for free points off the root frame, deferred since D-062 "until a public
+fixture needs it". The check is written in the
+[multicolor design](../design/coaster/multicolor-design.md#13-calls-recorded-here-on-2026-11-03) §13.
+
+### The options on the table
+
+- **Close it unbuilt** (the pick), with the reopening condition written down.
+- Build it now, against no fixture that needs it.
+- Leave it open as it was, a standing "only if".
+
+### What was picked
+
+Closed, not built. What was checked: every one of the ledger's 14 migrated constructions keeps
+its free points on the frame, so the importer's refusal has stopped no migration. Seven of the
+other 20 write a literal off-frame point, each a scaffold extent, a scale choice or a frame point
+dragged a few hundredths off, the kind a source rewrite puts back on the frame, as was done for
+`n_ICgwOr6qs`; none was run through the importer, so that is the expected kind, not a shown
+result. youtube's five public `.ggb` fixtures place free points off the frame but only test the
+XML reader and never reach the importer. The survey's "no reconstruction places a free point off
+the unit frame" was true of the nine it read, not of the 34 now.
+
+**What would reverse it:** the first migration where the refusal fires and a rewrite cannot put
+the point on the frame without changing the drawing.
+
+## D-122 — Reconstruction intake: a small tool lists the finished youtube rungs, writes their ledger rows on request, and moves the pin as it goes
+
+Claude, 2026-11-03, under Omar's blanket authorization of that day, for the three calls of §7 of the
+[reconstruction intake design](../constructions/reconstruction-intake-design.md). Provisional:
+Omar can reverse any of the three.
+
+### The options on the table
+
+- **Call 1, where the gap closes:** (a) the session hook writes the missing ledger rows itself;
+  (b) a small tool, `tools/reconstruction_intake.py`, lists at session start and writes only when
+  asked (the pick); (c) keep typing rows by hand.
+- **Call 2, when the youtube pin moves:** at every intake write and every import PR (the pick);
+  only at import PRs; by hand.
+- **Call 3, what "completed" means:** PASS only; PASS, or PARTIAL that youtube accepted, marked
+  "accepted partial" (the pick); anything youtube calls done.
+
+### What was picked
+
+The tool. Read-only `--list` and the SessionStart `--session` line name the rungs that are done
+in youtube and not yet imported here; `--write` moves the pin to youtube main's tip, stubs the
+rows nobody was typing, refreshes every row's youtube cell, and refuses on master. A completed
+rung is status done, PASS or accepted PARTIAL, fresh, and its construction digest at the same ref
+equal to both digests the rung records; that repeats youtube's own `done` rule on purpose, so
+the two repos never disagree. The pin moves whenever anything reads youtube, because a stale pin
+hid `bknVRSMcLj0` for ten days. The ledger gate gained rule L4 (a row says done, the rung says
+otherwise) and L2 now wants the pin to be an ancestor of youtube main.
+
+**What would reverse it:** Omar wanting the hook to write rows itself, or a run where the
+accepted-partial rule admits a reconstruction that should not be a coaster candidate.

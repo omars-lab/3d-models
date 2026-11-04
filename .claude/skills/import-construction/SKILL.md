@@ -55,7 +55,9 @@ refusals, never worked around — see "Failures this skill expects" below.
 
 ### 0. Pick the id — from the ledger, unmigrated first, ladder order
 
-Open [`../../../docs/constructions/ledger.md`](../../../docs/constructions/ledger.md).
+Run `python3 tools/reconstruction_intake.py --list` for the rungs done in youtube and not yet
+imported (the same line SessionStart prints), then open
+[`../../../docs/constructions/ledger.md`](../../../docs/constructions/ledger.md).
 Take the first row whose **naqsh** cell is `—` (not yet migrated), in the ladder
 order the plan fixes (`GimTvN9hw4U`, `7apC5Q9QS-8`, then `rDuxHF3xMOc`,
 `tA8eSdVx_EQ`, `sDO9fpu76v8`, `lEfWSogWscs`, `nmEjCTzMbDg`, …). A row marked **no

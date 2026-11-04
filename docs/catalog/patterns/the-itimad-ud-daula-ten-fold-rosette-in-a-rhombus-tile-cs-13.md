@@ -69,9 +69,9 @@ The pieces coaster cut into two printed halves, each printing its piece halves i
 
 From the [constructions ledger](../../constructions/ledger.md).
 
-0 of the three checks pass and 2 fail; the ledger's notes say why.
+1 of the three checks pass and 1 fail; the ledger's notes say why.
 
-- every labelled point and line: 134 compared, 20 failed (FAIL);
+- every labelled point and line: 144 compared, none failed (PASS);
 - the drawn lines: recall 0.997, precision 0.4291 (FAIL);
 - the solid coverage: not run.
 

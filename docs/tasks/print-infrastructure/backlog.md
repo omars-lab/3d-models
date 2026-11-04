@@ -24,19 +24,6 @@ plate, then anything you can't see before sending, then config ergonomics.
    per print, and nothing more. Packing by hand has come up once (sheets-04d, rows), so per
    the [skill precedent](../../design/process/dsl-extension-skill-evaluation.md) a second plate
    that wants packing comes before the skill. Session task board, 2026-10-03.
-3. **Orders phase 4 is the storefront repo's; what stays here is two Decided lines.** The
-   hub's Orders tab (Plan, Price with its Scenarios view, Inventory) and the Lab's "Add to
-   order" button, the last phase of the
-   [order-driven Lab design](../../design/coaster/order-driven-lab-design.md#11-the-build-in-order-of-value-for-the-work)
-   §11, are built from the storefront repo, tracked in its open list
-   (`~/Workspace/git-naqshcoffee/coffee-house-storefront/docs/tasks/open.md`), by the session that owns every storefront item (handed over 2026-11-03,
-   after the end-of-work hook had this session pick it; Omar: it is the store side's). Phases
-   1 to 3 already work from the terminal (`bambu order plan`, `bambu shelf show`,
-   `bambu order price`). What stays here: when Omar confirms the two calls the design's §10
-   still lists open, record them as Decided lines, the pages live in the hub (D-112) and the
-   price is cost plus a markup checked against a market band (D-113); the decisions log has
-   both since 2026-10-08 but §10 does not. The third, no order files in this repo, is D-101.
-   Do not fill in an answer for him.
 
 ## Waiting on Omar
 
@@ -68,16 +55,6 @@ plate, then anything you can't see before sending, then config ergonomics.
   for the Lab and the print-time color match both reuse this read, so they have nothing to serve
   until it runs. On macOS the background `node` may also need allowing under Local Network
   settings. From the session task board, 2026-11-02.
-- **The piece-colors screen's four calls** (#538), in the
-  [piece colors design](../../design/coaster/infill-color-ux-design.md#8-open-calls-for-omar) §8:
-  which way of printing the screen offers first, a color per group or per piece too, whether a
-  plate's color goes in its recipe or only at the send, and how the Lab learns which colors are
-  loaded. Phases 1 to 5 are built; the "match the loaded trays" helper waits on call 4, and phase
-  5 was built under the recommended pick for call 2. On call 4 (also call 4 of the 2026-10-05
-  page), Omar asked "cant it lookup on printer with cli": the CLI already reads the trays
-  (`bambu filament --json`), but a page in the browser cannot run it, so the hub would serve the
-  list. D-103, D-110 and D-111 touch the same questions as calls 1, 3 and 4, but the design has
-  no Decided line for any of the four. Waiting on his ticks.
 
 ## Found elsewhere, maybe this loop's
 

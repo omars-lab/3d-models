@@ -9,12 +9,12 @@ and the three oracles O1/O2/O3 are specified in
 record; `.claude/gates/constructions_ledger.py` keeps it honest and
 `make validate-constructions` runs it over the whole tree.
 
-Youtube pin: `e55a57797befcba7040447b38c7fc9a1475e7bdf` (2026-10-01)
+Youtube pin: `1f1ec577bd20f3ce34cb5150fa7b3d41be0640ef` (2026-11-03)
 
-The pin is a commit in the youtube repo (branch `main`, no remote). Every
+The pin is a commit in the youtube repo (branch `main`). Every
 "youtube" verdict below — **attempted** (a `reconstructions/<id>/` directory
-with a `construction.ggb-commands` exists at the pin) or **done** (that id is
-listed in the pin's docs/tasks/done.md) — is read at that commit and nowhere
+with a `construction.ggb-commands` exists at the pin) or **done** (the rung's own
+`rung.yaml` at the pin says so) — is read at that commit and nowhere
 else, so the column does not shift when someone checks out a different youtube
 branch. The gate re-reads youtube at this pin; when youtube is not checked out
 it says so and skips the cross-check rather than passing or failing it. It also
@@ -22,6 +22,8 @@ reads youtube's `main` branch (a ref, not the working tree) and fails when a
 reconstruction there has no row here, or when a row's id is not at the pin — so
 a new reconstruction cannot sit unledgered behind an old pin, as `bknVRSMcLj0`
 did ([the write-up](../issues/constructions-ledger-missed-new-reconstruction.md)).
+`python3 tools/reconstruction_intake.py --list` names the rungs done in youtube with no
+row or coaster here, and `--write` moves this pin and stubs their rows (D-122).
 
 Scope of the set (K2): **34 <!--count:constructions-total--> constructions**,
 one per reconstruction that has a `construction.ggb-commands` at the pin —
@@ -134,7 +136,7 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 | `bknVRSMcLj0` | Imamzadeh Isma'il Shrine, Isfahan — six-fold kite rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/bknVRSMcLj0.bkr` | PASS 79/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/bknVRSMcLj0-coaster-standard.stl` | CS-12 | — |
 | `cKYbKQvmsbs` | Sultan Barsbay 16 & 8 (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `fhGHzop7ULw` | The sixfold √3 rectangle from Baghdad | done | — | — | — | — | — | — | — |
-| `gBV_JTt3Kxk` | The Itimad-ud-Daula ten-fold rosette in a rhombus tile | done | `bikar/patterns/Constructions/gBV_JTt3Kxk.bkr` | FAIL 134/20 | FAIL 0.997/0.4291 | — | `src/Coasters/gBV_JTt3Kxk-minimal-coaster-standard.stl` | CS-13 | — |
+| `gBV_JTt3Kxk` | The Itimad-ud-Daula ten-fold rosette in a rhombus tile | done | `bikar/patterns/Constructions/gBV_JTt3Kxk.bkr` | PASS 144/0 | FAIL 0.997/0.4291 | — | `src/Coasters/gBV_JTt3Kxk-minimal-coaster-standard.stl` | CS-13 | — |
 | `jlTmt_279M4` | Sevenfold stars in a tilted square | done | `bikar/patterns/Constructions/jlTmt_279M4.bkr` | PASS 86/0 | PASS 1.0/1.0 | — | `src/Coasters/jlTmt_279M4-minimal-coaster-standard.stl` | CS-14 | — |
 | `kpFgs2e8YGw` | Star rosettes on a 3-uniform tiling (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `lEfWSogWscs` | Pattern from the Tomb of Itimad ad-Daula (Sarah Brewer) | done | `bikar/patterns/Constructions/lEfWSogWscs.bkr` | PASS 49/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/lEfWSogWscs-coaster-standard.stl` | CS-7 | — |
@@ -151,8 +153,8 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 | `xtox61vADMA` | Discrete variable star rosette, sliders n and k (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `ZFQt67eZ9Sg` | Alhambra Hall of the Two Sisters doors, 8-fold in a square (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `XfY1r7QKYwA` | 7-fold star rosette, the 27-minute build (Sarah Brewer) | done | — | — | — | — | — | — | — |
-| `yZN_wn0uvTY` | The Itimad-ud-Daula ten-fold rosette built by hand in GeoGebra, then tiled (Geogebra_Road to School) | done | — | — | — | — | — | — | — |
-| `LoCRh3SOhls` | A tenfold rosette in a pentagon, ink on filmed paper (Samira Mian) | done | — | — | — | — | — | — | — |
+| `yZN_wn0uvTY` | The Itimad-ud-Daula ten-fold rosette built by hand in GeoGebra, then tiled (Geogebra_Road to School) | blocked | — | — | — | — | — | — | — |
+| `LoCRh3SOhls` | A tenfold rosette in a pentagon, ink on filmed paper (Samira Mian) | queued | — | — | — | — | — | — | — |
 
 ## Oracle notes
 
@@ -191,7 +193,11 @@ at their imports on 2026-09-30, on the youtube branches named in each bikar PR
   `nmEjCTzMbDg` hit; every point, line, circle, polygon and mask passes. The O2
   precision is the video's white paint-over masks: the frame shows the clipped
   rosette, the naqsh render draws the mask edges and the rosette under them. A
-  re-render scores the same, so it is not a stale hero.
+  re-render scores the same, so it is not a stale hero. O1 was re-run on
+  2026-11-03, during the blossom import, against bikar's `gBV_JTt3Kxk.bkr`: it
+  reads `PASS: 144 compared, 0 failed, 47 skipped/extra`, the row's cell since
+  then. The arcs compare since youtube 224a346 ("O1 checks arcs", on main at
+  the pin). O2 was not re-run.
 - **`jlTmt_279M4`** O1 `PASS: 86 compared, 0 failed, 75 skipped/extra` — on
   youtube branch `o1-polyline-ray` (9a92134), which teaches the comparator
   polyline and ray rows and is not on youtube main yet; O2

@@ -91,3 +91,4 @@ Moved out of this repo's memory when auto-memory became per-repo (2026-08-16): `
 - [hifth history rewrite and branches](hifth-history-rewrite-branches.md) — 2026-10-08 scrub of two held-text pictures: old-history branches look diverged, prove dead by tree, never push their snapshots; no purge, history kept as is (Omar 2026-10-30)
 - [Stencil thickness liked](stencil-thickness-liked.md) — Omar 2026-10-30: the 0.6 mm, three-layer bendable cedar card was right; default for tracing stencils (make-stencil skill)
 - [Two sessions split by kind of work](two-sessions-split-by-kind-of-work.md) — Omar 2026-11-03: plates-and-feedback keeps prints, hub judging, comments and records; the other session takes the rest; rule in the loop README, pull work by reading task files on disk
+- [Auto-mode classifier refuses PR merges](auto-mode-classifier-refuses-pr-merge.md) — `gh pr merge` is denied as "Merge Without Review"; one attempt after validate, then it is Omar's

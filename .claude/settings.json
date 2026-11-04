@@ -18,7 +18,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/gates/constructions_ledger.py\" --session 2>/dev/null || true"
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/tools/reconstruction_intake.py\" --session 2>/dev/null || true"
           }
         ]
       }

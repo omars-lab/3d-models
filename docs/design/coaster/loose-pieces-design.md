@@ -6,8 +6,10 @@ produced-by: Claude (Opus 5.5), from a read of this repo at origin/master c2e37c
 
 # Loose pieces, fill height either way, and "assemble your own coaster" ^tfuhdk
 
-> Status: draft 2026-09-30, for Omar to decide the four calls in
-> [Open calls for Omar](#7-open-calls-for-omar). Asked by Omar on 2026-09-29 in review thread
+> Status: draft 2026-09-30. The four calls in [Open calls for Omar](#7-open-calls-for-omar) are
+> decided: call 1 by Omar (D-090, 2026-10-01), calls 2 to 4 provisionally on 2026-11-03 under
+> Omar's blanket authorization (D-124), each open to its sheet reading or Omar overturning it.
+> Asked by Omar on 2026-09-29 in review thread
 > 3kqnku (typos fixed in the quotes) on the flush-or-lowered call of the
 > [open-calls page](../../working-model/feedback-requests/2026-09-29-open-calls.md): "we should
 > have options to select this too in the ui ... and do so at either ends ... and even print
@@ -15,14 +17,18 @@ produced-by: Claude (Opus 5.5), from a read of this repo at origin/master c2e37c
 > 'assemble their own coaster'", "see if we can make a guided ui for this". Tracked as item 6
 > of the [catalog-expansion backlog](../../tasks/catalog-expansion/backlog.md). Built so far:
 > §6 items 2 and 3, the exact pocket walls and the loose pieces with the backed frame F1
-> (bikar #292, 2026-10-01). Nothing has been printed.
+> (bikar #292, 2026-10-01), then the open frame F3 (bikar #314), the piece height (bikar #313)
+> and the Lab's Loose button (bikar #308). Printed so far: the floorless frame's fit only,
+> sheets-04 and sheets-04b (§3.3) and the gBV fit plates under call 4; no F1 slab frame has
+> printed.
 
 Three asks, in order of how much is unknown:
 
 1. **Fill height either way.** The Lab's fill slider only goes down. Let it go up too. Small:
    one refusal lifted and one kernel rule extended (§2).
 2. **Loose pieces.** Print the filled shapes on their own and drop them into a printed frame.
-   This is a new joint: nothing we have printed tells us how much gap a loose piece needs (§3).
+   This is a new joint: when this was written, nothing we had printed told us how much gap a loose
+   piece needs (§3); the floorless readings since are under call 4 in §7.
 3. **A guided page** where someone assembles their own coaster, step by step (§4).
 
 The second and third are the hard asks. §5 lays out their options side by side, §6 lists what
@@ -142,7 +148,8 @@ on the fill line or a relief clause on `outline pattern`. That is left out here,
 **Loose pieces give "raised" for free.** A loose piece stands as high as it is printed, so a piece
 taller than its pocket is a raised fill with no kernel change to the fill rule at all (§3.2). If
 Omar only wants raised fills on loose-piece coasters, this section's kernel work is not needed.
-That is call 3.
+That is call 3, decided provisionally for this section's kernel work (§7, D-124); the work is
+implied, not built.
 
 ## 3. Loose pieces
 
@@ -386,7 +393,7 @@ In order; each item names the test that shows it works. What has shipped is mark
 
 **bikar**
 
-1. **Raised fills** (only if call 3 says yes). Lift the parser refusal; strap wins on height; the
+1. **Raised fills** (call 3 said yes, provisionally, D-124; implied, not built). Lift the parser refusal; strap wins on height; the
    mirror of `lowerFillVertices`; the minimum feature counts raised fills; widen the preset range.
    *Test:* the fill preset at `fill = 1.8` renders and passes `--check`; a strap-centre cell sits at
    the strap height and a face-centre cell at the fill height; the same test against today's
@@ -412,8 +419,8 @@ In order; each item names the test that shows it works. What has shipped is mark
    browser before it ships.
    *The Loose button is done, bikar #308 (2026-10-05):* each filled ring's chip in Coaster Lab has
    one, and it writes the same `loose` line a hand-written file would; the Lab's browser tests
-   pass and the page was looked at with it on and off. The parts list and the step bar wait on
-   call 2.
+   pass and the page was looked at with it on and off. The parts list and the step bar are what
+   call 2's pick implies (a guided mode in the Coaster Lab, D-124); neither is built.
 5. **Fill height on the minimal coaster** (flagged, not designed here). A relief clause or a word on
    the fill line for `outline pattern` coasters. *Test:* to be written with its design.
 
@@ -447,27 +454,43 @@ fit sample → [D-090](../../working-model/decisions-log.md#d-090--lines-and-loo
 
 **2. Where does the guided page live?** (§4, §5 B)
 
-- [ ] **A guided mode in the Coaster Lab.** No second copy of any panel.
+- [x] **A guided mode in the Coaster Lab.** No second copy of any panel.
 - [ ] A separate page next to the Lab.
 - [ ] A written how-to, no new UI.
 - Notes:
+
+**Decided 2026-11-03 (provisional):** a guided mode in the Coaster Lab: a step bar over
+`coaster.html` that shows the existing panels one step at a time, with the same URL state and
+share link and no second copy of any panel. Implied, not built: the step bar and the parts list
+(§6 item 4). The hedge from §4 and the three pictures stands: the Lab sits behind the org's
+sign-in, so if "folks" means people outside the org, a separate page beside the Lab stays possible
+later, and that is a hosting call, not a change to this pick. Picked by Claude under Omar's
+2026-11-03 blanket authorization; Omar, looking at the three pictures, can overturn it. → [D-124](../../working-model/decisions-log.md#d-124--loose-pieces-a-guided-mode-in-the-lab-raised-fills-on-every-fill-coaster-the-f1-gap-ladder-as-drawn-provisionally)
 
 **Decide it on:** three pictures, one per option, in the
 [sampler sheets design](sampler-sheets-design.md#where-the-guided-page-lives-three-pictures-not-a-sheet).
 
 **3. Raised fills: on every fill coaster, or only through loose pieces?** (§2)
 
-- [ ] **On every fill coaster, the same slider going up.** It is one refusal and one kernel rule,
+- [x] **On every fill coaster, the same slider going up.** It is one refusal and one kernel rule,
   and it answers "either end" on the coaster that has the slider today.
 - [ ] Only through loose pieces, where a taller piece is a raised fill with no kernel change.
 - Notes:
+
+**Decided 2026-11-03 (provisional):** raised fills on every fill coaster, the same slider going
+up: the parser's refusal of `f > h` lifted, strap wins on height, the ramp into the taller body,
+the mesh gate counting raised fills, and the fill preset's range widened (§2, §6 item 1), with
+the two checks §2 says stop holding (the minimum feature and CAL-CST-04's slot ratio) carried
+into the build. Implied, not built. Loose pieces keep giving proud and recessed on their own
+(bikar #313), so nothing is lost while the kernel work waits. Picked by Claude under Omar's
+2026-11-03 blanket authorization; the sheet 5 reading, or Omar, can overturn it. → [D-124](../../working-model/decisions-log.md#d-124--loose-pieces-a-guided-mode-in-the-lab-raised-fills-on-every-fill-coaster-the-f1-gap-ladder-as-drawn-provisionally)
 
 **Decide it on:** sampler sheet 5, fill height (lowered, flush and raised on the same windows) —
 [the sheet](sampler-sheets-design.md#3-the-sheets), [its plate page](../plates/sheets-05.md).
 
 **4. LP-1's gaps, and printing it.** (§3.6, §3.7)
 
-- [ ] **0.05, 0.10, 0.15, 0.20 per face on ring 1, plus ring 5 at 0.15.** Brackets the default the
+- [x] **0.05, 0.10, 0.15, 0.20 per face on ring 1, plus ring 5 at 0.15.** Brackets the default the
   way the key ladder does, with one looser step.
 - [ ] Other gaps (write them in the notes).
 - [ ] Wait for KEY-1 and T1 to print first, then choose the gaps.
@@ -475,6 +498,19 @@ fit sample → [D-090](../../working-model/decisions-log.md#d-090--lines-and-loo
   not a per-plate question, the X2D does its own failure detection →
   [D-092](../../working-model/decisions-log.md#d-092--failure-detection-is-the-printers-job-not-a-per-plate-yes)
 - Notes:
+
+**Decided 2026-11-03 (provisional):** 0.05, 0.10, 0.15, 0.20 mm per face on ring 1, plus ring 5
+at 0.15, as the F1 slab-frame reading still to come (§3.6); the floorless reading moved to
+sheets-04b (below). One thing to carry into that plate: the floorless gBV fit plates printed
+since landed under this ladder. On [sheets-04g-fit](../plates/sheets-04g-fit.md) the 0.05 mm
+kites fit and 0.10 to 0.25 were too small, and the middle piece at gap 0 was too tight and at
+0.05 a little too easy; on [sheets-04g-fit2](../plates/sheets-04g-fit2.md) 0.025 won for the
+middle piece, and the 0.05 kites were tough to push in and want a little more gap (bet
+CAL-LSE-01). A slab pocket is a closed hole to the slicer (§3.4), so those numbers bound this
+ladder from below without replacing it; the plates session may shift the F1 ladder down when it
+proposes the plate. Nothing to build; whether and when it prints is Omar's and the plates
+session's. Picked by Claude under Omar's 2026-11-03 blanket authorization; the F1 reading, or
+Omar, can overturn it. → [D-124](../../working-model/decisions-log.md#d-124--loose-pieces-a-guided-mode-in-the-lab-raised-fills-on-every-fill-coaster-the-f1-gap-ladder-as-drawn-provisionally)
 
 **Decide it on:** sampler sheet 4, fit (these four gaps on gBV, and its small stars at 0.15) —
 [the sheet](sampler-sheets-design.md#3-the-sheets), [its plate page](../plates/sheets-04.md).

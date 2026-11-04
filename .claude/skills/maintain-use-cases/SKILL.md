@@ -96,7 +96,7 @@ in order; `20-use-cases` runs `validate.py --staged`:
 | Situation | Result |
 |---|---|
 | `use-cases.md` staged | Staged content must fully validate AND its `3d-models` `as_of` must equal HEAD (the commit being built on) — otherwise **blocked** |
-| Staged file is referenced by a `3d-models` pointer, map not staged | **Blocked** — update the map, or override once with `USE_CASES_OK=1 git commit ...` |
+| Staged file is referenced by a `3d-models` pointer, map not staged | Every pointer into it is checked against the staged content: all anchored and resolving passes with a note; one moved or unanchored is **blocked** — update the map, or override once with `USE_CASES_OK=1 git commit ...` |
 | Staged files touch experience surfaces (`index.html`, `Makefile`, `docs/*.md`, `src/`) | Non-blocking reminder |
 | Map's `as_of` > 20 commits behind HEAD | Non-blocking reminder to `--refresh` |
 

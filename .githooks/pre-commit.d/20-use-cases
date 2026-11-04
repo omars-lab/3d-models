@@ -1,8 +1,10 @@
 #!/bin/sh
 # Use-case map guard (skill: .claude/skills/maintain-use-cases/). Blocks
-# commits that change pointer-referenced files without updating the map,
-# enforces as_of == HEAD when the map itself is staged, and reminds on
-# experience-surface edits. Override the block once: USE_CASES_OK=1 git commit
+# commits that change pointer-referenced files when a pointer into them no
+# longer resolves in the staged content (since 2026-11-03; before that any such
+# commit was blocked, pointers intact or not), enforces as_of == HEAD when the
+# map itself is staged, and reminds on experience-surface edits. Override the
+# block once: USE_CASES_OK=1 git commit
 #
 # When the map IS staged the validator runs in full, which since 2026-08-02
 # includes the anchor rule: a pointer written `path:L137 "orbs:"` must have

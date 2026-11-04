@@ -27,11 +27,12 @@ What this gate BLOCKS on (exit 1), each a claim that is false on disk right now:
       one: it asserts no path, so it fails nothing.
 
   L2  The header names no parseable youtube pin, or names one that youtube — when
-      youtube IS reachable — does not contain. A pin nobody can resolve dates
-      the whole "attempted/done" column to nothing. When youtube is NOT checked
-      out the pin is unknowable, so the gate says so and skips the youtube
-      cross-checks; it never passes them silently and never fails on an absent
-      sibling.
+      youtube IS reachable — does not contain, or one that is not an ancestor of
+      youtube's tip ref (a pin on a side branch dates the column to work that
+      may never land on main). A pin nobody can resolve dates the whole youtube
+      column to nothing. When youtube is NOT checked out the pin is unknowable,
+      so the gate says so and skips the youtube cross-checks; it never passes
+      them silently and never fails on an absent sibling.
 
   L3  A youtube reconstruction with no ledger row, or a row the pin cannot see.
       "Reconstruction" is read at two commits: the pin, and youtube's default
@@ -45,19 +46,30 @@ What this gate BLOCKS on (exit 1), each a claim that is false on disk right now:
       after the pin was taken — sat unledgered with every gate green
       (docs/issues/constructions-ledger-missed-new-reconstruction.md).
 
+  L4  A row whose youtube cell says "done" while the rung's own state file at
+      the pin (reconstructions/<id>/rung.yaml, `work.status`) says otherwise —
+      blocked, queued, claimed, in-progress. Until 2026-11-03 "done" was a text
+      search of youtube's docs/tasks/done.md, which counted an id mentioned as
+      "attempted" as done, and `yZN_wn0uvTY` (blocked in youtube) sat as done
+      here. The youtube column is now read from rung.yaml and nowhere else
+      (docs/constructions/reconstruction-intake-design.md §5, item 7).
+
 What this gate REPORTS (non-blocking, exit 0):
 
-  * every id the pin's done.md lists whose ledger row still says "attempted"
-    (the row is behind its own source).
+  * a row whose youtube cell differs from its rung status at the pin in any
+    other way (the row says "attempted" while the rung says done: the row is
+    behind its own source); `tools/reconstruction_intake.py --write` refreshes
+    every cell from the pin.
+  * a row with no rung.yaml at the pin (a pin older than youtube's rung files,
+    before youtube 30a2709), whose cell therefore cannot be checked.
 
 It needs youtube at the pin, and is skipped-with-a-line when youtube is absent,
-as are L2's resolve and all of L3.
+as are L2's resolve and all of L3 and L4.
 
-`--session` prints one line — "N constructions not yet migrated: <ids>" — for a
-SessionStart hook, plus one "N youtube reconstructions have no ledger row: <ids>"
-line when rows are owed, and nothing at all when both are 0. "Not yet migrated"
-excludes both a row with a real `.bkr` (done) and the by-design row (complete by
-design): neither is work waiting to be done.
+`--session` is the SessionStart line and is answered by the intake tool
+(`tools/reconstruction_intake.py --session`), which shares this file's youtube
+reader (`read_rungs`): the completed rungs with no coaster here, and what a
+`--write` would change. It prints nothing when nothing is owed.
 
 Whole-tree, not staged-scoped: L1 reads a sibling repo and the reports read
 youtube, neither visible in a staged diff. Cheap — it parses one markdown table
@@ -233,9 +245,10 @@ def youtube_recon_ids(yt: Path, pin: str) -> set[str]:
     return ids
 
 
-#: Where youtube's current work lives, most specific first. youtube has no
-#: remote today, so its local `main` is the record; `origin/HEAD` is the
-#: fallback for a clone that does have one.
+#: Where youtube's current work lives, most specific first. youtube's local
+#: `main` is the record (its `origin` is a push mirror on the studio machine,
+#: not a branch anyone reads); `origin/HEAD` is the fallback for a clone that
+#: has only the mirror.
 TIP_REFS = ("refs/heads/main", "refs/heads/master", "refs/remotes/origin/HEAD")
 
 
@@ -247,13 +260,139 @@ def youtube_tip(yt: Path) -> str | None:
     return None
 
 
-def done_ids(yt: Path, pin: str, candidates: set[str]) -> set[str]:
-    """Which of `candidates` the pin's docs/tasks/done.md mentions."""
-    proc = _git(yt, "show", f"{pin}:docs/tasks/done.md")
+def is_ancestor(yt: Path, pin: str, ref: str) -> bool:
+    """Is `pin` on the first-parent history of `ref` (or equal to it)?"""
+    return _git(yt, "merge-base", "--is-ancestor", pin, ref).returncode == 0
+
+
+def cat_files(yt: Path, ref: str, paths: list[str]) -> dict[str, bytes | None]:
+    """The bytes of each `path` at `ref`, read in one `git cat-file --batch`.
+
+    One subprocess for the whole set, so reading 34 rung files and their 34
+    constructions stays well inside the seconds a SessionStart hook has. A path
+    missing at the ref maps to None. Bytes, not text: the construction digest is
+    sha256 over the file's raw bytes, so a decode would change it.
+    """
+    if not paths:
+        return {}
+    proc = subprocess.run(
+        ["git", "-C", str(yt), "cat-file", "--batch"],
+        input="".join(f"{ref}:{p}\n" for p in paths).encode("utf-8"),
+        capture_output=True,
+        env=_git_env(),
+    )
+    out: dict[str, bytes | None] = {p: None for p in paths}
     if proc.returncode != 0:
-        return set()
-    text = proc.stdout
-    return {cid for cid in candidates if cid in text}
+        return out
+    data = proc.stdout
+    pos = 0
+    for p in paths:
+        nl = data.find(b"\n", pos)
+        if nl < 0:
+            break
+        header = data[pos:nl].decode("utf-8", "replace").split()
+        pos = nl + 1
+        if len(header) == 3 and header[1] != "missing":
+            size = int(header[2])
+            out[p] = data[pos : pos + size]
+            pos += size + 1  # the trailing newline cat-file adds after each blob
+    return out
+
+
+#: The status values youtube's rung script accepts for `work.status`.
+RUNG_STATUSES = ("queued", "claimed", "in-progress", "blocked", "done")
+
+
+@dataclass
+class Rung:
+    """One reconstructions/<id>/rung.yaml, read at a ref, plus the digest check.
+
+    `work` is kept by hand in youtube; `synced` is written by youtube's
+    `make rung-sync`. `digest_ok` is ours: sha256 of construction.ggb-commands
+    at the same ref, first 12 hex, must equal both digests the rung records,
+    or the synced half lags the construction beside it.
+    """
+
+    id: str
+    status: str
+    verdict: str
+    passed: int | None
+    scored: int | None
+    fresh: bool
+    accepted_partial: str | None
+    title: str
+    creator: str
+    synced_digest: str
+    score_digest: str
+    digest: str
+
+    @property
+    def digest_ok(self) -> bool:
+        return self.digest == self.synced_digest == self.score_digest
+
+    @property
+    def score(self) -> str:
+        """`PASS 18/18`, `PARTIAL 6/9`, or the bare verdict when no counts."""
+        if self.passed is None or self.scored is None:
+            return self.verdict
+        return f"{self.verdict} {self.passed}/{self.scored}"
+
+
+def _rung_from_yaml(cid: str, text: bytes, construction: bytes | None) -> Rung:
+    import hashlib
+
+    import yaml  # the hooks already require PyYAML (20-use-cases)
+
+    doc = yaml.safe_load(text.decode("utf-8")) or {}
+    work = doc.get("work") or {}
+    synced = doc.get("synced") or {}
+    score = synced.get("score") or {}
+    digest = hashlib.sha256(construction).hexdigest()[:12] if construction is not None else ""
+    accepted = work.get("accepted_partial")
+    return Rung(
+        id=cid,
+        status=str(work.get("status") or ""),
+        verdict=str(score.get("verdict") or ""),
+        passed=score.get("passed"),
+        scored=score.get("scored"),
+        fresh=bool(score.get("fresh")),
+        accepted_partial=str(accepted).strip() if accepted else None,
+        title=str(synced.get("title") or "").strip(),
+        creator=str(synced.get("creator") or "").strip(),
+        synced_digest=str(synced.get("construction_digest") or ""),
+        score_digest=str(score.get("construction_digest") or ""),
+        digest=digest,
+    )
+
+
+def read_rungs(yt: Path, ref: str) -> dict[str, Rung]:
+    """Every rung.yaml at `ref`, by id — the one youtube reader.
+
+    Read at a ref, never the working tree: youtube's checkout may be on any
+    branch, mid-edit by another session. A reconstruction (a folder with a
+    construction.ggb-commands, see `youtube_recon_ids`) with no rung.yaml at
+    the ref is absent here; a ref older than youtube's rung files (before
+    youtube 30a2709) gives an empty dict, and callers say so rather than
+    treating "no rung" as "not done".
+    """
+    proc = _git(yt, "ls-tree", "-r", "--name-only", ref, "reconstructions/")
+    if proc.returncode != 0:
+        return {}
+    ids = sorted(
+        m.group(1)
+        for m in (re.match(r"reconstructions/([^/]+)/rung\.yaml$", p) for p in proc.stdout.splitlines())
+        if m
+    )
+    paths = [f"reconstructions/{cid}/rung.yaml" for cid in ids]
+    paths += [f"reconstructions/{cid}/construction.ggb-commands" for cid in ids]
+    blobs = cat_files(yt, ref, paths)
+    rungs: dict[str, Rung] = {}
+    for cid in ids:
+        text = blobs.get(f"reconstructions/{cid}/rung.yaml")
+        if text is None:
+            continue
+        rungs[cid] = _rung_from_yaml(cid, text, blobs.get(f"reconstructions/{cid}/construction.ggb-commands"))
+    return rungs
 
 
 def bikar_bkr_resolves(rel: str, root: Path = ROOT) -> bool | None:
@@ -342,8 +481,9 @@ def check(
                 owed.append(cid)
                 findings.append(
                     f"{rel}: L3 youtube reconstruction {cid} exists at {where} but has "
-                    f"no ledger row — a row is owed. Add one (youtube `attempted`, the "
-                    f"other cells `—` until the work lands) and advance the pin."
+                    f"no ledger row — a row is owed. tools/reconstruction_intake.py "
+                    f"--write adds it (youtube cell from its rung.yaml, the other cells "
+                    f"`—` until the work lands) and advances the pin."
                 )
             for r in rows:
                 if r.id not in recon:
@@ -352,12 +492,38 @@ def check(
                         f"at the pin {pin[:12]} — advance the pin to a youtube commit "
                         f"that has it."
                     )
-            done = done_ids(yt, pin, have)
+            # L2 — the pin must sit on youtube's tip ref's history, not a side branch.
+            if tip and not is_ancestor(yt, pin, tip):
+                findings.append(
+                    f"{rel}: L2 the pinned youtube commit {pin[:12]} is not an ancestor "
+                    f"of youtube {tip.rsplit('/', 1)[-1]} — the pin is on a side branch; "
+                    f"re-pin to a commit on {tip.rsplit('/', 1)[-1]}."
+                )
+            # L4 — the youtube cell is read from the rung's own state file at the pin.
+            rungs = read_rungs(yt, pin)
             for r in rows:
-                if r.id in done and r.youtube == "attempted":
+                rung = rungs.get(r.id)
+                if rung is None:
+                    if r.id in recon:
+                        reports.append(
+                            f"{rel}:{r.lineno}: {r.id} has no rung.yaml at the pin "
+                            f"{pin[:12]} — its youtube cell cannot be checked (advance "
+                            f"the pin past youtube 30a2709)."
+                        )
+                    continue
+                if r.youtube == rung.status:
+                    continue
+                if r.youtube == "done":
+                    findings.append(
+                        f"{rel}:{r.lineno}: L4 {r.id} says done but its rung.yaml at the "
+                        f"pin says {rung.status} — a row may not claim a rung finished "
+                        f"that youtube has not; run tools/reconstruction_intake.py --write."
+                    )
+                else:
                     reports.append(
-                        f"{rel}:{r.lineno}: {r.id} is listed done in done.md at the "
-                        f"pin but its row still says attempted."
+                        f"{rel}:{r.lineno}: {r.id} says {r.youtube} but its rung.yaml at "
+                        f"the pin says {rung.status} — the row is behind its source; "
+                        f"tools/reconstruction_intake.py --write refreshes it."
                     )
 
     unmigrated = [r.id for r in rows if not r.migrated and not r.by_design]
@@ -394,24 +560,20 @@ _CLEAN_LEDGER = """# Constructions ledger
 
 Youtube pin: `{pin}` (2026-09-17)
 
+Scope of the set (K2): **3 <!--count:constructions-total--> constructions**.
+
 | id | title | youtube | naqsh | O1 | O2 | O3 | coaster | catalog | printed |
 |---|---|---|---|---|---|---|---|---|---|
 | `AAAAAAAAAAA` | first | done | — | — | — | — | — | — | — |
 | `BBBBBBBBBBB` | mechanism | done | no piece by design | — | — | — | no piece by design | — | — |
-| `_CCCCCCCCCC` | added after the old pin | done | — | — | — | — | — | — | — |
+| `_CCCCCCCCCC` | added after the old pin | queued | — | — | — | — | — | — | — |
+
+## Oracle notes
 """
 
 
-def _init_youtube(yt: Path) -> tuple[str, str]:
-    """A scratch youtube repo shaped like the bknVRSMcLj0 miss. Returns (old_pin, pin).
-
-    `old_pin` has AAAAAAAAAAA and BBBBBBBBBBB; the next commit on `main` (`pin`)
-    adds _CCCCCCCCCC, the way bknVRSMcLj0 landed in youtube after the ledger's
-    pin was taken. A third commit on a feature branch — left CHECKED OUT, so it
-    is youtube's working tree — adds DDDDDDDDDDD, which is not on `main` and so
-    owes no row yet: the gate reads refs, not whatever youtube has checked out.
-    """
-    yt.mkdir(parents=True, exist_ok=True)
+def scratch_git(yt: Path):
+    """A `git(*args)` runner for a scratch repo, with a fixed author and no hooks."""
     env = {**os.environ, "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t",
            "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t"}
 
@@ -419,13 +581,75 @@ def _init_youtube(yt: Path) -> tuple[str, str]:
         return subprocess.run(["git", "-C", str(yt), *args], capture_output=True,
                               text=True, check=True, env=env).stdout.strip()
 
-    def recon(cid: str) -> None:
-        d = yt / "reconstructions" / cid
-        d.mkdir(parents=True)
-        (d / "construction.ggb-commands").write_text("A = (0,0)\n", encoding="utf-8")
+    return git
+
+
+def write_rung(
+    yt: Path,
+    cid: str,
+    *,
+    status: str = "done",
+    verdict: str = "PASS",
+    passed: int = 9,
+    scored: int = 9,
+    fresh: bool = True,
+    accepted_partial: str | None = None,
+    stale_digest: bool = False,
+    title: str | None = None,
+    creator: str = "Test Maker",
+    construction: str = "A = (0,0)\n",
+) -> None:
+    """A scratch reconstructions/<cid>/ with its construction and rung.yaml.
+
+    The rung's two digests are computed from `construction` the way youtube's
+    `make rung-sync` does (sha256 of the bytes, first 12 hex); `stale_digest`
+    writes an older digest instead, the shape of a synced half that lags the
+    construction beside it — the hard case the design doc's §8 names.
+    """
+    import hashlib
+
+    d = yt / "reconstructions" / cid
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "construction.ggb-commands").write_text(construction, encoding="utf-8")
+    digest = hashlib.sha256(construction.encode("utf-8")).hexdigest()[:12]
+    recorded = "000000000000" if stale_digest else digest
+    accepted = f"'{accepted_partial}'" if accepted_partial else "null"
+    (d / "rung.yaml").write_text(
+        f"id: {cid}\n"
+        f"work:\n"
+        f"  status: {status}\n"
+        f"  blocked_by: []\n"
+        f"  accepted_partial: {accepted}\n"
+        f"synced:\n"
+        f"  title: '{title or 'Rung ' + cid}'\n"
+        f"  creator: '{creator}'\n"
+        f"  construction_digest: {recorded}\n"
+        f"  score:\n"
+        f"    verdict: {verdict}\n"
+        f"    passed: {passed}\n"
+        f"    scored: {scored}\n"
+        f"    construction_digest: {recorded}\n"
+        f"    fresh: {'true' if fresh else 'false'}\n",
+        encoding="utf-8",
+    )
+
+
+def _init_youtube(yt: Path) -> tuple[str, str, str]:
+    """A scratch youtube repo shaped like the bknVRSMcLj0 miss. Returns (old_pin, pin, side).
+
+    `old_pin` has AAAAAAAAAAA and BBBBBBBBBBB; the next commit on `main` (`pin`)
+    adds _CCCCCCCCCC, the way bknVRSMcLj0 landed in youtube after the ledger's
+    pin was taken. _CCCCCCCCCC's rung says `queued` while done.md names it under
+    "attempted" — the text-search shape that once read as done. A third commit
+    on a feature branch (`side`) — left CHECKED OUT, so it is youtube's working
+    tree — adds DDDDDDDDDDD, which is not on `main` and so owes no row yet: the
+    gate reads refs, not whatever youtube has checked out.
+    """
+    yt.mkdir(parents=True, exist_ok=True)
+    git = scratch_git(yt)
 
     def commit(msg: str, done: str) -> str:
-        (yt / "docs" / "tasks" / "done.md").write_text(f"done: {done}\n", encoding="utf-8")
+        (yt / "docs" / "tasks" / "done.md").write_text(done, encoding="utf-8")
         git("add", "-A")
         git("commit", "-q", "-m", msg)
         return git("rev-parse", "HEAD")
@@ -435,18 +659,18 @@ def _init_youtube(yt: Path) -> tuple[str, str]:
     # repo would otherwise fire this project's own pre-commit hooks on its seed
     # commit. Point it at nothing: the scratch repo is not the project.
     git("config", "core.hooksPath", "/dev/null")
-    recon("AAAAAAAAAAA")
-    recon("BBBBBBBBBBB")
+    write_rung(yt, "AAAAAAAAAAA")
+    write_rung(yt, "BBBBBBBBBBB")
     (yt / "reconstructions" / "_techniques").mkdir()
     (yt / "reconstructions" / "_techniques" / "note.md").write_text("snippet\n", encoding="utf-8")
     (yt / "docs" / "tasks").mkdir(parents=True)
-    old_pin = commit("seed", "AAAAAAAAAAA BBBBBBBBBBB")
-    recon("_CCCCCCCCCC")
-    pin = commit("add C", "AAAAAAAAAAA BBBBBBBBBBB _CCCCCCCCCC")
+    old_pin = commit("seed", "done: AAAAAAAAAAA BBBBBBBBBBB\n")
+    write_rung(yt, "_CCCCCCCCCC", status="queued", verdict="PARTIAL", passed=1, scored=2)
+    pin = commit("add C", "done: AAAAAAAAAAA BBBBBBBBBBB\nattempted: _CCCCCCCCCC\n")
     git("checkout", "-q", "-b", "feat/d")
-    recon("DDDDDDDDDDD")
-    commit("add D", "AAAAAAAAAAA BBBBBBBBBBB _CCCCCCCCCC DDDDDDDDDDD")
-    return old_pin, pin
+    write_rung(yt, "DDDDDDDDDDD")
+    side = commit("add D", "done: AAAAAAAAAAA BBBBBBBBBBB DDDDDDDDDDD\nattempted: _CCCCCCCCCC\n")
+    return old_pin, pin, side
 
 
 def self_test() -> int:
@@ -457,7 +681,7 @@ def self_test() -> int:
     tmp = Path(tempfile.mkdtemp(prefix="constructions-gate-"))
     try:
         yt = tmp / "youtube"
-        old_pin, pin = _init_youtube(yt)
+        old_pin, pin, side = _init_youtube(yt)
         primary = tmp / "3d-models"
         (primary / "docs" / "constructions").mkdir(parents=True)
         (primary / ".git").mkdir()  # enough for relative_to; youtube passed explicitly
@@ -526,10 +750,38 @@ def self_test() -> int:
         finally:
             del os.environ["BIKAR_DIR"]
 
-        # A row that says "attempted" for a done id is REPORTED.
+        # A row that says "attempted" while the rung says done is REPORTED, not failed.
         attempted = clean.replace("| `AAAAAAAAAAA` | first | done |",
                                   "| `AAAAAAAAAAA` | first | attempted |")
-        case("attempted-but-done is reported", attempted, 0, "still says attempted")
+        case("attempted-but-done is reported", attempted, 0,
+             "says attempted but its rung.yaml at the pin says done")
+
+        # Item 7 of the intake design: done.md names _CCCCCCCCCC under "attempted",
+        # and the old text search would have called it done. Its rung says queued,
+        # so the clean ledger's `queued` cell draws no report — and a cell that
+        # says done over it FAILS.
+        case("a done.md mention does not make a rung done", clean, 0, None,
+             must_pass_report_absent="_CCCCCCCCCC")
+        done_over_queued = clean.replace("| `_CCCCCCCCCC` | added after the old pin | queued |",
+                                         "| `_CCCCCCCCCC` | added after the old pin | done |")
+        case("done over a queued rung FAILS", done_over_queued, 1, None,
+             want_finding="L4 _CCCCCCCCCC says done but its rung.yaml at the pin says queued")
+
+        # L2: a pin on a side branch FAILS as not an ancestor of youtube main
+        # (and DDDDDDDDDDD, which that pin has, owes a row — two findings).
+        case("pin on a side branch FAILS", _CLEAN_LEDGER.format(pin=side), 2, None,
+             want_finding="is not an ancestor of youtube main")
+
+        # The shared reader: the pin sees three rungs, and the digest it recomputes
+        # matches the two the rung records.
+        rungs = read_rungs(yt, pin)
+        ok = (sorted(rungs) == ["AAAAAAAAAAA", "BBBBBBBBBBB", "_CCCCCCCCCC"]
+              and all(r.digest_ok for r in rungs.values())
+              and rungs["_CCCCCCCCCC"].status == "queued"
+              and rungs["AAAAAAAAAAA"].score == "PASS 9/9")
+        print(f"self-test {'ok  ' if ok else 'FAIL'}: read_rungs reads three rungs at the pin, digests match"
+              + ("" if ok else f" — {rungs}"))
+        failures += 0 if ok else 1
 
         # L2: no pin in the header FAILS.
         nopin = "\n".join(l for l in clean.splitlines() if "Youtube pin" not in l)
@@ -581,26 +833,29 @@ def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--self-test", action="store_true")
     ap.add_argument("--session", action="store_true",
-                    help="one line for SessionStart; silent when nothing is unmigrated")
+                    help="the SessionStart lines, answered by tools/reconstruction_intake.py; "
+                         "silent when nothing is owed")
     args = ap.parse_args(argv)
 
     if args.self_test:
         return self_test()
 
-    if os.environ.get("CONSTRUCTIONS_OK") and not args.session:
+    if args.session:
+        # One reader: the intake tool imports this file's youtube helpers and
+        # prints the session lines, so the gate and the hook never disagree.
+        # Imported here, not at the top, because the tool imports this module.
+        sys.path.insert(0, str(ROOT / "tools"))
+        from reconstruction_intake import session_lines  # noqa: E402
+
+        for line in session_lines():
+            print(line)
+        return 0
+
+    if os.environ.get("CONSTRUCTIONS_OK"):
         print("constructions: skipped (CONSTRUCTIONS_OK=1)")
         return 0
 
     findings, reports, stats = check()
-
-    if args.session:
-        unmig = stats.get("unmigrated") or []
-        if unmig:
-            print(f"{len(unmig)} constructions not yet migrated: {', '.join(unmig)}")
-        owed = stats.get("owed") or []
-        if owed:
-            print(f"{len(owed)} youtube reconstructions have no ledger row: {', '.join(owed)}")
-        return 0
 
     for r in reports:
         print(r)
