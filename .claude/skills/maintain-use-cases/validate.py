@@ -36,7 +36,9 @@ Pre-commit mode adds the freshness contract:
     plus MERGE_HEAD while a merge is in progress); self-repo
     pointers read the index for staged files, so what is checked is what ships
   - use-cases.md not staged but a staged file is referenced by a 3d-models
-    pointer -> BLOCK (override once with USE_CASES_OK=1 git commit ...)
+    pointer -> every pointer into it is read against the staged content;
+    all anchored and resolving passes with a note, else BLOCK (override
+    once with USE_CASES_OK=1 git commit ...)
   - staged files touch experience surfaces (index.html, Makefile, docs/,
     src/) -> non-blocking reminder
   - 3d-models as_of more than STALE_LIMIT commits behind HEAD -> reminder
@@ -1068,6 +1070,28 @@ def mode_repair(root: str) -> int:
     return mode_full(root)
 
 
+def staged_pointer_misses(root: str, doc: "Doc", hits: list[str], staged: set[str]) -> list[str]:
+    """Why the staged edit of each hit file cannot be waved through, if it cannot.
+
+    Every self-repo pointer into a hit file, from the map and from the tree, is
+    checked against the staged blob with the same three checks `validate_full`
+    uses. An unanchored pointer is listed too: nothing but the file length
+    speaks for it, and the line it names may have shifted without a word
+    changing. Empty means every pointer verified.
+    """
+    claims = [c for c in tree_claims(root) if c.ptr.repo == SELF_REPO and c.ptr.path in hits]
+    claims += [Claim(p, DOC_RELPATH, 0) for p in doc.pointers if p.repo == SELF_REPO and p.path in hits]
+    out: list[str] = []
+    for c in claims:
+        site = c.site if c.line else f"{c.doc}: "
+        if not c.ptr.anchor:
+            out.append(f"{site}{c.ptr} has no anchor, so the staged edit cannot be verified against it")
+            continue
+        blob, where = self_blob(root, c.ptr.path, staged, at_commit=True)
+        out.extend(f"{site}{e}" for e in check_pointer(c.ptr, blob, where))
+    return out
+
+
 def mode_staged(root: str) -> int:
     staged = [f for f in run_git(root, "diff", "--cached", "--name-only").splitlines() if f]
     head = try_git(root, "rev-parse", "HEAD")
@@ -1104,6 +1128,22 @@ def mode_staged(root: str) -> int:
     hits = sorted(set(holders) & set(staged))
     unstaged_docs = sorted({d for h in hits for d in holders[h]} - set(staged))
     if hits and unstaged_docs:
+        # The block above guards one thing: a pointer into the staged file may
+        # no longer hold once the edit lands. That is checkable, so check it:
+        # every anchored pointer into a hit file is read against the staged blob
+        # (what the commit will contain), and when all of them still resolve
+        # there is nothing to repair and nothing to block. An unanchored pointer
+        # cannot be verified past file length, so it keeps the block. Before
+        # this (2026-11-03) a ledger edit that touched no pointed-at line was
+        # blocked by an unchanged map that could not be staged.
+        unverified = staged_pointer_misses(root, doc, hits, set(staged))
+        if not unverified:
+            print(
+                "use-cases: staged files are pointed at by unstaged documents, and every pointer "
+                f"into them still resolves in the staged content: {', '.join(hits)}",
+                file=sys.stderr,
+            )
+    if hits and unstaged_docs and unverified:
         where = "; ".join(f"{h} <- {', '.join(sorted(holders[h]))}" for h in hits)
         if os.environ.get("USE_CASES_OK") == "1":
             print(f"use-cases: override accepted for pointer-referenced files: {', '.join(hits)}", file=sys.stderr)
@@ -1112,7 +1152,8 @@ def mode_staged(root: str) -> int:
                 "use-cases BLOCK: staged files carry line pointers from documents "
                 f"that are not staged.\n  {where}\n"
                 f"  Not staged: {', '.join(unstaged_docs)}\n"
-                "  Re-check the line numbers (validate.py prints where an anchor moved to),\n"
+                + "".join(f"  {u}\n" for u in unverified)
+                + "  Re-check the line numbers (validate.py prints where an anchor moved to),\n"
                 "  stage the doc, and retry — or override once with: USE_CASES_OK=1 git commit ...",
                 file=sys.stderr,
             )
@@ -1550,6 +1591,73 @@ def self_test() -> int:
             "a pointer at a file staged for deletion is an error, not a pass",
             "does not exist in the staged content"
             in (validate_full(doc, tmp, staged={"CLAUDE.md"}, at_commit=True)[0] or [""])[0],
+            True,
+        )
+
+    # The commit-time block when the map is NOT staged, reproduced both ways.
+    # An edit to a pointed-at file used to block whatever it changed, because
+    # an unchanged map cannot be staged to clear it (2026-11-03: a ledger note
+    # under an anchored line). Now the pointers into the staged file are read
+    # against the staged content: all resolving passes, one moved blocks.
+    with tempfile.TemporaryDirectory() as tmp:
+        def git(*args: str) -> None:
+            subprocess.run(["git", "-C", tmp, *args], check=True, capture_output=True, env=git_env())
+
+        def write(rel: str, text: str) -> None:
+            os.makedirs(os.path.dirname(os.path.join(tmp, rel)) or tmp, exist_ok=True)
+            with open(os.path.join(tmp, rel), "w", encoding="utf-8") as f:
+                f.write(text)
+
+        git("init", "-q", "-b", "master")
+        write("CLAUDE.md", "# header\n- **K9 -> D1.** Every relative link must resolve on disk.\n")
+        git("add", "CLAUDE.md")
+        git("-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "base")
+        head = run_git(tmp, "rev-parse", "HEAD")
+        write(
+            DOC_RELPATH,
+            f"---\nas_of:\n  {SELF_REPO}: {head}\nrepos: {{}}\n---\n\n"
+            "```mermaid\ngraph TD\n  A[UC1]\n```\n\n"
+            f'| UC1 | rules | `{SELF_REPO}:CLAUDE.md:L2 "K9 -> D1."` |\n',
+        )
+        git("add", DOC_RELPATH)
+        git("-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "map")
+        map_doc = Doc(run_git(tmp, "show", f"HEAD:{DOC_RELPATH}"))
+
+        write("CLAUDE.md", "# header\n- **K9 -> D1.** Every relative link must resolve on disk.\n- a note under it\n")
+        git("add", "CLAUDE.md")
+        expect(
+            "a staged edit under an anchored line leaves every pointer resolving — nothing to repair",
+            staged_pointer_misses(tmp, map_doc, ["CLAUDE.md"], {"CLAUDE.md"}),
+            [],
+        )
+        expect(
+            "...so the unchanged, unstaged map does not block the commit",
+            mode_staged(tmp),
+            0,
+        )
+        write("CLAUDE.md", "# header\n- a line pushed in above\n- **K9 -> D1.** Every relative link must resolve on disk.\n")
+        git("add", "CLAUDE.md")
+        moved = staged_pointer_misses(tmp, map_doc, ["CLAUDE.md"], {"CLAUDE.md"})
+        expect(
+            "a staged edit that moves the anchored line is named, read from the staged content",
+            len(moved) == 1 and "in the staged content" in moved[0] and "K9 -> D1." in moved[0],
+            True,
+        )
+        expect(
+            "...and the commit is blocked until the map is repaired and staged",
+            mode_staged(tmp),
+            1,
+        )
+        unanchored = Doc(
+            f"---\nas_of:\n  {SELF_REPO}: {head}\nrepos: {{}}\n---\n\n"
+            "```mermaid\ngraph TD\n  A[UC1]\n```\n\n"
+            f"| UC1 | rules | `{SELF_REPO}:CLAUDE.md:L2` |\n"
+        )
+        write("CLAUDE.md", "# header\n- **K9 -> D1.** Every relative link must resolve on disk.\n- a note under it\n")
+        git("add", "CLAUDE.md")
+        expect(
+            "an unanchored pointer into the staged file cannot be verified, so it still blocks",
+            any("has no anchor" in m for m in staged_pointer_misses(tmp, unanchored, ["CLAUDE.md"], {"CLAUDE.md"})),
             True,
         )
 

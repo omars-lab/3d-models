@@ -24,8 +24,14 @@ folded: no
   staged too. A ledger cell edit and its catalog sync are one commit.
 - Agent C's strict pre-push suite raced on the Studio keyboard-dial specs at load average 75:
   four agents' test workers in sibling bikar worktrees. The agent waited for the load to drop
-  and pushed again rather than skipping the gate. Four bikar pushes at once from one machine
-  is too many; stagger them.
+  and pushed again rather than skipping the gate. Several bikar pushes at once from one
+  machine is too many; stagger them.
+
+- Hook 20 blocked a ledger note written under an anchored line, because the unchanged
+  map could not be staged to clear it. Fixed in the hook rather than overridden: when the
+  map is not staged, the pointers into a staged file are now read against the staged content
+  and the commit passes when every one still resolves (a moved or unanchored pointer still
+  blocks); four self-test cases cover both ways.
 
 ## Worth copying
 
@@ -39,3 +45,7 @@ folded: no
   rediscovering the ledger's column rule.
 - Reading the sibling's PR diff and its description before the merge attempt, so the review
   stands on the record whoever merges it.
+
+## Checks on the tip
+
+- `make validate` on 63c9ac00, in the worktree with `build/orb-breakdown` removed first: hook-parity all 32 verified, exit 0. The `FAILED` lines in its output are the coaster-pictures self-test's cases that are meant to fail.

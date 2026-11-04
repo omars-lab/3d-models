@@ -196,7 +196,8 @@ at their imports on 2026-09-30, on the youtube branches named in each bikar PR
   re-render scores the same, so it is not a stale hero. O1 was re-run on
   2026-11-03, during the blossom import, against bikar's `gBV_JTt3Kxk.bkr`: it
   reads `PASS: 144 compared, 0 failed, 47 skipped/extra`, the row's cell since
-  then; the arc rows that failed before now compare. O2 was not re-run.
+  then. The arcs compare since youtube 224a346 ("O1 checks arcs", on main at
+  the pin). O2 was not re-run.
 - **`jlTmt_279M4`** O1 `PASS: 86 compared, 0 failed, 75 skipped/extra` — on
   youtube branch `o1-polyline-ray` (9a92134), which teaches the comparator
   polyline and ray rows and is not on youtube main yet; O2
