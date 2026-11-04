@@ -55,7 +55,7 @@ same way before its push, and the PR body names the verdict on the final tip.
 
 - bikar #368 merged on Omar's "merge all prs", and the held edits (ledger row and count,
   the Oracle-notes paragraph, CS-18, the catalog page and picture, the baseline entry) were
-  applied from the checked-in hand-off file and the file deleted in one commit (#PRNUM). The
+  applied from the checked-in hand-off file and the file deleted in one commit (#873). The
   catalog sync had said "89 already in step" before the ledger row changed: it reads
   migration from the ledger row, not from bikar, so the row goes first and the sync after.
 

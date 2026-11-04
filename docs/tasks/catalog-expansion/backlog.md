@@ -67,7 +67,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       `reconstructions/n_ICgwOr6qs/`, ready for the coaster step.
       **Done 2026-11-03: the coaster step merged as bikar #368, the gallery card and STL landed
       here in #872, and the ledger row, catalog note, CS-18 block and baseline entry followed in
-      #PRNUM.** Nothing is left on this item; see the done list.
+      #873.** Nothing is left on this item; see the done list.
       **Coaster step half done 2026-10-06, then parked** (Omar: "i want to wrap up consturciotn
       and move back to split coasters and split inflills"). Done: the source rewrite (whole lines
       through the unit points, and the 180° ray as a segment to a derived far point, so no free
