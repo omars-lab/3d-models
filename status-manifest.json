@@ -1,23 +1,23 @@
 {
   "schema": 1,
-  "generated": "2026-11-03",
+  "generated": "2026-11-04",
   "source": "build/bikar-ref.txt, .claude/skills/maintain-use-cases/use-cases.md as_of, gh-pages tip — via build/status_manifest.py",
   "bikar_ref": {
-    "sha": "8445c7265fc98ab72d9c608179567ffd0895f1de",
-    "short": "8445c72",
+    "sha": "21420bc3ba9d9dd99ff186427f8c95f41d80f4f9",
+    "short": "21420bc",
     "ref": "main",
     "dirty": false
   },
   "as_of": {
-    "3d-models": "04ce5898fd59c9aff8b7896206c4eba0e64de166",
-    "bikar": "8445c7265fc98ab72d9c608179567ffd0895f1de",
+    "3d-models": "0331ebf8671d9e055cfcb1d7245569fe7b41b3ca",
+    "bikar": "d55fc745987fbd4c0bdf3561bc3f64a36a398954",
     "qiyas": "74083326b6439e277ac7c57f0cfc28716b7ffbc2",
     "youtube": "1f1ec577bd20f3ce34cb5150fa7b3d41be0640ef"
   },
   "deploy": {
-    "sha": "a9cfe0c7a88894052ac3c6c72ba93121aaf371ea",
-    "short": "a9cfe0c",
-    "date": "2026-09-30",
-    "from_master": "42ef7de"
+    "sha": "ddc724ad66381108f3fbcd295e44ae3bf02e9a91",
+    "short": "ddc724a",
+    "date": "2026-11-03",
+    "from_master": "be479b91"
   }
 }
