@@ -2,11 +2,13 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-11-03 — Three 1.2 mm pins on a triangle are now the star's default in bikar, and star-3 gives the flat star (no slope) the same pins: two copies, built, Omar's yes in green, sent and printed in about 10 minutes with its log and timelapse. Judging it waits on Omar (bikar #367, 3d-models #869, #870, #871)
+- 2026-11-02 — star-2 sent in green on Omar's yes and printed to the finish, with its log and timelapse (3d-models #845, #848)
 - 2026-11-02 — star-2's print record: three 1.2 mm pins on a triangle kept ("left most was best"), the 0.8 mm pins dropped ("the right two's pins broke and turned"), bottoms as clean; Omar's answers merged from the hub (3d-models #853, #854)
 - 2026-11-02 — cedar-stencil-1's print record: the 0.6 mm tracing card is kept, on Omar's "stencil was good"; the plate page now shows it printed (3d-models #851)
 - 2026-11-02 — Checked whether star-2's pin sizes can be told apart for judging: the first-layer picture shows six identical columns, but Omar judges from the pieces, whose dots name the size, so no key is drawn on the picture; the first question now says to count each star's dots before closing it, since closing hides the cut-face dots (3d-models #849)
 - 2026-11-02 — The hub's judging page shows a plate's first-layer picture, supports and brim included, when it has one, instead of the bed drawing; asked by Omar on star-1 (3d-models #847)
-- 2026-11-01 — hexfit-1's print record: 4 dots (0.01 mm a side) kept, the rest dropped but 7 dots (not judged); the slot cut to the rail's depth rocked the same as stock ("both rock")
+- 2026-11-01 — hexfit-1's print record: 4 dots (0.01 mm a side) kept, the rest dropped but 7 dots (not judged); the slot cut to the rail's depth rocked the same as stock ("both rock") (3d-models #844)
 - 2026-11-01 — star-2 built from Omar's star-1 comments: bikar can now put three pins on a circle round a piece's middle (a triangle centred on the star), and the plate tries it at three pin sizes, two copies each on grid supports, each copy with its own dots. It waits on Omar's yes and color (bikar #364, 3d-models #842)
 - 2026-10-29 — hexfit-1's two after-print answers saved from the hub: 4 dots (0.01 mm a side) holds best, and the slot depth stays the same. bikar's dovetail slide now defaults to a 0.01 mm gap a side. Its print record is still to write (3d-models #828, bikar #356)
 - 2026-10-29 — split-06's print record, from what Omar said off the bed (3d-models #823)

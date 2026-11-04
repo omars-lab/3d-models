@@ -171,16 +171,6 @@
     },
     {
       "doc": "docs/tasks/catalog-expansion/n_ICgwOr6qs-held-edits.md",
-      "path": "bikar/patterns/Constructions/n_ICgwOr6qs.bkr",
-      "why": "Forward reference (kind 2): the held-edits file for the ten-petal blossom quotes text to paste after bikar PR #368 merges, and this path exists only on that PR's branch (blossom-n_I). Remove this entry in the commit that applies the held edits and deletes the file."
-    },
-    {
-      "doc": "docs/tasks/catalog-expansion/n_ICgwOr6qs-held-edits.md",
-      "path": "bikar/patterns/Constructions/n_ICgwOr6qs-minimal-coaster.bkr",
-      "why": "Forward reference (kind 2): the held-edits file for the ten-petal blossom quotes text to paste after bikar PR #368 merges, and this path exists only on that PR's branch (blossom-n_I). Remove this entry in the commit that applies the held edits and deletes the file."
-    },
-    {
-      "doc": "docs/tasks/catalog-expansion/n_ICgwOr6qs-held-edits.md",
       "path": "src/Coasters/n_ICgwOr6qs-minimal-coaster-mini.stl",
       "why": "Gitignored build output (.gitignore:57 excludes src/Coasters/*-mini.stl) quoted in the held-edits file for the ten-petal blossom; the catalog.md entry it will carry gets its own entry when the held edits are applied, and this one goes then."
     }
