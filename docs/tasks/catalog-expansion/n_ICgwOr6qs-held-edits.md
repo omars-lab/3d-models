@@ -7,6 +7,11 @@ Not urgent after the merge: with the row still `—`, hook 51 stays green (check
 Held because the ledger's own column rule says the naqsh cell stays `—` until the
 .bkr is merged, and hook 51 (pattern catalog) reads bikar at origin/main.
 
+In the ledger lines below, `[the count marker stays as it is]` stands for the HTML comment
+that pins the migrated count to its tool (the one that reads `count:constructions-migrated`);
+it is spelled out here because the counts gate reads the real marker as a claim, and the
+future 15 is not true until the row is in. Leave the marker in place and change only the digit.
+
 ## docs/constructions/ledger.md — exact per-line replacements (keep line 130 where it is:
 ## every edit above it is in-line, the use-case map pins `ledger.md:L130`)
 

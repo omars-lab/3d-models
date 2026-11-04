@@ -2,7 +2,7 @@
 name: auto-mode-classifier-refuses-pr-merge
 description: In auto mode the classifier refuses `gh pr merge` as "Merge Without Review" even after the diff was read; one attempt, then the merge is Omar's
 metadata:
-  type: feedback
+  type: project
 ---
 
 The auto-mode permission classifier denies `gh pr merge` with the reason "[Merge Without Review]".

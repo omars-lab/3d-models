@@ -1127,6 +1127,7 @@ def mode_staged(root: str) -> int:
         holders.setdefault(path, set()).add(DOC_RELPATH)
     hits = sorted(set(holders) & set(staged))
     unstaged_docs = sorted({d for h in hits for d in holders[h]} - set(staged))
+    unverified: list[str] = []
     if hits and unstaged_docs:
         # The block above guards one thing: a pointer into the staged file may
         # no longer hold once the edit lands. That is checkable, so check it:

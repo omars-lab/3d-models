@@ -48,4 +48,7 @@ folded: no
 
 ## Checks on the tip
 
+Every later tip of the branch (the hook 20 fix, the held-edits file, this note) was run the
+same way before its push, and the PR body names the verdict on the final tip.
+
 - `make validate` on 63c9ac00, in the worktree with `build/orb-breakdown` removed first: hook-parity all 32 verified, exit 0. The `FAILED` lines in its output are the coaster-pictures self-test's cases that are meant to fail.

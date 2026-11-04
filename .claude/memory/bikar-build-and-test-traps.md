@@ -28,6 +28,15 @@ metadata:
 
 stale core dist, worktree node_modules, vitest/Playwright cwd, eslint complexity 10, `--silent` loglevel leak, CLI `-o`; the whole-corpus tests are split per pattern since bikar #302 (a timeout names the slow pattern), and never run two repos' push gates at once
 
+## Two strict gate runs at once cannot both pass (2026-11-03)
+
+The e2e config (`packages/e2e/playwright.config.ts`) sets `reuseExistingServer: true` on ports
+7120 and 4613, so a strict run borrows a sibling worktree's dev servers when they are up and
+loses them when that run ends: 93 specs died at once on `tray-list-paste` while another
+agent's gate ran, none of them touching the changed code. Before a strict run or a push, wait
+until no other `ci_parity.py --run` process is up and the load is under about 25. This is the
+mechanism behind the "never two push gates at once" line above.
+
 ## The push gate needs docker on PATH (2026-10-25)
 
 bikar's pre-push runs `make local.ci-strict`, which probes `docker info` and fails the push with five "NOT VERIFIED (docker unavailable)" orb-sweep steps when it cannot. `docker` is `/usr/local/bin/docker`, so a pinned PATH without `/usr/local/bin` fails the push even with Docker Desktop running. Start Docker (`open -a Docker`) and keep `/usr/local/bin` in the PATH.
