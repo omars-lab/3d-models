@@ -10,7 +10,7 @@ Every pattern we have, one note each. This page is written by the catalog tool
 (`python3 .claude/skills/pattern-catalog/scripts/catalog.py sync`); edit the notes, not this
 page. How the catalog is laid out and why: [the plan](plan.md).
 
-## Constructions made into coasters (14)
+## Constructions made into coasters (15)
 
 | Picture | Pattern | Catalog id | Status | Styles |
 |---|---|---|---|---|
@@ -28,8 +28,9 @@ page. How the catalog is laid out and why: [the plan](plan.md).
 | ![NtnlGMTElBk\|96](media/NtnlGMTElBk/NtnlGMTElBk-minimal.png) | [The Mustansiriya ten-fold interlaced star](patterns/the-mustansiriya-ten-fold-interlaced-star-cs-15.md) | CS-15 | built | minimal |
 | ![0ke_GpoBa-s\|96](media/0ke_GpoBa-s/0ke_GpoBa-s-minimal.png) | [A pentagon after Ptolemy's *Almagest*, doubled to ten](patterns/a-pentagon-after-ptolemys-almagest-doubled-to-ten-cs-16.md) | CS-16 | built | minimal |
 | ![88q-u2eWZqg\|96](media/88q-u2eWZqg/88q-u2eWZqg-minimal.png) | [A 16-petal rosette in one unbroken line](patterns/a-16-petal-rosette-in-one-unbroken-line-cs-17.md) | CS-17 | built | minimal |
+| ![n_ICgwOr6qs\|96](media/n_ICgwOr6qs/n_ICgwOr6qs-minimal.png) | [A ten-petal blossom from one compass setting](patterns/a-ten-petal-blossom-from-one-compass-setting.md) | CS-18 | built | minimal |
 
-## Rebuilt from the video, not yet in naqsh (19)
+## Rebuilt from the video, not yet in naqsh (18)
 
 Rebuilt in the youtube repo. No bikar file yet, so no coaster and no picture.
 
@@ -39,7 +40,6 @@ Rebuilt in the youtube repo. No bikar file yet, so no coaster and no picture.
 | [7-fold star rosette, the 27-minute build](patterns/7-fold-star-rosette-the-27-minute-build.md) | Sarah Brewer |
 | [8-fold rosettes turned 45°, with squares](patterns/8-fold-rosettes-turned-45-with-squares.md) | Sarah Brewer |
 | [A Mamluk Qur'an page from seven ten-point stars](patterns/a-mamluk-quran-page-from-seven-ten-point-stars.md) | not recorded |
-| [A ten-petal blossom from one compass setting](patterns/a-ten-petal-blossom-from-one-compass-setting.md) | not recorded |
 | [A tenfold rosette in a pentagon, ink on filmed paper](patterns/a-tenfold-rosette-in-a-pentagon-ink-on-filmed-paper.md) | Samira Mian |
 | [Alhambra Hall of the Two Sisters doors, 8-fold in a square](patterns/alhambra-hall-of-the-two-sisters-doors-8-fold-in-a-square.md) | Sarah Brewer |
 | [Broug's ten-point star from one circle](patterns/brougs-ten-point-star-from-one-circle.md) | not recorded |
@@ -73,7 +73,7 @@ Screened and queued, or held. Add one to [the planned list](planned.yaml) and sy
 |---|---|
 | [plain](styles/plain.md) | 9 |
 | [interlock](styles/interlock.md) | 2 |
-| [minimal](styles/minimal.md) | 7 |
+| [minimal](styles/minimal.md) | 8 |
 | [border](styles/border.md) | 2 |
 | [twist](styles/twist.md) | 2 |
 | [minimal-frame](styles/minimal-frame.md) | 3 |

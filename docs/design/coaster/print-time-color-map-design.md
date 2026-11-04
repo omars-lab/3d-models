@@ -47,16 +47,17 @@ This doc says how those fit together. It does not re-ask any of them.
 Pink and black are colors the plate recipes use today. The gold design color and the tray numbers
 are stand-ins.*
 
-1. **The Lab: pick a color per group.** The Coaster Lab already offers each group a color "from
-   the loaded trays or the full Bambu catalog"
-   (`bikar:packages/lab/src/coaster-piece-colors.ts:L3 "from the loaded trays or the full Bambu catalog"`).
-   Its "loaded trays" are a list baked into the Lab
-   (`bikar:packages/lab/src/color-themes.ts:L101 "export const TRAYS"`), marked in the code as
-   standing in "until call 4 says how the Lab reads the printer's"
-   (`bikar:packages/lab/src/coaster-piece-colors.ts:L93 "until call 4 says how the Lab reads the printer's"`).
-   That call 4 is call 19 on the 10-06 page, now answered: the Lab asks the hub (§6, §7). A color
+1. **The Lab: pick a color per group.** The Coaster Lab already offers each group a color from
+   the loaded trays or the full Bambu catalog
+   (`bikar:packages/lab/src/coaster-piece-colors.ts:L3 "each a color from the loaded trays"`).
+   Its "loaded trays" are the hub's read of the printer when the page has it, else a list baked
+   into the Lab (`bikar:packages/lab/src/color-themes.ts:L101 "export const TRAYS"`), shown as a
+   snapshot that is not checked
+   (`bikar:packages/lab/src/coaster-piece-colors.ts:L102 "else the baked snapshot (D-111"`).
+   That was call 4 here and call 19 on the 10-06 page, answered as D-111 and built in bikar #369:
+   the Lab asks the hub (§6, §7). A color
    no tray holds already gets the line "Not on a tray: load before the send. It still exports."
-   (`bikar:packages/lab/src/coaster-piece-colors.ts:L361 "Not on a tray: load before the send. It still exports."`).
+   (`bikar:packages/lab/src/coaster-piece-colors.ts:L402 "Not on a tray: load before the send. It still exports."`).
    That stays: a design can carry any color, and the map at print time decides. "Can buy" is the
    Bambu catalog of 314 colors (`docs/design/coaster/themes/catalog/catalog.yaml`). A spool we own
    that is not in that catalog joins the list once the shelf of owned spools has a home, which

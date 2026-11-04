@@ -1898,6 +1898,31 @@ re-renders each size from its `size` param (never mesh-scaled — plan D-D) and
 - **Feeds**: the gallery's coaster entry; the constructions ledger's `coaster` and
   `catalog` cells for `88q-u2eWZqg`.
 
+## CS-18 — Ten-petal blossom, minimal (Samira Mian, n_ICgwOr6qs)
+
+- **Status**: planned
+- **Model**: `bikar/patterns/Constructions/n_ICgwOr6qs-minimal-coaster.bkr` —
+  rendered as `--coaster Coaster` at `--param size=40` (mini) and `--param
+  size=90` (standard) by `make coasters` (→
+  `src/Coasters/n_ICgwOr6qs-minimal-coaster-mini.stl` and `-standard.stl`).
+  The **minimal** style like CS-13. The art is the Sheikh Zayed Grand Mosque fivefold
+  blossom: five petals in front and five behind, every line an arc of one compass
+  setting (`connect arc … on <host circle>`), the two front arcs and the two back arcs
+  each turned five-fold. The compass circles, the radials and the rays only locate the
+  points, so the coaster leaves them out. Arcs only, no straight line — the first
+  coaster whose straps are all chords of arcs. Knobs `--param strap=3` (1.6..5) and
+  `--param round=1` (0..1.5) as CS-4; `unit` is `(size − strap)/3.6542`. Both sizes pass
+  the mesh gate at the 1.6 mm free-standing floor (watertight, 0 degenerate) and the
+  linkage gate (1 body): the mini is 22,980 triangles / 2.8 cm³ and the standard
+  62,372 / 7.3 cm³ (euler −30 at both). Migrated with bikar PR #368.
+- **Print target**: TBD — record machine/material/nozzle/layer on first print.
+- **What we want to learn**:
+  - [ ] 1. Do the ten petal tips, where two arcs meet at a shallow angle, print clean at 90 mm with 3 mm straps, or do they need a weld (`--param weld`)?
+  - [ ] 2. At 40 mm, does a strap built from arc chords read as a curve or as facets?
+- **What we learned**: — pending.
+- **Feeds**: the gallery's coaster entry; the constructions ledger's `coaster` and
+  `catalog` cells for `n_ICgwOr6qs`.
+
 ## LP-1 — Loose-piece fit on gBV (sampler sheet 4)
 
 - **Status**: printed (2026-10-02), adjust — the plate [sheets-04](../../../docs/design/plates/sheets-04.md)

@@ -170,9 +170,9 @@
       "why": "Gitignored build output — same as the coaster minis above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. Eman Zainab's sixteen-petal rosette, minimal style (CS-17); introduced with bikar PR #317."
     },
     {
-      "doc": "docs/tasks/catalog-expansion/n_ICgwOr6qs-held-edits.md",
+      "doc": ".claude/skills/prototype/catalog.md",
       "path": "src/Coasters/n_ICgwOr6qs-minimal-coaster-mini.stl",
-      "why": "Gitignored build output (.gitignore:57 excludes src/Coasters/*-mini.stl) quoted in the held-edits file for the ten-petal blossom; the catalog.md entry it will carry gets its own entry when the held edits are applied, and this one goes then."
+      "why": "Gitignored build output — same as the coaster minis above. .gitignore:57 excludes src/Coasters/*-mini.stl; `make coasters` renders it, only `-standard.stl` is vendored. Samira Mian's ten-petal blossom, minimal style (CS-18); introduced with bikar PR #368."
     }
   ]
 }

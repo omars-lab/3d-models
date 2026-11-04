@@ -28,7 +28,7 @@ row or coaster here, and `--write` moves this pin and stubs their rows (D-122).
 Scope of the set (K2): **34 <!--count:constructions-total--> constructions**,
 one per reconstruction that has a `construction.ggb-commands` at the pin —
 `_techniques/` holds shared snippets, not a construction, and is not a row.
-**14 <!--count:constructions-migrated--> migrated** so far: a row counts as
+**15 <!--count:constructions-migrated--> migrated** so far: a row counts as
 migrated once its naqsh cell names a real `.bkr` on bikar's default branch.
 `GimTvN9hw4U` landed with bikar PRs #200/#201 (importer + golden, then the
 `piece Coaster` trailer), `7apC5Q9QS-8` with bikar PR #202, `tA8eSdVx_EQ`
@@ -67,10 +67,10 @@ to be rewritten for the importer (its petal ring, a half turn of a pair of segme
 as the whole ten-fold turn of one; youtube branch `coaster-0ke`).
 `88q-u2eWZqg` landed 2026-10-06 with bikar PR #317, a minimal coaster too: Eman Zainab's
 sixteen-petal rosette, one unbroken line of sixteen Vs and sixteen roofs, imported from youtube
-main as it is, nothing refused.
-All fourteen now vendor a standard (90 mm) coaster mesh under `src/Coasters/` and
+main as it is, nothing refused. `n_ICgwOr6qs` landed 2026-11-03 with bikar PR #368, a minimal coaster too: Samira Mian's Sheikh Zayed Mosque fivefold blossom, the first construction drawn in arcs only (twenty `connect arc` lines, no segment), whose four `CircularArc` needed the D-080 coordinate bootstrap and whose coaster needed the importer to measure an arc-only pattern's span (same PR).
+All fifteen now vendor a standard (90 mm) coaster mesh under `src/Coasters/` and
 carry a prototype-catalog entry (`CS-1`, `CS-2`, `CS-6`, `CS-7`, `CS-8`, `CS-9`,
-`CS-10`, `CS-11`, `CS-12`, `CS-13`, `CS-14`, `CS-15`, `CS-16`, `CS-17`) — P3.3 of the umbrella plan,
+`CS-10`, `CS-11`, `CS-12`, `CS-13`, `CS-14`, `CS-15`, `CS-16`, `CS-17`, `CS-18`) — P3.3 of the umbrella plan,
 which built on the `coaster` declaration (P1.6/P2.7).
 
 The ten rows added 2026-09-29, with the pin moved to youtube `8ccacb1`, are the video loop's
@@ -141,7 +141,7 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 | `kpFgs2e8YGw` | Star rosettes on a 3-uniform tiling (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `lEfWSogWscs` | Pattern from the Tomb of Itimad ad-Daula (Sarah Brewer) | done | `bikar/patterns/Constructions/lEfWSogWscs.bkr` | PASS 49/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/lEfWSogWscs-coaster-standard.stl` | CS-7 | — |
 | `n3IidKfXE1I` | Variable-angled 12-6-4 Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/n3IidKfXE1I.bkr` | PASS 64/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/n3IidKfXE1I-coaster-standard.stl` | CS-10 | — |
-| `n_ICgwOr6qs` | A ten-petal blossom from one compass setting | done | — | — | — | — | — | — | — |
+| `n_ICgwOr6qs` | A ten-petal blossom from one compass setting | done | `bikar/patterns/Constructions/n_ICgwOr6qs.bkr` | PASS 34/0 | PASS 1.0/1.0 | none by design: no solid to compare (see notes) | `src/Coasters/n_ICgwOr6qs-minimal-coaster-standard.stl` | CS-18 | — |
 | `nmEjCTzMbDg` | n-fold Flower in GeoGebra Classic 5 (Sarah Brewer) | done | `bikar/patterns/Constructions/nmEjCTzMbDg.bkr` | FAIL 25/15 | FAIL 0.9176/0.2589 | none by design: no solid to compare (see notes) | `src/Coasters/nmEjCTzMbDg-coaster-standard.stl` | CS-9 | — |
 | `rDuxHF3xMOc` | 8-fold Star Rosette with Sequences (Sarah Brewer) | done | `bikar/patterns/Constructions/rDuxHF3xMOc.bkr` | PASS 41/0 | FAIL 0.8381/1.0 | PASS 1.000 | `src/Coasters/rDuxHF3xMOc-coaster-standard.stl` | CS-8 | — |
 | `sDO9fpu76v8` | Pattern from the Royal Alcazar (Sarah Brewer) | done | `bikar/patterns/Constructions/sDO9fpu76v8.bkr` | PASS 84/0 | PASS 0.996/0.9972 | PASS 1.000 | `src/Coasters/sDO9fpu76v8-coaster-standard.stl` | CS-11 | — |
@@ -221,3 +221,5 @@ diameters too, which naqsh keeps as scaffold, and recall was 0.71 against the sa
 rewrite: O1 `PASS: 33 compared, 0 failed, 11 skipped/extra`; O2
 `O2 PASS: edge-SSIM 0.9633 (min 0.7), recall 1.0 precision 1.0 (min 0.98)`. The hero export is
 newer than the source's last commit, so it is not stale. O3 is `—`: there is no `.ggb` export.
+
+`n_ICgwOr6qs` was scored at its import on 2026-11-03, on youtube main (1f1ec57, the ledger's pin; the source last changed at 224a346, and the `coaster-n_I` branch is that same tree), with no source rewrite but with the D-080 coordinate bootstrap: the four `CircularArc` have no coordinates in the command file, so the AST was built once with `--lenient CircularArc --emit-coords`, the seventeen point coordinates written back in with `--cached-coords`, and the import run again, which then lowered every statement (Rotate 18, Intersect 8, CircularArc 4, Circle 3, point 3, Segment 3, Line 2, Sequence 1, Translate 1, Vector 1; nothing refused or dropped). O1 `PASS: 34 compared, 0 failed, 58 skipped/extra` — the skips are the `Sequence` orbits (`radials`, `f2`..`f5`, `b2`..`b5`), which are the naqsh pattern layer, and `u180`, which the lowering tracks and never makes an object; the extras are the conjugates the lowering introduces (`i0_f2` and the like). O2 `O2 PASS: edge-SSIM 0.9818 (min 0.7), recall 1.0 precision 1.0 (min 0.98), phash 14 (advisory)` on a hero rebuilt with the loop's own export (the same timestamp as the source's last commit). O3 is `none by design`: `make reference` writes `polygons = 0`, because a construction drawn only in arcs has no polygon to extrude, so there is no solid to compare — the same reason as `nmEjCTzMbDg`.
