@@ -110,3 +110,8 @@ same way before its push, and the PR body names the verdict on the final tip.
 - The first live probe of the blossom STL answered 503 and the second, a minute later, 200 with
   every byte. Probe twice before calling a just-built Pages file missing.
 
+
+- Two lessons from the deploy went where the next session will read them (3d-models #878).
+  The minis lesson went into the deploy recipe in memory, as a step before `make deploy`, because
+  a retro line does not stop the next run shipping them. The star-pin source lag went onto the
+  plates loop's open list, because that session reads its task file and not this one's done list.

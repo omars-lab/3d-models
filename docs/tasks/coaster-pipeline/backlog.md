@@ -63,6 +63,12 @@ the coaster-print session closed on 2026-11-02.
    "named it the best", as if he were sure. Put his "might have been" back in the next change to
    [the record](../../prints/2026-10-28-hexfit-1/index.md), lesson and timeline both. Records session. Found 2026-11-02.
 9. **Standard-size plate (P5.2)** — only after item 5 settles the CAL-CST numbers (board #6).
+10. **Bring master's split-flange coaster source up to bikar's.** bikar main's
+   `gBV_JTt3Kxk-split-flange-coaster.bkr` has the star-pin default (three 1.2 mm pins on a
+   triangle whenever there is a pin size) that master's `src/Coasters/` copy lacks. `make coasters`
+   copies bikar's file over it, so the live gallery already carries it. Commit that copy to master
+   with whatever else the star default needs. Plates session; found by the gallery deploy,
+   2026-11-04 (3d-models #877).
 
 ## Owner-gated
 
