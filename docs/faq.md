@@ -60,7 +60,7 @@ stable three-digit id so links to it survive edits. Under it:
 
 ## Q-004 — Where is tagSegments defined?
 
-**Answer.** It is a method on the evaluator's environment, at `bikar:packages/core/src/dsl/environment.ts:L549 "tagSegments("`. Every command that produces segments pushes them through it with a source id and class name, so provenance tags come from one place. The one exception is `connect arc`, which bypasses it, stated in the source at `bikar:packages/core/src/dsl/evaluator.ts:L7837 "bypasses tagSegments"`. Nothing in 3d-models defines it; the click-to-source design doc here only cites it.
+**Answer.** It is a method on the evaluator's environment, at `bikar:packages/core/src/dsl/environment.ts:L549 "tagSegments("`. Every command that produces segments pushes them through it with a source id and class name, so provenance tags come from one place. The one exception is `connect arc`, which bypasses it, stated in the source at `bikar:packages/core/src/dsl/evaluator.ts:L7856 "bypasses tagSegments"`. Nothing in 3d-models defines it; the click-to-source design doc here only cites it.
 
 - **metrics:** re-derived in 4 sessions (after a failure 0, by searching 6, already knew it 0) · used in 4 · occ 6 (authored 6) · first 2026-07-29 · last 2026-08-31
 - **evidence:** `Q-004` in `docs/faq-evidence.jsonl`

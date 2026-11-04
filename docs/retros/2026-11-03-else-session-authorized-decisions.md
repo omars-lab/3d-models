@@ -51,4 +51,12 @@ folded: no
 Every later tip of the branch (the hook 20 fix, the held-edits file, this note) was run the
 same way before its push, and the PR body names the verdict on the final tip.
 
+## Blossom follow-up
+
+- bikar #368 merged on Omar's "merge all prs", and the held edits (ledger row and count,
+  the Oracle-notes paragraph, CS-18, the catalog page and picture, the baseline entry) were
+  applied from the checked-in hand-off file and the file deleted in one commit (#873). The
+  catalog sync had said "89 already in step" before the ledger row changed: it reads
+  migration from the ledger row, not from bikar, so the row goes first and the sync after.
+
 - `make validate` on 63c9ac00, in the worktree with `build/orb-breakdown` removed first: hook-parity all 32 verified, exit 0. The `FAILED` lines in its output are the coaster-pictures self-test's cases that are meant to fail.
