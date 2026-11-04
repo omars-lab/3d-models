@@ -12,6 +12,7 @@ bikar files:
   - patterns/Constructions/GimTvN9hw4U.bkr
   - patterns/Constructions/GimTvN9hw4U-coaster.bkr
   - patterns/Constructions/GimTvN9hw4U-border-coaster.bkr
+  - patterns/Constructions/GimTvN9hw4U-cup-band.bkr
   - patterns/Constructions/GimTvN9hw4U-interlock-coaster.bkr
   - patterns/Constructions/GimTvN9hw4U-lobed-coaster.bkr
   - patterns/Constructions/GimTvN9hw4U-minimal-coaster.bkr
@@ -30,7 +31,7 @@ tags:
 
 # Simple 20-step Six-Fold Star Rosette (CS-1) ^wtsm68
 
-Rebuilt step by step from [Sarah Brewer's video](https://www.youtube.com/watch?v=GimTvN9hw4U), written in naqsh and made in 11 coaster styles. Its catalog id is CS-1.
+Rebuilt step by step from [Sarah Brewer's video](https://www.youtube.com/watch?v=GimTvN9hw4U), written in naqsh and made in 12 coaster styles. Its catalog id is CS-1.
 
 ## Pictures
 
@@ -102,6 +103,10 @@ Plain, on an N-lobe wave outline drawn with compass arcs instead of a polygon.
 Minimal, with whole rings of openings (orbits, numbered outward from the centre; `bikar bands` lists them) closed solid at strap height, so the piece keeps the pattern's symmetry whichever rings are chosen.
 
 ![radial](../media/GimTvN9hw4U/GimTvN9hw4U-radial.png)
+
+### cup-band
+
+No picture yet: Coaster Lab has no thumbnail for this file.
 
 ## Checks against the video
 

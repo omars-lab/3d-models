@@ -71,3 +71,27 @@ same way before its push, and the PR body names the verdict on the final tip.
   Omar's review and has no PR, so it stays in the parked backlog as waiting on him. A done
   line should be written by the PR that ships the work, in the same commit, so this kind of
   sweep finds nothing to add.
+
+## Merge all PRs and cleanup
+
+- Omar asked for every open PR merged and the branches cleaned up, with nothing meaningful
+  lost. Ten PRs merged across three repos (3d-models #872, #873, #875; bikar #365, #368, #369,
+  #366; storefront #464; bikar #362 and #363 closed as superseded). The only snag was the
+  cup-band stack: its bottom PR could not merge once #368 and #369 had added patterns to the
+  two index files. Resolving it on the stack tip, not the bottom, meant one hand merge instead
+  of three: merge main into `feat/cup-bands-three`, keep both sides of each index, re-count,
+  run the strict suite, retarget #366 to main and squash it. GitHub only moves a child PR to
+  main when its parent's branch is deleted, so the two parents were closed by hand with a
+  comment naming the squash that holds their commits.
+
+- "Nothing lost" was checked the same way every time, before any remove: the worktree clean,
+  the tip on origin, no stash, and the branch proven dead by content. The three
+  `feat/cup-band-*` branches read as "diverged" to `verify` even after #366 merged, because the
+  stack edited their survey and index files further on top of them. The proof that holds is
+  that each is an ancestor of the merged stack tip and its band file is byte-identical on main,
+  and the tips were snapshotted first in any case.
+
+- A snapshot push from a background shell failed at bikar's `local.check-node`: the shell had
+  no nvm Node on PATH, so the pre-push strict gate could not start. The refs were already
+  written locally; the push was re-run with PATH set. Every bikar push, background or not,
+  needs the PATH line first (3d-models #876).

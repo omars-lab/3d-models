@@ -44,12 +44,3 @@ PRs, 0 stashes. So there is no conflict to work by hand in this repo today; when
    [`branch-state-across-repos`](../../../.claude/memory/branch-state-across-repos.md) memory.
 6. **Then the other repos**, bikar, qiyas, youtube, sacred-patterns, 3d-model-hub and the store
    repos, with the same inventory command and no path argument. They are a later pass.
-
-Waiting on a merge that is Omar's:
-
-1. **Delete bikar's three `feat/cup-band-*` branches on GitHub once PR #366 merges.** The
-   2026-11-03 inventory found them to be ancestors of #366's branch (`feat/cup-bands-three`), so
-   they hold nothing of their own once it lands. Then, from a bikar checkout: snapshot each tip
-   under `refs/snapshots/<date>/`, re-prove it dead with the script's `verify`, and delete one
-   per command. Waiting on bikar #366, which is Omar's to merge. From the session task board,
-   2026-11-03.

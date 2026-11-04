@@ -11,13 +11,14 @@ catalog id: CS-11
 bikar files:
   - patterns/Constructions/sDO9fpu76v8.bkr
   - patterns/Constructions/sDO9fpu76v8-coaster.bkr
+  - patterns/Constructions/sDO9fpu76v8-cup-band.bkr
 tags:
   - coaster
 ---
 
 # Pattern from the Royal Alcazar (CS-11)
 
-Rebuilt step by step from [Sarah Brewer's video](https://www.youtube.com/watch?v=sDO9fpu76v8), written in naqsh and made in 1 coaster style. Its catalog id is CS-11.
+Rebuilt step by step from [Sarah Brewer's video](https://www.youtube.com/watch?v=sDO9fpu76v8), written in naqsh and made in 2 coaster styles. Its catalog id is CS-11.
 
 ## Pictures
 
@@ -29,6 +30,10 @@ name, for example #plain.
 The pattern's straps raised on a full slab.
 
 ![plain](../media/sDO9fpu76v8/sDO9fpu76v8-plain.png)
+
+### cup-band
+
+No picture yet: Coaster Lab has no thumbnail for this file.
 
 ## Checks against the video
 

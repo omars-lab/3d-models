@@ -10,6 +10,7 @@ creator:
 catalog id: CS-15
 bikar files:
   - patterns/Constructions/NtnlGMTElBk.bkr
+  - patterns/Constructions/NtnlGMTElBk-cup-band.bkr
   - patterns/Constructions/NtnlGMTElBk-minimal-coaster.bkr
 tags:
   - 10-fold
@@ -19,7 +20,7 @@ tags:
 
 # The Mustansiriya ten-fold interlaced star (CS-15)
 
-Rebuilt step by step from [the video](https://www.youtube.com/watch?v=NtnlGMTElBk), written in naqsh and made in 1 coaster style. Its catalog id is CS-15.
+Rebuilt step by step from [the video](https://www.youtube.com/watch?v=NtnlGMTElBk), written in naqsh and made in 2 coaster styles. Its catalog id is CS-15.
 
 ## Pictures
 
@@ -31,6 +32,10 @@ name, for example #minimal.
 The straps alone: no slab, every empty space in the pattern is a hole, top edges rounded over.
 
 ![minimal](../media/NtnlGMTElBk/NtnlGMTElBk-minimal.png)
+
+### cup-band
+
+No picture yet: Coaster Lab has no thumbnail for this file.
 
 ## Checks against the video
 

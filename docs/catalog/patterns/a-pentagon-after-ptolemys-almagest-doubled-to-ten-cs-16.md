@@ -10,6 +10,7 @@ creator:
 catalog id: CS-16
 bikar files:
   - patterns/Constructions/0ke_GpoBa-s.bkr
+  - patterns/Constructions/0ke_GpoBa-s-cup-band.bkr
   - patterns/Constructions/0ke_GpoBa-s-minimal-coaster.bkr
 tags:
   - coaster
@@ -17,7 +18,7 @@ tags:
 
 # A pentagon after Ptolemy's *Almagest*, doubled to ten (CS-16)
 
-Rebuilt step by step from [the video](https://www.youtube.com/watch?v=0ke_GpoBa-s), written in naqsh and made in 1 coaster style. Its catalog id is CS-16.
+Rebuilt step by step from [the video](https://www.youtube.com/watch?v=0ke_GpoBa-s), written in naqsh and made in 2 coaster styles. Its catalog id is CS-16.
 
 ## Pictures
 
@@ -29,6 +30,10 @@ name, for example #minimal.
 The straps alone: no slab, every empty space in the pattern is a hole, top edges rounded over.
 
 ![minimal](../media/0ke_GpoBa-s/0ke_GpoBa-s-minimal.png)
+
+### cup-band
+
+No picture yet: Coaster Lab has no thumbnail for this file.
 
 ## Checks against the video
 

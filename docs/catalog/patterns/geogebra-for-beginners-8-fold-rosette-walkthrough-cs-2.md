@@ -12,6 +12,7 @@ bikar files:
   - patterns/Constructions/7apC5Q9QS-8.bkr
   - patterns/Constructions/7apC5Q9QS-8-coaster.bkr
   - patterns/Constructions/7apC5Q9QS-8-border-coaster.bkr
+  - patterns/Constructions/7apC5Q9QS-8-cup-band.bkr
   - patterns/Constructions/7apC5Q9QS-8-fill-coaster.bkr
   - patterns/Constructions/7apC5Q9QS-8-interlock-coaster.bkr
   - patterns/Constructions/7apC5Q9QS-8-minimal-coaster.bkr
@@ -26,7 +27,7 @@ tags:
 
 # Geogebra for Beginners — 8-Fold Rosette Walkthrough (CS-2)
 
-Rebuilt step by step from [Sarah Brewer's video](https://www.youtube.com/watch?v=7apC5Q9QS-8), written in naqsh and made in 8 coaster styles. Its catalog id is CS-2.
+Rebuilt step by step from [Sarah Brewer's video](https://www.youtube.com/watch?v=7apC5Q9QS-8), written in naqsh and made in 9 coaster styles. Its catalog id is CS-2.
 
 ## Pictures
 
@@ -80,6 +81,10 @@ Minimal-frame with the dovetails cut into the frame; the frame is at least slot 
 Plain in several colors: the spaces between the straps filled level and colored by ring about the centre.
 
 ![fill](../media/7apC5Q9QS-8/7apC5Q9QS-8-fill.png)
+
+### cup-band
+
+No picture yet: Coaster Lab has no thumbnail for this file.
 
 ## Checks against the video
 
