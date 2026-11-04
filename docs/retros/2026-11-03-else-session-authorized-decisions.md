@@ -94,4 +94,4 @@ same way before its push, and the PR body names the verdict on the final tip.
 - A snapshot push from a background shell failed at bikar's `local.check-node`: the shell had
   no nvm Node on PATH, so the pre-push strict gate could not start. The refs were already
   written locally; the push was re-run with PATH set. Every bikar push, background or not,
-  needs the PATH line first (3d-models #PRNUM).
+  needs the PATH line first (3d-models #876).
