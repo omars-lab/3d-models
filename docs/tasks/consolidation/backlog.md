@@ -45,12 +45,11 @@ PRs, 0 stashes. So there is no conflict to work by hand in this repo today; when
 6. **Then the other repos**, bikar, qiyas, youtube, sacred-patterns, 3d-model-hub and the store
    repos, with the same inventory command and no path argument. They are a later pass.
 
-Left by the 2026-10-27 pass:
+Waiting on a merge that is Omar's:
 
-1. **bikar's pre-push hook runs the full test suite even for a tag on a commit main already
-   passed.** Omar made the call on 2026-11-03 ("do all the things to do"). The skip is in bikar
-   PR #365, narrow and fail-closed like the deletion skip beside it: only a push made entirely of
-   tags whose commits origin/main already holds skips; a tag off main, a tag with a branch, or no
-   stdin still runs the suite, and the wiring test proves all three. Waiting to merge; its local
-   CI verdict is recorded but not yet posted to the PR (`make local.ci-post` from a bikar
-   session). Found 2026-09-21.
+1. **Delete bikar's three `feat/cup-band-*` branches on GitHub once PR #366 merges.** The
+   2026-11-03 inventory found them to be ancestors of #366's branch (`feat/cup-bands-three`), so
+   they hold nothing of their own once it lands. Then, from a bikar checkout: snapshot each tip
+   under `refs/snapshots/<date>/`, re-prove it dead with the script's `verify`, and delete one
+   per command. Waiting on bikar #366, which is Omar's to merge. From the session task board,
+   2026-11-03.

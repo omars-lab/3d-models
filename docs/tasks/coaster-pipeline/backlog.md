@@ -83,7 +83,7 @@ Sending a print and which filament to load.
   [sheets-04b](../../design/plates/sheets-04b.md) is pieces only for the coaster Omar already has, 4 mm
   tall and flat, at gaps 0.05, 0, −0.05 and −0.10 (bikar #300): one bed, 41 minutes, 12 g,
   waiting on Omar's tick; failure detection is the X2D's own (D-092). The other three are at `planned`, with no recipe, slice or tick box yet. Each of their
-  pages lists what it waits on (the builds are catalog-expansion item 8). Their order by value is
+  pages lists what it waits on (the builds are catalog-expansion item 6). Their order by value is
   computed on [the plates page](../../design/plates/README.md), not kept here. Prints are held for last.
 - **The split coaster plates, [split-01](../../design/plates/split-01.md) (lip) and
   [split-02](../../design/plates/split-02.md) (flange)** — the gBV coaster at 112.5 mm cut in two

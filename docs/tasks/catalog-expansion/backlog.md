@@ -9,8 +9,9 @@ the queue of screened candidates grown, each with a written GO or NO-GO.
 ## Open, in ROI order
 
 Parked since 2026-10-06: Omar moved the work back to split coasters and split pieces ("i want
-to wrap up consturciotn and move back to split coasters and split inflills"). Finish what is
-half done (n_ICgwOr6qs, item 3) before starting a new construction.
+to wrap up consturciotn and move back to split coasters and split inflills"). The one half-done
+construction, `n_ICgwOr6qs`, was finished on 2026-11-03 (see the done list); the next one starts
+from the queue in item 2 when Omar asks for it.
 
 1. **`nmEjCTzMbDg` still FAILs O1 and O2, and waits on youtube.** Causes found on
    2026-09-27 ([the FAILs note](../../research/ledger-oracle-fails-2026-09-27.md)). The
@@ -25,13 +26,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
    re-run O1 on this one and on `gBV_JTt3Kxk`, which has ten scaffold arcs; its last O1 skipped or
    counted as extra 47 objects. Also youtube's: `naqsh_score.py` treats `ggb_score.py`'s FAIL exit
    (2) as a crash. That patch is in the same note.
-2. **Reconstruction intake: read rung.yaml at session start, queue done reconstructions for
-   import.** Asked by Omar on 2026-09-30. The session start hook never reads youtube's rung.yaml
-   and imports nothing; 19 rungs are done in youtube with no coaster here, 9 of them with no
-   ledger row. The [intake design](../../constructions/reconstruction-intake-design.md) proposes
-   a small read-only intake list for the hook and a write mode for row stubs and the pin, with
-   three open calls for Omar.
-3. **Screened queue, 2026-09-27.** Two independent screens and a checker's consolidation:
+2. **Screened queue, 2026-09-27.** Two independent screens and a checker's consolidation:
    [the consolidated screen](../../research/candidate-screen-2026-09-27.md) is the one to act
    on. 10 GO, all from creators other than Sarah Brewer. Coaster fit was judged from
    thumbnails and storyboard frames only, so each still needs its render looked at. In
@@ -306,7 +301,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
    Held: [`LoCRh3SOhls`](../../catalog/patterns/a-tenfold-rosette-in-a-pentagon-ink-on-filmed-paper.md) (a variant of 1) and GeoGebra [`hzyhmg9p`](../../catalog/patterns/12-and-9-pointed-stars-after-bodner.md) (9+12 on the page, 8/9/5 in
    its preview; open the applet first, NC licence, goes through import-construction). No
    non-Brewer 9-fold video turned up in the searched space; item 14 is Brewer's.
-4. **Radial fill on CS-1** — a minimal coaster with chosen rings of pieces made solid
+3. **Radial fill on CS-1** — a minimal coaster with chosen rings of pieces made solid
    ([D-081](../../working-model/decisions-log.md)). The `orbit` word and openwork fill are on
    bikar main (bikar #270, 2026-09-29), with `patterns/Constructions/GimTvN9hw4U-radial-coaster.bkr`.
    **Omar picked none of the four fills below** (fill A stands as the default, D-127, until he does) (review thread kpdekz on the
@@ -343,7 +338,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
      §10 sample plate (flush beside a 0.6 mm lowered fill) is judged; that plate is
      plates-and-feedback's. The ring fill stays A, the snowflake, as the file's default until
      Omar picks in the Lab ([D-127](../../working-model/decisions-log.md#d-127--cs-1s-radial-fill-stays-a-the-snowflake-until-omar-picks-in-the-lab)).
-5. **Lines and loose pieces in two colors, on any coaster; plus fill height and "assemble your own
+4. **Lines and loose pieces in two colors, on any coaster; plus fill height and "assemble your own
    coaster".** Omar, 2026-09-29, review thread 3kqnku, asked three things: the fill height at either
    end, loose inner pieces for a printed frame, and a guided page. On 2026-10-01 (thread nhtq79, on
    gBV) he sharpened the second ask. Print the lines with the spaces open, and print the spaces as
@@ -359,7 +354,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
    2026-11-03 ([D-124](../../working-model/decisions-log.md#d-124--loose-pieces-a-guided-mode-in-the-lab-raised-fills-on-every-fill-coaster-the-f1-gap-ladder-as-drawn-provisionally)):
    a guided mode in the Lab, raised fills on every fill coaster, the F1 gap ladder as drawn. The
    fit sheets' reading, or Omar, can overturn them.
-6. **Start the gBV_JTt3Kxk coaster.** Omar picked it on 2026-10-01
+5. **Start the gBV_JTt3Kxk coaster.** Omar picked it on 2026-10-01
    ([D-089](../../working-model/decisions-log.md#d-089--gbv_jtt3kxk-is-the-next-coaster)) from the
    [top-three renders page](../../working-model/feedback-requests/2026-09-30-top-three-renders.md).
    Its minimal coaster is in bikar (#287). It already has its ledger row (CS-13), a vendored STL
@@ -367,7 +362,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
    into the gBV fit plate of item 6: that plate's openwork frame is this coaster's lines print, so a
    separate plate would print the same thing twice. The first full run of the
    [`prioritize-design`](../../../.claude/skills/prioritize-design/SKILL.md) skill is still owed.
-7. **Sampler sheets: decide the smooth-lines calls with samples in the hand.** Omar, 2026-10-01,
+6. **Sampler sheets: decide the smooth-lines calls with samples in the hand.** Omar, 2026-10-01,
    thread iykpc9 on the smooth-lines design, asked for printed sheets of labeled shape subsets
    before making the §6 calls. The design is
    [sampler-sheets-design.md](../../design/coaster/sampler-sheets-design.md) (draft): true-size
@@ -401,7 +396,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
    its tall-piece row's height shipped, bikar #313). Sheet 5 has a plate page
    at `planned` ([sheets-05](../../design/plates/sheets-05.md)), whose `needs:`
    is this list; the print itself is on the coaster-pipeline loop's owner-gated list.
-8. **Room for ids and dots on more coasters.** bikar's `mark` and `mark dots` (bikar #323) put
+7. **Room for ids and dots on more coasters.** bikar's `mark` and `mark dots` (bikar #323) put
    an id on every prototype, at Omar's ask on the 2026-10-06 calls page ("every proptoty should
    have an id"). Using them on the 2026-10-07 plates (3d-models #600) showed three limits, all in
    bikar's `coaster-mark.ts` and `coaster-loose.ts`. Dots at the middle is done, and turns at 18°
@@ -413,7 +408,7 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
      the two-digit ids, split-01 has room for 11, 12, 14, 15, 17, 71 and 77, though its `id`
      range stops at 9; split-02 has room for none of 10 to 19.
 
-9. **The gBV theme "All Bambu Green" needs shopper wording before the store lists it.**
+8. **The gBV theme "All Bambu Green" needs shopper wording before the store lists it.**
     Its name names a filament brand and its mood is a dated working note ("The plate as it
     went out on 2026-10-04…"), in
     [`themes.yaml`](../../design/coaster/themes/gbv/themes.yaml) and the theme page

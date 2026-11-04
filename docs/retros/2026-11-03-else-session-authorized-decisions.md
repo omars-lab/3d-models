@@ -60,3 +60,14 @@ same way before its push, and the PR body names the verdict on the final tip.
   migration from the ledger row, not from bikar, so the row goes first and the sync after.
 
 - `make validate` on 63c9ac00, in the worktree with `build/orb-breakdown` removed first: hook-parity all 32 verified, exit 0. The `FAILED` lines in its output are the coaster-pictures self-test's cases that are meant to fail.
+
+## Task board to done files
+
+- Omar asked for the finished board tasks to be moved to the done files and taken off the
+  board. Of the 26 finished tasks, 21 already had a done line (written by the PR that shipped
+  each), so the pass added only what no PR had recorded: the intake tool (D-122), bikar's
+  pre-push tag skip (bikar #365) and the shared checkout's fast-forward, and put bikar #369's
+  number on the tray-helper line. The FAQ task (#2) was marked finished on the board but is
+  Omar's review and has no PR, so it stays in the parked backlog as waiting on him. A done
+  line should be written by the PR that ships the work, in the same commit, so this kind of
+  sweep finds nothing to add.
