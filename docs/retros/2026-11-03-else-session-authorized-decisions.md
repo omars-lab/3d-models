@@ -1,0 +1,41 @@
+---
+date: 2026-11-03
+repo: 3d-models
+session: else
+branch: authorized-2026-11-03, PR #872
+folded: no
+---
+
+## Snags
+
+- The auto-mode classifier refused `gh pr merge` on bikar #368 twice, as "merge without
+  review", even after the diff was read and the local CI had passed in the pre-push. Merging a
+  sibling repo's PR is Omar's step from this harness; the edits that wait on that merge (the
+  ledger row, the CS-18 block, the catalog sync) were written out in the agent's hand-off file
+  instead of guessed into the tree.
+- The plates gate blocked the first commit after master gained star-3's print log (#871):
+  a branch cut before an append-only log exists reads as having deleted it. Merge
+  `origin/master` into the branch before committing; the overlap check (`comm` of the two
+  file lists) showed nothing shared, so the merge was clean.
+- After that merge, hook 20 refused the staged map: its `as_of` pin was the old merge-base.
+  `validate.py --refresh` and restage; the map moves with every merge from master.
+- Changing a ledger oracle cell (gBV's O1, FAIL 134/20 to PASS 144/0) changes the catalog page
+  that quotes it, and hook 51 blocks the commit until `catalog.py sync` is run and the page is
+  staged too. A ledger cell edit and its catalog sync are one commit.
+- Agent C's strict pre-push suite raced on the Studio keyboard-dial specs at load average 75:
+  four agents' test workers in sibling bikar worktrees. The agent waited for the load to drop
+  and pushed again rather than skipping the gate. Four bikar pushes at once from one machine
+  is too many; stagger them.
+
+## Worth copying
+
+- One branch, four agents, each committing its own files by name, the main session
+  serializing the decisions log: no two agents wrote the same file, and the log got one commit
+  with six ids.
+- Getting the decisions log past hook 20 by bundling a legitimate map change (UC34 for the
+  intake tool, plus the repaired pins) instead of an override.
+- A hand-off file for edits that must wait on another repo's merge, with the exact
+  replacement lines and the gates to run, so the next session applies them without
+  rediscovering the ledger's column rule.
+- Reading the sibling's PR diff and its description before the merge attempt, so the review
+  stands on the record whoever merges it.
