@@ -65,10 +65,9 @@ half done (n_ICgwOr6qs, item 3) before starting a new construction.
       at the centre where the front arcs stop short. Pure arcs, no straight lines, so it needs
       the arc path the other patterns do not. The ten arc pairs are in
       `reconstructions/n_ICgwOr6qs/`, ready for the coaster step.
-      **2026-11-03: the coaster step is in bikar PR #368 (open, reviewed, Omar's merge), the gallery
-      card and STL landed here in #872.** The ledger row, catalog note, CS-18 block and baseline
-      entry wait on that merge; the exact edits are in
-      [`n_ICgwOr6qs-held-edits.md`](n_ICgwOr6qs-held-edits.md), to apply and delete in one commit.
+      **Done 2026-11-03: the coaster step merged as bikar #368, the gallery card and STL landed
+      here in #872, and the ledger row, catalog note, CS-18 block and baseline entry followed in
+      #PRNUM.** Nothing is left on this item; see the done list.
       **Coaster step half done 2026-10-06, then parked** (Omar: "i want to wrap up consturciotn
       and move back to split coasters and split inflills"). Done: the source rewrite (whole lines
       through the unit points, and the 180° ray as a segment to a derived far point, so no free

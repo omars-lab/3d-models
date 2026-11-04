@@ -58,6 +58,12 @@ The name, the file it comes from and where it was decided are in the [coaster st
 
 ![jlTmt_279M4 minimal](../media/jlTmt_279M4/jlTmt_279M4-minimal.png)
 
+### n_ICgwOr6qs
+
+[A ten-petal blossom from one compass setting (CS-18)](../patterns/a-ten-petal-blossom-from-one-compass-setting.md#minimal)
+
+![n_ICgwOr6qs minimal](../media/n_ICgwOr6qs/n_ICgwOr6qs-minimal.png)
+
 <!-- written by hand below this line; the sync tool stops here -->
 
 ## Notes
