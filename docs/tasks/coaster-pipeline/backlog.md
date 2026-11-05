@@ -17,15 +17,7 @@ logs, plates built or rebuilt, the hub's questions and comments, and the print r
 Items below still tagged "print session" or "records session" are both its; that split ended when
 the coaster-print session closed on 2026-11-02.
 
-1. **The hexagon pieces' halves still rock up and down.** On hexfit-1 the side-to-side play is
-   settled (0.01 mm a side, now bikar's default), but Omar said "both rock" of the stock piece
-   and the one with the slot cut to the rail's depth, so depth is not the cause. Found by
-   hexfit-1's print record, 2026-11-01. **The plate is built: hexfit-2** (2026-11-05). It has a
-   taller rail, a wider rail, and pins in place of the rail, beside the 0.01 mm piece as the
-   control: 23 min, 6 g. Omar approved it in green; it was sent and printed clean on 2026-11-05
-   (about 27 minutes, no pause). It waits on his judging the pieces on the hub. bikar refuses a pin beside the rail,
-   so that idea is a bikar change, worth making only if hexfit-2's rails all still rock.
-2. **Write split-10's print record, then build the next split-10 plate.** This waits on Omar's
+1. **Write split-10's print record, then build the next split-10 plate.** This waits on Omar's
    answers to its five questions on the hub and on his reply to the "pins of 6" page comment on
    the hub (thread `t_1cc863`). The records session writes the split-10 and split-07 records. The
    print session builds the next split-10 plate only after both are written. That plate needs
@@ -34,25 +26,25 @@ the coaster-print session closed on 2026-11-02.
    piece. Its answers set the next whole coaster's settings, and split-09 (the halves only) is held
    until then. The question came from Omar on 2026-10-27, about split-07's loose pieces: the stars'
    faces curve, the middle has a "webbed duck feel", and the "dovetail kites are really loose".
-3. **The kite fits split-10 dropped.** On Omar's word, split-10's iteration 4 left out
+2. **The kite fits split-10 dropped.** On Omar's word, split-10's iteration 4 left out
    KITE-G10 (gap 0.10 mm a face) and KITE-PIN20 and KITE-PIN15 (pin holes 0.20 and 0.15 mm wider
    than the pin), keeping only stock and gap 0.08. Put them on the next kite plate once split-10
    says whether 0.08 is snug: G10 brackets the gap from the other side, and the pin holes settle
    whether loose kites are loose in the hole or between the halves. Found by split-10
    iteration 4, 2026-10-27.
-4. **The bigger kites print lopsided.** Omar, 2026-10-25, on split-08's pieces: "but the bigger
+3. **The bigger kites print lopsided.** Omar, 2026-10-25, on split-08's pieces: "but the bigger
    kites are still not eymetric". As drawn they are mirror-symmetric, so the difference comes in the
    slice or the print. Needs a photo with the lopsided side marked (split-07's page asks for it),
    then a look at the sliced walls of one bigger kite (`tools/fit_gap.py walls`) against the drawing.
-5. **Turn a finished print into data** — waits on Omar printing minis-01, or a
+4. **Turn a finished print into data** — waits on Omar printing minis-01, or a
    `bambu print capture` showing up. Then follow the `print-model` skill's compare loop:
    record in `docs/prints/<date>-minis-01/`, settle the CAL-CST bets it measures, update the
    counts in §1 of the register below. Record what was measured, not what was
    expected. (P4.3. minis-01's first print left no answer, 3d-models #629.)
-6. **Keep [minis-01](../../design/plates/minis-01.yaml) ready to send.** Re-compose after any coaster
+5. **Keep [minis-01](../../design/plates/minis-01.yaml) ready to send.** Re-compose after any coaster
    change; slice, preflight and filament-sync against the live AMS trays; check each item's
    bikar pin against bikar main. Stops at the send.
-7. **Tooling that blocks this plate** — fix only friction that stops minis-01. General tooling
+6. **Tooling that blocks this plate** — fix only friction that stops minis-01. General tooling
    goes in the [print-infrastructure backlog](../print-infrastructure/backlog.md), new designs
    in the [catalog backlog](../catalog-expansion/backlog.md).
    - **Check the send payload against one Bambu Studio send.** `bed_type`, `md5`, and the tray
@@ -61,12 +53,8 @@ the coaster-print session closed on 2026-11-02.
      printer config on this machine (`bambu setup doctor` says it is missing) and one send from
      Studio while the request topic is read. Until then, plates go out from Bambu Studio.
      Found by the minis-01 run, 2026-09-25.
-8. **hexfit-1's print record drops Omar's hedge.** He said "4 might have been the best, 1 too
-   loose, 6 too tight", but the record's lesson says 4 dots "held best" and the text says he
-   "named it the best", as if he were sure. Put his "might have been" back in the next change to
-   [the record](../../prints/2026-10-28-hexfit-1/index.md), lesson and timeline both. Records session. Found 2026-11-02.
-9. **Standard-size plate (P5.2)** — only after item 5 settles the CAL-CST numbers (board #6).
-10. **Bring master's split-flange coaster source up to bikar's.** bikar main's
+7. **Standard-size plate (P5.2)** — only after item 4 settles the CAL-CST numbers (board #6).
+8. **Bring master's split-flange coaster source up to bikar's.** bikar main's
    `gBV_JTt3Kxk-split-flange-coaster.bkr` has the star-pin default (three 1.2 mm pins on a
    triangle whenever there is a pin size) that master's `src/Coasters/` copy lacks. `make coasters`
    copies bikar's file over it, so the live gallery already carries it. Commit that copy to master

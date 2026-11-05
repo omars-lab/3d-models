@@ -54,7 +54,7 @@ objects:
     notes:
       - "3 dots, HEX-G03: 0.03 mm a side"
       - "Held: the row-1 answer is \"2 to 5 dots holds\""
-      - "Not taken forward: Omar named 4 dots the best"
+      - "Not taken forward: Omar said 4 dots \"might have been the best\""
   - entry: "c4"
     source: "bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr"
     source_sha256: "47b156e26dcee9b57eb513367ed22016b981c0c8bb19bb64661727fa16f87817"
@@ -78,7 +78,7 @@ objects:
     notes:
       - "5 dots, HEX-G00: no gap"
       - "Held: the row-1 answer is \"2 to 5 dots holds\""
-      - "Not taken forward: Omar named 4 dots the best"
+      - "Not taken forward: Omar said 4 dots \"might have been the best\""
   - entry: "c6"
     source: "bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr"
     source_sha256: "47b156e26dcee9b57eb513367ed22016b981c0c8bb19bb64661727fa16f87817"
@@ -116,7 +116,7 @@ objects:
 readings: []
 photos: []
 feedback:
-  lesson: "On the flange coaster's hexagon dovetail, 0.01 mm a side (4 dots) held best; the old 0.15 mm was too loose and 0.02 mm past zero too tight. Cutting the slot to the rail's own depth did not stop the halves rocking up and down. 0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers"
+  lesson: "On the flange coaster's hexagon dovetail, 0.01 mm a side (4 dots) \"might have been the best\", in his words; the old 0.15 mm was too loose and 0.02 mm past zero too tight. Cutting the slot to the rail's own depth did not stop the halves rocking up and down. 0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers"
   decisions: []
   symptom: "Omar: \"4 might have been the best, 1 too loose, 6 too tight\"; on rocking, \"Same\" and \"both rock\""
   cause: "Side to side is the dovetail gap, settled at 0.01 mm. The up-and-down rock is not the slot depth (8 dots rocked the same as stock); what causes it is not yet known"
@@ -138,7 +138,7 @@ rail's own depth.
 
 **Read, not said.** The 7-dot piece was not named; it is left not judged, though it is tighter
 than the 6 dots he called too tight. The 2, 3 and 5-dot pieces held, but only 4 dots goes
-forward, since he named it the best.
+forward, since he said it "might have been the best".
 
 **The print.** Sent at 22:44 UTC on 2026-10-28 in green from AMS 0 slot 3, finished at 23:31 UTC,
 all 15 layers (the [print log](../../design/plates/print-logs/hexfit-1.md)). Nothing was measured
