@@ -10,8 +10,8 @@
 // docs/issues/camera-tls-pin.md.
 
 import { X509Certificate } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { basename, dirname, join, resolve } from "node:path";
 import type { PeerCertificate } from "node:tls";
 import { ev, runWithTimeout } from "../log.js";
 import { repoRoot } from "../paths.js";
@@ -20,9 +20,30 @@ import { repoRoot } from "../paths.js";
  *  needs LAN Mode Liveview as well). */
 export const PIN_FETCH_PORT = 8883;
 
-/** Where this printer's pinned certificate lives: repo-root/.bambu (gitignored), else cwd. */
+/**
+ * Where this printer's pinned certificate lives: the main checkout's .bambu (gitignored), else cwd.
+ * One pin per machine, read from any worktree: the hub runs the CLI from its own worktree, which
+ * has no .bambu, and every status call there failed with "no pinned printer certificate" while the
+ * same call from the main checkout answered (2026-11-05).
+ */
 export function pinPath(serial: string, start = process.cwd()): string {
-  return join(repoRoot(start) ?? start, ".bambu", `printer-${serial}.pem`);
+  const root = repoRoot(start);
+  return join(root ? mainCheckout(root) : start, ".bambu", `printer-${serial}.pem`);
+}
+
+/**
+ * The main checkout behind `root`. A linked worktree's `.git` is a file,
+ * `gitdir: <main>/.git/worktrees/<name>`; the main checkout's `.git` is a folder, so it is its own
+ * answer, and so is anything that does not look like either.
+ */
+export function mainCheckout(root: string): string {
+  const dotGit = join(root, ".git");
+  if (!existsSync(dotGit) || statSync(dotGit).isDirectory()) return root;
+  const m = /^gitdir:\s*(.+?)\s*$/m.exec(readFileSync(dotGit, "utf8"));
+  if (!m) return root;
+  const worktrees = dirname(resolve(root, m[1]!));
+  if (basename(worktrees) !== "worktrees") return root;
+  return dirname(dirname(worktrees));
 }
 
 /** The pinned certificate for `serial`, or an Error saying how to make one. */
