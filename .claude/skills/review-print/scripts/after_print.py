@@ -206,8 +206,17 @@ def photos(plate: str, prints: Path) -> dict[str, str]:
 
 
 def piece_info(plate: str, plates: Path, build: Path, prints: Path) -> dict[str, dict]:
-    """id -> {label, turn_deg, tile, photo} for every carved id on the plate."""
+    """id -> {label, turn_deg, tile, photo, grams} for every carved id on the plate; grams is the
+    filament that piece took in the slice (`piece_grams`), None when the slice is not on disk."""
+    import zipfile
+
+    from piece_grams import piece_grams
     pics = photos(plate, prints)
+    three = build / f"{plate}.plate.3mf"
+    grams = {}
+    if three.is_file():
+        with zipfile.ZipFile(three) as zf:
+            grams = piece_grams(zf)
     out = {}
     for item, obj in matched(recipe_items(plate, plates), bedmap(plate, build)):
         pid = item.get("id")
@@ -217,8 +226,49 @@ def piece_info(plate: str, plates: Path, build: Path, prints: Path) -> dict[str,
         out[str(pid)] = {"label": item.get("label"),
                          "turn_deg": obj.get("turn_deg") if obj else None,
                          "tile": str(tile.relative_to(ROOT)) if tile.is_file() else None,
-                         "photo": pics.get(str(pid).upper())}
+                         "photo": pics.get(str(pid).upper()),
+                         "grams": grams.get(str(obj.get("object"))) if obj and grams else None}
     return out
+
+
+def label_grams(plate: str, plates: Path, build: Path) -> dict[str, float]:
+    """recipe label -> grams of every copy of it on the plate, for rows that name pieces by label
+    (every plate before carved ids did). Empty when the slice or a matching bed map is missing."""
+    import zipfile
+
+    from piece_grams import piece_grams
+    three = build / f"{plate}.plate.3mf"
+    if not three.is_file():
+        return {}
+    with zipfile.ZipFile(three) as zf:
+        grams = piece_grams(zf)
+    out: dict[str, float] = {}
+    for obj in bedmap(plate, build):
+        if str(obj.get("object")) not in grams:
+            return {}
+        out[obj.get("label")] = out.get(obj.get("label"), 0.0) + grams[str(obj.get("object"))]
+    return out
+
+
+def row_grams(row: dict, plate: str, by_label: dict[str, float]) -> float | None:
+    """What a question's own pieces cost to print: the grams of every piece of this plate it asks
+    to pick up (not the earlier prints it compares against, which are already made). A row with
+    no carved ids is read by label: each recipe label named as a whole word in its pieces cell,
+    every copy counted. None when any piece has no grams, so a part-known sum never reads as the
+    whole."""
+    these = [p for g in row["groups"] for p in g["these"] if p.get("plate") == plate]
+    if these:
+        if any(p.get("grams") is None for p in these):
+            return None
+        return round(sum(p["grams"] for p in these), 2)
+    def named(lb: str) -> bool:
+        # star-1's halves sit on the bed as SLOPE-NONE-1 and -2 while its row names SLOPE-NONE
+        for name in (lb, re.sub(r"-\d+$", "", lb)):
+            if re.search(rf"(?<![\w-]){re.escape(name)}(?![\w-])", row["pieces"]):
+                return True
+        return False
+    hits = [lb for lb in by_label if lb and named(lb)]
+    return round(sum(by_label[lb] for lb in hits), 2) if hits else None
 
 
 def tiles(plate: str, plates: Path, build: Path) -> list[Path]:
@@ -374,6 +424,7 @@ def questions(plate: str, plates: Path, build: Path, prints: Path) -> dict:
     page, _, data, body = read_page(plate, plates)
     rows, problems = rows_of(plate, plates)
     info = {plate: piece_info(plate, plates, build, prints)}
+    by_label = label_grams(plate, plates, build)
     for r in rows:
         for g in r["groups"]:
             for p in g["these"] + g["against"]:
@@ -386,7 +437,8 @@ def questions(plate: str, plates: Path, build: Path, prints: Path) -> dict:
         if r["every_piece"]:
             r["groups"] = [{"these": [{"plate": plate, "id": k, **v} for k, v in info[plate].items()],
                             "these_text": r["pieces"], "against": [], "against_text": ""}]
-    bed = bed_shown(data.get("pictures") or [])
+        r["grams"] = row_grams(r, plate, by_label)
+    bed =bed_shown(data.get("pictures") or [])
     return {"plate": plate, "title": pg.title_of(body), "stage": data.get("stage"),
             "bed_picture": str((plates / bed).relative_to(ROOT)) if bed else None,
             "rows": rows, "answers": judged(body), "notes": problems}
@@ -504,6 +556,17 @@ def self_test() -> int:
     check("matched", [o for _, o in matched(items, [{"label": "STOCK A"}, {"label": "55 A"}])] != [None, None], True)
     check("FAIL: a reordered bed map names no object",
           [o for _, o in matched(items, [{"label": "55 A"}, {"label": "STOCK A"}])], [None, None])
+
+    # grams per question: carved ids summed, labels matched whole (halves' -1/-2 included)
+    by_label = {"KITE": 0.1, "KITE-G08": 0.2, "STAR-1": 0.3, "STAR-2": 0.3}
+    row = lambda text, these=(): {"pieces": text, "groups": [{"these": list(these), "against": [{"plate": "x", "grams": 9}]}]}
+    check("carved ids summed, against left out",
+          row_grams(row("`A`, `B`", [{"plate": "p", "grams": 0.5}, {"plate": "p", "grams": 0.25}]), "p", {}), 0.75)
+    check("FAIL: one carved piece without grams gives none",
+          row_grams(row("`A`, `B`", [{"plate": "p", "grams": 0.5}, {"plate": "p", "grams": None}]), "p", {}), None)
+    check("a label names its halves", row_grams(row("1 dot (STAR)"), "p", by_label), 0.6)
+    check("FAIL: KITE does not pick up KITE-G08", row_grams(row("KITE (no dots)"), "p", by_label), 0.1)
+    check("FAIL: a row in words gives none", row_grams(row("The whole coaster"), "p", by_label), None)
 
     for f in fails:
         print("FAIL", f)

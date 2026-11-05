@@ -7,6 +7,7 @@
     python3 tools/print_review.py bottom <out.png> <a.stl> [<b.stl> ...]
     python3 tools/print_review.py bed <out.png> <plate.3mf> [--zoom] [--key]
     python3 tools/print_review.py footprints <plate>-media/bed.json <plate.3mf>
+    python3 tools/print_review.py grams <plate.3mf>
     python3 tools/print_review.py side <out.png> <frame.stl> <label> <x0>,<y0>,<x1>,<y1> <piece.stl> [...]
     python3 tools/print_review.py paths <out.png> <plate.3mf> <z> <x>,<y>,<side> [--below] [--px N] [--check]
     python3 tools/print_review.py join <out.png> <a.png> <b.png> [<c.png> ...]
@@ -106,6 +107,8 @@ from collections import deque
 from pathlib import Path
 
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont, ImageOps
+
+from piece_grams import piece_grams
 
 S = 400          # tile size, px
 CAPTION = 32     # caption band under each tile, px
@@ -910,6 +913,17 @@ def bases(text, px=FOOT_PX, tol=FOOT_TOL):
     return out
 
 
+def grams_report(plate):
+    """Print each piece's grams by its recipe label, and what falls between pieces."""
+    data = footprints(plate)
+    if "grams_between" not in data:
+        sys.exit(f"{plate}: the slice has no object marks or no grams, so no grams per piece")
+    for p in data["pieces"]:
+        print(f"{p['id']:<8} {p['label']:<24} {p['grams']:6.2f} g")
+    print(f"{'':<8} {'between pieces':<24} {data['grams_between']:6.2f} g")
+    print(f"{'':<8} {'plate':<24} {sum(p['grams'] for p in data['pieces']) + data['grams_between']:6.2f} g")
+
+
 def footprints(plate, bedmap=None):
     """The bed.json dict for a sliced plate (format in `footprints_sheet`)."""
     side = Path(bedmap) if bedmap else Path(re.sub(r"\.3mf$", "", str(plate), flags=re.I) + ".bedmap.json")
@@ -920,6 +934,7 @@ def footprints(plate, bedmap=None):
         objects = plate_objects(zf)
         gcode = next((n for n in zf.namelist() if n.endswith(".gcode")), None)
         base = bases(zf.read(gcode).decode("utf-8", "replace")) if gcode else {}
+        grams = piece_grams(zf)
     labels = {r["object"]: r["label"] for r in rows}
     kinds = kind_order(labels, [oid for oid, _ in objects])
     order = {r["object"]: i for i, r in enumerate(rows)}
@@ -934,8 +949,12 @@ def footprints(plate, bedmap=None):
             "label": labels.get(oid, oid), "name": piece, "kind": kinds.index(labels.get(oid, oid)) + 1,
             "dots": (r.get("params") or {}).get(f"dots_{piece.lower()}", 0) if piece else None,
             "outlines": outlines(tris)})
+        if grams:
+            pieces[-1]["grams"] = grams.get(oid, 0.0)
     name = re.sub(r"\.plate\.3mf$|\.3mf$", "", head.get("plate") or Path(plate).name, flags=re.I)
     out = {"plate": name, "bed": {"w": BED_MM, "h": BED_MM}, "pieces": pieces}
+    if grams:
+        out["grams_between"] = grams.get("between", 0.0)
     if base:
         out["bases"] = [{"kind": k, "outlines": v} for k, v in base.items()]
     return out
@@ -969,7 +988,11 @@ def footprints_sheet(out, plate):
     - `bases`, only when the slice lays any: what goes on the bed besides the pieces, read off the
       G-code's first layer, as [{"kind": "support" | "raft" | "brim" | "skirt", "outlines": rings}].
       A brim ring has a hole where its piece stands, so these too want fill-rule evenodd. They
-      belong to no piece and take no comments; a plate sliced without G-code has none."""
+      belong to no piece and take no comments; a plate sliced without G-code has none.
+    - `grams` on each piece and `grams_between` on the plate, only when the slice has G-code with
+      object marks: the filament each piece costs and what falls outside every piece, read by
+      `piece_grams`. They add up to the slice's own grams, which leave out the prime line and the
+      color flush."""
     data = footprints(plate)
     Path(out).parent.mkdir(parents=True, exist_ok=True)
     Path(out).write_text(json.dumps(data, separators=(",", ":")) + "\n")
@@ -1393,6 +1416,7 @@ def self_test():
     ]
     checks += compare_self_test()
     checks += footprints_self_test()
+    checks += grams_self_test()
     checks += bases_self_test()
     for name, ok in checks:
         print(("PASS " if ok else "FAIL ") + name)
@@ -1526,6 +1550,41 @@ def footprints_self_test():
         ("footprints numbers kinds as the --key picture does, and reads the dots",
          (p["2"]["kind"], p["4"]["kind"], p["2"]["dots"], p["6"]["dots"]) == (1, 2, 2, 0)),
         ("footprints names the plate and the bed", data["plate"] == "t" and data["bed"] == {"w": BED_MM, "h": BED_MM}),
+    ]
+
+
+def grams_self_test():
+    """A slice in memory: 1.0 g in all, two objects marked by identify ids 47 and 58 (objects 2
+    and 4). Object 2 extrudes 30 mm, retracting and pushing back 0.8 mm; object 4 extrudes 10 mm;
+    and 0.5 mm of pull-back falls between them. So 3:1 split of the grams, between floored at 0.
+    The case built to fail: the same slice in absolute extrusion (M82) must be refused."""
+    import io
+
+    def slice_(gcode):
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w") as zf:
+            zf.writestr("Metadata/slice_info.config", '<plate><filament id="1" used_m="0.4" used_g="1.00"/></plate>')
+            zf.writestr("Metadata/model_settings.config",
+                        "".join(f'<model_instance><metadata key="object_id" value="{o}"/>'
+                                f'<metadata key="identify_id" value="{i}"/></model_instance>' for o, i in ((2, 47), (4, 58))))
+            zf.writestr("Metadata/plate_1.gcode", gcode)
+        return zipfile.ZipFile(buf)
+    body = ("M83\nG1 E-.5 F1800\n"
+            "; start printing object, unique label id: 47\nG1 X1 Y1 E10\nG3 X2 Y2 I1 J0 E20\nG1 E-.8\nG1 E.8\n"
+            "; stop printing object, unique label id: 47\nG1 X50 Y50 F30000\n"
+            "; start printing object, unique label id: 58\nG2 X3 Y3 I1 J0 E10 ; a note E99\n"
+            "; stop printing object, unique label id: 58\n")
+    g = piece_grams(slice_(body))
+    try:
+        piece_grams(slice_(body.replace("M83", "M82")))
+        refused = False
+    except ValueError:
+        refused = True
+    return [
+        ("piece grams split the slice's grams by each object's filament, comments ignored",
+         abs(g.get("2", 0) - 0.75) < 0.02 and abs(g.get("4", 0) - 0.25) < 0.02),
+        ("piece grams floor what falls between pieces at zero", g.get("between") == 0.0),
+        ("piece grams refuse absolute extrusion", refused),
     ]
 
 
@@ -1677,6 +1736,9 @@ if __name__ == "__main__":
         sys.exit(0)
     if len(a) == 3 and a[0] == "footprints":
         footprints_sheet(a[1], a[2])
+        sys.exit(0)
+    if len(a) == 2 and a[0] == "grams":
+        grams_report(a[1])
         sys.exit(0)
     if len(a) >= 4 and a[0] == "join":
         join_sheet(a[1], a[2:])
