@@ -48,8 +48,10 @@ Take them in this order: the first two help on their own, and the third is measu
   claude-techniques session (social-presence-hub) is planning a side-by-side test of the graph on
   real bikar tasks; line the two up rather than running both blind.
 - **After the trial:** a script for links between repos (design question 3), and a cleanup skill
-  fed by the complexity list, both only if the trial or the gate leaves real work. A post about it
-  is written with claude-techniques once there is a result to report.
+  fed by the complexity list, both only if the trial or the gate leaves real work.
+- **A post about the design**, which Omar asked for once he signed off: written with the
+  claude-techniques session, numbers and design only. A second post can follow with the trial's
+  result.
 
 ## LDraw export, never opened in a viewer
 
