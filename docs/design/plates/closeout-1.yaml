@@ -1,0 +1,138 @@
+# closeout-1 — one small plate for every plate question still open on the flange coaster
+#
+# Omar, 2026-11-05, after saying he no longer has star-3's pieces: "can we print a combo plate to
+# close out all decisions we need?" The which-questions page (2026-11-05) sorted the 24 open
+# questions: 18 were overtaken by later plates, and the rest come down to four that need pieces
+# in the hand. Its call 7 listed the small plate that answers them from split-10's and star-3's
+# slices. This is that plate, with one thing added: a slice of the coaster frame, so the kites can
+# be tried without split-07's frame, which may be gone like the rest.
+#
+# Every piece prints exactly as it printed before, with the same dots on its cut face, so each
+# answer reads straight back onto the plate it came from:
+#
+#   Stars (split-10 question 1, which face stays flat):
+#     STAR-STOCK 3 dots, STAR-SUPPORT 1 dot, STAR-SLOPE 2 dots, STAR-WHOLE (the only whole star)
+#   The flat star on star-2's pins (star-3, both questions; worth judging only if a flat star wins):
+#     FLAT-TRI, the only star in halves with no dots and three pin holes on a triangle
+#   Middles (split-10 question 3, what "pins of 6" means):
+#     MIDDLE-STOCK 1 dot (the centre pin and six round it), MIDDLE-PINS5 2 dots (the centre and four)
+#   Kites (split-10 question 4, which gap fits the frame):
+#     KITE-STOCK, no dots (0.12 mm a face, as split-07); KITE-G08, 1 dot (0.08 mm); two of each
+#   The frame slice, for the kites: LOWER-36 and UPPER-36, a 36° slice of split-07's two halves
+#     (wedge 36 from 9°, the same slice the kites themselves are cut from), so a kite drops into
+#     its own pocket and the halves close over it
+#
+# Left off, and why:
+#   - the hexagon and outer pieces: hexfit-2 settled the rail (0.01 mm a side, no rock), 2026-11-05.
+#   - MIDDLE-SUPPORT and MIDDLE-SLOPE: Omar called the supported middle best ("this was best"); the
+#     open part is only the pin count, which stock and PINS5 answer.
+#   - star-3's second flat star: one copy answers whether the pins hold; the second only doubles it.
+#   - star-1's question (no base, grid supports or a brim): overtaken by star-2.
+#
+# Each group is a `group:`, so the slice lays each question's pieces out in a block of its own.
+#
+# No color here: the send picks it.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/closeout-1.yaml --plate-type textured_plate --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: CL1
+
+ledge_bitten_by_design: "the 0.7 mm wall Omar picked on split-08 still bites the hex pockets' blunt end in the frame slice (D-119); split-07's halves, unchanged"
+
+no_id_reasons:
+  - &dots "dots on each half's cut face, hidden once the halves close, exactly as on split-10, so the answer reads back onto split-10's piece: count them. bikar: no carved id fits (a one-letter id needs 3.1 x 3.5 mm of flat face with 0.8 mm to every edge)"
+  - &whole "the only whole star: it has no cut face to take dots, and it is the one star that is not in two halves"
+  - &flat "the only star in two halves with no dots, and the only one with three pin holes on a triangle. bikar: no carved id fits on a star half"
+  - &kitestock "no dots: the only other kite here, KITE-G08, has one dot on each half's cut face"
+  - &lower "the frame slice's lower half, the only piece of its shape here; an id is cut only on a face hidden in use (D-114), and this half's bed face is the coaster's face"
+  - &upper "the frame slice's upper half, the only piece of its shape here; it prints face down, so its bed face is the top that shows in use (D-114)"
+
+items:
+  # Stars: split-10 question 1
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36, dots_star: 3 }
+    label:  STAR-STOCK
+    group:  "stars: which face stays flat"
+    no_id:  *dots
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 0, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36 }
+    label:  STAR-WHOLE
+    group:  "stars: which face stays flat"
+    no_id:  *whole
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36, dots_star: 1 }
+    label:  STAR-SUPPORT
+    group:  "stars: which face stays flat"
+    no_id:  *dots
+    object_settings: { infill_wall_overlap: "55%", enable_support: "1" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 0, slide_outer: 0, wedge: 36, slope: 0.2, dots_star: 2 }
+    label:  STAR-SLOPE
+    group:  "stars: which face stays flat"
+    no_id:  *dots
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 3, pins_star_ring: 1, pin_wall: 0.9, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36, dots_star: 0 }
+    label:  FLAT-TRI
+    group:  "stars: which face stays flat"
+    no_id:  *flat
+    object_settings: { infill_wall_overlap: "55%" }
+  # Middles: split-10 question 3
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Middle
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, dots_middle: 1 }
+    label:  MIDDLE-STOCK
+    group:  "middles: how many pins"
+    no_id:  *dots
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Middle
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 5, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, dots_middle: 2 }
+    label:  MIDDLE-PINS5
+    group:  "middles: how many pins"
+    no_id:  *dots
+    object_settings: { infill_wall_overlap: "55%" }
+  # Kites and the frame slice they fit into: split-10 question 4
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Kite
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.12, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36 }
+    count:  2
+    label:  KITE-STOCK
+    group:  "kites: which gap fits the frame"
+    no_id:  *kitestock
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Kite
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.08, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36, dots_kite: 1 }
+    count:  2
+    label:  KITE-G08
+    group:  "kites: which gap fits the frame"
+    no_id:  *dots
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Lower
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36 }
+    label:  LOWER-36
+    group:  "kites: which gap fits the frame"
+    no_id:  *lower
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Upper
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36 }
+    label:  UPPER-36
+    group:  "kites: which gap fits the frame"
+    no_id:  *upper
+    object_settings: { infill_wall_overlap: "55%" }

@@ -1,0 +1,118 @@
+---
+plate: closeout-1
+recipe: closeout-1.yaml
+iteration: 1
+stage: proposed
+times_printed: 0
+runs: []
+answers: "One small plate for every flange-coaster question still open: which star face stays flat, how many pins the middle takes, which kite gap fits the frame, and whether the flat star holds on star-2's pins."
+kind: new
+maturity: experiment
+bets: []
+unblocks:
+  - "the flange coaster's star, middle and kites settled, so the next whole coaster is printed from decided pieces"
+minutes: 34
+grams: 7
+bed_plates: 1
+risk: ok
+pictures:
+  - closeout-1-media/bed.png
+---
+
+# closeout-1 — one plate to close the flange coaster's open questions
+
+![closeout-1 on the bed from above: three groups of pieces, each in its own box (stars, middles, and kites with a slice of the frame), numbered 1 to 11, with the list of pieces beside the bed](closeout-1-media/bed.png)
+
+**In short.** You no longer have split-10's or star-3's pieces, and asked on 2026-11-05: "can
+we print a combo plate to close out all decisions we need?" The which-questions page that day
+sorted the 24 open questions. 18 had been overtaken by later plates, the hexagon ones were
+settled by hexfit-2, and what is left comes down to four questions that need pieces in the
+hand. This plate prints exactly those pieces, each as it printed before, with the same dots, so
+every answer reads straight back onto the plate it came from. It adds one thing: a slice of the
+coaster frame, so the kites can be tried without split-07's frame. 13 pieces, 34 minutes, 7 g.
+The plate is [`closeout-1.yaml`](closeout-1.yaml).
+
+**What it replaces.** These questions close here, and their old pieces need not be found:
+
+- split-10's question 1 (which star face stays flat), question 3 (how many pins the middle takes)
+  and question 4 (which kite gap fits the frame);
+- star-3's questions 1 and 2 (does the flat star hold on star-2's three pins, and is its bottom
+  clean).
+
+Left open elsewhere, and why they are not here:
+
+- split-10's question 2 (the middle's webbed feel): you already called the supported middle best,
+  so only its pin count is open, which question 3 asks;
+- split-10's question 5 (the hexagon and outer dovetails): closed by hexfit-2, which kept the
+  rail at 0.01 mm a side;
+- star-1's question (no base, grid supports or a brim): overtaken by star-2;
+- the lopsided bigger kites: that needs a photo of the pieces you have, not a print.
+
+## What it tries
+
+| Question | Pieces (how to tell them) | Grams |
+|---|---|---|
+| Which star face stays flat | STAR-STOCK (3 dots), STAR-SUPPORT (1 dot, printed on supports), STAR-SLOPE (2 dots, a sloped step), STAR-WHOLE (the only star not in halves) | 0.94 |
+| Does the flat star hold on three pins | FLAT-TRI (halves with no dots, three pin holes on a triangle) | 0.26 |
+| How many pins the middle takes | MIDDLE-STOCK (1 dot: the centre pin and six round it), MIDDLE-PINS5 (2 dots: the centre and four) | 2.52 |
+| Which kite gap fits the frame | KITE-STOCK ×2 (no dots, 0.12 mm a face), KITE-G08 ×2 (1 dot, 0.08 mm), in a frame slice LOWER-36 and UPPER-36 | 2.65 + 0.44 |
+| **The plate** | 13 pieces | **6.81** |
+
+The frame slice is a 36° slice of split-07's two frame halves, cut by the same wedge the kites are
+cut from, so each kite has its own pocket in it. It also holds a star pocket, a hexagon pocket and
+an outer pocket, which are not asked about here. It costs 2.65 g, the most of any group, and is
+what lets the kites be judged at all.
+
+Every piece is split-10's piece in everything else: size 112.5 mm, the 0.7 mm wall, and setting 8
+(infill and wall overlap 55%).
+
+**Telling the pieces apart.** The dots are sunk into each half's cut face, the face hidden once
+the halves close, exactly as on split-10: open the halves and count them. No piece carries a
+carved id, because bikar cannot fit one: a one-letter id needs 3.1 by 3.5 mm of flat face with
+0.8 mm to every edge, and no star or kite half has it. The pieces with no dots are each the only
+one of their kind here: STAR-WHOLE is the only whole star, FLAT-TRI the only star in halves with
+no dots, KITE-STOCK the only kite with none. The frame slice's two halves are the only pieces of
+their shape. **Keep each piece's two halves together** when you take them off the bed.
+
+## After the print
+
+| Pieces | The question | What we expect, and why | What each answer changes |
+|---|---|---|---|
+| STAR-STOCK (3 dots), STAR-SUPPORT (1 dot), STAR-SLOPE (2 dots), STAR-WHOLE (whole) | **Do:** 1. Close each cut star's two halves. 2. Lay the four stars face up side by side. 3. Look at each from the side, along a point. **Look for:** a face that is flat out to its points, with no curve at the edges. | STAR-SLOPE or STAR-SUPPORT flattest: each puts something under the step that sagged. STAR-WHOLE shows whether the cut itself made the curve. | Slope best: stars print with the slope, nothing to pick off. Support best and slope not: stars print with supports, and the slope gets another look. Whole best: the cut caused it, and stars print whole. All four curve: the cause is something else; say what you see in the notes. |
+| FLAT-TRI (halves, no dots), against STAR-STOCK (3 dots) | **Do:** 1. Press FLAT-TRI's two halves together on its three pins. 2. Hold it by its edges and try to twist the halves against each other. 3. Do the same with STAR-STOCK, which has one pin. 4. Turn FLAT-TRI over and look at its bottom, its five tips and the step under each half. **Look for:** halves that close flat and do not turn, where STAR-STOCK can turn round its one pin; and a bottom as clean as STAR-STOCK's. | It holds and does not turn, like star-2's stars on the same 1.2 mm pins; its bottom is as clean, since only the pins changed and they sit inside the halves. Worth deciding only if a flat star wins the row above. | Holds, as clean: the flat star takes the triangle of pins. Too tight to close, or a pin snapped: its pins need a wider gap. Still turns: the triangle is too small, and a wider one is the next plate. Bottom worse: the pins changed how the step prints, and the next plate looks at that. |
+| MIDDLE-STOCK (1 dot), MIDDLE-PINS5 (2 dots) | **Do:** 1. Close each middle piece's halves on their pins. 2. Lay each flat and press each end. 3. Pull the halves apart and twist them. **Look for:** halves that close flat and hold without rocking. MIDDLE-STOCK has a centre pin and six round it, MIDDLE-PINS5 a centre pin and four. | Both close and hold: each pin keeps the room the rule asks for to the edge, and the ring is even, so no side is left without a pin as split-07's three uneven pins left it. | Both hold: middles take four round the centre, fewer holes to print. Only six holds: middles take six. Neither holds: the pins need another fit, and your note says which way. |
+| KITE-STOCK (no dots) ×2, KITE-G08 (1 dot) ×2, in LOWER-36 and UPPER-36 | **Do:** 1. Lay the frame slice's lower half flat, face down. 2. Put one kite in the small kite pocket at its edge. 3. Close the upper half over it and shake it gently. 4. Take the kite out and do the same with each of the other three. **Look for:** which kites go in without forcing and do not rattle. Both copies should agree. | KITE-G08 snug but may need a push; KITE-STOCK loose, as split-07's were. | 0.08 snug and goes in: kites go to gap 0.08. 0.08 still rattles: the next plate tries below 0.08. 0.08 binds: the next plate tries between 0.08 and 0.12. |
+
+## Pictures
+
+The bed, from above, as the slice lays it out, at the top of this page. Drawn from the sliced
+plate by `tools/print_review.py bed --zoom --key`.
+
+## Cost and risk
+
+**About 34 minutes and 7 g of PLA** (the slice: 33 min 42 s, 6.81 g). One bed, one color, no
+prime tower, no brim. STAR-SUPPORT alone prints on supports, as it did on split-10.
+
+**Risk: ok.** Small flat pieces, all printed before on split-10 and split-07 at these settings;
+the frame slice is split-07's halves cut smaller.
+
+## Your call
+
+- [ ] **Approve as it stands**: say the color with the yes
+- [ ] **Hold**: say why in the notes
+
+Notes:
+
+## Approvals
+
+Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A tick under Your call, or a yes in chat, becomes a row here through the manage-approvals skill's `plate_approve.py`; a send spends the open approval, and a recipe change resets it.
+
+| Date | Decision | By | Covers | Spent by |
+|---|---|---|---|---|
+
+## Timeline
+
+| Date | What happened | Where it is written |
+|---|---|---|
+| 2026-11-05 | proposed: Omar no longer has split-10's or star-3's pieces ("Don't have them") and asked for "a combo plate to close out all decisions we need"; 13 pieces for the four questions still open | this page |
+| 2026-11-05 | sliced: 34 min, 6.81 g, 13 pieces, no warnings, for the Textured PEI plate | this page |
