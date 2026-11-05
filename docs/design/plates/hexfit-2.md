@@ -2,7 +2,7 @@
 plate: hexfit-2
 recipe: hexfit-2.yaml
 iteration: 1
-stage: proposed
+stage: approved
 times_printed: 0
 runs: []
 answers: "What stops the hexagon piece's two halves rocking up and down: a taller rail, a wider rail, or pins in place of the rail, beside hexfit-1's best fit as the control?"
@@ -98,6 +98,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-11-05 | approved | Omar, in chat: "Approve, in green" | iteration 1 @ dd34ba4afc in #00AE42 | |
 
 ## Timeline
 
