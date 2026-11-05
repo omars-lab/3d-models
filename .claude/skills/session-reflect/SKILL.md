@@ -101,6 +101,21 @@ to *confirm* an answer it half-remembers looks the same as one that never knew
 it. So "not taking" means "still being looked up". It is strong evidence, not
 proof. Say so when you report it.
 
+A search the FAQ hook answered (below) still counts as a re-derivation here,
+because the search ran. Before calling an answer not taking, check the hook's log
+(`~/.claude/state/faq-at-grep.log`, one `ev=faq_shown` line per answer shown): a
+session that was shown the answer and searched again anyway is the real "not
+taking"; one that searched and stopped is the hook working.
+
+## Scripts — when to use each
+
+| Script | What it does | When to reach for it | Command |
+|---|---|---|---|
+| `scripts/faq_at_grep.py` | A PreToolUse hook on Grep and Bash. When a search names a term an FAQ entry answers (the term after `cmd:grep ` in that entry's line in `docs/faq-evidence.jsonl`), it puts the entry's answer in front of the session before the search runs. Once per session per entry; never blocks; logs each showing | Runs on its own from `.claude/settings.json`. Run the self-test after changing the FAQ's format or the evidence file | `python3 .claude/skills/session-reflect/scripts/faq_at_grep.py --self-test` |
+
+The hook is how D-129's first step lands: the answers were written, but sessions
+searched before they read them, so the answer now arrives at the search.
+
 ## Where this sits
 
 - **Memory** is where answers live for recall. The FAQ measures whether an answer

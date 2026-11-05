@@ -35,9 +35,10 @@ coaster-pipeline backlog on 2026-09-25 (board #10).
 Omar picked these on 2026-11-05 from the [code graph design](../../design/process/code-graph.md).
 Take them in this order: the first two help on their own, and the third is measured against them.
 
-- **Sessions read the FAQ before they grep.** The FAQ tool marks all five written answers as not
-  taking: the one session since searched for each again. Find where a session would see the FAQ
-  first (CLAUDE.md, a session-start line, or the grep itself) and make it land there.
+- **Sessions read the FAQ before they grep.** Built in #888: a hook shows the FAQ answer when a
+  search names a term the FAQ answers (the session-reflect skill's `faq_at_grep.py`). Still to do
+  after it merges: one real search for `tagSegments` in this repo, to see the answer appear. Then
+  move this line to done.
 - **A complexity check on 3d-models' Python.** ruff's complexity rule at 10, the limit bikar and
   qiyas use, in `make validate`. Fix or list the functions already over it.
 - **graphify on bikar for two weeks.** Code only, version pinned, no git hooks, no strict mode, per
