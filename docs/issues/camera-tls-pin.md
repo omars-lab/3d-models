@@ -38,7 +38,11 @@ that certificate and no other.
    certificate with `openssl s_client` (this sends no credentials). Since 2026-10-04 it fetches
    from port 8883, which answers whenever LAN mode is on; 322 also needs Liveview. It checks that the certificate names the configured serial and is in date, then
    saves it to `.bambu/printer-<serial>.pem`, which is gitignored and local to this machine. It
-   prints the issuer, the expiry and the SHA-256 fingerprint.
+   prints the issuer, the expiry and the SHA-256 fingerprint. The file sits in the main
+   checkout's `.bambu/`, and a worktree reads it from there: one pin per machine. Until
+   2026-11-05 each worktree looked in its own `.bambu/`, so the hub, which runs the CLI from its
+   own worktree, said it could not reach the printer while every call from the main checkout
+   answered.
 2. **Node does the TLS hop, pinned.** Node can trust a single certificate:
    `ca: <pinned cert>` with `allowPartialTrustChain: true` lets the pinned certificate stand in
    for the CA. OpenSSL still checks the signature, the dates and the key. On top of that, the name

@@ -1,13 +1,13 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { execFileSync } from "node:child_process";
 import { X509Certificate } from "node:crypto";
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { connect, createServer, type Server, type TLSSocket } from "node:tls";
 import { Client as FtpClient } from "basic-ftp";
 import mqtt from "mqtt";
-import { firstPem, pinnedTlsOptions, pinRefusal, readPin } from "./tls-pin.js";
+import { firstPem, mainCheckout, pinnedTlsOptions, pinPath, pinRefusal, readPin } from "./tls-pin.js";
 
 // Every connection that carries the access code (MQTT 8883, FTPS 990, camera 322) checks the
 // printer's pinned certificate (backends/tls-pin.ts). The load-bearing case is the refusal: a server
@@ -151,6 +151,32 @@ describe("pinned options through mqtt and basic-ftp", () => {
 describe("readPin", () => {
   it("names the command that makes the pin when there is none", () => {
     expect(() => readPin("NOPINSERIAL", dir)).toThrow(/bambu setup printer-pin/);
+  });
+
+  // A made-up main checkout and a linked worktree of it, laid out the way git lays them out.
+  function checkoutAndWorktree(): { main: string; tree: string } {
+    const base = mkdtempSync(join(tmpdir(), "pin-tree-"));
+    const main = join(base, "repo");
+    const tree = join(base, "repo-hub");
+    for (const root of [main, tree]) mkdirSync(join(root, ".claude", "gates"), { recursive: true });
+    for (const root of [main, tree]) writeFileSync(join(root, ".claude", "gates", "prints_gate.py"), "");
+    mkdirSync(join(main, ".git", "worktrees", "repo-hub"), { recursive: true });
+    writeFileSync(join(tree, ".git"), `gitdir: ${join(main, ".git", "worktrees", "repo-hub")}\n`);
+    mkdirSync(join(main, ".bambu"));
+    writeFileSync(join(main, ".bambu", "printer-TREESERIAL.pem"), pem.printer!);
+    return { main, tree };
+  }
+
+  it("reads the main checkout's pin from a worktree that has no .bambu", () => {
+    const { main, tree } = checkoutAndWorktree();
+    expect(pinPath("TREESERIAL", join(tree, "tools", "bambu"))).toBe(join(main, ".bambu", "printer-TREESERIAL.pem"));
+    expect(readPin("TREESERIAL", tree)).toBe(pem.printer);
+  });
+
+  it("reads the pin from the main checkout itself", () => {
+    const { main } = checkoutAndWorktree();
+    expect(mainCheckout(main)).toBe(main);
+    expect(readPin("TREESERIAL", main)).toBe(pem.printer);
   });
 });
 
