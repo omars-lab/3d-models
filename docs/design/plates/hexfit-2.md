@@ -1,8 +1,9 @@
 ---
 plate: hexfit-2
+print_log: '[[print-logs/hexfit-2|print log]]'
 recipe: hexfit-2.yaml
 iteration: 1
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "What stops the hexagon piece's two halves rocking up and down: a taller rail, a wider rail, or pins in place of the rail, beside hexfit-1's best fit as the control?"
@@ -78,6 +79,14 @@ The bed, from above, as the slice lays it out, at the top of this page. Drawn fr
 plate by `tools/print_review.py bed --zoom --key`. Each version's join drawn from its own model
 by `tools/print_review.py pins`, above.
 
+## The print
+
+The print as the chamber camera saw it: 14 pictures from 21:48 to 22:15 UTC, half a second each, the last held. Made by the monitor-print skill's `print_monitor.py --publish`; what the printer said is in the print log.
+
+![hexfit-2 printing, as the chamber camera saw it](hexfit-2-media/timelapse.webp)
+
+![hexfit-2 finished, on the bed](hexfit-2-media/finished.webp)
+
 ## Cost and risk
 
 **About 23 minutes and 6 g of PLA** (the slice: 23 min 13 s, 5.56 g). One bed, one color, no
@@ -98,7 +107,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-11-05 | approved | Omar, in chat: "Approve, in green" | iteration 1 @ dd34ba4afc in #00AE42 | |
+| 2026-11-05 | approved | Omar, in chat: "Approve, in green" | iteration 1 @ dd34ba4afc in #00AE42 | sent 2026-11-05 |
 
 ## Timeline
 
@@ -106,3 +115,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-11-05 | proposed: hexfit-1's rocking left open ("both rock" on the two loose pieces), and Omar no longer has its 4-dot piece ("Don't have them"); 8 pieces, four joins | this page |
 | 2026-11-05 | sliced: 23 min, 5.56 g, 8 pieces, no warnings, for the Textured PEI plate | this page |
+| 2026-11-05 | sent — by `bambu print send`; spends the approval of 2026-11-05, iteration 1 @ dd34ba4afc in #00AE42 | this page |
