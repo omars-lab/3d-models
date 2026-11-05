@@ -115,3 +115,11 @@ same way before its push, and the PR body names the verdict on the final tip.
   The minis lesson went into the deploy recipe in memory, as a step before `make deploy`, because
   a retro line does not stop the next run shipping them. The star-pin source lag went onto the
   plates loop's open list, because that session reads its task file and not this one's done list.
+
+## Next-coaster ranking, round 3
+
+- Three of the sixteen rebuilds drew an empty hero picture even after a fresh rebuild that
+  reported the right size: the construction hides every shape by its end. A size check passing
+  says nothing about whether anything was drawn, so they are held, not ranked.
+- Four square tiles share all four facts with CS-8, so the difference score could not split
+  them. Written in the round log as a sign a fifth fact may be needed.
