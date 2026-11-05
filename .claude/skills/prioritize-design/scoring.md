@@ -150,6 +150,13 @@ weights live at the top of the tool, and a round that moves them says why below,
 One line per round: the date, what was ranked, what the page suggested, what Omar picked, and
 whether a check or a weight moved and why. Newest first.
 
+- **2026-11-05, round 3** — the 16 youtube rebuilds with no coaster, against 15 made coasters,
+  on the [round 3 page](../../../docs/working-model/feedback-requests/2026-11-05-next-coaster-round-3.md).
+  7 ranked, 9 held (three drew an empty picture). Suggested: ZFQt67eZ9Sg, tied with
+  cKYbKQvmsbs at 11.10 and ahead on the rebuild score. Omar's pick: open. Weights unchanged.
+  Four square tiles share all four facts with CS-8, so difference cannot split them; a fifth
+  fact may be needed if that keeps happening.
+
 - **2026-09-30, round 2** — the three D-087 patterns rendered as minimal coasters at 90 mm
   (CS-13 gBV, CS-14 jlTmt, CS-15 Ntnl) on the
   [renders page](../../../docs/working-model/feedback-requests/2026-09-30-top-three-renders.md).
