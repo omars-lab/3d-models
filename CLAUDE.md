@@ -154,11 +154,8 @@ normal case. **Only** write a durable narrative record when the fix also produce
 a *tenet*, a rule that changes how the next doc gets written; then it goes in this
 file, or in the taxonomy, not in a register.
 
-There is deliberately **no issue catalog** and no automated link checker — both
-[rejected on measurement](docs/design/process/issue-register-evaluation.md): 5 of 15 defects graduated
-into a guard, all 7 July-2026 fixes shipped a test and needed no entry, and §5.1 measured ~11% false
-alarms against a <1% dead-link rate. The checkable invariant is not *does this URL resolve* but *is
-every load-bearing number attributed to a source the research file records as fetched*.
+There is deliberately **no issue catalog** and no link checker, both [rejected on
+measurement](docs/design/process/issue-register-evaluation.md) (~11% false alarms vs a <1% dead-link rate).
 
 **Self-improvement is part of finishing.** A *recurring* manual step gets fixed in the PR that hit
 it, as a defect gets a guard ([migrations](docs/constructions/ledger.md) each fill the last gap).
@@ -167,22 +164,25 @@ not-yet line; a tool that can't draw it is the finding (Omar, 2026-10-01, `loose
 decides from opens on a marked-up picture, gives each option its own, and is looked at in Obsidian
 before he hears of it** ([rules](.claude/skills/request-feedback/page-template.md#rules); 2026-10-12).
 
+**A plate waiting to be judged goes stale.** Never assume Omar still has its pieces: once a later
+plate moves its question on, or weeks pass, offer each open question as reprint-the-piece or
+superseded-by-<plate>, and a new plate's page names the questions it supersedes (Omar, 2026-11-05).
+
 ## Robustness over ease — especially when offering the choice
 
 Ease is visible at the moment of choosing and robustness is not, so the trade is systematically
 mis-priced unless written down. When you present options, the cheapest is not the default, "do
 nothing" is not neutral, and each must say **what it verifies** — or be named as verifying nothing.
 
-> *Failure mode, 2026-08-03:* both machine-card options made 23 STLs, **neither checked one**, though a
-> 23-row expectation table existed; what shipped diffs the mesh gate against it ([D-014](docs/working-model/decisions-log.md)).
+> *Failure mode, 2026-08-03:* both machine-card options made 23 STLs and **neither checked one** ([D-014](docs/working-model/decisions-log.md)).
 
 Corollary: **quality over efficiency.** The product is the coaster in the hand. A way that is
 faster to build or print but looks or feels worse is never the default or the pick, and its option
 says what it gives up beside what it saves (Omar, 2026-10-06: "we are sacrificing quality" — after
 way c was picked as the quickest split print, though its face comes out one color).
 
-Corollary: **the by-design failure is the load-bearing case.** A gate that asserts "everything passes"
-must be wrong about a deliberate failure or skip it — and skipping stops it testing its reason to exist.
+Corollary: **the by-design failure is the load-bearing case.** A gate asserting "everything passes"
+must be wrong about a deliberate failure or skip it, and skipping stops it testing why it exists.
 
 Corollary: **robust and simple beat cheap and easy, even at more work.** The cheap fix routes
 around the defect; the robust one deletes it. Two code paths that disagree — or one name with two
