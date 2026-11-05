@@ -2,7 +2,7 @@
 date: 2026-11-05
 repo: 3d-models
 session: plates-and-feedback
-branch: piece-grams, PR #883; question-sort, PR (this one)
+branch: piece-grams, PR #883; question-sort, PR #884; hexfit-2, PRs #890, #891; hexfit-2-sent, PR (this one)
 folded: no
 ---
 
@@ -15,6 +15,19 @@ folded: no
   ("Both stars here") get no grams. Only carved ids or whole recipe labels can be counted.
 - `gh pr merge` without `--delete-branch` left the remote branch behind; it had to be deleted by
   hand after the merge.
+- `tools/print_review.py pins` labels each join with its STL's file name, so a picture for the
+  page needs the STLs copied to version names first (hexfit-2: `1-dot-HEX-CTRL.stl` …).
+- `.claude/gates/plates_gate.py` has no `supersedes:` key; a page says what it replaces in its
+  text. A slice made before recipe hashes were written shows `✗ slice` at the dry run and has
+  to be sliced again from the vault.
+- `tools/bambu/src/backends/tls-pin.ts`: the printer's certificate was read from each worktree's
+  own `.bambu/`, so the hub's printer panel said "can't reach the printer" while the
+  printer answered. Fixed in #892 (read from the main checkout); other `.bambu/` paths in the
+  CLI still resolve per worktree and may hide the same trap.
+- `.claude/skills/review-print/scripts/after_print.py pieces`: on a plate whose pieces carry dots
+  instead of ids (hexfit-2, D-121) and print as two halves, it refuses with "does not match the
+  recipe's items label for label". The real reason is that there are no ids to name pictures by
+  and the bed has two objects per recipe item; the message should say so.
 
 ## Worth copying
 

@@ -22,7 +22,8 @@ the coaster-print session closed on 2026-11-02.
    and the one with the slot cut to the rail's depth, so depth is not the cause. Found by
    hexfit-1's print record, 2026-11-01. **The plate is built: hexfit-2** (2026-11-05). It has a
    taller rail, a wider rail, and pins in place of the rail, beside the 0.01 mm piece as the
-   control: 23 min, 6 g. It waits on Omar's yes and a color. bikar refuses a pin beside the rail,
+   control: 23 min, 6 g. Omar approved it in green; it was sent and printed clean on 2026-11-05
+   (about 27 minutes, no pause). It waits on his judging the pieces on the hub. bikar refuses a pin beside the rail,
    so that idea is a bikar change, worth making only if hexfit-2's rails all still rock.
 2. **Write split-10's print record, then build the next split-10 plate.** This waits on Omar's
    answers to its five questions on the hub and on his reply to the "pins of 6" page comment on
