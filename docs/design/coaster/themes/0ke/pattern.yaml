@@ -55,6 +55,15 @@ sources:
   - title: Wikipedia, "Islamic geometric patterns"
     url: https://en.wikipedia.org/wiki/Islamic_geometric_patterns
     supports: [story]
+  # The book Mian first learned this division of the circle from: in the video (about 03:20-03:31,
+  # audio heard 2026-10-08) she calls it "the John Allen method", and her books page lists it. It is
+  # cited, not quoted: the story never names Allen or credits him with the method (Omar,
+  # 2026-11-05: cut the line from the story, keep the book in the citation list). Listed through
+  # her books page, the page someone opened; the book itself is unread
+  # (coffee-house-storefront docs/research/2026-10-08-lead-sources-consolidated.md).
+  - title: Jon Allen, Drawing Geometry (Floris Books, 2007), listed on Samira Mian's books page
+    url: https://www.samiramian.uk/books
+    supports: [caption]
 
 # Whose drawing our construction follows. Feeds the selling-rights record (design-rights, call 9).
 credit:
