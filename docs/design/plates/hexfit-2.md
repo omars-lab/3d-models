@@ -3,9 +3,9 @@ plate: hexfit-2
 print_log: '[[print-logs/hexfit-2|print log]]'
 recipe: hexfit-2.yaml
 iteration: 1
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-11-05-hexfit-2]
 answers: "What stops the hexagon piece's two halves rocking up and down: a taller rail, a wider rail, or pins in place of the rail, beside hexfit-1's best fit as the control?"
 kind: new
 maturity: experiment
@@ -73,6 +73,15 @@ setting 8 (infill and wall overlap 55%).
 | 1 dot (HEX-CTRL), 2 dots (HEX-TALL), 3 dots (HEX-WIDE), 4 dots (HEX-PINS) | **Do:** 1. Take one piece's two halves (the lower half has the dots) and put them together: slide them on the rail, or press them onto the pins for 4 dots. 2. Lay the piece flat, lower half down. 3. Press down on one end of the upper half, then the other end. 4. Do the same for both copies of each count. **Look for:** The upper half staying flat when you press each end, with no lift at the other end. | 1 dot rocks a little less than hexfit-1's pieces did, since its fit is tighter; 2 and 3 dots rock less again. 4 dots is the unknown: the pins stop sliding, not lifting. | None rocks, not even 1 dot: the tight fit already fixed it, and the rail stays as it is. Only 2 dots stays flat: rails go to 1.0 mm tall. Only 3 dots stays flat: rails go to 6 mm wide. Both 2 and 3: the next plate tries both together. Only 4 dots: the hexagon goes to pins. All rock: none of these is the cause, and the next step is a piece with a rail and pins both (a bikar change). |
 | 2 dots (HEX-TALL), 3 dots (HEX-WIDE) | **Do:** 1. Slide each piece's two halves together on the rail. 2. Hold the lower half and try to slide the upper one side to side, across the rail. **Look for:** Side-to-side play, against hexfit-1's 4-dot piece, which had none. | No play: both keep hexfit-1's 0.01 mm gap a side. | No play: the change keeps the fit. Play on one: that change loosens the fit, and the next plate tightens it before using it. Will not go on: that change binds, and the next plate opens its gap. |
 
+## Judged
+
+Omar's answers to the rows of After the print, word for word, one row each, oldest first. They are written by the review-print skill's `after_print.py answer` (the hub's Judge a print page calls it); the newest answer to a row is the one that counts. A session turns them into the print record with review-print.
+
+| Row | Answer | His words | Date |
+|---|---|---|---|
+| 1 | in my words | Only 1 dot (the control) stays flat, in chat 2026-11-05 | 2026-11-05 |
+| 2 | in my words | they are all very identical, just go with 1 dot | 2026-11-05 |
+
 ## Pictures
 
 The bed, from above, as the slice lays it out, at the top of this page. Drawn from the sliced
@@ -116,3 +125,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-11-05 | proposed: hexfit-1's rocking left open ("both rock" on the two loose pieces), and Omar no longer has its 4-dot piece ("Don't have them"); 8 pieces, four joins | this page |
 | 2026-11-05 | sliced: 23 min, 5.56 g, 8 pieces, no warnings, for the Textured PEI plate | this page |
 | 2026-11-05 | sent — by `bambu print send`; spends the approval of 2026-11-05, iteration 1 @ dd34ba4afc in #00AE42 | this page |
+| 2026-11-05 | printed — all 17 layers, 21:48 to 22:15 UTC in green; judged by hand in chat: only 1 dot (the control, hexfit-1's 0.01 mm fit) ticked as staying flat, and on side play "they are all very identical, just go with 1 dot". Next: the hexagon keeps the rail as it is; the rocking is settled | [the record](../../prints/2026-11-05-hexfit-2/index.md) |

@@ -2,6 +2,7 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-11-05 — hexfit-2 judged in chat: the hexagon halves stay flat with the rail as it is at 0.01 mm a side (1 dot, the control); the taller rail, the wider rail and pins in place of the rail did no better ("they are all very identical, just go with 1 dot"), so the rocking is settled and the pin-beside-the-rail bikar change is not needed. hexfit-1's record gets Omar's "might have been the best" back (3d-models #890, #891, #893, #894)
 - 2026-11-03 — Three 1.2 mm pins on a triangle are now the star's default in bikar, and star-3 gives the flat star (no slope) the same pins: two copies, built, Omar's yes in green, sent and printed in about 10 minutes with its log and timelapse. Judging it waits on Omar (bikar #367, 3d-models #869, #870, #871)
 - 2026-11-02 — star-2 sent in green on Omar's yes and printed to the finish, with its log and timelapse (3d-models #845, #848)
 - 2026-11-02 — star-2's print record: three 1.2 mm pins on a triangle kept ("left most was best"), the 0.8 mm pins dropped ("the right two's pins broke and turned"), bottoms as clean; Omar's answers merged from the hub (3d-models #853, #854)
