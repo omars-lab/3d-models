@@ -22,11 +22,36 @@ in all.
 
 ## The FAQ — waiting on Omar
 
-The `session-reflect` skill proposed six FAQ candidates in the untracked proposal file in
-`docs/`. Omar marks each keep or discard and writes the answers (regenerate the candidates with
-`python3 tools/session_reflect.py update-faq`). Then one PR, per that skill, with ids from
+Five of the six candidates in `docs/faq-proposal.md` are already answered as Q-001 to Q-005 in
+the [FAQ](../../faq.md), written 2026-11-03. The proposal file is older than those answers, so
+regenerate it with `python3 tools/session_reflect.py update-faq` before asking Omar anything
+from it. The one still open is the use-case ids (UC23 and the like, cand-006). Omar marks it keep
+or discard and writes the answer, then one PR per the `session-reflect` skill with an id from
 `python3 tools/next_id.py next Q`. Never write an FAQ answer yourself. Moved from the
 coaster-pipeline backlog on 2026-09-25 (board #10).
+
+## Code graph trial and the two fixes before it (D-129)
+
+Omar picked these on 2026-11-05 from the [code graph design](../../design/process/code-graph.md).
+Take them in this order: the first two help on their own, and the third is measured against them.
+
+- **Sessions read the FAQ before they grep.** The FAQ tool marks all five written answers as not
+  taking: the one session since searched for each again. Find where a session would see the FAQ
+  first (CLAUDE.md, a session-start line, or the grep itself) and make it land there.
+- **A complexity check on 3d-models' Python.** ruff's complexity rule at 10, the limit bikar and
+  qiyas use, in `make validate`. Fix or list the functions already over it.
+- **graphify on bikar for two weeks.** Code only, version pinned, no git hooks, no strict mode, per
+  §6 of the design and section 7 of the [research](../../research/2026-11-05-graphify-code-graph.md).
+  It touches bikar, so it is a bikar PR. Before it starts, one test build answers the open
+  question: does graphify make module constants and class fields into graph entries? At the end,
+  rerun the FAQ tool over bikar sessions and judge against the design's PASS and FAIL lines. The
+  claude-techniques session (social-presence-hub) is planning a side-by-side test of the graph on
+  real bikar tasks; line the two up rather than running both blind.
+- **After the trial:** a script for links between repos (design question 3), and a cleanup skill
+  fed by the complexity list, both only if the trial or the gate leaves real work.
+- **A post about the design**, which Omar asked for once he signed off: written with the
+  claude-techniques session, numbers and design only. A second post can follow with the trial's
+  result.
 
 ## LDraw export, never opened in a viewer
 
@@ -68,14 +93,11 @@ comes back hard to read. The third engine gap §6.2 listed, text emit, has since
 
 ## Merges waiting on Omar
 
-Finished work that a session may not merge itself. Take a line off when it lands.
+Finished work that a session may not merge itself. Take a line off when it lands. None waiting
+as of 2026-11-05.
 
-- **youtube `coaster-0ke` (c8d2b48) and `coaster-n_I` (6e7fc45) into youtube main.** The first
-  is the 0ke_GpoBa-s source the ten-fold rosette coaster was imported from (3d-models #583); the
-  second is the n_ICgwOr6qs source rewrite and the O1 check for arcs (2026-10-06). A session's
-  push to youtube main was refused as a merge without review, so both are Omar's.
-
-Before these: the four youtube branches and 3d-models #427, #432, #433 and #434 merged on
+The youtube `coaster-0ke` and `coaster-n_I` branches merged into youtube main on 2026-11-05
+(28baef1 and 7deb8ab). Before these: the four youtube branches and 3d-models #427, #432, #433 and #434 merged on
 2026-09-30 (#424 and #425 closed, superseded by #427). #430, another session's ledger rows for
 ten youtube reconstructions, was approved by Omar the same day. It had fallen behind master, so
 it landed through a fresh branch that merged it and worked the conflicts by hand.

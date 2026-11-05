@@ -6950,3 +6950,31 @@ otherwise) and L2 now wants the pin to be an ancestor of youtube main.
 
 **What would reverse it:** Omar wanting the hook to write rows itself, or a run where the
 accepted-partial rule admits a reconstruction that should not be a coaster candidate.
+
+## D-129 — Code graph: try graphify on bikar for two weeks, and fix the FAQ and complexity gaps first
+
+Omar, 2026-11-05, in chat, on the [code graph design](../design/process/code-graph.md) and its
+[research](../research/2026-11-05-graphify-code-graph.md) (PR #885, which he merged).
+
+### The options on the table
+
+- **Trial plus cheap fixes:** point sessions at the FAQ before they grep, add a complexity check
+  to 3d-models' Python, and try graphify on bikar only, code only, for two weeks (the pick).
+- **Cheap fixes only:** skip graphify.
+- **Trial across all five repos:** join graphs for 3d-models, bikar, qiyas, youtube and
+  sacred-patterns from the start.
+- **Check it twice first:** a second independent researcher and a checker before deciding.
+
+### What was picked
+
+Trial plus cheap fixes, as the design's §6 lays out. The research found graphify answers "who
+calls this function", while five of the six facts sessions re-search are settings, constants,
+data keys and ids; the FAQ already answers five of the six (Q-001 to Q-005), so the gap that
+showed is that sessions grep before they read it. This answers the design's open questions 1
+(trial) and 4 (the complexity check goes in `make validate`). Question 2 stays as the trial has
+it: the graph does not read docs, so no model pass and no cost. Question 3, a script for links
+between repos, waits for the trial's result. The research rests on one pass that read
+graphify's source but never ran it; Omar chose not to run a second researcher first.
+
+**What would reverse it:** the trial's FAIL line in §6 of the design, or Omar wanting the graph
+across all five repos before the trial ends.
