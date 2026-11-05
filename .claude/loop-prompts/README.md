@@ -37,8 +37,8 @@ Anything a shopper or the store touches (orders, pricing, the store pages, the L
 the hub's Orders tab) is owned by the coffee-house-storefront repo, and its open list is
 `~/Workspace/git-naqshcoffee/coffee-house-storefront/docs/tasks/open.md` (parked items in its
 `docs/tasks/backlog.md`, each saying what brings it back). Neither session here picks those:
-a backlog line here points at that file, and the end-of-work hook
-([`next-for-customers.py`](../hooks/next-for-customers.py)) names them and points there rather
+a backlog line here points at that file, and the end-of-work hook (the guardrail-manager
+plugin's what's-next hook, worded for this repo in [`whats-next.conf`](../hooks/whats-next.conf)) names them and points there rather
 than choosing them. The rule names the repo and file, not a session, because session names change
 from day to day (real-shoppers-store-launch, 2026-11-03, after the hook had this session pick the
 Orders tab). Two things stay here: recording the D- ids when Omar answers a store design's open
