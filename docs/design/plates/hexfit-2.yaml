@@ -1,0 +1,71 @@
+# hexfit-2 — the flange coaster's hexagon piece: what stops its halves rocking up and down
+#
+# hexfit-1 settled the side-to-side fit: 0.01 mm a side (4 dots) held best, now bikar's default
+# (bikar #356). But Omar said "both rock" of the two pieces he was asked to rock, the stock piece and
+# the one whose slot was cut to the rail's own depth, so slot depth is not the cause. Both of those had
+# the old loose 0.15 mm fit; the 0.01 mm piece was never asked, and Omar no longer has it (2026-11-05,
+# "Don't have them"). So this plate puts the 0.01 mm piece back as the control and tries three changes
+# beside it, two copies each:
+#
+#   version     the join                                   dots
+#   HEX-CTRL    rail 4 mm wide, 0.8 tall, 0.01 mm a side    1   hexfit-1's 4-dot piece, as it printed
+#   HEX-TALL    rail 1.0 tall, slot as deep as the rail     2   a taller rail
+#   HEX-WIDE    rail 6 mm wide                              3   a wider rail
+#   HEX-PINS    three 1.2 mm pins, no rail                  4   pins in place of the rail
+#
+# Why not the two ideas the backlog named as they were written:
+# - A taller rail with the slot a layer deeper does not fit. The halves are 1.5 mm thick and bikar
+#   keeps 0.5 mm of band over the slot's ends, so a 0.8 rail with a 1.0 slot is already at the limit;
+#   a 1.0 rail is refused ("only 0.30 mm of band is left"). So HEX-TALL cuts its slot to the rail's own
+#   depth (slide_slot_extra 0), which hexfit-1 found rocked no differently from a deeper slot.
+# - A pin beside the rail is refused by bikar: "a piece's halves take one or the other". So HEX-PINS
+#   tries pins in place of the rail. Pins stop the halves sliding; whether they stop the rock is the
+#   question. Letting one piece take both would be a bikar change, worth it only if neither the
+#   taller nor the wider rail stops the rock.
+#
+# Every other param is hexfit-1's 4-dot piece, so each version differs from the control only in its
+# join. The dots go on the lower half's bed face, the face on the table, as on hexfit-1 (D-121).
+#
+# No color here: the send picks it.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/hexfit-2.yaml --plate-type textured_plate --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: HX2
+
+ledge_bitten_by_design: "the 0.7 mm wall Omar picked on split-08 still bites the hex pieces' blunt end (D-119); hexfit-1's hexagon, unchanged but for the join"
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Hex
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.01, slide_slot_extra: 1, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36, dots_hex: 1, dots_bottom: 1 }
+    count:  2
+    label:  HEX-CTRL
+    no_id:  "1 dot on the lower half's bottom face, the face on the table; each version has its own count, 1 to 4 (D-121). The id would also be cut on the upper half, whose bed face is the coaster's top, and bikar finds no room for it there"
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Hex
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.01, slide_slot_extra: 0, slide_height: 1.0, slide_hex: 1, slide_outer: 1, wedge: 36, dots_hex: 2, dots_bottom: 1 }
+    count:  2
+    label:  HEX-TALL
+    no_id:  "2 dots on the lower half's bottom face, the face on the table; each version has its own count, 1 to 4 (D-121). The id would also be cut on the upper half, whose bed face is the coaster's top, and bikar finds no room for it there"
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Hex
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 6, slide_gap: 0.01, slide_slot_extra: 1, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36, dots_hex: 3, dots_bottom: 1 }
+    count:  2
+    label:  HEX-WIDE
+    no_id:  "3 dots on the lower half's bottom face, the face on the table; each version has its own count, 1 to 4 (D-121). The id would also be cut on the upper half, whose bed face is the coaster's top, and bikar finds no room for it there"
+    object_settings: { infill_wall_overlap: "55%" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Hex
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_hex: 3, pins_star: 1, slide: 4, slide_gap: 0.01, slide_slot_extra: 1, slide_height: 0.8, slide_hex: 0, slide_outer: 1, wedge: 36, dots_hex: 4, dots_bottom: 1 }
+    count:  2
+    label:  HEX-PINS
+    no_id:  "4 dots on the lower half's bottom face, the face on the table; each version has its own count, 1 to 4 (D-121). The id would also be cut on the upper half, whose bed face is the coaster's top, and bikar finds no room for it there"
+    object_settings: { infill_wall_overlap: "55%" }
