@@ -1,0 +1,29 @@
+#!/bin/sh
+# Decision-evidence gate (.claude/gates/decision_evidence.py) and the print
+# evidence log (.claude/skills/review-print/scripts/evidence_log.py). A decision
+# drawn from a print is linked both ways: the record's feedback.decisions names
+# it and its section in the decisions log links the record or its plate page;
+# a record that names a decision has its setup filled in; and
+# docs/prints/evidence-log.md is current with the records. Runs when a commit
+# stages a print record, the decisions log, a plate page, the issue write-ups,
+# the bets table or either script. A stale page is fixed with
+# `python3 .claude/skills/review-print/scripts/evidence_log.py --write`.
+#
+# wholesale: make validate-decision-evidence
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the decision-evidence gate" >&2
+  exit 1
+fi
+TOP="$(git rev-parse --show-toplevel)"
+GATE="$TOP/.claude/gates/decision_evidence.py"
+PAGE="$TOP/.claude/skills/review-print/scripts/evidence_log.py"
+# `gh-pages` carries `.githooks` and not `.claude/`.
+if [ ! -f "$GATE" ] || [ ! -f "$PAGE" ]; then
+  echo "pre-commit: no decision-evidence gate in this worktree — skipping" >&2
+  exit 0
+fi
+if git diff --cached --name-only | grep -Eq '^(docs/prints/|docs/working-model/decisions-log\.md$|docs/design/plates/|docs/issues/|\.claude/skills/calibrate/bets\.md$|\.claude/gates/decision_evidence\.py$|\.claude/skills/review-print/scripts/(evidence_log|after_print)\.py$)'; then
+  python3 "$GATE" || exit 1
+  exec python3 "$PAGE"
+fi
+exit 0

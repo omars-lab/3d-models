@@ -1100,3 +1100,13 @@ validate-vocabulary:
 validate-complexity:
 	$(PYTHON) $(ROOT_DIR)/.claude/gates/complexity_gate.py --self-test
 	$(PYTHON) $(ROOT_DIR)/.claude/gates/complexity_gate.py
+
+# Decision evidence — the wholesale form of .githooks/pre-commit.d/56-decision-evidence:
+# every decision a print record names is linked both ways with the decisions log, a record
+# naming one has its setup filled in, and docs/prints/evidence-log.md is current.
+.PHONY: validate-decision-evidence
+validate-decision-evidence:
+	$(PYTHON) $(ROOT_DIR)/.claude/gates/decision_evidence.py --self-test
+	$(PYTHON) $(ROOT_DIR)/.claude/gates/decision_evidence.py
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/review-print/scripts/evidence_log.py --self-test
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/review-print/scripts/evidence_log.py
