@@ -27,7 +27,7 @@ in [`scoring.md`](scoring.md) — read it every run, since the weights may have 
      skill).
    - **Hold** → `python3 .claude/skills/manage-approvals/scripts/plate_approve.py <plate> --held --by "Omar, tick: <his note>"`.
    - **It printed** (on a sent plate) → write the print record first (the review-print skill's
-     record steps); the page follows it (step 4).
+     record steps); the page follows it (step 5).
    - Then clear the notes, since the table now holds them.
    Never tick a box, and never record a yes with no ticked box or his words in chat; for a yes in
    chat, `--by "Omar, in chat: \"<his words>\""`. One approval covers one send: the send fills the
@@ -35,7 +35,15 @@ in [`scoring.md`](scoring.md) — read it every run, since the weights may have 
    design approved many times keeps every row. A production plate has a standing approval instead
    (D-095); leave its box alone. The plates gate (P2) checks the table; there is no approval in
    the frontmatter.
-2. **Give every new recipe a page.** The gate fails on a `minis-NN.yaml` with no `minis-NN.md`.
+2. **Fold before you add a plate.** Omar, 2026-11-05: "add a tenant to minimize prints, can we
+   print a combo plate to close out all decisions we need?" Before a new plate goes to him, list
+   every open After-the-print question across the plates (`after_print.py waiting`), drop each one
+   a later plate has overtaken (the page names it as superseded), and put the rest that still
+   change something onto the new plate, a piece each, with the grams per question from the slice.
+   One small plate that closes many questions beats several that close one each.
+   [closeout-1](../../../docs/design/plates/closeout-1.md) is the model. A question left off says
+   why on the new page (overtaken by which plate, or not worth its grams).
+3. **Give every new recipe a page.** The gate fails on a `minis-NN.yaml` with no `minis-NN.md`.
    Copy the shape of [minis-06](../../../docs/design/plates/minis-06.md): In short, What it is, Why
    print it, After the print, Pictures, Cost and risk, Your call, Timeline. The page starts at
    `proposed`, with `maturity: experiment`; only the [grade-plate](../grade-plate/SKILL.md) skill
@@ -64,7 +72,7 @@ in [`scoring.md`](scoring.md) — read it every run, since the weights may have 
    no mark. Omar, 2026-10-06: "every proptoty should have an id". The rule, and what to do with a
    piece too small to mark, is in print-coaster-samples'
    [sample-rules](../print-coaster-samples/sample-rules.md#checks-every-plate-passes-before-the-owner-gate).
-3. **Pictures and cost, before `waiting`.** A page moves to `waiting` only with pictures.
+4. **Pictures and cost, before `waiting`.** A page moves to `waiting` only with pictures.
    - The review sheet: `python3 tools/print_review.py sheet <out.png> <pieces.stl>`, from the
      review-print skill. Read it yourself and write what you saw on the page (openness, art
      fill, anything near-solid).
@@ -81,14 +89,14 @@ in [`scoring.md`](scoring.md) — read it every run, since the weights may have 
    - Set `risk:` by the machine, not the print: `watch` for small loose parts or anything a
      nozzle could drag, with what to watch written on the page; `hold` for anything that could
      damage the printer, until it is dealt with. A piece that snaps is data, not risk.
-4. **Match the count to the records.** For each record in `docs/prints/` whose `plate:` starts
+5. **Match the count to the records.** For each record in `docs/prints/` whose `plate:` starts
    with the plate's name, the page lists its run under `runs:`, `times_printed` is how many
    there are, and the timeline has a `printed` row naming it. The gate checks all three. A new
    record's verdicts can move the plate's maturity (and the maturity of every plate sharing a
    piece with it): run the grade-plate skill after it.
-5. **Write the queue.** `python3 .claude/gates/plates_gate.py --write`. It refuses while any
+6. **Write the queue.** `python3 .claude/gates/plates_gate.py --write`. It refuses while any
    page has a finding; fix the page, not the gate.
-6. **Say why.** Report the top three in plain words: what each answers, what it costs, what
+7. **Say why.** Report the top three in plain words: what each answers, what it costs, what
    pushes it up or down (a second bed, a held risk, a repeat), and what Omar has to decide on
    each page. If the order looks wrong, say so and name the weight that caused it; changing a
    weight is a line in `scoring.md`'s round log, not a quiet edit.

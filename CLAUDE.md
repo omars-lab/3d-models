@@ -164,9 +164,9 @@ not-yet line; a tool that can't draw it is the finding (Omar, 2026-10-01, `loose
 decides from opens on a marked-up picture, gives each option its own, and is looked at in Obsidian
 before he hears of it** ([rules](.claude/skills/request-feedback/page-template.md#rules); 2026-10-12).
 
-**A plate waiting to be judged goes stale.** Never assume Omar still has its pieces: once a later
-plate moves its question on, or weeks pass, offer each open question as reprint-the-piece or
-superseded-by-<plate>, and a new plate's page names the questions it supersedes (Omar, 2026-11-05).
+**Fewer prints, and a waiting plate goes stale.** A new plate first takes in every open question still
+worth its grams, so one small plate closes many (closeout-1). Never assume Omar still has a plate's pieces:
+once a later plate moves a question on, or weeks pass, offer reprint or superseded-by-<plate> (2026-11-05).
 
 ## Robustness over ease — especially when offering the choice
 
