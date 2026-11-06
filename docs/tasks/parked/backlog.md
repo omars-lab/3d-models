@@ -39,8 +39,10 @@ complexity check lists the 86 Python functions over 10 and stops any new one.
 
 - **graphify on bikar for two weeks.** Code only, version pinned, no git hooks, no strict mode, per
   §6 of the design and section 7 of the [research](../../research/2026-11-05-graphify-code-graph.md).
-  It touches bikar, so it is a bikar PR. Before it starts, one test build answers the open
-  question: does graphify make module constants and class fields into graph entries? At the end,
+  It touches bikar, so it is a bikar PR. The test build ran on 2026-11-06 (design §6): module
+  constants are graph entries, static class fields are not, so FILL_ATTRIBUTES stays a FAQ
+  answer. Next is the bikar PR itself, started on the same bikar commit as the
+  claude-techniques side-by-side test. At the end,
   rerun the FAQ tool over bikar sessions and judge against the design's PASS and FAIL lines. The
   claude-techniques session (social-presence-hub) is planning a side-by-side test of the graph on
   real bikar tasks; line the two up rather than running both blind.
