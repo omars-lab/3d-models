@@ -2,7 +2,7 @@
 
 Newest first: date, what shipped, PR. Open work: [`backlog.md`](backlog.md).
 
-- 2026-11-06 — A complexity check on the repo's Python (D-129 step 2): no function may grow past 10 (ruff C901, pinned through uvx), the 86 already over it listed in `.claude/gates/complexity-baseline.json`, a list that only shrinks; hook `55-complexity` and `make validate-complexity` (3d-models, this PR)
+- 2026-11-06 — A complexity check on the repo's Python (D-129 step 2): no function may grow past 10 (ruff C901, pinned through uvx), the 86 already over it listed in `.claude/gates/complexity-baseline.json`, a list that only shrinks; hook `55-complexity` and `make validate-complexity` (3d-models #902)
 - 2026-11-05 — Sessions see the FAQ answer when they search for what it answers (D-129 step 1): a hook on searches, checked live with a real search for `tagSegments` (3d-models #888)
 
 - 2026-10-08 — The `draw-side-view` skill: a labeled cut-through side view (halves, pieces, lips, studs, dovetails, first and last layers) from a short YAML description, as SVG and PNG (3d-models #632)
