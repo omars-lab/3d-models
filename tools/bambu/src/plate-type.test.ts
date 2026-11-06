@@ -14,7 +14,8 @@ import {
   resolveSlicePlateType,
   studioSavedPlateType,
 } from "./plate-type.js";
-import { setFilamentColor, setPlateType } from "./commands/slice.js";
+import { setFilamentColor, setPlateType, setSkirt } from "./commands/slice.js";
+import { checkSkirt } from "./commands/compose.js";
 import type { FlattenedPreset } from "./preset-chain.js";
 
 // The plate type is what sheets-04b got wrong (2026-10-03): sliced for Studio's CLI default, a Cool
@@ -166,6 +167,40 @@ describe("setPlateType", () => {
     expect(() => setPlateType([preset("machine")], textured, mkdtempSync(join(tmpdir(), "plate-type-")))).toThrow(
       /needs a process preset/,
     );
+  });
+});
+
+// A whole-plate skirt rides the same way (closeout-1, 2026-11-05). Studio's stock skirt_per_object is
+// "1", a skirt round every piece; the plate asked for one round the whole plate.
+describe("setSkirt", () => {
+  const preset = (type: string): FlattenedPreset => ({ leaf: `/p/${type}.json`, type, chain: [type], config: { name: type } });
+
+  it("writes one skirt round the whole plate into the process preset only, and onto its file", () => {
+    const dir = mkdtempSync(join(tmpdir(), "skirt-"));
+    const presets = [preset("machine"), preset("process"), preset("filament")];
+    setSkirt(presets, { loops: 2 }, dir);
+    expect(presets[1]!.config).toMatchObject({ skirt_loops: "2", skirt_distance: "2", skirt_height: "1", skirt_per_object: "0" });
+    expect(presets[0]!.config.skirt_loops).toBeUndefined();
+    expect(JSON.parse(readFileSync(join(dir, "process.json"), "utf8")).skirt_per_object).toBe("0");
+  });
+
+  it("refuses settings with no process preset to hold it", () => {
+    expect(() => setSkirt([preset("machine")], { loops: 1 }, mkdtempSync(join(tmpdir(), "skirt-")))).toThrow(/needs a process preset/);
+  });
+});
+
+describe("checkSkirt", () => {
+  it("takes loops 1 to 5 and a distance 1 to 10 mm", () => {
+    expect(checkSkirt({ loops: 2 })).toEqual({ loops: 2 });
+    expect(checkSkirt({ loops: 1, distance: 3 })).toEqual({ loops: 1, distance: 3 });
+  });
+
+  it("refuses no loops, too many, a stray key, or a distance out of range", () => {
+    expect(() => checkSkirt({ loops: 0 })).toThrow(/1 to 5/);
+    expect(() => checkSkirt({ loops: 6 })).toThrow(/1 to 5/);
+    expect(() => checkSkirt({ loops: 1, height: 2 })).toThrow(/not a skirt setting/);
+    expect(() => checkSkirt({ loops: 1, distance: 0.5 })).toThrow(/1 to 10/);
+    expect(() => checkSkirt("2")).toThrow(/must be a mapping/);
   });
 });
 
