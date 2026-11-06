@@ -154,18 +154,11 @@ Sending a print and which filament to load.
   [swatch-10501](../../design/plates/swatch-10501.md) Bambu Green, each about 18 minutes and 5 g,
   waiting on a tick on its page. A color bought for a theme gets its swatch with
   `swatch.py recipe <code>` (the color-themes skill).
-- **Print the first themes: the bottom row (D-106, 2026-10-05)** — Midnight blue, Night sky,
-  Terracotta souk and Iznik tile, 14 plates in all, one per color (D-103), each sliced with its
-  color's own line preset and waiting on a tick on its page. The
-  [theme plates page](../../design/coaster/themes/gbv-theme-plates.md) lists them and the 11
-  colors to buy, $193.89 for one of each; Midnight blue needs none. Buying and printing are
-  Omar's. Two things to know first: every plate cuts its pieces at `gap: 0`, the fit sheets-04g
-  showed off, so printing [sheets-04g-fit](../../design/plates/sheets-04g-fit.md) first lets
-  these plates take its gaps as a new iteration; and Neon City (13903) is a two-color spool, so
-  its pieces will not all match the picture. After that, check the theme scores against real
-  customers: the scores on the [themes page](../../design/coaster/themes/gbv-themes.md) come from
-  the review-theme skill's made-up personas, not from buyers, so they rank ideas but do not say
-  what sells. That check waits on the first real orders (session task board, 2026-11-02).
+- **The first themes (D-106) are parked until the store launches**, Omar's call: buying the 11
+  colors and printing the 14 plates on the
+  [theme plates page](../../design/coaster/themes/gbv-theme-plates.md) is a line on the
+  [store launch checklist](../../../.claude/skills/launch-store/checklist.md#prints-and-supplies),
+  with the three things to know before printing (session task board, 2026-11-06).
 - **Did [minis-02](../../design/plates/minis-02.md) print?** It went out from Bambu Studio on
   2026-09-25 and has no record. Its page has the tick boxes; a yes means writing the record.
   minis-01, sent the same day, is answered: Omar does not remember, so it is printed again with
