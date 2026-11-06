@@ -1,0 +1,27 @@
+#!/bin/sh
+# Print vocabulary (.claude/skills/maintain-vocabulary/scripts/vocabulary.py check).
+# docs/vocabulary/README.md is written from docs/vocabulary/vocabulary.yaml, and every param or
+# object setting a plate recipe uses must be named by a term (or listed as not a technique), so a
+# new technique gets its word and picture when it first lands on a plate (Omar, 2026-11-05: "as
+# we add more generic techiques we expand the vocabulary"). Runs when the YAML, the page, its
+# pictures, the tool or a plate recipe is staged.
+#
+# wholesale: make validate-vocabulary
+#
+# No override: the fix is one line in vocabulary.yaml (a knob on a term, or a not_techniques
+# line), then `vocabulary.py render`.
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit: python3 not found — needed for the vocabulary check" >&2
+  exit 1
+fi
+# `gh-pages` carries `.githooks` and not `.claude`.
+TOOL="$(git rev-parse --show-toplevel)/.claude/skills/maintain-vocabulary/scripts/vocabulary.py"
+if [ ! -f "$TOOL" ]; then
+  echo "pre-commit: no vocabulary tool in this worktree ($TOOL) — skipping" >&2
+  exit 0
+fi
+if git diff --cached --name-only | grep -Eq '^docs/vocabulary/|^docs/design/plates/[^/]+\.yaml$|^\.claude/skills/maintain-vocabulary/'; then
+  python3 "$TOOL" --self-test || exit 1
+  exec python3 "$TOOL" check
+fi
+exit 0
