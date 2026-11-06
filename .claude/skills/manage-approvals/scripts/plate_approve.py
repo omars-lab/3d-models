@@ -350,6 +350,8 @@ def sent(page: Path, date: str, via: str, standing: bool,
 # ---------------------------------------------------------------------------
 
 def self_test() -> int:
+    import contextlib
+    import io
     import shutil
     import tempfile
 
@@ -517,25 +519,42 @@ def self_test() -> int:
         rows = pg.approvals(m9.read_text(encoding="utf-8"))[0]
         check("standing approval" in row and rows[-1]["spent"] == "—" and gate() == [],
               "a standing send spends nothing", f"{row} {gate()}")
+
+        quad = (prints, scoring, bets, rubric)
+        pg._stale_queue(plates)
+        stale = any("P7" in f for f in pg.check_tree(plates, prints, scoring, bets, rubric)[0])
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            wrote = refresh_queue(m9, plates, quad)
+        after = pg.check_tree(plates, prints, scoring, bets, rubric)[0]
+        check(stale and wrote and after == [] and out.getvalue() == "",
+              "a page change rewrites the queue, P7 clean after, nothing on stdout",
+              f"stale={stale} wrote={wrote} {after} stdout={out.getvalue()!r}")
+        check(not refresh_queue(bare, plates, quad),
+              "a page outside the plates folder leaves the queue alone", str(bare))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     print("self-test: " + ("PASS" if not fails else f"FAIL ({fails})"))
     return 1 if fails else 0
 
 
-def refresh_queue(page: Path) -> None:
+def refresh_queue(page: Path, plates: Path = pg.PLATES, paths: tuple | None = None) -> bool:
     """Rewrite the plate queue after a page change, so the plates gate's P7 is not left failing.
 
     Every approval change moves a page's stage, and the queue in the plates README ranks by it;
     before this, each one needed `plates_gate.py --write` by hand (closeout-1, 2026-11-06, four
-    times running). Only a page in the repo's own plates folder: a self-test fixture has no
-    queue. A refusal (another page is wrong) is said, not raised: the page change still stands."""
-    if page.resolve().parent != pg.PLATES.resolve():
-        return
-    if pg.rewrite(quiet=True) == 0:
-        print("plate queue rewritten: docs/design/plates/README.md")
-    else:
-        print("plate_approve: the plate queue was not rewritten; see above", file=sys.stderr)
+    times running). Only a page in `plates` itself: a page anywhere else has no queue. A refusal
+    (another page is wrong) is said, not raised: the page change still stands. Everything goes to
+    stderr, because `bambu print send` reads `--sent`'s stdout as the one timeline row it wrote.
+    Paths (prints, scoring, bets, rubric) are for the self-test's fixture."""
+    if page.resolve().parent != plates.resolve():
+        return False
+    prints, scoring, bets, rubric = paths or (pg.PRINTS, pg.SCORING, pg.BETS, pg.RUBRIC)
+    if pg.rewrite(plates, prints, scoring, bets, quiet=True, rubric=rubric) == 0:
+        print(f"plate queue rewritten: {plates / 'README.md'}", file=sys.stderr)
+        return True
+    print("plate_approve: the plate queue was not rewritten; see above", file=sys.stderr)
+    return False
 
 
 def apply_flags(page: Path, a: argparse.Namespace) -> str | None:
