@@ -223,10 +223,12 @@ be under 30 minutes old and carry a verdict for those exact bytes.
 
 When it goes through, the CLI rewrites the page in the vault through `plate_approve.py --sent`:
 the open row's `Spent by` becomes `sent <today>`, the box unticked, `stage: sent`, and a dated
-`sent` row on the timeline naming the approval it spent. Ship that change: copy the page into a work branch
-off `origin/master`, PR, merge, then put the vault's copy back to the merged one
-(`git -C <vault> checkout -- docs/design/plates/<name>.md` only after `git diff` shows it matches) and
-fast-forward. The `--record` draft stays in `.bambu/records/` until the pieces are judged.
+`sent` row on the timeline naming the approval it spent. It also rewrites the plate queue in
+`docs/design/plates/README.md`, since the queue ranks by stage. Ship both: copy the page and the
+README into a work branch off `origin/master`, PR, merge, then put the vault's copies back to the
+merged ones (`git -C <vault> checkout -- docs/design/plates/<name>.md docs/design/plates/README.md`
+only after `git diff` shows they match) and fast-forward. A README left changed in the vault stops
+the next fast-forward, for this session and for any other working in the vault. The `--record` draft stays in `.bambu/records/` until the pieces are judged.
 
 It also writes the send's `sent` row into the plate's print log
 (`docs/design/plates/print-logs/<name>.md`), through the monitor-print skill's
