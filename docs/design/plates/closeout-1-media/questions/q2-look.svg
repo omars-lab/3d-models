@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1055.72" height="320.7" viewBox="0 0 1055.72 320.7" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>Question 2: the two halves of FLAT-TRI closed on its pins, seen from the side (a sketch)</title>
+<rect width="100%" height="100%" fill="#f8f7f4"/>
+<text x="20" y="37" font-size="17" font-weight="bold" fill="#222222">Question 2: the two halves of FLAT-TRI closed on its pins, seen from the side (a sketch)</text>
+<text x="20" y="53.5" font-size="12.5" fill="#555555">Cut through, side view. Gold and teal: the piece. White: air. Not to scale.</text>
+<g data-panel="Good: the halves close flat">
+<text x="20" y="89.5" font-size="14" font-weight="bold" fill="#222222">Good: the halves close flat</text>
+<g transform="translate(20,107.5)">
+<polygon data-kind="piece" points="0,115.2 360,115.2 360,57.6 0,57.6" fill="#3f9189"/>
+<polygon data-kind="piece" points="0,57.6 360,57.6 360,0 0,0" fill="#dcaa33"/>
+<line data-kind="seam" x1="0" y1="57.6" x2="360" y2="57.6" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="3 2"/>
+<polygon data-kind="stud" points="90,57.6 111.6,57.6 111.6,28.8 108,21.6 93.6,21.6 90,28.8" fill="#3f9189"/>
+<polygon data-kind="stud" points="248.4,57.6 270,57.6 270,28.8 266.4,21.6 252,21.6 248.4,28.8" fill="#3f9189"/>
+</g>
+<circle data-label-dot="1" cx="344" cy="136.3" r="2.6" fill="#222222"/>
+<polyline points="344,136.3 394,136.3 404,136.3" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="408" y="140.3" font-size="12" fill="#222222" text-anchor="start">upper half</text>
+<circle data-label-dot="1" cx="120.8" cy="147.1" r="2.6" fill="#222222"/>
+<polyline points="120.8,147.1 394,152.3 404,152.3" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="408" y="156.3" font-size="12" fill="#222222" text-anchor="start">pin</text>
+<circle data-label-dot="1" cx="344" cy="193.9" r="2.6" fill="#222222"/>
+<polyline points="344,193.9 394,193.9 404,193.9" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="408" y="197.9" font-size="12" fill="#222222" text-anchor="start">lower half</text>
+<text x="20" y="248.7" font-size="12" fill="#444444">No gap at the cut, and twisting the halves against each other does not</text>
+<text x="20" y="265.7" font-size="12" fill="#444444">turn them.</text>
+</g>
+<g data-panel="Bad: a pin too tight holds the halves apart">
+<text x="533.6" y="89.5" font-size="14" font-weight="bold" fill="#222222">Bad: a pin too tight holds the halves apart</text>
+<g transform="translate(533.6,107.5)">
+<polygon data-kind="piece" points="0,133.2 360,133.2 360,75.6 0,75.6" fill="#3f9189"/>
+<polygon data-kind="air" points="0,75.6 360,75.6 360,57.6 0,57.6" fill="#ffffff"/>
+<polygon data-kind="piece" points="0,57.6 360,57.6 360,0 0,0" fill="#dcaa33"/>
+<polygon data-kind="stud" points="90,75.6 111.6,75.6 111.6,46.8 108,39.6 93.6,39.6 90,46.8" fill="#3f9189"/>
+<polygon data-kind="stud" points="248.4,75.6 270,75.6 270,46.8 266.4,39.6 252,39.6 248.4,46.8" fill="#3f9189"/>
+</g>
+<circle data-label-dot="1" cx="857.6" cy="136.3" r="2.6" fill="#222222"/>
+<polyline points="857.6,136.3 907.6,136.3 917.6,136.3" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="921.6" y="140.3" font-size="12" fill="#222222" text-anchor="start">upper half</text>
+<circle data-label-dot="1" cx="821.6" cy="174.1" r="2.6" fill="#222222"/>
+<polyline points="821.6,174.1 907.6,174.1 917.6,174.1" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="921.6" y="178.1" font-size="12" fill="#222222" text-anchor="start">a gap you can see</text>
+<circle data-label-dot="1" cx="857.6" cy="211.9" r="2.6" fill="#222222"/>
+<polyline points="857.6,211.9 907.6,211.9 917.6,211.9" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="921.6" y="215.9" font-size="12" fill="#222222" text-anchor="start">lower half</text>
+<text x="533.6" y="266.7" font-size="12" fill="#444444">The other bad case cannot be seen from the side: the halves close but turn</text>
+<text x="533.6" y="283.7" font-size="12" fill="#444444">round each other, as STAR-STOCK can on its one pin.</text>
+</g>
+</svg>

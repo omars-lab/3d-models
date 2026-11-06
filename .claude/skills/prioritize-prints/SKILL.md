@@ -43,6 +43,14 @@ in [`scoring.md`](scoring.md) — read it every run, since the weights may have 
    One small plate that closes many questions beats several that close one each.
    [closeout-1](../../../docs/design/plates/closeout-1.md) is the model. A question left off says
    why on the new page (overtaken by which plate, or not worth its grams).
+   **Name what it replaces, before it goes to Omar.** The new page has a "**What it replaces.**"
+   paragraph listing each old question it takes over, by plate and question number with the
+   question in a few plain words ("split-10's question 4, which kite gap fits the frame"). Omar
+   may pick the new plate instead of answering the old pieces; the list is what tells him, and
+   the next session, which old questions then close. When he approves the plate, write each old
+   plate's print record naming the new plate as the one that took over its questions, as [#915](https://github.com/omars-lab/3d-models/pull/915) did for split-10, star-1 and star-3.
+   Omar, 2026-11-03: "when we print a new plate, we should know what questions we supersede if
+   I decide I want a plate over answering a question".
 3. **Give every new recipe a page.** The gate fails on a `minis-NN.yaml` with no `minis-NN.md`.
    Copy the shape of [minis-06](../../../docs/design/plates/minis-06.md): In short, What it is, Why
    print it, After the print, Pictures, Cost and risk, Your call, Timeline. The page starts at

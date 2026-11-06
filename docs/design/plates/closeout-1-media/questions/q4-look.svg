@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1149.16" height="345.9" viewBox="0 0 1149.16 345.9" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>Question 4: a kite in the frame slice's pocket, cut through from the side (a sketch, gaps made bigger)</title>
+<rect width="100%" height="100%" fill="#f8f7f4"/>
+<text x="20" y="37" font-size="17" font-weight="bold" fill="#222222">Question 4: a kite in the frame slice's pocket, cut through from the side (a sketch, gaps made bigger)</text>
+<text x="20" y="53.5" font-size="12.5" fill="#555555">Cut through, side view. Dark gray: lower half of the coaster. Light gray: upper half. Gold: the piece. White: air. Not to scale.</text>
+<g data-panel="Good: snug, KITE-G08 as we expect">
+<text x="20" y="89.5" font-size="14" font-weight="bold" fill="#222222">Good: snug, KITE-G08 as we expect</text>
+<g transform="translate(123.96,107.5)">
+<polygon data-kind="half" points="0,158.4 72,158.4 72,79.2 0,79.2" fill="#8e8a83"/>
+<polygon data-kind="half" points="288,158.4 360,158.4 360,79.2 288,79.2" fill="#8e8a83"/>
+<polygon data-kind="half" points="0,79.2 72,79.2 72,0 0,0" fill="#aba69f"/>
+<polygon data-kind="half" points="288,79.2 360,79.2 360,0 288,0" fill="#aba69f"/>
+<polygon data-kind="piece" points="73.8,158.4 286.2,158.4 286.2,0 73.8,0" fill="#dcaa33"/>
+</g>
+<circle data-label-dot="1" cx="447.96" cy="226.3" r="2.6" fill="#222222"/>
+<polyline points="447.96,226.3 109.96,226.3 99.96,226.3" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="95.96" y="230.3" font-size="12" fill="#222222" text-anchor="end">frame slice</text>
+<circle data-label-dot="1" cx="303.96" cy="186.7" r="2.6" fill="#222222"/>
+<polyline points="303.96,186.7 497.96,186.7 507.96,186.7" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="511.96" y="190.7" font-size="12" fill="#222222" text-anchor="start">kite</text>
+<text x="20" y="291.9" font-size="12" fill="#444444">It goes in with a light push and does not move when you shake the closed slice.</text>
+</g>
+<g data-panel="Bad: loose, as split-07's kites were">
+<text x="599.4" y="89.5" font-size="14" font-weight="bold" fill="#222222">Bad: loose, as split-07's kites were</text>
+<g transform="translate(709.72,107.5)">
+<polygon data-kind="half" points="0,158.4 72,158.4 72,79.2 0,79.2" fill="#8e8a83"/>
+<polygon data-kind="half" points="288,158.4 360,158.4 360,79.2 288,79.2" fill="#8e8a83"/>
+<polygon data-kind="half" points="0,79.2 72,79.2 72,0 0,0" fill="#aba69f"/>
+<polygon data-kind="half" points="288,79.2 360,79.2 360,0 288,0" fill="#aba69f"/>
+<polygon data-kind="air" points="72,158.4 99,158.4 99,0 72,0" fill="#ffffff"/>
+<polygon data-kind="piece" points="99,158.4 261,158.4 261,0 99,0" fill="#dcaa33"/>
+</g>
+<circle data-label-dot="1" cx="794.32" cy="139.9" r="2.6" fill="#222222"/>
+<polyline points="794.32,139.9 695.72,139.9 685.72,139.9" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="681.72" y="143.9" font-size="12" fill="#222222" text-anchor="end">room to move</text>
+<circle data-label-dot="1" cx="889.72" cy="186.7" r="2.6" fill="#222222"/>
+<polyline points="889.72,186.7 1083.72,186.7 1093.72,186.7" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1097.72" y="190.7" font-size="12" fill="#222222" text-anchor="start">kite</text>
+<text x="599.4" y="291.9" font-size="12" fill="#444444">It drops in and you hear it rattle when you shake the slice.</text>
+<text x="599.4" y="308.9" font-size="12" fill="#444444">The third case: it does not go in without forcing. That gap is too tight.</text>
+</g>
+</svg>

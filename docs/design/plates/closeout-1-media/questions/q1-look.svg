@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1460.68" height="258.7" viewBox="0 0 1460.68 258.7" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>Question 1: a star seen from the side, along one point (a sketch, the curve made bigger)</title>
+<rect width="100%" height="100%" fill="#f8f7f4"/>
+<text x="20" y="37" font-size="17" font-weight="bold" fill="#222222">Question 1: a star seen from the side, along one point (a sketch, the curve made bigger)</text>
+<text x="20" y="53.5" font-size="12.5" fill="#555555">Cut through, side view. Gold: the piece. Not to scale.</text>
+<g data-panel="Good: flat out to the points">
+<text x="20" y="89.5" font-size="14" font-weight="bold" fill="#222222">Good: flat out to the points</text>
+<g transform="translate(26,107.5)">
+<polygon data-kind="piece" points="0,57.6 432,57.6 432,0 0,0" fill="#dcaa33"/>
+<rect data-kind="bed" x="-6" y="61.6" width="444" height="5" fill="#cfcbc3"/>
+<text x="442" y="67.6" font-size="12" fill="#444444">the table</text>
+</g>
+<circle data-label-dot="1" cx="386" cy="107.5" r="2.6" fill="#222222"/>
+<polyline points="386,107.5 539.24,107.5 549.24,107.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="553.24" y="111.5" font-size="12" fill="#222222" text-anchor="start">the face: one straight line</text>
+<text x="20" y="204.7" font-size="12" fill="#444444">Laid face up on the table, the top edge is straight from the centre out to the tip of each point.</text>
+</g>
+<g data-panel="Bad: the face curves down at the points">
+<text x="786.96" y="89.5" font-size="14" font-weight="bold" fill="#222222">Bad: the face curves down at the points</text>
+<g transform="translate(792.96,107.5)">
+<polygon data-kind="piece" points="108,57.6 324,57.6 324,0 108,0" fill="#dcaa33"/>
+<polygon data-kind="piece" points="54,57.6 108,57.6 108,10.8 54,10.8" fill="#dcaa33"/>
+<polygon data-kind="piece" points="324,57.6 378,57.6 378,10.8 324,10.8" fill="#dcaa33"/>
+<polygon data-kind="piece" points="0,57.6 54,57.6 54,25.2 0,25.2" fill="#dcaa33"/>
+<polygon data-kind="piece" points="378,57.6 432,57.6 432,25.2 378,25.2" fill="#dcaa33"/>
+<rect data-kind="bed" x="-6" y="61.6" width="444" height="5" fill="#cfcbc3"/>
+<text x="442" y="67.6" font-size="12" fill="#444444">the table</text>
+</g>
+<circle data-label-dot="1" cx="1008.96" cy="107.5" r="2.6" fill="#222222"/>
+<polyline points="1008.96,107.5 1306.2,107.5 1316.2,107.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1320.2" y="111.5" font-size="12" fill="#222222" text-anchor="start">flat in the middle</text>
+<circle data-label-dot="1" cx="819.96" cy="132.7" r="2.6" fill="#222222"/>
+<polyline points="819.96,132.7 1306.2,132.7 1316.2,132.7" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1320.2" y="136.7" font-size="12" fill="#222222" text-anchor="start">lower at the tip</text>
+<text x="786.96" y="204.7" font-size="12" fill="#444444">What split-07's stars did (Omar, 2026-10-27: &quot;not a star extruded, they have a curve&quot;). The top edge</text>
+<text x="786.96" y="221.7" font-size="12" fill="#444444">drops toward each point, so the star rocks or shows light under its tips.</text>
+</g>
+</svg>

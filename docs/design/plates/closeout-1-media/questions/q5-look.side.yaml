@@ -1,0 +1,24 @@
+# closeout-1, question 5: a small kite printed with a brim, before and after the brim comes off.
+# A sketch, not to scale. Drawn by the draw-side-view skill:
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+title: "Question 5: a brim kite cut through from the side, on the bed and after trimming (a sketch)"
+panels:
+  - title: "On the bed: a thin brim round the kite's first layer"
+    width: 24
+    parts:
+      - {kind: piece, box: [6, 0, 12, 1.6], first: bottom, label: kite, label_at: [12, 0.8]}
+      - {kind: flange, box: [0, 0, 6, 0.2], both: true, label: "2 mm brim, one layer", label_at: [21, 0.1]}
+      - {kind: bed, line: [0, 0, 24]}
+  - title: "Good: brim off, a sharp clean bottom edge"
+    width: 24
+    parts:
+      - {kind: piece, box: [6, 0, 12, 1.6], first: bottom, label: "square corner, no lip", label_at: [18, 0]}
+      - {kind: bed, line: [0, 0, 24], text: "the table"}
+  - title: "Bad: a lip left where the brim was"
+    width: 24
+    parts:
+      - {kind: piece, box: [6, 0, 12, 1.6], first: bottom}
+      - {kind: flange, box: [5.4, 0, 0.6, 0.2], both: true, label: "lip: it may stop the kite fitting", label_at: [18.3, 0.1]}
+      - {kind: bed, line: [0, 0, 24], text: "the table"}
+    notes:
+      - "Compare with the plain twin beside it: its bottom edge, its corners, and whether it still goes in its pocket."

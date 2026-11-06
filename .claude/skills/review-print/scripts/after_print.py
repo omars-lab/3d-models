@@ -3,8 +3,8 @@
 
     python3 .claude/skills/review-print/scripts/after_print.py questions <plate> [--json]
                                     the page's `## After the print` rows, each split into the pieces
-                                    to pick up, the pieces to hold them against, Do, Look for, what
-                                    we expect, and one answer per outcome the last cell names; with
+                                    to pick up, the pieces to hold them against, the lead paragraph
+                                    and pictures before Do, Do, Look for, what we expect, and one answer per outcome the last cell names; with
                                     every piece's label and turn from the recipe and bed map, its
                                     tile, a photo when a print record has one, and the answers so far
     python3 .claude/skills/review-print/scripts/after_print.py answer <plate> <row> <answer> [-n "<his words>"] [--date YYYY-MM-DD]
@@ -40,6 +40,7 @@ from __future__ import annotations
 import argparse
 import datetime
 import json
+import os
 import re
 import sys
 import tempfile
@@ -61,6 +62,7 @@ JUDGED_INTRO = ("Omar's answers to the rows of After the print, word for word, o
 TICK = re.compile(r"`([^`]+)`")
 OWNER = re.compile(r"\b([a-z][a-z0-9]*(?:-[a-z0-9]+)+)'s\s*$")
 DO_LOOK = re.compile(r"\*\*Do:\*\*\s*(.*?)\s*\*\*Look for:\*\*\s*(.*)$", re.DOTALL)
+FIGURE = re.compile(r"!\[([^\]]*)\]\(([^)\s]+)\)")
 SENTENCE = re.compile(r"(?<=\.)\s+(?=[A-Z0-9`*])")
 LABEL_MAX = 80
 DECIMAL = re.compile(r"\d\.\d")
@@ -130,6 +132,14 @@ def row_of(i: int, cells: list[str], plate: str) -> tuple[dict, list[str]]:
     gs, every = groups(pieces, plate)
     m = DO_LOOK.search(question)
     outs, intro = outcomes(last)
+    # Before **Do:** a row may say in plain words what it checks and why, with a picture of what
+    # good and bad look like (asking.md; Omar, 2026-11-03: "narrative style writing on what to look
+    # for and relevant supplementary figures"). The pictures come out of the text, so a page that
+    # shows `question` whole does not print their markup.
+    figures = [{"alt": a.strip(), "path": f} for a, f in FIGURE.findall(question)]
+    lead = FIGURE.sub("", question[:m.start()] if m else "")
+    lead = re.sub(r"\s+", " ", lead).strip()
+    question = re.sub(r"[ \t]+", " ", FIGURE.sub("", question)).strip()
     notes = []
     if not every and not any(g["these"] for g in gs):
         notes.append(f"row {i}: pieces named in words, no carved ids ({pieces!r})")
@@ -138,7 +148,8 @@ def row_of(i: int, cells: list[str], plate: str) -> tuple[dict, list[str]]:
     if not outs:
         notes.append(f"row {i}: names no answers, so it is answered in words")
     return {"row": i, "pieces": pieces, "groups": gs, "every_piece": every,
-            "question": question, "do": m.group(1).strip() if m else None,
+            "question": question, "lead": lead, "figures": figures,
+            "do": m.group(1).strip() if m else None,
             "look_for": m.group(2).strip() if m else None, "expect": expect,
             "decides": " ".join(intro), "outcomes": outs}, notes
 
@@ -438,6 +449,9 @@ def questions(plate: str, plates: Path, build: Path, prints: Path) -> dict:
             r["groups"] = [{"these": [{"plate": plate, "id": k, **v} for k, v in info[plate].items()],
                             "these_text": r["pieces"], "against": [], "against_text": ""}]
         r["grams"] = row_grams(r, plate, by_label)
+        # A row's pictures are linked from the page; the hub names them from the repo root.
+        for f in r["figures"]:
+            f["path"] = os.path.relpath(os.path.normpath(plates / f["path"]), ROOT)
     bed =bed_shown(data.get("pictures") or [])
     return {"plate": plate, "title": pg.title_of(body), "stage": data.get("stage"),
             "bed_picture": str((plates / bed).relative_to(ROOT)) if bed else None,
@@ -492,6 +506,18 @@ def self_test() -> int:
     check("a decimal in a label", [x["answer"] for x in o], ["None show", "0.6 shows"])
     o, s = outcomes("The tightest gap that holds becomes the stud gap. If none holds, go looser.")
     check("FAIL: a row with no answers gives no buttons", (o, len(s)), ([], 2))
+
+    # a lead paragraph and a picture before Do: both read, the picture's markup out of the text
+    r, n = row_of(1, ["`A` beside `B`", "![a flat face beside a curved one](x-media/face.png) The "
+                      "face should be flat. **Do:** 1. Turn it. **Look for:** a curve.", "Flat.",
+                      "Flat: keep it. Curved: drop it."], "demo-1")
+    check("lead", r["lead"], "The face should be flat.")
+    check("figure", r["figures"], [{"alt": "a flat face beside a curved one", "path": "x-media/face.png"}])
+    check("question without the picture's markup", "![" in r["question"], False)
+    check("do and look for still split", (r["do"], r["look_for"]), ("1. Turn it.", "a curve."))
+    check("no fallback note", n, [])
+    r, _ = row_of(1, ["`A`", "**Do:** 1. Turn it. **Look for:** a curve.", "Flat.", "Flat: keep it."], "demo-1")
+    check("FAIL: a row with no lead gives an empty lead and no pictures", (r["lead"], r["figures"]), ("", []))
 
     # pieces: another plate's ids, and `;` groups
     g, every = groups("`3`, `5` (stock) beside bedface-4's `H`, `J`", "bedface-5")
