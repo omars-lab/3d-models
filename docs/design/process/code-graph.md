@@ -4,13 +4,14 @@ status: idea
 
 # A code graph across our repos
 
-**Status:** idea (a proposal), 2026-11-05. Nothing built. Rests on one research pass,
+**Status:** idea (a proposal), 2026-11-05. The trial is not built yet. Rests on one research pass,
 [../../research/2026-11-05-graphify-code-graph.md](../../research/2026-11-05-graphify-code-graph.md),
-which read graphify's source and docs but did not install or run it.
+which read graphify's source and docs but did not run it, and on one test build run on
+2026-11-06 (§6).
 
 **In one paragraph.** Our sessions keep re-searching the same few facts. Graphify, a tool that
-builds a graph of a code base, would answer one of the six we have measured, might help with two
-more, and would miss three. The facts we re-search are mostly settings, constants, data keys and
+builds a graph of a code base, would answer one of the six we have measured fully and one in part,
+and would miss four (the test build in §6 settled the two that were open). The facts we re-search are mostly settings, constants, data keys and
 ids, and graphify is built for "who calls this function". So this doc proposes a short trial on
 bikar only, plus two cheaper fixes that would help more: point sessions at the FAQ before they
 grep, and add a complexity lint to 3d-models' Python.
@@ -23,11 +24,11 @@ the bar of three or more sessions. They are listed in [the FAQ proposal](../../f
 
 | Fact | Sessions | What kind of thing | Graphify answers it? |
 |---|---|---|---|
-| SCHEMA_VERSION | 5 | a constant, with several of the same name in qiyas | partly, if constants are nodes (not confirmed) |
+| SCHEMA_VERSION | 5 | a constant, with several of the same name in qiyas | partly: bikar's `GT_SCHEMA_VERSION` is an entry (test build, §6), but the contract one is in qiyas, outside the trial |
 | BIKAR_DIR | 4 | a setting in a Makefile, read from the environment | no |
 | patternSources | 4 | a key in a data JSON file | no |
 | tagSegments | 4 | a TypeScript method | yes |
-| FILL_ATTRIBUTES | 3 | a private static set on a class | partly, if class fields are nodes (not confirmed) |
+| FILL_ATTRIBUTES | 3 | a private static set on a class | no: the test build (§6) does not record static class fields |
 | UCN (use-case ids) | 3 | ids in a diagram, table cells and string values | no |
 
 Five of the six already have answers in [the FAQ](../../faq.md), written 2026-11-03. The FAQ
@@ -138,6 +139,25 @@ tuned for this repo's gates.
 **The trial.** bikar only, code only (no AI model, no cost), version pinned, no hooks installed,
 no strict mode, two weeks. Steps are in the research file, section 7. One line in bikar's CLAUDE.md
 tells sessions it exists.
+
+**The test build, 2026-11-06.** One code-only build of bikar main at `21420bc3`, on an exported
+copy in a scratch folder (bikar's checkout untouched), with graphify 0.9.102. It answered the open
+question, and the answer is half yes:
+
+- **Exported module constants are entries.** All 299 exported upper-case constants in the `.ts`
+  files under `packages/` are in the graph (constants that are not exported, camelCase ones and
+  `.tsx`/`.js` files were not checked). For `FIT_GAP_MM`, `graphify explain` lists the 9 files that import it; plain grep
+  finds 11, and the 2 extra only name it inside a string.
+- **Static class fields are not.** `FILL_ATTRIBUTES`, a `private static readonly` set on the
+  parser, is absent. Typed instance fields are kept as a list on the class (75 fields on 26
+  classes), not as entries, so "who reads this field" has no answer.
+- **The build:** 884 code files, 10,940 entries, 28,723 links (not timed). One parse error in
+  `packages/core/src/dsl/parser.ts` at line 1363; extraction recovered past it (245 of the file's
+  307 entries come after that line), but entries near it may be missing.
+
+So of the six facts the trial answers one fully (tagSegments) and one in part (bikar's own schema
+constant, not qiyas's contract one). FILL_ATTRIBUTES stays a FAQ answer. Constants being entries
+also means the measure below can count constant lookups as well as function lookups.
 
 **What we measure.** The six facts are mostly not code-symbol questions, so they cannot by
 themselves show whether the graph helped. Instead count, in the FAQ tool's next run over bikar
