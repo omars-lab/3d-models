@@ -54,6 +54,11 @@ so a geometry change in bikar makes no iteration. Look at the render before aski
   recipe that fixes its own colors (multi-color, or frozen production) refuses `--color`.
 - A hold: `… --held --by "Omar, tick: <his note>"`.
 - Never write a yes Omar did not give (D-093).
+- Every change to a page also rewrites the plate queue in `docs/design/plates/README.md`, since
+  the queue ranks by stage. Stage the README with the page. If another page is wrong, the
+  queue is left alone and the tool says so; fix that page, then run
+  `python3 .claude/gates/plates_gate.py --write`. Before 2026-11-06 this was a step done by
+  hand, and the plates gate failed on every approval until someone ran it.
 
 ## Scripts — when to use each
 
