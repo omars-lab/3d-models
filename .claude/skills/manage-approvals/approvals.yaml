@@ -24,6 +24,8 @@ cedar-stencil-1:
   - {iteration: 5, recipe: '6a3d9b564b0b', date: '2026-10-30'}
 closeout-1:
   - {iteration: 1, recipe: 'c291b78b83b5', date: '2026-11-05'}
+  - {iteration: 2, recipe: '317680492bcc', date: '2026-11-05'}
+  - {iteration: 3, recipe: 'dc5db7df04ea', date: '2026-11-05'}
 hexfit-1:
   - {iteration: 1, recipe: 'ce10b0895421', date: '2026-10-28'}
   - {iteration: 2, recipe: '26200ae3ed06', date: '2026-10-28'}
