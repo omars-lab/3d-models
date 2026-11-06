@@ -54,7 +54,8 @@ id_code: CL1
 # whole-plate skirt"). It touches no piece: it primes the nozzle, so the first piece starts clean.
 skirt: { loops: 2 }
 
-ledge_bitten_by_design: "the 0.7 mm wall Omar picked on split-08 still bites the hex pockets' blunt end in the frame slice (D-119); split-07's halves, unchanged"
+# No ledge_bitten_by_design line: the ledge check found 27 loose pieces and none bitten, so the
+# line copied from split-08 at the start claimed a bite this plate does not have.
 
 no_id_reasons:
   - &dots "dots on each half's cut face, hidden once the halves close, exactly as on split-10, so the answer reads back onto split-10's piece: count them. bikar: no carved id fits (a one-letter id needs 3.1 x 3.5 mm of flat face with 0.8 mm to every edge)"
