@@ -27,7 +27,7 @@ objects:
     iteration: "it-cc3bad1e83d1"
     verdict: not-judged
     notes:
-      - "no remark on the coaster itself yet"
+      - "not judged, and stays so: the coaster was printed again on sheets-04g-fit and sheets-04g-fit2, which overtook it (Omar's call)"
   - entry: "c2"
     source: "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr"
     source_sha256: "df89bf7cbb6d88f5abdfa437d3deda74012637c339899baf9f711b408c177228"
@@ -57,7 +57,7 @@ objects:
     iteration: "it-4d1db932eb53"
     verdict: not-judged
     notes:
-      - "no remark yet"
+      - "not judged, and stays so: overtaken by the later fit plates, sheets-04g-fit and sheets-04g-fit2 (Omar's call)"
   - entry: "c5"
     source: "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr"
     source_sha256: "df89bf7cbb6d88f5abdfa437d3deda74012637c339899baf9f711b408c177228"
@@ -67,7 +67,7 @@ objects:
     iteration: "it-13e25f7b7efd"
     verdict: not-judged
     notes:
-      - "no remark yet"
+      - "not judged, and stays so: overtaken by the later fit plates, sheets-04g-fit and sheets-04g-fit2 (Omar's call)"
   - entry: "c6"
     source: "bikar:patterns/Constructions/gBV_JTt3Kxk-minimal-pieces.bkr"
     source_sha256: "df89bf7cbb6d88f5abdfa437d3deda74012637c339899baf9f711b408c177228"
@@ -77,7 +77,7 @@ objects:
     iteration: "it-4b194bef17f6"
     verdict: not-judged
     notes:
-      - "no remark yet"
+      - "not judged, and stays so: overtaken by the later fit plates, sheets-04g-fit and sheets-04g-fit2 (Omar's call)"
 readings: []
 photos: []
 feedback:
