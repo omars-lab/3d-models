@@ -13,7 +13,9 @@ produced-by: Claude (Opus 5.5), from a read of this repo at origin/master ec01d9
 > it so we can reconstruct with lego-like connectors ... so that we have two glossy sides of the
 > construction that print against the plate — this should be a general technique". Call 6 is
 > decided (D-100): the lip and the flange are both built in bikar, as two Coaster Lab options, and
-> wait to print as split-01 and split-02; nothing has printed. The research behind it is
+> wait to print as split-01 and split-02; nothing has printed. Calls 1 to 5 were decided on
+> 2026-10-08, each with its Decided line under it: the plates we have, sharp edges, press fit,
+> about 9 studs (a stud-layout plate to confirm), the bikar clause. The research behind it is
 > [split-with-studs-research.md](../../research/split-with-studs-research.md).
 
 **In short.** Cut the coaster in half through its height. Print both halves with their outside
@@ -419,12 +421,19 @@ Until bikar can split, the fit pairs and the show-through tiles can be a throwaw
    The Engineering plate ("nearly glossy") is left out: it needs glue before every print, and the
    glue would sit against the face meant to be seen.
 
+   **Decided 2026-10-08:** no SuperTack bought. The faces print on the plates we have: the gold
+   Textured PEI plate, and Omar's glacier plate, a smooth light-blue plate from another maker,
+   sliced as the smooth plate type, which the bed check names (D-108)
+   ([call 9](../../working-model/feedback-requests/2026-10-06-open-calls.md#9-which-build-plate-prints-the-two-faces-and-which-one-is-the-glacier-plate)).
+
 2. **The edge round-over.**
 
    | Option | Pros | Cons | Implications |
    |---|---|---|---|
    | **Sharp bed edges, no round-over** (recommended) | both faces crisp and the same; nothing new to build | loses today's softened top edge | the `split` clause drops the `edge fillet top` it inherits |
    | **Round-over on each cut edge** | softer to hold | a groove round the whole side wall at the seam | the clause moves the fillet to the cut face, and the seam becomes a design line |
+
+   **Decided 2026-10-08:** sharp edges, no round-over ([call 10](../../working-model/feedback-requests/2026-10-06-open-calls.md#10-round-the-cut-edges-or-not)).
 
 3. **Glue or press fit.**
 
@@ -433,6 +442,9 @@ Until bikar can split, the fit pairs and the show-through tiles can be a throwaw
    | **Press fit at the coupon's gap, glue optional** (recommended) | comes apart if a pin is wrong; no glue on a coaster that meets hot mugs and cold glasses | a PLA press fit "relaxes over months" under constant stress (Creative3DP, research §4), so it may loosen | the coupon picks the gap that holds by hand; a loosened coaster can be glued later |
    | **Glue always** | strongest; fills the side hairline; Bambu's own guide lines the parts up with the connectors and then glues them | permanent; squeeze-out on a visible face; Bambu warns super glue on PLA has "poor cold and durability resistance; it will crack and lose bond strength in cold environments or after long-term use", and recommends epoxy where strength matters | studs only line things up, so a looser gap is fine; the glue becomes epoxy, not super glue, for a coaster under cold drinks. Bond area, not pins, sets the strength ([hemisphere-split §3.4](../orb/hemisphere-split-design.md#34-a-glued-seams-strength-depends-almost-entirely-on-which-plane-you-cut)). No measured glue strength on PLA turned up ([research §4](../../research/split-with-studs-research.md#4-glue-or-press-fit)). |
 
+   **Decided 2026-10-08:** press fit, glue optional. Studs join the coaster halves; the dovetail
+   stays for piece halves (sld-1) ([call 11](../../working-model/feedback-requests/2026-10-06-open-calls.md#11-glue-or-press-fit)).
+
 4. **How many studs.**
 
    | Option | Pros | Cons | Implications |
@@ -440,10 +452,17 @@ Until bikar can split, the fit pairs and the show-through tiles can be a throwaw
    | **Every crossing 10 mm apart (56)** | holds everywhere, so no strap can lift | 56 pins to press at once; a tight gap may be too stiff to close by hand | the coupon gap matters more |
    | **About 9, 25 mm apart** (recommended to start) | easy to press | straps between pins can lift a little | `spacing 25` in the clause. Raise the count if the halves gap. |
 
+   **Decided 2026-10-08:** about 9, 25 mm apart, to be settled first by a stud-layout plate: three
+   wedge pairs cut from gBV at 25, 15 and 10 mm spacing, after the stud gap is set. That plate,
+   stud-1, is still held for the gap ([call 12](../../working-model/feedback-requests/2026-10-06-open-calls.md#12-how-many-studs)).
+
 5. **Where it lives.** A, a bikar coaster clause, is recommended (§6). The alternative is B, the
    slicer's cut by hand for every job. B costs nothing now but repeats every click each send.
    Choosing A commits a new grammar clause, its cookbook recipe and its picture. Choosing B means
    no plate recipe can say "split".
+
+   **Decided 2026-10-08:** A, the bikar coaster clause, which made split-01 and split-02
+   ([call 13](../../working-model/feedback-requests/2026-10-06-open-calls.md#13-where-splitting-lives)).
 
 6. **How a split coaster holds its loose pieces** (§11, with a picture).
 
