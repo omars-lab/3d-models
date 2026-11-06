@@ -4,13 +4,14 @@ status: idea
 
 # A code graph across our repos
 
-**Status:** idea (a proposal), 2026-11-05. Nothing built. Rests on one research pass,
+**Status:** idea (a proposal), 2026-11-05. The trial is not built yet. Rests on one research pass,
 [../../research/2026-11-05-graphify-code-graph.md](../../research/2026-11-05-graphify-code-graph.md),
-which read graphify's source and docs but did not install or run it.
+which read graphify's source and docs but did not run it, and on one test build run on
+2026-11-06 (§6).
 
 **In one paragraph.** Our sessions keep re-searching the same few facts. Graphify, a tool that
-builds a graph of a code base, would answer one of the six we have measured, might help with two
-more, and would miss three. The facts we re-search are mostly settings, constants, data keys and
+builds a graph of a code base, would answer one of the six we have measured fully and one in part,
+and would miss four (the test build in §6 settled the two that were open). The facts we re-search are mostly settings, constants, data keys and
 ids, and graphify is built for "who calls this function". So this doc proposes a short trial on
 bikar only, plus two cheaper fixes that would help more: point sessions at the FAQ before they
 grep, and add a complexity lint to 3d-models' Python.
@@ -143,8 +144,9 @@ tells sessions it exists.
 copy in a scratch folder (bikar's checkout untouched), with graphify 0.9.102. It answered the open
 question, and the answer is half yes:
 
-- **Module constants are entries.** All 299 exported upper-case constants in `packages/` are in
-  the graph. For `FIT_GAP_MM`, `graphify explain` lists the 9 files that import it; plain grep
+- **Exported module constants are entries.** All 299 exported upper-case constants in the `.ts`
+  files under `packages/` are in the graph (constants that are not exported, camelCase ones and
+  `.tsx`/`.js` files were not checked). For `FIT_GAP_MM`, `graphify explain` lists the 9 files that import it; plain grep
   finds 11, and the 2 extra only name it inside a string.
 - **Static class fields are not.** `FILL_ATTRIBUTES`, a `private static readonly` set on the
   parser, is absent. Typed instance fields are kept as a list on the class (75 fields on 26
