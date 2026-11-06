@@ -3,9 +3,9 @@ plate: split-10
 print_log: '[[print-logs/split-10|print log]]'
 recipe: split-10.yaml
 iteration: 4
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-28-split-10]
 answers: "Which change fixes each loose piece split-07 got wrong: the stars' curved faces, the middle's webbed feel, the loose kites and the dovetail fit?"
 kind: new
 maturity: experiment
@@ -136,3 +136,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-27 | sent — by `bambu print send`; spends the approval of 2026-10-27, iteration 3 @ d67cb942f8 in #00AE42 | this page |
 | 2026-10-27 | changed: on Omar's "i don't want to test anythign unitl we repreint with lavles": dots on every cut face (bikar #351), counted per version; KITE-G10, KITE-PIN20 and KITE-PIN15 dropped to the loose-pieces backlog; 24 pieces, about 61 minutes. The first print stays unjudged | this page, [`split-10.yaml`](split-10.yaml) |
 | 2026-10-27 | sent — by `bambu print send`; spends the approval of 2026-10-27, iteration 4 @ f867a8141d in #00AE42 | this page |
+| 2026-10-28 | printed — the reprint, all 21 layers, 03:00 to 04:08 UTC in green (the first print, 2026-10-27 17:51 to 18:58 UTC, was never judged); closed on Omar's "Close all four" (2026-11-06): MIDDLE-SUPPORT adjust ("this was best but want pins of 6"), the rest taken over by closeout-1, hexfit-1 and hexfit-2 | [the record](../../prints/2026-10-28-split-10/index.md) |

@@ -3,9 +3,9 @@ plate: star-3
 print_log: '[[print-logs/star-3|print log]]'
 recipe: star-3.yaml
 iteration: 1
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-11-03-star-3]
 answers: "With three 1.2 mm pins on a triangle round its middle, as star-2 picked, do the flat star's halves close and stop turning?"
 kind: new
 maturity: experiment
@@ -109,3 +109,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-11-03 | proposed: on star-2's answers ("left most was best"), the flat star with three 1.2 mm pins on a triangle, two copies | this page |
 | 2026-11-03 | sent — by `bambu print send`; spends the approval of 2026-11-03, iteration 1 @ e516ba6d94 in #00AE42 | this page |
+| 2026-11-03 | printed — all 17 layers, 23:16 to 23:26 UTC in green; closed unjudged on Omar's "Close all four" (2026-11-06), both questions taken over by closeout-1's FLAT-TRI | [the record](../../prints/2026-11-03-star-3/index.md) |
