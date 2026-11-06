@@ -199,12 +199,14 @@ def bedmap(plate: str, build: Path) -> list[dict]:
 
 
 def matched(items: list[dict], objects: list[dict]) -> list[tuple[dict, dict | None]]:
-    """Each recipe item with its bed-map object. The bed map names objects c1…cN in item order;
-    that is trusted only when every label agrees, else no item gets an object."""
-    if len(objects) == len(items) and all(o.get("label") == i.get("label")
-                                          for i, o in zip(items, objects)):
-        return list(zip(items, objects))
-    return [(i, None) for i in items]
+    """Each recipe item with its bed-map object. The bed map names objects c1…cN in item order,
+    one per copy, so an item with `count: 2` stands for two objects (closeout-1's kites); that is
+    trusted only when every label agrees, else no item gets an object."""
+    copies = [i for i in items for _ in range(max(1, int(i.get("count") or 1)))]
+    if len(objects) == len(copies) and all(o.get("label") == i.get("label")
+                                           for i, o in zip(copies, objects)):
+        return list(zip(copies, objects))
+    return [(i, None) for i in copies]
 
 
 def photos(plate: str, prints: Path) -> dict[str, str]:
@@ -582,6 +584,12 @@ def self_test() -> int:
     check("matched", [o for _, o in matched(items, [{"label": "STOCK A"}, {"label": "55 A"}])] != [None, None], True)
     check("FAIL: a reordered bed map names no object",
           [o for _, o in matched(items, [{"label": "55 A"}, {"label": "STOCK A"}])], [None, None])
+    two = [{"label": "KITE", "count": 2}, {"label": "STAR"}]
+    check("a count: 2 item matches two bed-map objects",
+          [o["object"] for _, o in matched(two, [{"label": "KITE", "object": 1}, {"label": "KITE", "object": 2},
+                                                  {"label": "STAR", "object": 3}])], [1, 2, 3])
+    check("FAIL: a count: 2 item with one object on the bed names none",
+          [o for _, o in matched(two, [{"label": "KITE"}, {"label": "STAR"}])], [None, None, None])
 
     # grams per question: carved ids summed, labels matched whole (halves' -1/-2 included)
     by_label = {"KITE": 0.1, "KITE-G08": 0.2, "STAR-1": 0.3, "STAR-2": 0.3}
