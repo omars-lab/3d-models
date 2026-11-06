@@ -1,0 +1,265 @@
+{
+ "_about": "Python functions over complexity 10 when the gate was added, with their score. Shrinks freely; grows only on purpose. See complexity_gate.py.",
+ "max": 10,
+ "ruff": "ruff@0.14.3",
+ "functions": {
+  ".claude/gates/catalog_models.py::parse_catalog": [
+   11
+  ],
+  ".claude/gates/catalog_models.py::run": [
+   19
+  ],
+  ".claude/gates/coaster_pictures.py::enclosed_non_opaque": [
+   11
+  ],
+  ".claude/gates/coaster_pictures.py::enclosed_regions": [
+   12
+  ],
+  ".claude/gates/constructions_ledger.py::check": [
+   20
+  ],
+  ".claude/gates/counts_gate.py::check": [
+   13
+  ],
+  ".claude/gates/counts_gate.py::enumerations_in": [
+   13
+  ],
+  ".claude/gates/doc_pointers.py::resolve_under": [
+   14
+  ],
+  ".claude/gates/doc_pointers.py::run": [
+   11
+  ],
+  ".claude/gates/docs_gate.py::check_obsidian": [
+   12
+  ],
+  ".claude/gates/docs_gate.py::outline_verdict": [
+   14
+  ],
+  ".claude/gates/docs_gate.py::self_test": [
+   20
+  ],
+  ".claude/gates/hook_parity.py::run": [
+   17
+  ],
+  ".claude/gates/plates_gate.py::check_approvals": [
+   23
+  ],
+  ".claude/gates/plates_gate.py::check_ids": [
+   12
+  ],
+  ".claude/gates/plates_gate.py::check_iterations": [
+   12
+  ],
+  ".claude/gates/plates_gate.py::check_maturity": [
+   11
+  ],
+  ".claude/gates/plates_gate.py::check_page": [
+   33
+  ],
+  ".claude/gates/plates_gate.py::check_print_logs": [
+   17
+  ],
+  ".claude/gates/plates_gate.py::id_findings": [
+   15
+  ],
+  ".claude/gates/plates_gate.py::self_test": [
+   19
+  ],
+  ".claude/gates/prints_gate.py::check_record": [
+   57
+  ],
+  ".claude/gates/site_graph.py::check": [
+   28
+  ],
+  ".claude/gates/site_graph.py::self_test": [
+   21
+  ],
+  ".claude/hooks/delegate-nudge.py::_apply_record": [
+   15
+  ],
+  ".claude/skills/color-themes/scripts/after_print.py::self_test": [
+   14
+  ],
+  ".claude/skills/color-themes/scripts/swatch.py::self_test": [
+   14
+  ],
+  ".claude/skills/color-themes/scripts/theme_plates.py::self_test": [
+   22
+  ],
+  ".claude/skills/color-themes/scripts/themes.py::check_one": [
+   15
+  ],
+  ".claude/skills/color-themes/scripts/themes.py::draw": [
+   13
+  ],
+  ".claude/skills/color-themes/scripts/themes.py::gallery_text": [
+   13
+  ],
+  ".claude/skills/color-themes/scripts/themes.py::main": [
+   19
+  ],
+  ".claude/skills/color-themes/scripts/themes.py::self_test": [
+   11
+  ],
+  ".claude/skills/consolidate-branches/scripts/branch_inventory.py::main": [
+   12
+  ],
+  ".claude/skills/consolidate-branches/scripts/branch_inventory.py::plan_branch": [
+   11
+  ],
+  ".claude/skills/consolidate-branches/scripts/branch_inventory.py::self_test": [
+   34
+  ],
+  ".claude/skills/draw-side-view/scripts/side_view.py::check_part": [
+   19
+  ],
+  ".claude/skills/draw-side-view/scripts/side_view.py::draw_panel": [
+   27
+  ],
+  ".claude/skills/draw-side-view/scripts/side_view.py::read_spec": [
+   12
+  ],
+  ".claude/skills/draw-side-view/scripts/side_view.py::render": [
+   12
+  ],
+  ".claude/skills/launch-store/scripts/launch_check.py::check_checklist": [
+   11
+  ],
+  ".claude/skills/maintain-use-cases/validate.py::__init__": [
+   13
+  ],
+  ".claude/skills/maintain-use-cases/validate.py::mode_staged": [
+   14
+  ],
+  ".claude/skills/maintain-use-cases/validate.py::self_test": [
+   18
+  ],
+  ".claude/skills/maintain-use-cases/validate.py::validate_full": [
+   13
+  ],
+  ".claude/skills/maintain-vocabulary/scripts/vocabulary.py::plate_knobs": [
+   12
+  ],
+  ".claude/skills/maintain-vocabulary/scripts/vocabulary.py::problems": [
+   19
+  ],
+  ".claude/skills/maintain-vocabulary/scripts/vocabulary.py::render": [
+   13
+  ],
+  ".claude/skills/manage-approvals/scripts/iterations.py::read_store": [
+   11
+  ],
+  ".claude/skills/manage-approvals/scripts/plate_approve.py::decide": [
+   12
+  ],
+  ".claude/skills/manage-approvals/scripts/plate_approve.py::self_test": [
+   14
+  ],
+  ".claude/skills/monitor-print/scripts/print_monitor.py::publish": [
+   11
+  ],
+  ".claude/skills/monitor-print/scripts/print_monitor.py::step": [
+   25
+  ],
+  ".claude/skills/pattern-catalog/scripts/catalog.py::build": [
+   17
+  ],
+  ".claude/skills/pattern-catalog/scripts/catalog.py::check_lines": [
+   11
+  ],
+  ".claude/skills/pattern-catalog/scripts/catalog.py::note_top": [
+   16
+  ],
+  ".claude/skills/place-pins/scripts/ledge_check.py::check_piece": [
+   16
+  ],
+  ".claude/skills/place-pins/scripts/ledge_check.py::section": [
+   11
+  ],
+  ".claude/skills/print-model/scripts/grid_plate_test.py::main": [
+   12
+  ],
+  ".claude/skills/print-model/scripts/layer_extrusion.py::measure": [
+   14
+  ],
+  ".claude/skills/review-print/scripts/after_print.py::main": [
+   13
+  ],
+  ".claude/skills/review-print/scripts/prints_page.py::render": [
+   14
+  ],
+  ".claude/skills/review-theme/scripts/reviews.py::problems": [
+   15
+  ],
+  ".claude/skills/send-plate/scripts/color_map.py::check": [
+   19
+  ],
+  ".claude/skills/send-plate/scripts/color_map.py::main": [
+   15
+  ],
+  ".claude/skills/simulate-buyers/scripts/buyers.py::sweep_problems": [
+   17
+  ],
+  ".claude/skills/simulate-first-layer/scripts/simulate.py::calibrate": [
+   16
+  ],
+  ".claude/skills/simulate-first-layer/scripts/simulate.py::line_starts": [
+   12
+  ],
+  "build/brick_previews.py::main": [
+   11
+  ],
+  "build/plate_photo_map.py::read_objects": [
+   13
+  ],
+  "build/verify_machine_card.py::run_verification": [
+   12
+  ],
+  "build/verify_machine_card.py::verify": [
+   18
+  ],
+  "tools/cookbook_render.py::main": [
+   12
+  ],
+  "tools/fit_gap.py::gcode_all_walls": [
+   15
+  ],
+  "tools/move_doc.py::expand": [
+   12
+  ],
+  "tools/move_doc.py::plan_run": [
+   15
+  ],
+  "tools/move_doc.py::rewrite_text": [
+   35
+  ],
+  "tools/move_doc.py::summary": [
+   16
+  ],
+  "tools/piece_grams.py::piece_grams": [
+   11
+  ],
+  "tools/print_review.py::bed_picture": [
+   18
+  ],
+  "tools/print_review.py::gcode_layer": [
+   14
+  ],
+  "tools/print_review.py::mask_loops": [
+   11
+  ],
+  "tools/print_review.py::self_test": [
+   12
+  ],
+  "tools/reconstruction_intake.py::main": [
+   11
+  ],
+  "tools/session_reflect.py::census": [
+   30
+  ],
+  "tools/vault_audit.py::audit": [
+   16
+  ]
+ }
+}

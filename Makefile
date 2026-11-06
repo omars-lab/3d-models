@@ -1092,3 +1092,11 @@ intake:
 validate-vocabulary:
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/maintain-vocabulary/scripts/vocabulary.py --self-test
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/maintain-vocabulary/scripts/vocabulary.py check
+
+# Complexity gate — the wholesale form of .githooks/pre-commit.d/55-complexity: no
+# Python function over 10 (ruff C901, pinned through uvx) that is not on the list in
+# .claude/gates/complexity-baseline.json at its score or lower (D-129).
+.PHONY: validate-complexity
+validate-complexity:
+	$(PYTHON) $(ROOT_DIR)/.claude/gates/complexity_gate.py --self-test
+	$(PYTHON) $(ROOT_DIR)/.claude/gates/complexity_gate.py
