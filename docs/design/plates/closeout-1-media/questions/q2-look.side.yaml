@@ -1,0 +1,26 @@
+# closeout-1, question 2: a star's two halves closed on pins, flat or held apart.
+# A sketch, not to scale. Drawn by the draw-side-view skill:
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+title: "Question 2: the two halves of FLAT-TRI closed on its pins, seen from the side (a sketch)"
+panels:
+  - title: "Good: the halves close flat"
+    width: 20
+    parts:
+      - {kind: piece, color: teal, box: [0, 0, 20, 1.6], label: lower half, label_at: [18, 0.8]}
+      - {kind: piece, box: [0, 1.6, 20, 1.6], label: upper half, label_at: [18, 2.4]}
+      - {kind: seam, line: [0, 1.6, 20]}
+      - {kind: stud, color: teal, box: [5, 1.6, 1.2, 1.0], toward: up, label: pin, label_at: [5.6, 2.1]}
+      - {kind: stud, color: teal, box: [13.8, 1.6, 1.2, 1.0], toward: up}
+    notes:
+      - "No gap at the cut, and twisting the halves against each other does not turn them."
+  - title: "Bad: a pin too tight holds the halves apart"
+    width: 20
+    parts:
+      - {kind: piece, color: teal, box: [0, 0, 20, 1.6], label: lower half, label_at: [18, 0.8]}
+      - {kind: air, box: [0, 1.6, 20, 0.5], label: "a gap you can see", label_at: [16, 1.85]}
+      - {kind: piece, box: [0, 2.1, 20, 1.6], label: upper half, label_at: [18, 2.9]}
+      - {kind: stud, color: teal, box: [5, 1.6, 1.2, 1.0], toward: up}
+      - {kind: stud, color: teal, box: [13.8, 1.6, 1.2, 1.0], toward: up}
+    notes:
+      - "The other bad case cannot be seen from the side: the halves close but turn round each other,
+        as STAR-STOCK can on its one pin."

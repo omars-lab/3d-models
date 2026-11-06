@@ -9,6 +9,62 @@ like, then the answer. Read this file before asking each round.
 Omar, 2026-10-09, on spl-1 row 4: "what kind of instructions are these ... not clear and
 straighforward and in simple sop format ... easy to get a mistake".
 
+## Before the steps: a plain paragraph and a picture
+
+Omar, 2026-11-03, on the judging page at split-10 question 1: "These questions are unclear, i
+don't know what to look for ... langague very cryptic. We should have narrative sytle writing on
+what to look for and relevatn supplemtnatry figures to reference."
+
+Steps alone tell him what to do, not why or what he is looking at. So every question on a plate
+page's After-the-print table opens, before `**Do:**`, with:
+
+- **A lead paragraph, 2 to 4 sentences, in words a newcomer knows.** What the question checks;
+  why it matters for the coaster in the hand; what good looks like and what bad looks like. Name
+  the earlier plate that raised it, if one did. A design word (brim, pin, flange) gets a few words
+  of explanation the first time.
+- **At least one picture.** The pieces themselves, cut from the bed picture or the pieces pictures
+  with `tools/print_review.py compare`, labelled by the number or id he sees. Where good and bad
+  are a shape (a curve, a gap, a lip), add a side-view sketch from the
+  [draw-side-view](../draw-side-view/SKILL.md) skill, good on the left and bad on the right, and
+  say in its caption it is a sketch. A real photo of the fault beats a sketch when one exists;
+  never dress a sketch up as a photo.
+
+The cell is written as pictures, then the lead, then the steps:
+
+```
+![<what the picture shows, by piece number>](<plate>-media/questions/q1-pieces.png) ![<what the sketch shows>](<plate>-media/questions/q1-look.png) <lead paragraph> **Do:** 1. … 2. … **Look for:** …
+```
+
+`after_print.py questions <plate>` reads the lead into `lead` and the pictures into `figures`, and
+the hub's judging page shows them in a panel between the pieces and the steps. The alt text is the
+caption, so write it as a sentence. The SOP rules below still hold for the steps.
+
+### Don't: closeout-1 question 1 as first written
+
+> **Do:** 1. Peel the supports off STAR-SUPPORT and STAR-GRID. 2. Close each cut star's two
+> halves. 3. Lay the five stars face up side by side, STAR-GRID at one end. 4. Look at each from
+> the side, along a point. **Look for:** a face that is flat out to its points, with no curve at
+> the edges, and whether any of the four is flatter than STAR-GRID.
+
+Clear steps, but nothing says why the curve matters, what a curve looks like next to a flat face,
+or which star on the bed is which.
+
+### Do: the same question now
+
+> *(picture: the five stars cut from the bed picture, numbered 1, 3, 4, 2, 6)* *(sketch: a flat
+> face on the left, one that dips toward its points on the right)*
+>
+> This checks whether a star's face stays flat right out to its points. On split-07 the stars
+> came out with a curve, so a coaster made from them would rock and show light under the tips.
+> Good is a top edge that runs straight from the centre to each tip when you look along a point;
+> bad is an edge that dips toward the tip, like the right side of the sketch. STAR-GRID is the
+> star we would print today, so the question is whether any of the other four beats it.
+>
+> **Do:** … (unchanged) **Look for:** … (unchanged)
+
+All five of [closeout-1](../../../docs/design/plates/closeout-1.md)'s questions are written this
+way; copy them.
+
 ## The format
 
 ```

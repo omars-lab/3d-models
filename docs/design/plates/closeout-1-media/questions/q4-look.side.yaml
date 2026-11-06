@@ -1,0 +1,23 @@
+# closeout-1, question 4: a small kite in its pocket in the frame slice, snug or loose.
+# A sketch, the gaps made bigger so they can be seen. Drawn by the draw-side-view skill:
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+title: "Question 4: a kite in the frame slice's pocket, cut through from the side (a sketch, gaps made bigger)"
+panels:
+  - title: "Good: snug, KITE-G08 as we expect"
+    width: 20
+    parts:
+      - {kind: half, side: lower, box: [0, 0, 4, 2.2], both: true, label: frame slice, label_at: [2, 1.1], label_side: left}
+      - {kind: half, side: upper, box: [0, 2.2, 4, 2.2], both: true}
+      - {kind: piece, box: [4.1, 0, 11.8, 4.4], label: kite, label_at: [10, 2.2]}
+    notes:
+      - "It goes in with a light push and does not move when you shake the closed slice."
+  - title: "Bad: loose, as split-07's kites were"
+    width: 20
+    parts:
+      - {kind: half, side: lower, box: [0, 0, 4, 2.2], both: true}
+      - {kind: half, side: upper, box: [0, 2.2, 4, 2.2], both: true}
+      - {kind: air, box: [4, 0, 1.5, 4.4], label: "room to move", label_at: [4.7, 3.5], label_side: left}
+      - {kind: piece, box: [5.5, 0, 9, 4.4], label: kite, label_at: [10, 2.2]}
+    notes:
+      - "It drops in and you hear it rattle when you shake the slice."
+      - "The third case: it does not go in without forcing. That gap is too tight."

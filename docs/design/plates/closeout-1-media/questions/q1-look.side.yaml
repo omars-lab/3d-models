@@ -1,0 +1,23 @@
+# closeout-1, question 1: what a flat star face and a curved one look like from the side.
+# A sketch, not a measurement: the curve is drawn as steps and made bigger so it can be seen.
+# Drawn by the draw-side-view skill:
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+title: "Question 1: a star seen from the side, along one point (a sketch, the curve made bigger)"
+panels:
+  - title: "Good: flat out to the points"
+    width: 24
+    parts:
+      - {kind: piece, box: [0, 0, 24, 1.6], label: "the face: one straight line", label_at: [20, 1.6]}
+      - {kind: bed, line: [0, 0, 24], text: "the table"}
+    notes:
+      - "Laid face up on the table, the top edge is straight from the centre out to the tip of each point."
+  - title: "Bad: the face curves down at the points"
+    width: 24
+    parts:
+      - {kind: piece, box: [6, 0, 12, 1.6], label: "flat in the middle", label_at: [12, 1.6]}
+      - {kind: piece, box: [3, 0, 3, 1.3], both: true}
+      - {kind: piece, box: [0, 0, 3, 0.9], both: true, label: "lower at the tip", label_at: [22.5, 0.9]}
+      - {kind: bed, line: [0, 0, 24], text: "the table"}
+    notes:
+      - "What split-07's stars did (Omar, 2026-10-27: \"not a star extruded, they have a curve\").
+        The top edge drops toward each point, so the star rocks or shows light under its tips."
