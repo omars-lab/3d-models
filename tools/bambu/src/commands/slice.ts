@@ -136,6 +136,7 @@ export function prepareSlicePresets(
   scratchDir: string,
   plateType?: PlateType,
   filamentColor?: string | string[],
+  skirt?: PlateSkirt,
 ): PreparedPresets {
   const root = profilesRoot(studioBin);
   const lookup: PresetLookup = root ? studioPresetLookup(root) : () => null;
@@ -143,10 +144,13 @@ export function prepareSlicePresets(
   if (settings) {
     const flat = flattenPresetList(resolvePresetList(settings, "settings", studioBin), lookup, scratchDir);
     if (plateType) setPlateType(flat.presets, plateType, scratchDir);
+    if (skirt) setSkirt(flat.presets, skirt, scratchDir);
     out.settings = flat.list;
     out.presets.push(...flat.presets);
   } else if (plateType) {
     throw new Error("a plate type needs a process preset in -s/--settings to hold it.");
+  } else if (skirt) {
+    throw new Error("a skirt needs a process preset in -s/--settings to hold it.");
   }
   if (filament) {
     const flat = flattenPresetList(resolvePresetList(filament, "filament", studioBin), lookup, scratchDir);
@@ -175,6 +179,27 @@ export function setFilamentColor(presets: FlattenedPreset[], color: string | str
     p.config.filament_colour = [colors[i]!.toUpperCase()];
     writeFlattened(p, scratchDir);
   });
+}
+
+/** A skirt round the whole plate: `loops` lines `distance` mm out from the pieces, one layer high.
+ *  It never touches a piece, so it only primes the nozzle before the first piece starts. */
+export interface PlateSkirt {
+  loops: number; // 1 to 5
+  distance?: number; // mm from the nearest piece (default 2, Studio's own)
+}
+
+/** Write a whole-plate skirt into the one flattened process preset, like the plate type. Studio's stock
+ *  `skirt_per_object` is "1" (a skirt round each piece), so it is set to "0": one skirt round the plate.
+ *  The preset check after the slice proves the slice carries all three. Omar on closeout-1, 2026-11-05:
+ *  "on small kite (10/11) can we try them with skirt and brim", and he picked a whole-plate skirt. */
+export function setSkirt(presets: FlattenedPreset[], skirt: PlateSkirt, scratchDir: string): void {
+  const proc = presets.find((p) => p.type === "process");
+  if (!proc) throw new Error("a skirt needs a process preset in -s/--settings to hold it.");
+  proc.config.skirt_loops = String(skirt.loops);
+  proc.config.skirt_distance = String(skirt.distance ?? 2);
+  proc.config.skirt_height = "1";
+  proc.config.skirt_per_object = "0";
+  writeFlattened(proc, scratchDir);
 }
 
 /** Name the plate in the one flattened process preset and rewrite its file in place (same path, so

@@ -41,7 +41,7 @@ import {
   hashFile,
   type WarningsSidecar,
 } from "../backends/warnings.js";
-import { prepareSlicePresets, enforceSliceCarriesPresets, buildStudioArgs, filamentCount } from "./slice.js";
+import { prepareSlicePresets, enforceSliceCarriesPresets, buildStudioArgs, filamentCount, type PlateSkirt } from "./slice.js";
 import { resolveSlicePlateType, studioSavedPlateType } from "../plate-type.js";
 import type { FlattenedPreset, SettingMismatch } from "../preset-chain.js";
 import { iterationId, type IterationKey } from "../iteration.js";
@@ -107,7 +107,27 @@ export interface PlateManifest {
   beds?: number; // the most beds the arrange may use (default 1); a spill past it is refused
   profile?: PlateProfile; // the ONE slice profile the plate is sliced under
   id_code?: string; // the plate's 1-3 character code, the first line of every piece's carved id (D-109)
+  // one skirt round the whole plate (slice.ts setSkirt); a skirt is plate-wide in Studio, never per piece
+  skirt?: PlateSkirt;
   items: ManifestItem[];
+}
+
+/** Check the manifest's `skirt:`: `loops` a whole number 1 to 5, `distance` mm from 1 to 10. PURE. */
+export function checkSkirt(raw: unknown): PlateSkirt {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    throw new Error("`skirt:` must be a mapping: `loops:` (1 to 5) and, optionally, `distance:` (mm, 1 to 10)");
+  }
+  const s = raw as Record<string, unknown>;
+  for (const k of Object.keys(s)) {
+    if (k !== "loops" && k !== "distance") throw new Error(`\`skirt.${k}\` is not a skirt setting; it takes loops and distance`);
+  }
+  if (typeof s.loops !== "number" || !Number.isInteger(s.loops) || s.loops < 1 || s.loops > 5) {
+    throw new Error(`\`skirt.loops\` must be a whole number from 1 to 5, got ${JSON.stringify(s.loops)}`);
+  }
+  if (s.distance !== undefined && (typeof s.distance !== "number" || !(s.distance >= 1 && s.distance <= 10))) {
+    throw new Error(`\`skirt.distance\` must be mm from 1 to 10, got ${JSON.stringify(s.distance)}`);
+  }
+  return { loops: s.loops, ...(s.distance !== undefined ? { distance: s.distance as number } : {}) };
 }
 
 function isIterationItem(it: ManifestItem): it is ManifestItemIteration {
@@ -600,6 +620,7 @@ export function parseManifest(text: string): PlateManifest {
     beds: typeof m.beds === "number" ? m.beds : undefined,
     profile: (m.profile as PlateProfile) ?? undefined,
     ...(typeof m.id_code === "string" ? { id_code: m.id_code } : {}),
+    ...(m.skirt !== undefined ? { skirt: checkSkirt(m.skirt) } : {}),
     items: items as ManifestItem[],
   };
 }
@@ -1202,6 +1223,7 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
         mkdtempSync(join(tmpdir(), "bambu-presets-")),
         plate.type,
         manifest.profile?.color,
+        manifest.skirt,
       );
       settingsResolved = prepared.settings ?? settingsName;
       filamentResolved = prepared.filament ?? filamentName;
