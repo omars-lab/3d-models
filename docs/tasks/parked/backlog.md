@@ -39,13 +39,12 @@ complexity check lists the 86 Python functions over 10 and stops any new one.
 
 - **graphify on bikar for two weeks.** Code only, version pinned, no git hooks, no strict mode, per
   §6 of the design and section 7 of the [research](../../research/2026-11-05-graphify-code-graph.md).
-  It touches bikar, so it is a bikar PR. The test build ran on 2026-11-06 (design §6): module
-  constants are graph entries, static class fields are not, so FILL_ATTRIBUTES stays a FAQ
-  answer. Next is the bikar PR itself, started on the same bikar commit as the
-  claude-techniques side-by-side test. At the end,
-  rerun the FAQ tool over bikar sessions and judge against the design's PASS and FAIL lines. The
-  claude-techniques session (social-presence-hub) is planning a side-by-side test of the graph on
-  real bikar tasks; line the two up rather than running both blind.
+  **Running since 2026-11-06, ends 2026-11-20** (bikar #370, graph built from bikar main
+  `21420bc3`; see [done.md](done.md)). Exported constants are graph entries and static class
+  fields are not, so FILL_ATTRIBUTES stays a FAQ answer. At the end, rerun the FAQ tool over
+  bikar sessions and judge against the design's PASS and FAIL lines. The claude-techniques session
+  (social-presence-hub) runs a side-by-side test of the graph on real bikar tasks, on the same
+  commit, once Omar OKs its plan; read its result beside the FAQ rerun rather than either alone.
 - **After the trial:** a script for links between repos (design question 3), and a cleanup skill
   fed by the complexity list. The list is real work now: 86 functions, the worst
   `prints_gate.py::check_record` at 57 and `tools/move_doc.py::rewrite_text` at 35. Shrink it with
