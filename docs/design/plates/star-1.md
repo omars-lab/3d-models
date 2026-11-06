@@ -3,9 +3,9 @@ plate: star-1
 print_log: '[[print-logs/star-1|print log]]'
 recipe: star-1.yaml
 iteration: 5
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-31-star-1]
 answers: "Does a base on the bed under the flange coaster's sloped star (grid supports or a brim) give it a cleaner bottom and sharper tips than no base, and which one?"
 kind: new
 maturity: experiment
@@ -111,3 +111,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-10-28 | proposed: on Omar's comment on split-10's middle piece 7, "I want to see a star printed with a base like 7"; the sloped star three ways, six stars | this page |
 | 2026-10-31 | sent — by `bambu print send`; spends the approval of 2026-10-31, iteration 5 @ c4106309d3 in #00AE42 | this page |
+| 2026-10-31 | printed — all 17 layers, 18:06 to 18:25 UTC in green; closed unjudged on Omar's "Close all four" (2026-11-06), taken over by star-2 (grid supports, "As clean") | [the record](../../prints/2026-10-31-star-1/index.md) |

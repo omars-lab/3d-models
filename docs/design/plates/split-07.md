@@ -3,9 +3,9 @@ plate: split-07
 print_log: '[[print-logs/split-07|print log]]'
 recipe: split-07.yaml
 iteration: 3
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-10-26-split-07]
 answers: "Cut in two at its middle and printed face down, does every loose piece of the flange coaster come out with two bed faces, join back into one piece (pins on the kite, star and middle, a slide on the hexagons and outer pieces), and still fit the coaster, which now has a 0.7 mm wall round each pin socket, snug and flush?"
 kind: new
 maturity: experiment
@@ -192,3 +192,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-10-25 | changed (iteration 3): every loose piece cut in two and joined, pins on the kites, stars and middle, a slide on the hexagons and outer pieces (D-120, Omar: "Cut them, wait for the slide"); the yes not yet given, so none to reset | [`split-07.yaml`](split-07.yaml) |
 | 2026-10-25 | sliced — for the gold Textured PEI plate, 7 objects, 82 loose halves, no slicer warnings: 8231 s and 36.49 g; the ledges as before, the hexagons' blunt end 0.45 mm | this page |
 | 2026-10-26 | sent — by `bambu print send`; spends the approval of 2026-10-26, iteration 3 @ ff079190be in #00AE42 | this page |
+| 2026-10-26 | printed — all 18 layers, 18:03 to 20:41 UTC in green; closed unjudged on Omar's "Close all four" (2026-11-06): the frame kept ("came out well"), the stars and middle adjust, the rest taken over by split-10, hexfit-1, hexfit-2 and closeout-1; the lopsided bigger kites closed with no photo | [the record](../../prints/2026-10-26-split-07/index.md) |
