@@ -574,6 +574,14 @@ def self_test() -> int:
     return 1 if fails else 0
 
 
+def refresh_evidence_log() -> None:
+    """A saved answer moves the evidence log's waiting list; rewrite it so hook 56 passes."""
+    import evidence_log  # it imports this module, so not at the top
+    said = evidence_log.refresh()
+    if said:
+        print(said)
+
+
 def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--self-test", action="store_true")
@@ -613,6 +621,7 @@ def main(argv: list[str]) -> int:
             return 0
         if args.cmd == "answer":
             print(answer(args.plate, args.row, args.answer, args.note, args.date, pg.PLATES))
+            refresh_evidence_log()
             return 0
         if args.cmd == "waiting":
             out = waiting(pg.PLATES, pg.PRINTS)

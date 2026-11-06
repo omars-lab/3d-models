@@ -178,6 +178,21 @@ def check(root: Path, page: Path) -> list[str]:
     return []
 
 
+def refresh(root: Path = ROOT, page: Path | None = None) -> str | None:
+    """Rewrite the page when it is behind, and say so; None when it was current.
+
+    The tools that change what the page shows call this themselves: a saved answer on the
+    judging page (`after_print.py answer`) and a print watch that ends (`print_monitor.py`).
+    Without it each of those commits failed hook 56 until someone ran `--write` by hand, the
+    trap the plate queue had until `plate_approve.py` rewrote it itself (2026-11-06)."""
+    page = page or root / PAGE
+    text = render(root)
+    if page.is_file() and page.read_text(encoding="utf-8") == text:
+        return None
+    page.write_text(text, encoding="utf-8")
+    return f"rewrote {PAGE}; stage it with the page"
+
+
 def self_test() -> int:
     """The rendered page passes; the same page one line stale is caught (the by-design failure)."""
     bad = 0
@@ -191,6 +206,12 @@ def self_test() -> int:
         caught = bool(check(ROOT, page))
         print(f"{'ok ' if caught else 'BAD'} a hand-edited decision row is caught")
         bad += not caught
+        fixed = refresh(ROOT, page) is not None and not check(ROOT, page)
+        print(f"{'ok ' if fixed else 'BAD'} refresh rewrites a stale page")
+        bad += not fixed
+        quiet = refresh(ROOT, page) is None
+        print(f"{'ok ' if quiet else 'BAD'} refresh leaves a current page alone")
+        bad += not quiet
         page.unlink()
         caught = bool(check(ROOT, page))
         print(f"{'ok ' if caught else 'BAD'} a missing page is caught")

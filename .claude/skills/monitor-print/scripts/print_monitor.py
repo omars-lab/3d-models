@@ -1093,7 +1093,9 @@ def main(argv: list[str]) -> int:
         print(add_look(page_of(a.plate).stem, *a.look))
         return 0
     if a.publish:
-        return publish(a.plate, Log(LOGS / f"{page_of(a.plate).stem}.log"), a.leave_out or [])
+        code = publish(a.plate, Log(LOGS / f"{page_of(a.plate).stem}.log"), a.leave_out or [])
+        refresh_evidence_log()
+        return code
     if a.sent:
         when = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M")
         try:
@@ -1109,8 +1111,19 @@ def main(argv: list[str]) -> int:
     if a.gif:
         name = page_of(a.plate).stem
         return 0 if make_gif(name, Log(LOGS / f"{name}.log")) else 1
-    return watch(a.plate, a.every, a.lost_after * 60, a.stall_after * 60, a.snapshot_every * 60,
+    code = watch(a.plate, a.every, a.lost_after * 60, a.stall_after * 60, a.snapshot_every * 60,
                  a.pick_up)
+    refresh_evidence_log()
+    return code
+
+
+def refresh_evidence_log() -> None:
+    """A print that ends puts its plate on the evidence log's waiting list (hook 56 checks it)."""
+    sys.path.insert(0, str(ROOT / ".claude" / "skills" / "review-print" / "scripts"))
+    import evidence_log
+    said = evidence_log.refresh()
+    if said:
+        print(said)
 
 
 if __name__ == "__main__":

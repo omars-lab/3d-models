@@ -116,7 +116,9 @@ The watcher comes back once the script exits. By then it has looked at the last 
 - **Finished** means the print is done, not judged. The record and the Timeline's `printed` row
   come when the pieces are judged, as before.
 - **Ship it all in one PR:** the vault's `print-logs/<name>.md`, the page (its `## The print`
-  section, and on a plate's first watch its new `print_log:` line), and the two WebPs. Copy them
+  section, and on a plate's first watch its new `print_log:` line), the two WebPs, and
+  `docs/prints/evidence-log.md`, which the watch's end and `--publish` rewrite so the finished
+  plate shows on its waiting list (hook 56 checks it). Copy them
   into a work branch off `origin/master`, run `plates_gate.py --write`, then PR and merge. The
   log is append-only: the plates gate (P10, hook 39) refuses a commit that changes or drops a
   row master already has, or deletes a log, so a wrong row is answered by a new row, never by an
