@@ -6555,7 +6555,7 @@ argue for C on the pieces that matter most.
 
 ## D-115 — On a coupon, the upper half's id goes on its outer face
 
-Omar, 2026-10-09, in chat, judging spl-1: "when we add embeded labesl .. the female side gets
+Omar, 2026-10-09, in chat, judging [spl-1](../prints/2026-10-09-spl-1/index.md): "when we add embeded labesl .. the female side gets
 hidden after ... label should have been on other side add this as learning". On spl-1 an upper
 half's only mark was its pair letter on the cut face (D-114 kept ids off its outer face), and
 once a pair was hammered closed that letter was inside it, so row 4's questions asked for pieces

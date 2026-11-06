@@ -165,6 +165,14 @@ the [`judge-page`](../judge-page/SKILL.md) skill. So:
    - `next`: what it changes for the next plate;
    - `decisions`: the D-ids decided from it, such as `[D-115]`, if any.
 
+   **Link each decision both ways.** The D section in the
+   [decisions log](../../../docs/working-model/decisions-log.md) links the record
+   (`../prints/<run>/index.md`) or its plate page, and the record's `decisions` names every D
+   section that links it. The record's setup (machine, material, nozzle, layer height, slicer
+   profile) must be filled in, since the decision holds only for that setup.
+   `python3 .claude/gates/decision_evidence.py` checks all three, and hook `56-decision-evidence`
+   runs it.
+
    **A fit or gap lesson names what it was measured with**: the nozzle size, the outer and inner
    wall line widths and the layer height, read off the record's profile and the `.3mf`
    (`line_width`, `outer_wall_line_width`, `inner_wall_line_width`). Write them as one clause,
@@ -186,7 +194,11 @@ the [`judge-page`](../judge-page/SKILL.md) skill. So:
    `python3 .claude/skills/review-print/scripts/prints_page.py --write`. It rewrites the
    Lessons and Records parts of [`docs/prints.md`](../../../docs/prints.md) from every record,
    and the prints gate fails while the page is behind. The record is also what the Coaster Lab
-   shows against each style.
+   shows against each style. Then rewrite the
+   [print evidence log](../../../docs/prints/evidence-log.md), which lists the decisions, issue
+   write-ups, calibration bets and unjudged plates, each linked to its print:
+   `python3 .claude/skills/review-print/scripts/evidence_log.py --write`. Hook
+   `56-decision-evidence` fails while it is behind.
 
 Hand feel is not a measurement. "Loose" goes in the notes, and a bet moves only on a reading
 under `readings` (the print-model skill's compare loop).
@@ -196,6 +208,8 @@ under `readings` (the print-model skill's compare loop).
 | Script | What it does | When to reach for it | Command |
 |---|---|---|---|
 | `scripts/prints_page.py` | Writes the Lessons and Records parts of `docs/prints.md` from every record in `docs/prints/`: the run, its plate page, what happened and why, what it changed, its decisions, and its photos (or the plate page's renders, said plainly). With no flag it checks the page is current. | After writing or changing a print record, in the same PR. `make validate-prints` and hook `39-prints` run the check. | `python3 .claude/skills/review-print/scripts/prints_page.py --write` (check: no flag; tests: `--self-test`) |
+| `scripts/evidence_log.py` | Writes [`docs/prints/evidence-log.md`](../../../docs/prints/evidence-log.md): the decisions each print record names (with record, plate page and date), the `docs/issues/` write-ups records link, the `CAL-*` bets records name with their state from the calibrate bets table, and the plates finished but not judged with their open questions. With no flag it checks the page is current. | After writing or changing a print record, a decision drawn from one, or a plate's judging, in the same PR. `make validate-decision-evidence` and hook `56-decision-evidence` run the check. | `python3 .claude/skills/review-print/scripts/evidence_log.py --write` (check: no flag; tests: `--self-test`) |
+| `.claude/gates/decision_evidence.py` (a gate, not in `scripts/`) | Checks each decision drawn from a print: the D-id a record names is in the decisions log and its section links the record or plate page; a D section that links a record is named in that record's `decisions`; a record naming a decision has its setup filled in | Before shipping a record that names a decision, or a decision that cites a print | `python3 .claude/gates/decision_evidence.py` (tests: `--self-test`) |
 | `scripts/after_print.py questions` | Reads one plate page's After-the-print table: each row's pieces by carved id (with label, turn, piece picture and any photo, including another plate's), its Do and Look for, what we expect, the answers it names, the `## Judged` lines so far, and `grams`: what that row's own pieces took in the slice (by carved id, or by whole recipe label on older pages; empty for a row that names pieces in words) | The hub's judging page calls it; read `answers` from it when Omar says he has judged; read `grams` when weighing which questions earn a place on the next plate | `python3 .claude/skills/review-print/scripts/after_print.py questions <plate> --json` |
 | `scripts/after_print.py answer` | Adds one line to the plate page's `## Judged` table (made after `## After the print` the first time): the row, the answer, his words exactly, the date. Refuses an answer the row does not name, a missing row, or "in my words" with no words | The hub page's save button calls it; by hand only to record an answer he gave in chat, in his words | `python3 .claude/skills/review-print/scripts/after_print.py answer <plate> <row> "<answer>" -n "<his words>"` |
 | `scripts/after_print.py waiting` | Lists the plates printed to the finish with no record yet, and how many rows are answered | Before telling Omar what is left to judge | `python3 .claude/skills/review-print/scripts/after_print.py waiting` |
