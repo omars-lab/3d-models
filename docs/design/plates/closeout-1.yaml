@@ -22,6 +22,9 @@
 #     MIDDLE-STOCK 1 dot (the centre pin and six round it), MIDDLE-PINS5 2 dots (the centre and four)
 #   Kites (split-10 question 4, which gap fits the frame):
 #     KITE-STOCK, no dots (0.12 mm a face, as split-07); KITE-G08, 1 dot (0.08 mm); two of each
+#   The same kites on a brim (Omar, 2026-11-05: "on small kite (10/11) can we try them with skirt
+#   and brim"): KITE-BRIM-12, 1 dot on the bottom (0.12 mm); KITE-BRIM-08, 1 on the cut face and 1 on the bottom (0.08 mm); one of each, in the kites box,
+#   and a skirt round the whole plate
 #   The frame slice, for the kites: LOWER-36 and UPPER-36, a 36° slice of split-07's two halves
 #     (wedge 36 from 9°, the same slice the kites themselves are cut from), so a kite drops into
 #     its own pocket and the halves close over it
@@ -46,6 +49,10 @@ profile:
   filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
 
 id_code: CL1
+
+# One skirt round the whole plate, two lines 2 mm out (Omar, 2026-11-05, picked "Brim kites, plus a
+# whole-plate skirt"). It touches no piece: it primes the nozzle, so the first piece starts clean.
+skirt: { loops: 2 }
 
 ledge_bitten_by_design: "the 0.7 mm wall Omar picked on split-08 still bites the hex pockets' blunt end in the frame slice (D-119); split-07's halves, unchanged"
 
@@ -134,6 +141,22 @@ items:
     group:  "kites: which gap fits the frame"
     no_id:  *dots
     object_settings: { infill_wall_overlap: "55%" }
+  # The same two kites on a 2 mm brim, one of each gap (Omar, 2026-11-05: "on small kite (10/11) can
+  # we try them with skirt and brim"; picked "Add a brim copy of each gap"). 2 mm, so two brims 6 mm apart in the box never meet.
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Kite
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.12, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36, dots_bottom: 1 }
+    label:  KITE-BRIM-12
+    group:  "kites: which gap fits the frame"
+    no_id:  *dots
+    object_settings: { infill_wall_overlap: "55%", brim_type: "outer_only", brim_width: "2" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Kite
+    params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.08, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36, dots_kite: 1, dots_bottom: 1 }
+    label:  KITE-BRIM-08
+    group:  "kites: which gap fits the frame"
+    no_id:  *dots
+    object_settings: { infill_wall_overlap: "55%", brim_type: "outer_only", brim_width: "2" }
   - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
     piece:  Lower
     params: { size: 112.5, stud: 1.2, stud_gap: 0.25, stud_spacing: 6, stud_ring2: 54.4, stud_ring2_n: 10, stud_ring2_turn: 18, stud_ring3: 13.0, stud_ring3_n: 10, stud_ring3_turn: 18, stud_ring4: 25.1, stud_ring4_n: 10, stud_ring4_turn: 0, stud_ring5: 33.5, stud_ring5_n: 10, stud_ring5_turn: 18, stud_boss: 1, room: 0.2, gap: 0.1, stud_wall: 0.7, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7, pins_kite: 1, pins_star: 1, slide: 4, slide_gap: 0.15, slide_height: 0.8, slide_hex: 1, slide_outer: 1, wedge: 36 }
