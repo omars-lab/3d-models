@@ -1085,3 +1085,10 @@ INTAKE ?= --list
 intake:
 	$(PYTHON) $(ROOT_DIR)/tools/reconstruction_intake.py --self-test
 	$(PYTHON) $(ROOT_DIR)/tools/reconstruction_intake.py $(INTAKE)
+
+# The maintain-vocabulary skill — the wholesale form of .githooks/pre-commit.d/54-vocabulary:
+# the vault page is current with vocabulary.yaml, and every plate knob is named by a term.
+.PHONY: validate-vocabulary
+validate-vocabulary:
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/maintain-vocabulary/scripts/vocabulary.py --self-test
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/maintain-vocabulary/scripts/vocabulary.py check

@@ -16,6 +16,7 @@ How the vault is set up, and the rules it is checked against:
   [print infrastructure](tasks/print-infrastructure/backlog.md),
   [consolidation](tasks/consolidation/backlog.md), [parked](tasks/parked/backlog.md).
 - [Decisions log](working-model/decisions-log.md) — every D-0xx, with the options and why.
+- [Print vocabulary](vocabulary/README.md) — skirt, brim, pin, dovetail and the rest, each with a picture.
 - [FAQ](faq.md) and the [grounding defect taxonomy](guides/grounding-defect-taxonomy.md) — how docs
   here go wrong, and how to write one that does not.
 

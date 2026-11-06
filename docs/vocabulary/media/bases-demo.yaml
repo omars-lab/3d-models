@@ -1,0 +1,35 @@
+# bases-demo — not a plate: a slice made only to draw the vocabulary page's skirt, raft and tree
+# supports pictures from real G-code. It is never sent. The maintain-vocabulary skill slices it:
+#
+#   python3 .claude/skills/maintain-vocabulary/scripts/vocabulary.py pictures --slice
+#
+# The process file beside it is the plate's stock process with a 2-loop skirt turned on, since a
+# skirt is set for the whole plate, not per piece. The pieces are the flange coaster's, with the
+# same params star-1 printed.
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;docs/vocabulary/media/bases-demo-process.json"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+items:
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, room: 0.2, gap: 0.1, halves: 1, pin: 1.2, pin_gap: 0.25, pins_star: 1, wedge: 36, slope: 0.2 }
+    count:  1
+    label:  SKIRT
+    group:  "skirt only"
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Star
+    params: { size: 112.5, room: 0.2, gap: 0.1, halves: 1, pin: 1.2, pin_gap: 0.25, pins_star: 1, wedge: 36, slope: 0.2 }
+    count:  1
+    label:  RAFT
+    group:  "raft"
+    object_settings: { raft_layers: "2" }
+  - bkr:    bikar:patterns/Constructions/gBV_JTt3Kxk-split-flange-coaster.bkr
+    piece:  Middle
+    params: { size: 112.5, room: 0.2, gap: 0.1, halves: 1, pin: 1.2, pin_gap: 0.25, pins_middle: 7 }
+    count:  1
+    label:  TREE
+    group:  "tree supports"
+    object_settings: { enable_support: "1", support_type: "tree(auto)" }
