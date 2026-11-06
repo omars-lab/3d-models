@@ -28,11 +28,11 @@ A loop or two of plastic that the printer lays on the bed round everything, a fe
 
 *First layer of the demo slice, seen from above. A blue loop runs round all the pieces, well away from them. (made for this page, from the demo slice media/bases-demo.yaml.)*
 
-**On our coasters.** Our printer's stock settings print no skirt, and no plate of ours has asked for one. On closeout-1 you asked "do we have stars with skirts in this?": the star you meant, STAR-GRID, stands on grid supports, which are a base under it, not a skirt. The picture is a demo slice made for this page, with a two-loop skirt turned on: the blue loop runs round the whole bed.
+**On our coasters.** Our printer's stock settings print no skirt. closeout-1 is the first plate to ask for one: two lines round the whole plate, after you asked "on small kite (10/11) can we try them with skirt and brim". Earlier on closeout-1 you asked "do we have stars with skirts in this?": the star you meant, STAR-GRID, stands on grid supports, which are a base under it, not a skirt. The picture is a demo slice made for this page, with a two-loop skirt turned on: the blue loop runs round the whole bed.
 
-```json
-{"inherits": "0.20mm Standard @BBL X2D",
- "skirt_loops": "2", "skirt_distance": "3"}
+```yaml
+# in a plate recipe (closeout-1.yaml): a skirt round the whole plate
+skirt: { loops: 2 }        # distance: 2 mm unless set, 1 to 10
 ```
 
 Plates: [closeout-1](../design/plates/closeout-1.md) · See also: [Brim](#brim), [Raft](#raft), [Supports, grid and tree](#supports-grid-and-tree)
@@ -53,7 +53,7 @@ A flat band of plastic, one layer thick, printed joined onto the piece's outside
 object_settings: { brim_type: "outer_only", brim_width: "5" }
 ```
 
-Plates: [star-1](../design/plates/star-1.md) · See also: [Skirt](#skirt), [Raft](#raft)
+Plates: [star-1](../design/plates/star-1.md), [closeout-1](../design/plates/closeout-1.md) · See also: [Skirt](#skirt), [Raft](#raft)
 
 ### Raft
 

@@ -47,17 +47,19 @@ terms:
       away from the pieces, before it prints them. It touches nothing. It is there to get the
       plastic flowing cleanly, and it is thrown away after.
     ours: >-
-      Our printer's stock settings print no skirt, and no plate of ours has asked for one. On
-      closeout-1 you asked "do we have stars with skirts in this?": the star you meant, STAR-GRID,
-      stands on grid supports, which are a base under it, not a skirt. The picture is a demo slice
-      made for this page, with a two-loop skirt turned on: the blue loop runs round the whole bed.
+      Our printer's stock settings print no skirt. closeout-1 is the first plate to ask for one: two
+      lines round the whole plate, after you asked "on small kite (10/11) can we try them with skirt
+      and brim". Earlier on closeout-1 you asked "do we have stars with skirts in this?": the star
+      you meant, STAR-GRID, stands on grid supports, which are a base under it, not a skirt. The
+      picture is a demo slice made for this page, with a two-loop skirt turned on: the blue loop
+      runs round the whole bed.
     picture: media/skirt.png
     alt: First layer of the demo slice, seen from above. A blue loop runs round all the pieces, well away from them.
     from: made for this page, from the demo slice media/bases-demo.yaml
     snippet: |-
-      {"inherits": "0.20mm Standard @BBL X2D",
-       "skirt_loops": "2", "skirt_distance": "3"}
-    lang: json
+      # in a plate recipe (closeout-1.yaml): a skirt round the whole plate
+      skirt: { loops: 2 }        # distance: 2 mm unless set, 1 to 10
+    lang: yaml
     knobs: []
     plates: [closeout-1]
     related: [brim, raft, supports]
@@ -80,7 +82,7 @@ terms:
       object_settings: { brim_type: "outer_only", brim_width: "5" }
     lang: yaml
     knobs: ["setting:brim_type", "setting:brim_width"]
-    plates: [star-1]
+    plates: [star-1, closeout-1]
     related: [skirt, raft]
 
   - id: raft
