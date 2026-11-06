@@ -523,6 +523,38 @@ def self_test() -> int:
     return 1 if fails else 0
 
 
+def refresh_queue(page: Path) -> None:
+    """Rewrite the plate queue after a page change, so the plates gate's P7 is not left failing.
+
+    Every approval change moves a page's stage, and the queue in the plates README ranks by it;
+    before this, each one needed `plates_gate.py --write` by hand (closeout-1, 2026-11-06, four
+    times running). Only a page in the repo's own plates folder: a self-test fixture has no
+    queue. A refusal (another page is wrong) is said, not raised: the page change still stands."""
+    if page.resolve().parent != pg.PLATES.resolve():
+        return
+    if pg.rewrite(quiet=True) == 0:
+        print("plate queue rewritten: docs/design/plates/README.md")
+    else:
+        print("plate_approve: the plate queue was not rewritten; see above", file=sys.stderr)
+
+
+def apply_flags(page: Path, a: argparse.Namespace) -> str | None:
+    """Make the change the flags ask for; return what to print, or None when no flag says."""
+    if a.table:
+        text, _, body = read(page)
+        page.write_text(split(text)[0] + with_table(body), encoding="utf-8")
+        return f"{page.stem}: Approvals table present"
+    if a.iterate:
+        return iterate(page, a.date)
+    if a.sent:
+        return sent(page, a.date, a.via, a.standing)
+    if a.approved or a.held or a.standing:
+        decision = "approved" if a.approved else "held" if a.held else "standing"
+        by = a.by if a.by is not None else (STANDING_BY if decision == "standing" else "")
+        return decide(page, decision, by, a.date, a.color)
+    return None
+
+
 def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("plate", nargs="?", help="a plate name, or the path of its page")
@@ -548,21 +580,10 @@ def main(argv: list[str]) -> int:
             print(json.dumps(st) if a.json else
                   f"{page.stem}: {'approved' if st['approved'] else 'not approved'} — {st['how']}")
             return 0
-        if a.table:
-            text, _, body = read(page)
-            page.write_text(split(text)[0] + with_table(body), encoding="utf-8")
-            print(f"{page.stem}: Approvals table present")
-            return 0
-        if a.iterate:
-            print(iterate(page, a.date))
-            return 0
-        if a.sent:
-            print(sent(page, a.date, a.via, a.standing))
-            return 0
-        if a.approved or a.held or a.standing:
-            decision = "approved" if a.approved else "held" if a.held else "standing"
-            by = a.by if a.by is not None else (STANDING_BY if decision == "standing" else "")
-            print(decide(page, decision, by, a.date, a.color))
+        said = apply_flags(page, a)
+        if said is not None:
+            print(said)
+            refresh_queue(page)
             return 0
     except Refused as e:
         print(f"plate_approve: {page.stem}: {e}", file=sys.stderr)
