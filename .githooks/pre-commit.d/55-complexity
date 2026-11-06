@@ -1,0 +1,23 @@
+#!/bin/sh
+# Complexity gate (.claude/gates/complexity_gate.py). No Python function may
+# grow past a complexity of 10 (ruff C901), the limit bikar and qiyas use. The
+# 86 functions already over it when this was added (2026-11-06) are listed in
+# .claude/gates/complexity-baseline.json; the list may only shrink (D-129).
+#
+# wholesale: make validate-complexity
+# wholesale-requires: uvx
+#
+# Whole-tree, not --staged: ruff over every tracked .py file takes about a
+# second, and a pairing of same-named functions needs the whole file anyway.
+# Override once: COMPLEXITY_OK=1 git commit
+[ -n "$COMPLEXITY_OK" ] && exit 0
+GATE="$(git rev-parse --show-toplevel)/.claude/gates/complexity_gate.py"
+if [ ! -f "$GATE" ]; then
+  echo "pre-commit: no complexity gate in this worktree ($GATE) — skipping" >&2
+  exit 0
+fi
+if ! command -v uvx >/dev/null 2>&1; then
+  echo "pre-commit: uvx not found (brew install uv) — complexity not checked" >&2
+  exit 0
+fi
+exec python3 "$GATE"

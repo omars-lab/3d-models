@@ -34,13 +34,9 @@ coaster-pipeline backlog on 2026-09-25 (board #10).
 
 Omar picked these on 2026-11-05 from the [code graph design](../../design/process/code-graph.md).
 Take them in this order: the first two help on their own, and the third is measured against them.
+The first two are done (see [done.md](done.md)): the FAQ answer now shows at the search, and a
+complexity check lists the 86 Python functions over 10 and stops any new one.
 
-- **Sessions read the FAQ before they grep.** Built in #888: a hook shows the FAQ answer when a
-  search names a term the FAQ answers (the session-reflect skill's `faq_at_grep.py`). Still to do
-  after it merges: one real search for `tagSegments` in this repo, to see the answer appear. Then
-  move this line to done.
-- **A complexity check on 3d-models' Python.** ruff's complexity rule at 10, the limit bikar and
-  qiyas use, in `make validate`. Fix or list the functions already over it.
 - **graphify on bikar for two weeks.** Code only, version pinned, no git hooks, no strict mode, per
   §6 of the design and section 7 of the [research](../../research/2026-11-05-graphify-code-graph.md).
   It touches bikar, so it is a bikar PR. Before it starts, one test build answers the open
@@ -49,7 +45,9 @@ Take them in this order: the first two help on their own, and the third is measu
   claude-techniques session (social-presence-hub) is planning a side-by-side test of the graph on
   real bikar tasks; line the two up rather than running both blind.
 - **After the trial:** a script for links between repos (design question 3), and a cleanup skill
-  fed by the complexity list, both only if the trial or the gate leaves real work.
+  fed by the complexity list. The list is real work now: 86 functions, the worst
+  `prints_gate.py::check_record` at 57 and `tools/move_doc.py::rewrite_text` at 35. Shrink it with
+  `complexity_gate.py --update` after each split.
 - **A post about the design**, which Omar asked for once he signed off: written with the
   claude-techniques session, numbers and design only. A second post can follow with the trial's
   result.
