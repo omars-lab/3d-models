@@ -138,12 +138,19 @@ def assumptions(root: Path, records: dict[str, dict]) -> list[str]:
     return out + ["| Bet | What it is about | State | Print records |", "|---|---|---|---|", *rows, ""]
 
 
+def _row_line(r: dict) -> str:
+    """One open question as a bullet: its Look for, or the whole question when it has none
+    (dragon-egg-1's question is one sentence with no "Look for", and crashed the watch's end)."""
+    said = " ".join((r.get("look_for") or "").split()) or " ".join((r.get("question") or "").split())
+    return f"  - Row {r['row']}: {said}"
+
+
 def _open_rows(plate: str, plates: Path) -> list[str]:
     rows, _ = ap.rows_of(plate, plates)
     _, _, _, body = ap.read_page(plate, plates)
     done = ap.latest(ap.judged(body))
-    return [f"  - Row {r['row']}: {' '.join(r['look_for'].split()) or ' '.join(r['question'].split())}"
-            for r in rows if done.get(r["row"], {}).get("answer", ap.NOT_JUDGED) == ap.NOT_JUDGED]
+    return [_row_line(r) for r in rows
+            if done.get(r["row"], {}).get("answer", ap.NOT_JUDGED) == ap.NOT_JUDGED]
 
 
 def risks(root: Path) -> list[str]:
@@ -216,6 +223,10 @@ def self_test() -> int:
         caught = bool(check(ROOT, page))
         print(f"{'ok ' if caught else 'BAD'} a missing page is caught")
         bad += not caught
+    line = _row_line({"row": 1, "look_for": None, "question": "Do the scales come out clean?"})
+    ok = line == "  - Row 1: Do the scales come out clean?"
+    print(f"{'ok ' if ok else 'BAD'} a question with no Look for is listed by its question")
+    bad += not ok
     for name, fn in (("decisions", decisions), ("issues", issues), ("assumptions", assumptions)):
         has = any(line.startswith("| [") or line.startswith("| CAL-")
                   for line in fn(ROOT, load_records(ROOT / "docs" / "prints")))
