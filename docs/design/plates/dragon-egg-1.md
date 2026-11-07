@@ -2,7 +2,7 @@
 plate: dragon-egg-1
 recipe: dragon-egg-1.yaml
 iteration: 2
-stage: proposed
+stage: approved
 times_printed: 0
 runs: []
 answers: "Does the Mini Twisted Dragon Egg print clean standing up with no supports, in silk blue, on the X2D?"
@@ -88,6 +88,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-11-06 | approved | Omar, in chat: "send a plate to print small dragon egg", color "Silk blue" | iteration 2 @ d811f0eb94 in #0047BB | |
 
 ## Timeline
 
