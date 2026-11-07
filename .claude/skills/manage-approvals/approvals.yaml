@@ -197,3 +197,7 @@ theme-terracotta-souk-11203:
 theme-terracotta-souk-11401:
   - {iteration: 1, recipe: '4f29d09fa7cf', date: '2026-10-05'}
   - {iteration: 2, recipe: '3acf6b4749ab', date: '2026-10-08'}
+toys-1:
+  - {iteration: 1, recipe: 'c49c51258f65', date: '2026-11-07'}
+  - {iteration: 2, recipe: '2b0ac6d18081', date: '2026-11-07'}
+  - {iteration: 3, recipe: '47c2f2d6335e', date: '2026-11-07'}

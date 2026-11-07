@@ -1,0 +1,7 @@
+{
+  "type": "process",
+  "name": "Naqsh supports 0.20mm @BBL X2D",
+  "from": "User",
+  "inherits": "0.20mm Standard @BBL X2D",
+  "enable_support": "1"
+}

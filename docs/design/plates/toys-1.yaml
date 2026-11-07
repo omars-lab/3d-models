@@ -1,0 +1,52 @@
+# toys-1 — a magic cube, an airless ping-pong ball and an 8-point fidget star, a fun print
+#
+# Omar, 2026-11-07: "i want a plat with the cube and ball", then "also same with
+# .../8ptFidgetStar.stl and add to plate too". One of each, as the models come:
+#
+#   MAGIC CUBE      x1   scale 1   40.0 x 40.0 x 40.0 mm, flat on a full 40 x 40 mm face
+#   PING-PONG BALL  x1   scale 1   about 40.0 x 39.9 x 39.3 mm, on a flat base about 6 mm across
+#   FIDGET STAR     x1   scale 1   about 78.0 x 78.0 x 18.0 mm, flat on a base about 70 mm across
+#
+# The ball is the airless ping-pong ball from MakerWorld (the file's header names model 376496),
+# downloaded as airlesspingpongball20.stl. The cube was downloaded as "Magic Cube.stl" and the star
+# as 8ptFidgetStar.stl (exported from Blender 2.92); neither file names a source. All three print
+# as they come, on their own flat bases. Supports are on (see profile below). The files stay out of git: this repo is
+# public and the models are someone else's. They sit in the gitignored imports folder
+# (.bambu/imports, a link to Omar's iCloud folder CloudDesktop/data/3d-models/imports) and the
+# recipe holds each to its sha256.
+#
+# One color, picked at the send. Until then the plate slices on PLA Basic.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/toys-1.yaml --dry-run
+
+bed: x2d
+profile:
+  # Supports on for the whole plate. The first slice warned that the ball's open lattice has
+  # "floating regions", spots that start in the air. Omar, 2026-11-07, picked "Turn supports on for
+  # the plate" over signing the warning off. Only an item made from a `bkr:` file can carry its own
+  # settings, so supports go plate-wide through this preset: the stock 0.20 mm Standard with
+  # enable_support on, the preset's own support kind.
+  settings: "Bambu Lab X2D 0.4 nozzle;tools/bambu/presets/supports-0.20.json"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: TY1
+
+items:
+  - stl:     .bambu/imports/magic-cube.stl # "Magic Cube.stl" as downloaded
+    sha256:   e62225a337e69805ba1bb8f57091b5462eb1db6524e0308a2de833802ffcb5b9
+    count:    1
+    label:    MAGIC CUBE
+    no_id:    "one of three pieces that look nothing alike; an outside mesh, so nothing is cut into it"
+  - stl:     .bambu/imports/airless-ping-pong-ball-20.stl # airlesspingpongball20.stl as downloaded
+    sha256:   0b9ba2089962c7e678d6f1c8b568afa3c96c9e9d74a160de06cc43083eff0102
+    count:    1
+    label:    PING-PONG BALL
+    no_id:    "one of three pieces that look nothing alike; an outside mesh, so nothing is cut into it"
+  - stl:    .bambu/imports/8pt-fidget-star.stl # 8ptFidgetStar.stl as downloaded
+    sha256:   4ac4e45a65a3336d6098bf1e02a83f63e8cc7b57c87cc8e02f8c971f87c21340
+    count:    1
+    label:    FIDGET STAR
+    no_id:    "one of three pieces that look nothing alike; an outside mesh, so nothing is cut into it"
+    # Apart from supports, all three slice on our standard profile: our walls and 15% infill,
+    # whatever the makers set. A recipe cannot set the makers' own settings on an outside mesh.
