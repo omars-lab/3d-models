@@ -17,6 +17,12 @@ logs, plates built or rebuilt, the hub's questions and comments, and the print r
 Items below still tagged "print session" or "records session" are both its; that split ended when
 the coaster-print session closed on 2026-11-02.
 
+**Send next, out of queue order: [toys-1](../../design/plates/toys-1.md).** Omar asked on
+2026-11-07 for a plate with the magic cube and the ping-pong ball, then added the fidget star, to
+print next. It is sliced and merged (#925): one bed, 5 h 40 min, 89 g, supports on for the whole
+plate. The plates queue ranks it 28th because it answers no coaster question. That ranking is not
+the order here. It needs Omar's yes, a color and a bed check: the dragon egg may still be on the bed.
+
 1. **The kite fits split-10 dropped.** On Omar's word, split-10's iteration 4 left out
    KITE-G10 (gap 0.10 mm a face) and KITE-PIN20 and KITE-PIN15 (pin holes 0.20 and 0.15 mm wider
    than the pin), keeping only stock and gap 0.08. Put them on the next kite plate once
