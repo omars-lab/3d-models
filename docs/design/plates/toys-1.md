@@ -2,7 +2,7 @@
 plate: toys-1
 recipe: toys-1.yaml
 iteration: 3
-stage: proposed
+stage: approved
 times_printed: 0
 runs: []
 answers: "Do the magic cube, the airless ping-pong ball and the 8-point fidget star all print clean on one X2D bed, with supports on for the whole plate?"
@@ -104,6 +104,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-11-07 | approved | Omar, in chat: "yes, all in Silk blue" | iteration 3 @ f08bbbc482 in #0047BB | |
 
 ## Timeline
 
