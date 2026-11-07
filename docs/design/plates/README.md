@@ -40,7 +40,7 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 | 18 | [theme-night-sky-11602](theme-night-sky-11602.md) | waiting | 1 | 0.5 | 2.04 | ok | Night sky, one of its 4 plates: do its Hex ×10, Outer ×10 come out as the theme draws them, in PLA Matte Dark Blue (11602)? |
 | 19 | [minis-05](minis-05.md) | waiting | 10 | 5.8 | 1.72 | watch | Which thin join holds a pair together best, the butterfly key or the built-in tab? |
 | 20 | [split-09](split-09.md) | waiting | 4 | 2.6 | 1.51 | ok | Do split-07's two coaster halves, printed two of each to a bed with no loose pieces, come out as clean as they did on split-07, so this layout can be the production plate? |
-| 21 | [dragon-egg-1](dragon-egg-1.md) | proposed | 2 | 1.4 | 1.44 | ok | Does the Mini Twisted Dragon Egg print clean standing up with no supports, in silk blue, on the X2D? |
+| 21 | [dragon-egg-1](dragon-egg-1.md) | approved | 2 | 1.4 | 1.44 | ok | Does the Mini Twisted Dragon Egg print clean standing up with no supports, in silk blue, on the X2D? |
 | 22 | [theme-midnight-blue-13903](theme-midnight-blue-13903.md) | waiting | 1 | 0.7 | 1.39 | ok | Midnight blue, one of its 2 plates: do its Middle ×1, Kite ×10, Hex ×10, Star ×10, Outer ×10 come out as the theme draws them, in PLA Silk Neon City (13903)? |
 | 23 | [sheets-02](sheets-02.md) | waiting | 3 | 2.7 | 1.11 | ok | Should star points stay sharp or be softened, and by how much? |
 | 24 | [sheets-03](sheets-03.md) | waiting | 3 | 2.7 | 1.11 | ok | How much soft weld at the crossings looks right: none, light or strong? |
