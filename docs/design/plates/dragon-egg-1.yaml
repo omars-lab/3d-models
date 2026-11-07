@@ -1,0 +1,40 @@
+# dragon-egg-1 — one Mini Twisted Dragon Egg, a fun print
+#
+# Omar, 2026-11-06: "send a plate to print small dragon egg". One egg, as the model comes:
+#
+#   DRAGON EGG x1     scale 1     about 29.8 x 29.7 x 35.8 mm
+#
+# The model is the Mini Twisted Dragon Egg from MakerWorld (makerworld.com/en/models/2993035),
+# downloaded 2026-09-18. It prints standing, without supports, as its maker set it up. Its mesh has 79
+# non-manifold edges of 238,496 (docs/wiki: non-manifold-edges); Bambu Studio repairs them on load.
+# The file stays out of git: this repo is public and the model is someone else's. The recipe holds it
+# to its sha256.
+#
+# One color, picked at the send. Omar picked silk blue (#0047BB) in chat on 2026-11-06, so the
+# plate slices on the PLA Silk profile, which runs cooler and slower than PLA Basic.
+#
+# The slicer warns of "floating regions" on the egg: small spots, scale tips, that start in the air.
+# The egg stands on a flat base about 21 mm across, so this is a looks risk, not a footing or printer
+# risk. Omar signed it off for this egg only in chat on 2026-11-06 ("Sign it off for this egg"); the
+# rule in .claude/gates/expected-slicer-warnings.json names this egg's object and nothing else.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/dragon-egg-1.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Silk @BBL X2D 0.4 nozzle"
+
+id_code: EG1
+
+items:
+  - stl:     .bambu/imports/mini-twisted-dragon-egg.stl # Mini+Twisted+Dragon+Egg+.stl as downloaded
+    sha256:   661d14f093b960560e4399648eb4cd4f5584b0a1490dcdac9a7f49533a1fde73
+    count:    1
+    label:    DRAGON EGG
+    no_id:    "the only piece on the bed; an outside mesh, so nothing is cut into it"
+    # The maker's .3mf sets no supports, 2 walls, no infill and an automatic brim. A recipe cannot
+    # set per-object settings on an outside mesh (only on a `bkr:` item), so the egg slices on our
+    # standard profile: the same no supports and automatic brim, but our walls and 15% infill, which
+    # makes it a little heavier and slower than the maker's.
