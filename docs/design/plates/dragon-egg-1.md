@@ -1,8 +1,9 @@
 ---
 plate: dragon-egg-1
+print_log: '[[print-logs/dragon-egg-1|print log]]'
 recipe: dragon-egg-1.yaml
 iteration: 2
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "Does the Mini Twisted Dragon Egg print clean standing up with no supports, in silk blue, on the X2D?"
@@ -58,6 +59,14 @@ The slice: the egg standing in the middle of the bed.
 |---|---|---|
 | DRAGON EGG | about 29.8 x 29.7 x 35.8 | 138.2, 128 |
 
+## The print
+
+The print as the chamber camera saw it: 18 pictures from 02:58 to 04:21 UTC, half a second each, the last held. Made by the monitor-print skill's `print_monitor.py --publish`; what the printer said is in the print log.
+
+![dragon-egg-1 printing, as the chamber camera saw it](dragon-egg-1-media/timelapse.webp)
+
+![dragon-egg-1 finished, on the bed](dragon-egg-1-media/finished.webp)
+
 ## Cost and risk
 
 One bed, 1 h 14 min, 15.60 g of silk blue (local slice, 2026-11-06, X2D 0.20 mm Standard preset
@@ -88,7 +97,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-11-06 | approved | Omar, in chat: "send a plate to print small dragon egg", color "Silk blue" | iteration 2 @ d811f0eb94 in #0047BB | |
+| 2026-11-06 | approved | Omar, in chat: "send a plate to print small dragon egg", color "Silk blue" | iteration 2 @ d811f0eb94 in #0047BB | sent 2026-11-06 |
 
 ## Timeline
 
@@ -96,3 +105,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-11-06 | proposed — at Omar's ask: one small dragon egg | this page |
 | 2026-11-06 | sliced — local slice fits one bed, 1 h 14 min, 15.60 g, one by-design slicer warning signed off by Omar | this page |
+| 2026-11-06 | sent — by `bambu print send`; spends the approval of 2026-11-06, iteration 2 @ d811f0eb94 in #0047BB | this page |
