@@ -113,11 +113,28 @@ def ids_in(text: str, plate: str) -> list[dict]:
     return found
 
 
+def split_outside_brackets(cell: str) -> list[str]:
+    """The cell cut at each `;` that is not inside round brackets."""
+    parts, depth, start = [], 0, 0
+    for i, ch in enumerate(cell):
+        if ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth = max(depth - 1, 0)
+        elif ch == ";" and depth == 0:
+            parts.append(cell[start:i])
+            start = i + 1
+    parts.append(cell[start:])
+    return parts
+
+
 def groups(cell: str, plate: str) -> tuple[list[dict], bool]:
     """The Pieces cell as [{these, against}] (`;` parts one beside the other), and whether it
-    names every piece on the plate ("All twelve")."""
+    names every piece on the plate ("All twelve"). A `;` inside brackets is a note on one piece,
+    not a second group: dragon-egg-1's "DRAGON EGG (no carved id; the only piece on the bed)"
+    showed as two "Pick up these"."""
     out = []
-    for part in [p.strip() for p in cell.split(";") if p.strip()]:
+    for part in [p.strip() for p in split_outside_brackets(cell) if p.strip()]:
         these, _, against = part.partition(" beside ")
         out.append({"these": ids_in(these, plate), "these_text": these.strip(),
                      "against": ids_in(against, plate), "against_text": against.strip()})
@@ -532,6 +549,9 @@ def self_test() -> int:
     g, _ = groups("`G`, `K` (55% and flow) beside `8`, `9`; `R`, `S` (75% and flow) beside `A`, `C`",
                   "bedface-5")
     check("two groups", [[p["id"] for p in x["these"]] for x in g], [["G", "K"], ["R", "S"]])
+    g, _ = groups("DRAGON EGG (no carved id; the only piece on the bed)", "dragon-egg-1")
+    check("a ; in brackets is one group", [x["these_text"] for x in g],
+          ["DRAGON EGG (no carved id; the only piece on the bed)"])
     _, every = groups("All twelve", "bedface-5")
     check("every piece", every, True)
 
