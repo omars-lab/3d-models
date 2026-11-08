@@ -48,9 +48,6 @@
   ".claude/gates/site_graph.py::self_test": [
    21
   ],
-  ".claude/hooks/delegate-nudge.py::_apply_record": [
-   15
-  ],
   ".claude/skills/color-themes/scripts/after_print.py::self_test": [
    14
   ],
