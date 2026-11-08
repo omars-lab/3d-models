@@ -2,6 +2,7 @@
 
 Newest first: date, what shipped, PR. Open work: [`backlog.md`](backlog.md).
 
+- 2026-11-08 — Pattern catalog step 5: a note for each of the 76 files in bikar's seven library families (stars, rosettes, tiled, weave, orbs, lego, coupons) in `docs/catalog/library/`, with their file header, knobs and a picture; `catalog.py render-library` draws the 69 pictures (1.1 MB, about 16 kB each) and redraws one only when its file changes; the catalog page lists them by family. Step 6 is optional
 - 2026-11-06 — The code graph trial on bikar started (D-129 step 3): a test build showed exported constants are in the graph and static class fields are not (3d-models #905), the graph built from bikar main `21420bc3` and kept out of git, and a CLAUDE.md line pointing sessions at it (bikar #370). Ends 2026-11-20
 - 2026-11-06 — A complexity check on the repo's Python (D-129 step 2): no function may grow past 10 (ruff C901, pinned through uvx), the 86 already over it listed in `.claude/gates/complexity-baseline.json`, a list that only shrinks; hook `55-complexity` and `make validate-complexity` (3d-models #902)
 - 2026-11-05 — Sessions see the FAQ answer when they search for what it answers (D-129 step 1): a hook on searches, checked live with a real search for `tagSegments` (3d-models #888)

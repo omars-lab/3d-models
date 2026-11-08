@@ -1,0 +1,278 @@
+[
+  {
+    "file": "Coupons/Dovetail-Coupon.bkr",
+    "blob": "66f1944988bde76075bf2272c379c73ca945c0dd"
+  },
+  {
+    "file": "Coupons/Fit-Coupon.bkr",
+    "blob": "84788d7a70d1e19595f158df5c74f5026461c1db"
+  },
+  {
+    "file": "Coupons/Frame-Band-Coupon.bkr",
+    "blob": "2cd717ca8806ace61f0f2f2b84a3ea5d2308b6d9"
+  },
+  {
+    "file": "Coupons/Loose-Fit-Coupon.bkr",
+    "blob": "de1a5e21781012f1ef70ec6a2c8bc388fe26474a"
+  },
+  {
+    "file": "Coupons/Machine-Card.bkr",
+    "blob": "b4f6c30414f2809ec610915a8f142ffa34adc7a4"
+  },
+  {
+    "file": "Coupons/Sampler-Cards.bkr",
+    "blob": "013066cebe423fa44dbaf32b51e8cf6cc5ac0ceb"
+  },
+  {
+    "file": "Coupons/Split-Fit-Coupon.bkr",
+    "blob": "22510c8090100509e7a685f44ff5115c1f7c5ff7"
+  },
+  {
+    "file": "Coupons/Split-Pocket-Coupon.bkr",
+    "blob": "0fb2b016ece12ff13c90224e979b887e8618c1ed"
+  },
+  {
+    "file": "Coupons/Split-Trap-Coupon.bkr",
+    "blob": "ddf26a7163567bfe01e4c68844d3a4d7f3490ce3"
+  },
+  {
+    "file": "Coupons/Swatch-Chip.bkr",
+    "blob": "881faf0b14cc4fdd40446de0882e7897dd04b7c8"
+  },
+  {
+    "file": "Lego/Edge-Stud-Tile.bkr",
+    "blob": "ecab320bf1b3a08ecdaeac43966b57934634067d"
+  },
+  {
+    "file": "Lego/Grid-Field-Tile.bkr",
+    "blob": "246a1292174c104e411fe39680423da31cb68eff"
+  },
+  {
+    "file": "Lego/Hex-Field-Tile.bkr",
+    "blob": "6ba3f0ee189dea6abea993240cb724b6de2a2eda"
+  },
+  {
+    "file": "Lego/Rational-Repeat-Tile.bkr",
+    "blob": "a56c2af6921fef516cd03c4758585e38de99aaad"
+  },
+  {
+    "file": "Lego/Rosette-Brick.bkr",
+    "blob": "51ddf9a35ed4ce1fa96f1670b732b9583edb5b15"
+  },
+  {
+    "file": "Lego/Seam-Coupon.bkr",
+    "blob": "d1889bbe311a76b3825327aa13b80757aa2bfd82"
+  },
+  {
+    "file": "Lego/Star-Brick.bkr",
+    "blob": "91486acde28df1a913aeb07ea154e0064f83e7d3"
+  },
+  {
+    "file": "Lego/Star-Mural.bkr",
+    "blob": "1494a098128b6666ba9698dd7e43d5e0450934b9"
+  },
+  {
+    "file": "Orbs/Dodeca-Orb.bkr",
+    "blob": "5756b3c882afe046d8e48a6450ce4e6ecdc3fa1c"
+  },
+  {
+    "file": "Orbs/Donut-Hex-Orb.bkr",
+    "blob": "eda45e1e26d94be5950bd435ffb2592a3a5b60b3"
+  },
+  {
+    "file": "Orbs/Donut-Hex-Weld.bkr",
+    "blob": "e648dc2d5f6bcfe7464b62bb889122d5daa78b70"
+  },
+  {
+    "file": "Orbs/Hankin-Orb.bkr",
+    "blob": "1f898f46d73f63f12541aadf0dbabf877e8bfe00"
+  },
+  {
+    "file": "Orbs/Maclado-9-Weave.bkr",
+    "blob": "6eb2fe7106a214f023fa5d720fa1f7a1089df39f"
+  },
+  {
+    "file": "Orbs/Maclado-9.bkr",
+    "blob": "17b2267982ff710251d766b58020d512d3fd22a9"
+  },
+  {
+    "file": "Orbs/Rosette-Cube-Orb.bkr",
+    "blob": "1eaa7ae16bec22325c0b7cb6ac66d8b91c18a182"
+  },
+  {
+    "file": "Orbs/Rosette-Orb.bkr",
+    "blob": "642c42f1667bf4750f27e8e64db4709f3a9021d5"
+  },
+  {
+    "file": "Orbs/Rosette-Weave-Orb.bkr",
+    "blob": "046bf1f1b19a3a39100b598c24af892c3e9c9434"
+  },
+  {
+    "file": "Orbs/Star-Cube-Orb.bkr",
+    "blob": "df27c4e890df97b9db6be14e8ab47c20720eae82"
+  },
+  {
+    "file": "Orbs/Star-Octa-Orb.bkr",
+    "blob": "f332439ac5804c3b3b9b23f243c1e7914d7813ec"
+  },
+  {
+    "file": "Orbs/Star-Orb.bkr",
+    "blob": "db1170321c125037f2c3d8a10c39e6cab9e56374"
+  },
+  {
+    "file": "Orbs/Star-Tetra-Orb.bkr",
+    "blob": "e7fe1ac51da7259666fb4a3be79f80ae999a169c"
+  },
+  {
+    "file": "Orbs/Weave-Dodeca-Orb.bkr",
+    "blob": "95a24f6bf64c1cced1ea203d1320d512452c9c6b"
+  },
+  {
+    "file": "Orbs/Weave-Orb.bkr",
+    "blob": "e7c3b0c9a8760aa0345e1b19f9340e8ffbe8e7ca"
+  },
+  {
+    "file": "Rosettes/Andalusian.bkr",
+    "blob": "6b4a85bde12b91187a9e1a8a223a7a8e324cfc36"
+  },
+  {
+    "file": "Rosettes/Flower-Rosette.bkr",
+    "blob": "a6052ae609bd08a6166969a05a991bff4b014f50"
+  },
+  {
+    "file": "Rosettes/Ocean-Rosette.bkr",
+    "blob": "f5c17b3c27f7ec10544c1f04bd231ae538cda17e"
+  },
+  {
+    "file": "Rosettes/Rosette-10-Ring.bkr",
+    "blob": "577216c25f347c62471a9dca5d1ac8f73326e5be"
+  },
+  {
+    "file": "Rosettes/Rosette-10-Tiled.bkr",
+    "blob": "d300ade6b0b2c84be64e48ee443a81538b849a03"
+  },
+  {
+    "file": "Rosettes/Rosette-10.bkr",
+    "blob": "07b88eda267ba532a22e2bf4dd3092ef41d96d82"
+  },
+  {
+    "file": "Rosettes/Rosette-12r.bkr",
+    "blob": "7c5a172009bcf67f86544ddd018463a5b41d858d"
+  },
+  {
+    "file": "Rosettes/Rosette-N.bkr",
+    "blob": "d999b7e8602d72974cfa0c19a03545bb75455690"
+  },
+  {
+    "file": "Stars/Darb-i-Imam.bkr",
+    "blob": "e21c699c213f0b492e54f9c15485c5de3739b265"
+  },
+  {
+    "file": "Stars/Gem-Cut.bkr",
+    "blob": "37ff2073327caf178bc9765d85d001f00f8cc906"
+  },
+  {
+    "file": "Stars/Girih-10.bkr",
+    "blob": "98fa7b5bde52a1f3ec74dd7a55ab22c54b1072de"
+  },
+  {
+    "file": "Stars/Girih-Decagon.bkr",
+    "blob": "ffc13a8ee1e98b9a128f78b26d1a6817e49de46e"
+  },
+  {
+    "file": "Stars/Hankin-Star.bkr",
+    "blob": "6f0ed10bfb1eac8670451756b6fc53e2684ef687"
+  },
+  {
+    "file": "Stars/Radiant.bkr",
+    "blob": "ca951779763787b001f434bfafa0783b8a4a8b86"
+  },
+  {
+    "file": "Stars/Star-10.bkr",
+    "blob": "aed9cd24547463afb856a0018a903ae81be6c828"
+  },
+  {
+    "file": "Stars/Star-14.bkr",
+    "blob": "083bc87ea730083396eb005cfca98a6853417eb6"
+  },
+  {
+    "file": "Stars/Star-16.bkr",
+    "blob": "f7933f605f85108d68c3e737fd0931951c82765e"
+  },
+  {
+    "file": "Stars/Star-7.bkr",
+    "blob": "fdbb30c9df8a76e9d0755b386963e6975d6a1717"
+  },
+  {
+    "file": "Stars/Star-N.bkr",
+    "blob": "204db42b8eadf2d859dd4b85bb0c165befa3337f"
+  },
+  {
+    "file": "Stars/Styled-Star.bkr",
+    "blob": "d7e3a9dffeea768481b4f9068517c9f18b8fe841"
+  },
+  {
+    "file": "Stars/Sunburst.bkr",
+    "blob": "91483e26d8b97a3fed65354670b2fd6e1989694a"
+  },
+  {
+    "file": "Stars/Topkapi-Star.bkr",
+    "blob": "731afd6743ea777b2dba7588f406eacc520d3354"
+  },
+  {
+    "file": "Stars/Yazd-Star.bkr",
+    "blob": "e083ef5c425a68a8f104a7ecd3b18221b68ea256"
+  },
+  {
+    "file": "Tiled Patterns/Hex-Flower.bkr",
+    "blob": "fea6d8d53847d2b176702ff9c67455dc0fc2533e"
+  },
+  {
+    "file": "Tiled Patterns/Hex-Tiled.bkr",
+    "blob": "95c4f20a92856983f46e9d7db69f4e71f4520f96"
+  },
+  {
+    "file": "Tiled Patterns/Moroccan-12-Dense.bkr",
+    "blob": "9e84753dec668e56d111cd886914379cf82f16ce"
+  },
+  {
+    "file": "Tiled Patterns/Moroccan-12-Tiled.bkr",
+    "blob": "57935be191c87b904b5b232e5bbc9b7ac18afdb2"
+  },
+  {
+    "file": "Tiled Patterns/Moroccan-12.bkr",
+    "blob": "84fb6d2f43ca907a355a6e53b764817d3748d940"
+  },
+  {
+    "file": "Tiled Patterns/Oct-Grid.bkr",
+    "blob": "53b48b9b840b26b5b42eaa2e2e1393bd0a3b4b99"
+  },
+  {
+    "file": "Tiled Patterns/Star-8-Tiled.bkr",
+    "blob": "51eaeadfb37303b54399b29f2c75d6a0d5db9d0c"
+  },
+  {
+    "file": "Tiled Patterns/Zellige.bkr",
+    "blob": "400b0eec055188594883abaefada03bb7968c1c0"
+  },
+  {
+    "file": "Weave/Mamluk-Border.bkr",
+    "blob": "6c5c2abbf3e94f7ef7858972216b2427a16ae9a1"
+  },
+  {
+    "file": "Weave/Weave-12.bkr",
+    "blob": "831638f2d36fb3dd2529cf52684c0ce4318fe5a9"
+  },
+  {
+    "file": "Weave/Weave-6.bkr",
+    "blob": "5d73b4d355d9db5bf310476bb8ed04d35e5d449d"
+  },
+  {
+    "file": "Weave/Weave-8.bkr",
+    "blob": "0a3d60765026a8fa8e0d2bba11705fa8a7ffaff0"
+  },
+  {
+    "file": "Weave/Weave-Border.bkr",
+    "blob": "d5f8c10c9ca65cfecadbcbd5610e0f41832d3713"
+  }
+]

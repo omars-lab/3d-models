@@ -63,6 +63,24 @@ NEW_NOTE_HAND_PART = (
     "wrong, and what to try next.\n"
 )
 NEW_STYLE_HAND_PART = "\n\n## Notes\n\nNothing written by hand yet.\n"
+NEW_LIBRARY_HAND_PART = "\n\n## Notes\n\nNothing written by hand yet.\n"
+
+# The bikar library beyond the constructions (plan step 5): folder under patterns/ -> family name.
+LIBRARY_FAMILIES = {
+    "Stars": "stars",
+    "Rosettes": "rosettes",
+    "Tiled Patterns": "tiled",
+    "Weave": "weave",
+    "Orbs": "orbs",
+    "Lego": "lego",
+    "Coupons": "coupons",
+}
+LIBRARY = CATALOG / "library"
+LIBRARY_MEDIA = MEDIA / "library"
+# Which version of each file its picture shows: a list of {"file", "blob"} records. A record, not a
+# {file: blob} map, because a file name holding "api" or "key" beside a hash reads to gitleaks as a secret.
+RENDERS = LIBRARY_MEDIA / "renders.json"
+PICTURE_WIDTH = 480
 
 # ---------------------------------------------------------------- bikar, read at a ref
 
@@ -118,6 +136,19 @@ class Bikar:
         names = [n for n in self.pattern_files() if belongs_to(n, cid)]
         first = [n for n in (f"{cid}.bkr", f"{cid}-coaster.bkr") if n in names]
         return first + [n for n in names if n not in first]
+
+    def library_files(self) -> list[str]:
+        """Every `.bkr` file directly in one of the library folders, as `<folder>/<name>`."""
+        out = []
+        for p in self.tree:
+            folder, _, name = p.removeprefix("patterns/").partition("/")
+            if p.startswith("patterns/") and folder in LIBRARY_FAMILIES and "/" not in name and name.endswith(".bkr"):
+                out.append(f"{folder}/{name}")
+        return sorted(out)
+
+    def blob(self, path: str) -> str:
+        """The git blob id of one file at the ref: what a picture was drawn from."""
+        return self._git("rev-parse", f"{self.ref}:{path}").decode().strip()
 
     def roster(self) -> dict[str, dict[str, str]]:
         """Coaster Lab roster, keyed by `.bkr` file name: the thumbnail id and the one-line blurb."""
@@ -473,7 +504,26 @@ def note_top(b: Built, style_what: dict[str, str], roster: dict, plates: dict, p
     out = [frontmatter(props).rstrip("\n"), ""]
     heading = f"# {row.title_md}" + (f" ({row.catalog_id})" if row.catalog_id else "")
     out += [heading, ""]
+    out += _intro_lines(b, video)
+    if b.styles:
+        out += _picture_lines(b, style_what, roster)
+    if not row.no_piece:
+        out += ["## Checks against the video", ""]
+        out.append("From the [constructions ledger](../../constructions/ledger.md).")
+        out.append("")
+        out += check_lines(row)
+        out.append("")
+    if b.styles:
+        out += _plate_lines(b, plates)
+        out += _print_lines(b, prints)
+    return "\n".join(out)
+
+
+def _intro_lines(b: Built, video: str) -> list[str]:
+    """The note's opening paragraph: where it was rebuilt from and how far it has got."""
+    row = b.row
     who = f"[{row.creator}'s video]({video})" if row.creator else f"[the video]({video})"
+    out: list[str] = []
     if row.no_piece:
         out.append(f"Rebuilt from {who}. The video shows a way of drawing, not a finished piece, so there is nothing")
         out.append("to make from it: the ledger marks it \"no piece by design\".")
@@ -486,64 +536,67 @@ def note_top(b: Built, style_what: dict[str, str], roster: dict, plates: dict, p
         cat = f" Its catalog id is {row.catalog_id}." if row.catalog_id else ""
         out.append(f"Rebuilt step by step from {who}, written in naqsh and made {made}.{cat}")
     out.append("")
+    return out
 
-    if b.styles:
-        out += ["## Pictures", ""]
-        out.append("One heading per style, so each picture has its own link: the note's link plus the style")
-        out.append(f"name, for example #{b.styles[0]}.")
-        out.append("")
-        for s in b.styles:
-            out += [f"### {s}", ""]
-            fname = next(f for f in b.files if style_of(row.id, f) == s)
-            what = style_what.get(s) or roster.get(fname, {}).get("blurb", "")
-            if what:
-                out += [what[0].upper() + what[1:] + ("" if what.endswith(".") else "."), ""]
-            pic = b.pictures.get(s)
-            if pic:
-                out += [f"![{s.replace('-', ' ')}]({pic.rel})", ""]
-            else:
-                out += ["No picture yet: Coaster Lab has no thumbnail for this file.", ""]
 
-    if not row.no_piece:
-        out += ["## Checks against the video", ""]
-        out.append("From the [constructions ledger](../../constructions/ledger.md).")
-        out.append("")
-        out += check_lines(row)
-        out.append("")
-
-    if b.styles:
-        out += ["## Coaster styles and plates", ""]
-        on: dict[str, list[str]] = {}
-        for f in b.files:
-            for plate in plates.get(f, []):
-                s = style_of(row.id, f)
-                if s and s not in on.setdefault(plate, []):
-                    on[plate].append(s)
-        if on:
-            out += ["| Plate | Styles of this pattern on it |", "|---|---|"]
-            for plate in sorted(on):
-                page = PLATES / f"{plate}.md"
-                link = f"../../design/plates/{plate}.md" if page.exists() else f"../../design/plates/{plate}.yaml"
-                out.append(f"| [{plate}]({link}) | {', '.join(s.replace('-', ' ') for s in on[plate])} |")
+def _picture_lines(b: Built, style_what: dict[str, str], roster: dict) -> list[str]:
+    """The Pictures section: a heading, a sentence and a picture per coaster style."""
+    out = ["## Pictures", ""]
+    out.append("One heading per style, so each picture has its own link: the note's link plus the style")
+    out.append(f"name, for example #{b.styles[0]}.")
+    out.append("")
+    for s in b.styles:
+        out += [f"### {s}", ""]
+        fname = next(f for f in b.files if style_of(b.row.id, f) == s)
+        what = style_what.get(s) or roster.get(fname, {}).get("blurb", "")
+        if what:
+            out += [what[0].upper() + what[1:] + ("" if what.endswith(".") else "."), ""]
+        pic = b.pictures.get(s)
+        if pic:
+            out += [f"![{s.replace('-', ' ')}]({pic.rel})", ""]
         else:
-            out.append("No plate uses this pattern yet.")
-        out.append("")
+            out += ["No picture yet: Coaster Lab has no thumbnail for this file.", ""]
+    return out
 
-        out += ["## Prints", ""]
-        mine = [o for o in prints if o.file in b.files]
-        if mine:
-            out += ["| Print | Piece | Verdict | What was seen |", "|---|---|---|---|"]
-            for o in mine:
-                s = style_of(row.id, o.file) or ""
-                seen = "; ".join(o.notes) or "nothing written yet"
-                out.append(
-                    f"| [{o.run}](../../prints/{o.run}/index.md) | {md_cell(piece_words(o, s))} "
-                    f"| {o.verdict or 'not judged'} | {md_cell(seen)} |"
-                )
-        else:
-            out.append("No print record names this pattern yet.")
-        out.append("")
-    return "\n".join(out)
+
+def _plate_lines(b: Built, plates: dict) -> list[str]:
+    """The plates section: which plate carries which styles of this pattern."""
+    out = ["## Coaster styles and plates", ""]
+    on: dict[str, list[str]] = {}
+    for f in b.files:
+        for plate in plates.get(f, []):
+            s = style_of(b.row.id, f)
+            if s and s not in on.setdefault(plate, []):
+                on[plate].append(s)
+    if on:
+        out += ["| Plate | Styles of this pattern on it |", "|---|---|"]
+        for plate in sorted(on):
+            page = PLATES / f"{plate}.md"
+            link = f"../../design/plates/{plate}.md" if page.exists() else f"../../design/plates/{plate}.yaml"
+            out.append(f"| [{plate}]({link}) | {', '.join(s.replace('-', ' ') for s in on[plate])} |")
+    else:
+        out.append("No plate uses this pattern yet.")
+    out.append("")
+    return out
+
+
+def _print_lines(b: Built, prints: list[PrintObject]) -> list[str]:
+    """The Prints section: every printed piece of this pattern and its verdict."""
+    out = ["## Prints", ""]
+    mine = [o for o in prints if o.file in b.files]
+    if mine:
+        out += ["| Print | Piece | Verdict | What was seen |", "|---|---|---|---|"]
+        for o in mine:
+            s = style_of(b.row.id, o.file) or ""
+            seen = "; ".join(o.notes) or "nothing written yet"
+            out.append(
+                f"| [{o.run}](../../prints/{o.run}/index.md) | {md_cell(piece_words(o, s))} "
+                f"| {o.verdict or 'not judged'} | {md_cell(seen)} |"
+            )
+    else:
+        out.append("No print record names this pattern yet.")
+    out.append("")
+    return out
 
 
 def planned_top(p: Planned, path: Path) -> str:
@@ -618,6 +671,241 @@ def assemble(path: Path, top: str, new_hand: str) -> str:
     return top.rstrip("\n") + "\n\n" + MARKER + hand
 
 
+# ---------------------------------------------------------------- the bikar library (plan step 5)
+
+
+@dataclass
+class LibraryEntry:
+    file: str  # `<folder>/<name>.bkr`, under bikar's patterns/
+    title: str
+    header: list[str]  # the comment block the file opens with, without the `#`
+    knobs: list[tuple[str, str, str, bool]]  # name, default, range, advanced
+    path: Path
+    picture: Path | None
+    status: str
+
+    @property
+    def folder(self) -> str:
+        return self.file.split("/", 1)[0]
+
+    @property
+    def id(self) -> str:
+        return self.file.removesuffix(".bkr")
+
+
+PARAM = re.compile(r"^param\s+(\w+)\s*=\s*(\S+)(?:\s+range\s+(\S+))?(.*)$")
+
+
+def read_header(text: str) -> list[str]:
+    """The comment lines a `.bkr` file opens with, `#` stripped; stops at the first other line."""
+    out: list[str] = []
+    for line in text.splitlines():
+        if not line.startswith("#"):
+            break
+        out.append(line[1:].removeprefix(" ").rstrip())
+    while out and not out[-1]:
+        out.pop()
+    return out
+
+
+def read_knobs(text: str) -> list[tuple[str, str, str, bool]]:
+    """Each `param` line: name, default, range (or ""), and whether it is marked advanced."""
+    out = []
+    for line in text.splitlines():
+        m = PARAM.match(line.strip())
+        if m:
+            out.append((m.group(1), m.group(2), m.group(3) or "", "advanced" in m.group(4).split()))
+    return out
+
+
+def library_title(file: str, header: list[str]) -> str:
+    """The file's own first comment line, cut at a dash; the file name when that line is missing or long."""
+    first = header[0] if header else ""
+    first = re.split(r"\s+[—–-]\s+", first, maxsplit=1)[0].strip().rstrip(".:")
+    if not first or len(first) > 60:
+        return Path(file).stem.replace("-", " ")
+    return first
+
+
+def library_picture(file: str) -> Path:
+    folder, name = file.split("/", 1)
+    return LIBRARY_MEDIA / LIBRARY_FAMILIES[folder] / f"{Path(name).stem}.webp"
+
+
+def library_printed() -> set[str]:
+    """Library files a print record names, as `<folder>/<name>.bkr`."""
+    out: set[str] = set()
+    for idx in sorted(PRINTS.glob("*/index.md")):
+        m = re.match(r"^---\n(.*?)\n---\n", idx.read_text(encoding="utf-8"), flags=re.S)
+        front = (yaml.safe_load(m.group(1)) or {}) if m else {}
+        for obj in front.get("objects") or []:
+            src = str(obj.get("source") or "")
+            if src.startswith("bikar:patterns/") and not src.startswith(f"bikar:{CONSTRUCTIONS}"):
+                out.add(src.removeprefix("bikar:patterns/"))
+    return out
+
+
+def read_renders() -> dict[str, str]:
+    rows = json.loads(RENDERS.read_text(encoding="utf-8")) if RENDERS.exists() else []
+    return {r["file"]: r["blob"] for r in rows}
+
+
+def write_renders(renders: dict[str, str]) -> None:
+    rows = [{"file": f, "blob": b} for f, b in sorted(renders.items())]
+    RENDERS.parent.mkdir(parents=True, exist_ok=True)
+    RENDERS.write_text(json.dumps(rows, indent=2) + "\n", encoding="utf-8")
+
+
+def library_entries(bikar: Bikar, warnings: list[str]) -> list[LibraryEntry]:
+    printed = library_printed()
+    renders = read_renders()
+    out: list[LibraryEntry] = []
+    for f in bikar.library_files():
+        text = bikar.read(f"patterns/{f}").decode()
+        header = read_header(text)
+        folder = f.split("/", 1)[0]
+        by_id = existing_notes(LIBRARY / LIBRARY_FAMILIES[folder], "id") if (LIBRARY / LIBRARY_FAMILIES[folder]).exists() else {}
+        fid = f.removesuffix(".bkr")
+        path = by_id.get(fid, LIBRARY / LIBRARY_FAMILIES[folder] / f"{slug(Path(f).stem)}.md")
+        pic = library_picture(f)
+        if pic.exists() and renders.get(f) != bikar.blob(f"patterns/{f}"):
+            warnings.append(f"{f}: its picture was drawn from an older version of the file; run render-library")
+        out.append(LibraryEntry(
+            f, library_title(f, header), header, read_knobs(text), path,
+            pic if pic.exists() else None, "printed" if f in printed else "built",
+        ))
+    return out
+
+
+def _knob_lines(knobs: list[tuple[str, str, str, bool]]) -> list[str]:
+    if not knobs:
+        return ["The file has no knobs: it draws one fixed pattern."]
+    out = ["| Knob | Default | Range |", "|---|---|---|"]
+    for name, default, rng, advanced in knobs:
+        out.append(f"| `{name}`{' (advanced)' if advanced else ''} | {md_cell(default)} | {md_cell(rng) or 'any'} |")
+    return out
+
+
+def library_top(e: LibraryEntry) -> str:
+    family = LIBRARY_FAMILIES[e.folder]
+    props: list[tuple[str, object]] = [
+        ("id", e.id),
+        ("aliases", [Path(e.file).stem]),
+        ("title", e.title),
+        ("family", family),
+        ("status", e.status),
+        ("bikar files", [f"patterns/{e.file}"]),
+        ("tags", ["library", family]),
+    ]
+    out = [frontmatter(props).rstrip("\n"), "", f"# {e.title}", ""]
+    out += [f"From bikar's pattern library: `bikar:patterns/{e.file}`, in the {family} family.", ""]
+    if e.picture:
+        rel = os.path.relpath(e.picture, e.path.parent)
+        what = "The orb seen straight on to one face." if e.folder == "Orbs" else "The file drawn at its default knobs."
+        out += [f"![{Path(e.file).stem}]({rel})", "", what, ""]
+    else:
+        out += ["No picture: bikar draws no flat picture of this file at its default knobs. Some orbs, lego pieces and coupons exist only as solids.", ""]
+    out += ["## What the file says", ""]
+    out += ["```text", *e.header, "```"] if e.header else ["The file opens with no comment."]
+    out += ["", "## Knobs", "", *_knob_lines(e.knobs), ""]
+    return "\n".join(out)
+
+
+def _library_notes(bikar: Bikar, out: dict[Path, bytes], warnings: list[str]) -> list[LibraryEntry]:
+    entries = library_entries(bikar, warnings)
+    for e in entries:
+        out[e.path] = assemble(e.path, library_top(e), NEW_LIBRARY_HAND_PART).encode()
+    return entries
+
+
+def library_index_lines(entries: list[LibraryEntry]) -> list[str]:
+    out = [
+        "",
+        f"## The bikar library ({len(entries)})",
+        "",
+        "The patterns bikar has beyond the video rebuilds, one note per file, grouped by family. Their",
+        "pictures are drawn by `catalog.py render-library`.",
+    ]
+    for folder, family in LIBRARY_FAMILIES.items():
+        members = [e for e in entries if e.folder == folder]
+        if not members:
+            continue
+        out += ["", f"### {folder} ({len(members)})", "", "| Picture | Pattern | File | Status |", "|---|---|---|---|"]
+        for e in members:
+            pic = f"![{Path(e.file).stem}\\|96]({os.path.relpath(e.picture, CATALOG)})" if e.picture else ""
+            note = os.path.relpath(e.path, CATALOG)
+            out.append(f"| {pic} | [{md_cell(e.title)}]({note}) | `{Path(e.file).name}` | {e.status} |")
+    return out
+
+
+def _drawn(svg: str) -> bool:
+    """An SVG with something on it besides the background rectangle."""
+    return any(tag in svg for tag in ("<path", "<polygon", "<polyline", "<circle", "<line", "<ellipse"))
+
+
+def _render_svg(cli: str, src: Path, folder: str, tmp: Path) -> str | None:
+    """The flat drawing of one file (for an orb, the view straight on to a face), or None when nothing is drawn."""
+    if folder == "Orbs":
+        views = tmp / "views"
+        r = subprocess.run(["node", cli, "render", str(src), "--format", "views", "-o", str(views)],
+                           capture_output=True, timeout=300)
+        svgs = sorted(views.glob("*.svg"), key=lambda p: ".face-" not in p.name) if r.returncode == 0 else []
+        svg = svgs[0].read_text(encoding="utf-8") if svgs else ""
+    else:
+        dest = tmp / "out.svg"
+        r = subprocess.run(["node", cli, "render", str(src), "-o", str(dest)], capture_output=True, timeout=300)
+        svg = dest.read_text(encoding="utf-8") if r.returncode == 0 and dest.exists() else ""
+    return svg if _drawn(svg) else None
+
+
+def _draw(bikar: Bikar, file: str, cli: str, media: Path) -> bool:
+    """Draw one library file at the ref into `media` as a small WebP; False when it draws nothing flat."""
+    import tempfile
+
+    with tempfile.TemporaryDirectory() as t:
+        tmp = Path(t)
+        src = tmp / Path(file).name
+        src.write_bytes(bikar.read(f"patterns/{file}"))
+        svg = _render_svg(cli, src, file.split("/", 1)[0], tmp)
+        if svg is None:
+            return False
+        (tmp / "in.svg").write_text(svg, encoding="utf-8")
+        png = tmp / "out.png"
+        # Drawn large, the white margin cut away, then shrunk: a small shape on a wide canvas still fills the picture.
+        subprocess.run(["rsvg-convert", "-w", str(PICTURE_WIDTH * 3), "-b", "white", str(tmp / "in.svg"), "-o", str(png)],
+                       check=True, timeout=120)
+        media.parent.mkdir(parents=True, exist_ok=True)
+        size = f"{PICTURE_WIDTH - 24}x{PICTURE_WIDTH - 24}"
+        subprocess.run(["magick", str(png), "-trim", "+repage", "-resize", size, "-bordercolor", "white", "-border", "12",
+                        "-strip", "-quality", "82", str(media)], check=True, timeout=120)
+    return True
+
+
+def render_library(bikar: Bikar, cli: str, only: list[str], force: bool) -> int:
+    """Draw a picture for each library file whose source changed since its picture was drawn."""
+    renders = read_renders()
+    drawn = skipped = blank = 0
+    for f in bikar.library_files():
+        if only and not any(o.lower() in f.lower() for o in only):
+            continue
+        blob, media = bikar.blob(f"patterns/{f}"), library_picture(f)
+        if not force and media.exists() and renders.get(f) == blob:
+            skipped += 1
+            continue
+        if _draw(bikar, f, cli, media):
+            renders[f] = blob
+            drawn += 1
+            print(f"catalog: drew {media.relative_to(ROOT)}")
+        else:
+            renders.pop(f, None)
+            media.unlink(missing_ok=True)
+            blank += 1
+            print(f"catalog: {f} draws nothing flat; no picture")
+    write_renders(renders)
+    print(f"catalog: {drawn} drawn, {skipped} already current, {blank} with nothing flat to draw (bikar {bikar.ref})")
+    return 0
+
+
 # ---------------------------------------------------------------- the run
 
 
@@ -649,30 +937,59 @@ def build(bikar: Bikar) -> tuple[dict[Path, bytes], list[str], list[str]]:
         if path in seen_paths:
             sys.exit(f"catalog: two ledger rows map to {path.relative_to(ROOT)}")
         seen_paths.add(path)
-        pictures: dict[str, Picture] = {}
-        for s in styles_here:
-            fname = next(f for f in files if style_of(row.id, f) == s)
-            entry = roster.get(fname)
-            thumb = f"{THUMBS}{entry['id']}.png" if entry else None
-            if thumb and thumb in bikar.tree:
-                media = MEDIA / row.id / f"{row.id}-{s}.png"
-                pictures[s] = Picture(s, f"../media/{row.id}/{media.name}", bikar.read(thumb))
-                out[media] = pictures[s].data
-            else:
-                warnings.append(f"{row.id}: no Coaster Lab picture for {fname}")
-        if row.no_piece:
-            status = "built"  # nothing to make, and nothing left to do: the status list has no better word
-        elif not row.migrated:
-            status = "rebuilding"
-        elif any(o.file in files for o in prints):
-            status = "printed"
-        else:
-            status = "built"
-        b = Built(row, path, files, styles_here, pictures, status)
+        pictures = _row_pictures(row, files, styles_here, roster, bikar, out, warnings)
+        b = Built(row, path, files, styles_here, pictures, _row_status(row, files, prints))
         built.append(b)
         out[path] = assemble(path, note_top(b, style_what, roster, plates, prints), NEW_NOTE_HAND_PART).encode()
 
     ledger_ids = {r.id for r in rows}
+    planned = _planned_notes(ledger_ids, by_id, seen_paths, out, warnings)
+
+    known = ledger_ids | {p.id for p, _ in planned}
+    for nid, path in by_id.items():
+        if nid not in known:
+            warnings.append(f"{path.relative_to(ROOT)}: id {nid} is not in the ledger or the planned list (left as it is)")
+
+    all_styles, by_style = _style_notes(built, style_what, style_order, roster, out)
+    library = _library_notes(bikar, out, warnings)
+    out[CATALOG / "index.md"] = index_page(built, planned, all_styles, by_style, library).encode()
+    return out, warnings, unclaimed(bikar.pattern_files(), known)
+
+
+def _row_pictures(
+    row: Row, files: list[str], styles_here: list[str], roster: dict, bikar: Bikar,
+    out: dict[Path, bytes], warnings: list[str],
+) -> dict[str, Picture]:
+    """One Coaster Lab picture per style of this row, copied into the media folder; a warning for each missing one."""
+    pictures: dict[str, Picture] = {}
+    for s in styles_here:
+        fname = next(f for f in files if style_of(row.id, f) == s)
+        entry = roster.get(fname)
+        thumb = f"{THUMBS}{entry['id']}.png" if entry else None
+        if thumb and thumb in bikar.tree:
+            media = MEDIA / row.id / f"{row.id}-{s}.png"
+            pictures[s] = Picture(s, f"../media/{row.id}/{media.name}", bikar.read(thumb))
+            out[media] = pictures[s].data
+        else:
+            warnings.append(f"{row.id}: no Coaster Lab picture for {fname}")
+    return pictures
+
+
+def _row_status(row: Row, files: list[str], prints: list[PrintObject]) -> str:
+    if row.no_piece:
+        return "built"  # nothing to make, and nothing left to do: the status list has no better word
+    if not row.migrated:
+        return "rebuilding"
+    if any(o.file in files for o in prints):
+        return "printed"
+    return "built"
+
+
+def _planned_notes(
+    ledger_ids: set[str], by_id: dict[str, Path], seen_paths: set[Path],
+    out: dict[Path, bytes], warnings: list[str],
+) -> list[tuple[Planned, Path]]:
+    """A note for each planned pattern not yet in the ledger."""
     planned: list[tuple[Planned, Path]] = []
     for p in read_planned():
         if p.id in ledger_ids:
@@ -684,13 +1001,14 @@ def build(bikar: Bikar) -> tuple[dict[Path, bytes], list[str], list[str]]:
         seen_paths.add(path)
         planned.append((p, path))
         out[path] = assemble(path, planned_top(p, path), NEW_NOTE_HAND_PART).encode()
+    return planned
 
-    known = ledger_ids | {p.id for p, _ in planned}
-    for nid, path in by_id.items():
-        if nid not in known:
-            warnings.append(f"{path.relative_to(ROOT)}: id {nid} is not in the ledger or the planned list (left as it is)")
 
-    # style notes
+def _style_notes(
+    built: list[Built], style_what: dict[str, str], style_order: dict[str, int], roster: dict,
+    out: dict[Path, bytes],
+) -> tuple[list[str], dict[str, list[Built]]]:
+    """A note per style, listing the patterns drawn in it."""
     by_style: dict[str, list[Built]] = {}
     for b in built:
         for s in b.styles:
@@ -700,9 +1018,7 @@ def build(bikar: Bikar) -> tuple[dict[Path, bytes], list[str], list[str]]:
     for s in all_styles:
         path = style_paths.get(s, STYLES / f"{s}.md")
         out[path] = assemble(path, style_top(s, style_what, by_style.get(s, []), roster), NEW_STYLE_HAND_PART).encode()
-
-    out[CATALOG / "index.md"] = index_page(built, planned, all_styles, by_style).encode()
-    return out, warnings, unclaimed(bikar.pattern_files(), known)
+    return all_styles, by_style
 
 
 def style_top(s: str, style_what: dict[str, str], members: list[Built], roster: dict) -> str:
@@ -744,7 +1060,8 @@ def style_top(s: str, style_what: dict[str, str], members: list[Built], roster: 
 
 
 def index_page(
-    built: list[Built], planned: list[tuple[Planned, Path]], all_styles: list[str], by_style: dict[str, list[Built]]
+    built: list[Built], planned: list[tuple[Planned, Path]], all_styles: list[str], by_style: dict[str, list[Built]],
+    library: list[LibraryEntry],
 ) -> str:
     def cs_key(b: Built) -> tuple[int, str]:
         m = re.match(r"CS-(\d+)$", b.row.catalog_id)
@@ -808,6 +1125,7 @@ def index_page(
     out += ["", "## Coaster styles", "", "| Style | Patterns made in it |", "|---|---|"]
     for s in all_styles:
         out.append(f"| [{s}](styles/{s}.md) | {len(by_style.get(s, []))} |")
+    out += library_index_lines(library)
     out.append("")
     return "\n".join(out)
 
@@ -816,7 +1134,8 @@ def self_test(real: Bikar) -> int:
     """The by-design failure: a bikar pattern file with no ledger row and no planned entry.
 
     Checked on a throwaway commit that is bikar's real tree plus one such file, run through the
-    real build, so the check is proven where it runs and not on a toy tree. Nothing is written.
+    real build, so the check is proven where it runs and not on a toy tree. The same commit adds a
+    file to a library family, which must get a note of its own. Nothing is written.
     """
     import tempfile
 
@@ -831,6 +1150,7 @@ def self_test(real: Bikar) -> int:
     expect("naming rule", unclaimed(files, {"abc", "Ln-s5FzLGms"}), ["abcd.bkr", "Ln-other.bkr"])
 
     orphan = "zzSelfTest000-coaster.bkr"
+    star = "Zz-Self-Test-Star.bkr"
     with tempfile.TemporaryDirectory() as tmp:
         env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
 
@@ -847,6 +1167,7 @@ def self_test(real: Bikar) -> int:
         git("read-tree", real._git("rev-parse", f"{real.ref}^{{tree}}").decode().strip(), index=idx)
         blob = git("hash-object", "-w", "--stdin", data=b"// a pattern no ledger row claims\n")
         git("update-index", "--add", "--cacheinfo", f"100644,{blob},{CONSTRUCTIONS}{orphan}", index=idx)
+        git("update-index", "--add", "--cacheinfo", f"100644,{blob},patterns/Stars/{star}", index=idx)
         tree = git("write-tree", index=idx)
         commit = git(
             "-c", "user.name=self-test", "-c", "user.email=self-test@localhost",
@@ -856,14 +1177,16 @@ def self_test(real: Bikar) -> int:
 
         _, _, real_orphans = build(real)
         expect(f"bikar {real.ref} as it is", real_orphans, [])
-        _, _, orphans = build(Bikar(Path(tmp), "main"))
+        out, _, orphans = build(Bikar(Path(tmp), "main"))
         expect("bikar plus a file with no note", orphans, [orphan])
+        expect("a new library file gets a note", LIBRARY / "stars" / "zz-self-test-star.md" in out, True)
 
     for f in failures:
         print(f"catalog self-test: FAIL — {f}")
     if failures:
         return 1
-    print("catalog self-test: ok — a bikar pattern file with no ledger row or planned entry is named")
+    print("catalog self-test: ok — a bikar pattern file with no ledger row or planned entry is named, "
+          "and a new library file gets a note")
     return 0
 
 
@@ -909,6 +1232,12 @@ def main() -> int:
     np_ = sub.add_parser("note", help="print the catalog note link for each piece, pattern id or plate recipe")
     np_.add_argument("names", nargs="+", help="a .bkr file name or path, a pattern id, or a plate .yaml")
     np_.add_argument("--from", dest="base", default=".", help="write links relative to this folder (default: here)")
+    rp = sub.add_parser("render-library", help="draw a picture for each library file whose source changed")
+    rp.add_argument("only", nargs="*", help="only files whose path contains one of these (default: all)")
+    rp.add_argument("--force", action="store_true", help="draw again even when the picture is current")
+    rp.add_argument("--cli", help="bikar's built CLI (default: <bikar>/packages/cli/dist/index.js)")
+    rp.add_argument("--bikar-dir", default=argparse.SUPPRESS, help="as above, given after `render-library`")
+    rp.add_argument("--bikar-ref", default=argparse.SUPPRESS, help="as above, given after `render-library`")
     args = ap.parse_args()
 
     if args.cmd == "note":
@@ -916,8 +1245,16 @@ def main() -> int:
     bikar = Bikar(bikar_dir(args.bikar_dir), args.bikar_ref)
     if args.self_test:
         return self_test(bikar)
+    if args.cmd == "render-library":
+        cli = args.cli or str(bikar.repo / "packages" / "cli" / "dist" / "index.js")
+        return render_library(bikar, cli, args.only, args.force)
     if args.cmd != "sync":
         ap.error("say `sync` or `--self-test`")
+    return run_sync(bikar, args.check)
+
+
+def run_sync(bikar: Bikar, check: bool) -> int:
+    """Write the catalog (or, with `check`, only say what is out of date)."""
     out, warnings, orphans = build(bikar)
     for w in warnings:
         print(f"catalog: note: {w}")
@@ -929,7 +1266,7 @@ def main() -> int:
         )
 
     stale = [p for p, data in out.items() if not p.exists() or p.read_bytes() != data]
-    if args.check:
+    if check:
         for p in stale:
             print(f"catalog: out of date: {p.relative_to(ROOT)}")
         if stale or orphans:

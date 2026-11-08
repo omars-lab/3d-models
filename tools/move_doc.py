@@ -571,13 +571,11 @@ def sibling_refs(root: Path, moves: list[Move]) -> tuple[list[str], list[str]]:
     return searched, hits
 
 
-def plan_run(root: Path, moves: list[Move], with_siblings: bool = True) -> tuple[Report, dict[str, str]]:
-    mapper = Mapper(root, moves)
+def _rewrite_tracked(root: Path, mapper: Mapper, files: list[str], report: Report) -> dict[str, str]:
+    """Rewrite every tracked file that names a moved path; note what is left behind in each."""
     rooted = rooted_pattern(mapper)
-    files = tracked(root)
-    report = Report(moves)
+    names = {posixpath.basename(m.old) for m in mapper.moves if not m.is_dir}
     new_texts: dict[str, str] = {}
-
     for rel in candidates(root, mapper, files):
         text = (root / rel).read_text(encoding="utf-8", errors="surrogateescape")
         if is_comment_file(rel):
@@ -589,10 +587,14 @@ def plan_run(root: Path, moves: list[Move], with_siblings: bool = True) -> tuple
             new_texts[rel] = new
         why = "research prose, kept as written" if rel.startswith(RESEARCH) else "not tied to this repo"
         report.left += leftovers(rel, new, mapper, why)
-        names = {posixpath.basename(m.old) for m in moves if not m.is_dir}
         report.name_only += sum(len(re.findall(r"(?<![\w/.(-])" + re.escape(nm) + r"(?![\w-])", new))
                                 for nm in names)
+    return new_texts
 
+
+def _untracked_leftovers(root: Path, mapper: Mapper) -> list[Leftover]:
+    """Another session's untracked files are never edited, only reported."""
+    out: list[Leftover] = []
     for rel in untracked(root):
         p = root / rel
         if not p.is_file() or p.stat().st_size > 2_000_000:
@@ -601,28 +603,48 @@ def plan_run(root: Path, moves: list[Move], with_siblings: bool = True) -> tuple
             text = p.read_text(encoding="utf-8")
         except UnicodeDecodeError:
             continue
-        report.left += leftovers(rel, text, mapper, "untracked — another session's file, not edited")
+        out += leftovers(rel, text, mapper, "untracked — another session's file, not edited")
+    return out
 
-    # A bare [[name]] finds a note by its file name; that holds only while the
-    # name is unique in the vault.
+
+def _name_collisions(files: list[str], mapper: Mapper) -> list[str]:
+    """A bare [[name]] finds a note by its file name; that holds only while the
+    name is unique in the vault."""
     vault = [f for f in files if f.startswith("docs/")]
     after = Counter(posixpath.basename(mapper.map(f) or f).lower() for f in vault)
-    for m in moves:
+    out = []
+    for m in mapper.moves:
         if not m.is_dir and m.new.endswith(".md") and after[posixpath.basename(m.new).lower()] > 1:
             twins = [f for f in vault if posixpath.basename(mapper.map(f) or f).lower()
                      == posixpath.basename(m.new).lower()]
-            report.collisions.append(f"{posixpath.basename(m.new)}: {len(twins)} notes share this name "
-                                     f"({', '.join(twins)}) — a bare [[wikilink]] to it is ambiguous")
+            out.append(f"{posixpath.basename(m.new)}: {len(twins)} notes share this name "
+                       f"({', '.join(twins)}) — a bare [[wikilink]] to it is ambiguous")
+    return out
 
+
+def _base_warnings(root: Path, files: list[str], moves: list[Move]) -> list[str]:
+    """Obsidian bases that would lose a moved note: keyed on the docs root, or naming it by path."""
+    out = []
     for rel in files:
         if rel.startswith(BASES) and rel.endswith(".base"):
             text = (root / rel).read_text(encoding="utf-8")
             if 'file.path.contains("/")' in text:
-                report.base_warnings.append(f"{rel}: keys on a note sitting at the docs root "
-                                            '(file.path.contains("/")) — moved notes drop out of it')
+                out.append(f"{rel}: keys on a note sitting at the docs root "
+                           '(file.path.contains("/")) — moved notes drop out of it')
             for m in moves:
                 if m.old[len("docs/"):] in text:
-                    report.base_warnings.append(f"{rel}: names {m.old[len('docs/'):]} by path")
+                    out.append(f"{rel}: names {m.old[len('docs/'):]} by path")
+    return out
+
+
+def plan_run(root: Path, moves: list[Move], with_siblings: bool = True) -> tuple[Report, dict[str, str]]:
+    mapper = Mapper(root, moves)
+    files = tracked(root)
+    report = Report(moves)
+    new_texts = _rewrite_tracked(root, mapper, files, report)
+    report.left += _untracked_leftovers(root, mapper)
+    report.collisions = _name_collisions(files, mapper)
+    report.base_warnings = _base_warnings(root, files, moves)
 
     touched = set(new_texts) | {m.old for m in moves}
     status = git(root, "status", "--porcelain", "--", *sorted(touched)) if touched else ""
@@ -649,13 +671,28 @@ def apply(root: Path, moves: list[Move], new_texts: dict[str, str]) -> list[str]
 
 
 def summary(report: Report, dry: bool) -> str:
-    out = []
+    out = _move_lines(report, dry) + _change_lines(report, dry) + _leftover_lines(report)
+    if USE_CASES in report.changes:
+        out.append("next: python3 .claude/skills/maintain-use-cases/validate.py --refresh "
+                   "(the use-case map changed), then make validate")
+    elif not dry:
+        out.append("next: make validate")
+    return "\n".join(out)
+
+
+def _move_lines(report: Report, dry: bool) -> list[str]:
+    """What moved (or would): a count by kind, then each move."""
     kinds = Counter(m.why for m in report.moves)
-    out.append(("would move" if dry else "moved") +
-               f": {kinds['asked']} note(s), {kinds['comments']} comment file(s), "
-               f"{kinds['pictures']} picture folder(s)")
+    out = [("would move" if dry else "moved") +
+           f": {kinds['asked']} note(s), {kinds['comments']} comment file(s), "
+           f"{kinds['pictures']} picture folder(s)"]
     for m in report.moves:
         out.append(f"  {m.old} -> {m.new}" + ("" if m.why == "asked" else f"   ({m.why})"))
+    return out
+
+
+def _change_lines(report: Report, dry: bool) -> list[str]:
+    """What was rewritten (or would be): a total, a line per kind of reference, files per area."""
     by = defaultdict(Counter)
     files_by = defaultdict(set)
     for rel, changes in report.changes.items():
@@ -666,13 +703,19 @@ def summary(report: Report, dry: bool) -> str:
               "wikilink": "path wikilinks", "path": "repo paths (docs/<old>)",
               "relative": "doc-relative backticked paths"}
     total = sum(len(c) for c in report.changes.values())
-    out.append(("would rewrite" if dry else "rewrote") +
-               f": {total} reference(s) in {len(report.changes)} file(s)")
+    out = [("would rewrite" if dry else "rewrote") +
+           f": {total} reference(s) in {len(report.changes)} file(s)"]
     for kind in ("link-in", "link-out", "wikilink", "path", "relative"):
         if by[kind]:
             parts = ", ".join(f"{a} {n}" for a, n in sorted(by[kind].items()))
             out.append(f"  {labels[kind]}: {sum(by[kind].values())}  ({parts})")
     out.append("  files per area: " + ", ".join(f"{a} {len(s)}" for a, s in sorted(files_by.items())))
+    return out
+
+
+def _leftover_lines(report: Report) -> list[str]:
+    """What was found and left alone: name-only mentions, unrewritten references, clashes, views, siblings."""
+    out = []
     if report.name_only:
         out.append(f"left alone: {report.name_only} mention(s) by file name only — a name still finds the note")
     groups = defaultdict(list)
@@ -691,12 +734,7 @@ def summary(report: Report, dry: bool) -> str:
         out.append(f"  references there: {len(report.sibling_refs)}")
         for s in report.sibling_refs:
             out.append(f"  {s}")
-    if USE_CASES in report.changes:
-        out.append("next: python3 .claude/skills/maintain-use-cases/validate.py --refresh "
-                   "(the use-case map changed), then make validate")
-    elif not dry:
-        out.append("next: make validate")
-    return "\n".join(out)
+    return out
 
 
 # --- self-test ------------------------------------------------------------------

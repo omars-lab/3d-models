@@ -18,9 +18,6 @@
   ".claude/gates/counts_gate.py::enumerations_in": [
    13
   ],
-  ".claude/gates/doc_pointers.py::resolve_under": [
-   14
-  ],
   ".claude/gates/doc_pointers.py::run": [
    11
   ],
@@ -42,20 +39,11 @@
   ".claude/gates/plates_gate.py::check_maturity": [
    11
   ],
-  ".claude/gates/plates_gate.py::check_print_logs": [
-   17
-  ],
-  ".claude/gates/plates_gate.py::id_findings": [
-   15
-  ],
   ".claude/gates/plates_gate.py::self_test": [
    19
   ],
   ".claude/gates/site_graph.py::self_test": [
    21
-  ],
-  ".claude/hooks/delegate-nudge.py::_apply_record": [
-   15
   ],
   ".claude/skills/color-themes/scripts/after_print.py::self_test": [
    14
@@ -65,9 +53,6 @@
   ],
   ".claude/skills/color-themes/scripts/theme_plates.py::self_test": [
    22
-  ],
-  ".claude/skills/color-themes/scripts/themes.py::check_one": [
-   15
   ],
   ".claude/skills/color-themes/scripts/themes.py::draw": [
    13
@@ -126,17 +111,8 @@
   ".claude/skills/monitor-print/scripts/print_monitor.py::publish": [
    11
   ],
-  ".claude/skills/pattern-catalog/scripts/catalog.py::build": [
-   17
-  ],
   ".claude/skills/pattern-catalog/scripts/catalog.py::check_lines": [
    11
-  ],
-  ".claude/skills/pattern-catalog/scripts/catalog.py::note_top": [
-   16
-  ],
-  ".claude/skills/place-pins/scripts/ledge_check.py::check_piece": [
-   16
   ],
   ".claude/skills/place-pins/scripts/ledge_check.py::section": [
    11
@@ -153,18 +129,6 @@
   ".claude/skills/review-print/scripts/prints_page.py::render": [
    14
   ],
-  ".claude/skills/review-theme/scripts/reviews.py::problems": [
-   15
-  ],
-  ".claude/skills/send-plate/scripts/color_map.py::main": [
-   15
-  ],
-  ".claude/skills/simulate-buyers/scripts/buyers.py::sweep_problems": [
-   17
-  ],
-  ".claude/skills/simulate-first-layer/scripts/simulate.py::calibrate": [
-   16
-  ],
   ".claude/skills/simulate-first-layer/scripts/simulate.py::line_starts": [
    12
   ],
@@ -180,17 +144,8 @@
   "tools/cookbook_render.py::main": [
    12
   ],
-  "tools/fit_gap.py::gcode_all_walls": [
-   15
-  ],
   "tools/move_doc.py::expand": [
    12
-  ],
-  "tools/move_doc.py::plan_run": [
-   15
-  ],
-  "tools/move_doc.py::summary": [
-   16
   ],
   "tools/piece_grams.py::piece_grams": [
    11
@@ -206,9 +161,6 @@
   ],
   "tools/reconstruction_intake.py::main": [
    11
-  ],
-  "tools/vault_audit.py::audit": [
-   16
   ]
  }
 }

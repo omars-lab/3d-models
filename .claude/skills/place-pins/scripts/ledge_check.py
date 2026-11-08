@@ -213,6 +213,26 @@ def check_piece(verts, tris, tol):
     zlo, zhi = min(zs), max(zs)
     if zhi - zlo < 1.0:
         return None
+    face = _face_outline(verts, tris, zlo)
+    if face is None:
+        return None
+    best_z, best_loops = _widest_section(verts, tris, zlo, zhi, area(face))
+    cx = sum(p[0] for p in face) / len(face)
+    cy = sum(p[1] for p in face) / len(face)
+    result = {"centre": (cx, cy), "corners": len(face), "ledge_z": best_z, "face": face, "ledge": best_loops or []}
+    if best_loops is None:
+        result["width"] = 0.0
+        result["bites"] = []
+        return result
+    normals = _outward_normals(face)
+    width = _side_width(face, normals, best_loops)
+    result["width"] = width
+    result["bites"] = _corner_bites(face, normals, best_loops, width - tol, (cx, cy))
+    return result
+
+
+def _face_outline(verts, tris, zlo):
+    """The piece's bottom face as a counter-clockwise corner loop, or None for no face or a half."""
     face_loops = sorted(section(verts, tris, zlo + 0.3), key=lambda lp: abs(area(lp)), reverse=True)
     if not face_loops:
         return None
@@ -222,7 +242,11 @@ def check_piece(verts, tris, tol):
     face = corners(face_loops[0])
     if area(face) < 0:
         face = face[::-1]
-    face_area = area(face)
+    return face
+
+
+def _widest_section(verts, tris, zlo, zhi, face_area):
+    """The height and loops of the widest cut through the piece, if any is 2% wider than its face."""
     best_z, best_loops, best_area = None, None, face_area
     for k in range(40):
         z = zlo + (zhi - zlo) * (k + 0.5) / 40
@@ -230,28 +254,36 @@ def check_piece(verts, tris, tol):
         a = net_area(loops)
         if a > best_area * 1.02:
             best_z, best_loops, best_area = z, loops, a
-    cx = sum(p[0] for p in face) / len(face)
-    cy = sum(p[1] for p in face) / len(face)
-    result = {"centre": (cx, cy), "corners": len(face), "ledge_z": best_z, "face": face, "ledge": best_loops or []}
-    if best_loops is None:
-        result["width"] = 0.0
-        result["bites"] = []
-        return result
+    return best_z, best_loops
+
+
+def _outward_normals(face):
+    """One outward unit normal per side of a counter-clockwise loop."""
     n = len(face)
     normals = []
     for i in range(n):
         (x1, y1), (x2, y2) = face[i], face[(i + 1) % n]
         L = math.hypot(x2 - x1, y2 - y1)
         normals.append(((y2 - y1) / L, -(x2 - x1) / L))  # outward for a counter-clockwise loop
+    return normals
+
+
+def _side_width(face, normals, loops):
+    """The ledge's width: the median reach out from the middle of each side."""
+    n = len(face)
     widths = []
     for i in range(n):
         (x1, y1), (x2, y2) = face[i], face[(i + 1) % n]
-        d = ray_hit(((x1 + x2) / 2, (y1 + y2) / 2), normals[i], best_loops)
+        d = ray_hit(((x1 + x2) / 2, (y1 + y2) / 2), normals[i], loops)
         if d is not None:
             widths.append(d)
-    width = statistics.median(widths) if widths else 0.0
-    result["width"] = width
-    need = width - tol
+    return statistics.median(widths) if widths else 0.0
+
+
+def _corner_bites(face, normals, loops, need, centre):
+    """Every convex corner whose shortest reach out to the ledge falls short of `need`."""
+    cx, cy = centre
+    n = len(face)
     bites = []
     for i in range(n):
         q = face[i]
@@ -263,7 +295,7 @@ def check_piece(verts, tris, tol):
         worst = None
         for s in range(9):
             a = a0 + sweep * s / 8
-            d = ray_hit(q, (math.cos(a), math.sin(a)), best_loops) or 0.0
+            d = ray_hit(q, (math.cos(a), math.sin(a)), loops) or 0.0
             if worst is None or d < worst[0]:
                 worst = (d, a)
         p, r = face[i - 1], face[(i + 1) % n]
@@ -272,8 +304,7 @@ def check_piece(verts, tris, tol):
                                                     / (math.hypot(*v1) * math.hypot(*v2))))))
         if worst[0] < need:
             bites.append({"at": (q[0] - cx, q[1] - cy), "angle": angle, "reach": worst[0]})
-    result["bites"] = bites
-    return result
+    return bites
 
 
 def describe(r):

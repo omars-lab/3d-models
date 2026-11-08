@@ -201,61 +201,81 @@ def gcode_walls(text, z):
     return nearest, layers[nearest]
 
 
+def _arc_points(x, y, nx, ny, words, g3):
+    """An arc move (G3 counter-clockwise, G2 clockwise) from (x, y) to (nx, ny), walked in
+    short steps; the start point is left out."""
+    cx, cy = x + words.get("I", 0), y + words.get("J", 0)
+    a0 = math.atan2(y - cy, x - cx)
+    a1 = math.atan2(ny - cy, nx - cx)
+    sweep = a1 - a0
+    if g3 and sweep <= 0:
+        sweep += 2 * math.pi
+    if not g3 and sweep >= 0:
+        sweep -= 2 * math.pi
+    r = math.hypot(x - cx, y - cy)
+    n = max(2, int(abs(sweep) * r / STEP))
+    return [(cx + r * math.cos(a0 + sweep * i / n), cy + r * math.sin(a0 + sweep * i / n))
+            for i in range(1, n + 1)]
+
+
+class _WallReader:
+    """Walks a slice's G-code line by line, keeping each outer-wall run that closes on itself."""
+
+    def __init__(self):
+        self.layers, self.cur, self.obj, self.feature, self.width = {}, None, None, None, None
+        self.x = self.y = 0.0
+        self.run = []
+
+    def close(self):
+        run = self.run
+        if len(run) >= 4 and math.dist(run[0], run[-1]) < 1.0 and self.cur is not None:
+            self.layers.setdefault(self.cur, {}).setdefault(self.obj, []).append((run[:-1], self.width))
+        self.run = []
+
+    def comment(self, line):
+        """The slicer's notes: layer height, object, feature and line width. True if it was one."""
+        if line.startswith("; Z_HEIGHT:"):
+            self.close()
+            self.cur = float(line.split(":")[1])
+        elif line.startswith("; start printing object, unique label id:"):
+            self.obj = line.rsplit(":", 1)[1].strip()
+        elif line.startswith("; stop printing object"):
+            self.close()
+            self.obj = None
+        elif line.startswith("; FEATURE:"):
+            self.close()
+            self.feature = line.split(":", 1)[1].strip()
+        elif line.startswith("; LINE_WIDTH:"):
+            self.width = float(line.split(":")[1])
+        else:
+            return False
+        return True
+
+    def move(self, line):
+        """One G0-G3 move: added to the run when it prints outer wall, else it ends the run."""
+        words = {w[0]: float(w[1:]) for w in line.split(";")[0].split()[1:] if len(w) > 1
+                 and w[0] in "XYZEIJ"}
+        nx, ny = words.get("X", self.x), words.get("Y", self.y)
+        if not (words.get("E", 0) > 0 and self.feature == "Outer wall"):
+            self.close()
+        else:
+            if not self.run:
+                self.run = [(self.x, self.y)]
+            if line[:2] in ("G2", "G3"):
+                self.run += _arc_points(self.x, self.y, nx, ny, words, line[:2] == "G3")
+            else:
+                self.run.append((nx, ny))
+        self.x, self.y = nx, ny
+
+
 def gcode_all_walls(text):
     """Every layer's outer-wall loops: {height: {object label: [(loop, line width), ...]}}."""
-    layers, cur, obj, feature, width = {}, None, None, None, None
-    x = y = 0.0
-    run = []
-
-    def close():
-        nonlocal run
-        if len(run) >= 4 and math.dist(run[0], run[-1]) < 1.0 and cur is not None:
-            layers.setdefault(cur, {}).setdefault(obj, []).append((run[:-1], width))
-        run = []
-
+    reader = _WallReader()
     for line in text.splitlines():
-        if line.startswith("; Z_HEIGHT:"):
-            close()
-            cur = float(line.split(":")[1])
-        elif line.startswith("; start printing object, unique label id:"):
-            obj = line.rsplit(":", 1)[1].strip()
-        elif line.startswith("; stop printing object"):
-            close()
-            obj = None
-        elif line.startswith("; FEATURE:"):
-            close()
-            feature = line.split(":", 1)[1].strip()
-        elif line.startswith("; LINE_WIDTH:"):
-            width = float(line.split(":")[1])
-        elif line[:3] in ("G0 ", "G1 ", "G2 ", "G3 "):
-            words = {w[0]: float(w[1:]) for w in line.split(";")[0].split()[1:] if len(w) > 1
-                     and w[0] in "XYZEIJ"}
-            nx, ny = words.get("X", x), words.get("Y", y)
-            printing = words.get("E", 0) > 0 and feature == "Outer wall"
-            if not printing:
-                close()
-                x, y = nx, ny
-                continue
-            if not run:
-                run = [(x, y)]
-            if line[:2] in ("G2", "G3"):
-                cx, cy = x + words.get("I", 0), y + words.get("J", 0)
-                a0 = math.atan2(y - cy, x - cx)
-                a1 = math.atan2(ny - cy, nx - cx)
-                sweep = a1 - a0
-                if line[:2] == "G3" and sweep <= 0:
-                    sweep += 2 * math.pi
-                if line[:2] == "G2" and sweep >= 0:
-                    sweep -= 2 * math.pi
-                r = math.hypot(x - cx, y - cy)
-                n = max(2, int(abs(sweep) * r / STEP))
-                run += [(cx + r * math.cos(a0 + sweep * i / n), cy + r * math.sin(a0 + sweep * i / n))
-                        for i in range(1, n + 1)]
-            else:
-                run.append((nx, ny))
-            x, y = nx, ny
-    close()
-    return layers
+        if not reader.comment(line) and line[:3] in ("G0 ", "G1 ", "G2 ", "G3 "):
+            reader.move(line)
+    reader.close()
+    return reader.layers
 
 
 def offset_by_area(A, P, k, area_after, grow):

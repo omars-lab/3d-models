@@ -548,9 +548,7 @@ def self_test() -> int:
 
 # --- the command line ---------------------------------------------------------------------------
 
-def main() -> int:
-    if sys.argv[1:] == ["--self-test"]:
-        return self_test()
+def _parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("plan", help="map each design color to a loaded tray and list the questions")
@@ -570,40 +568,53 @@ def main() -> int:
     c = sub.add_parser("check", help="the §10 check, plate by plate")
     c.add_argument("map")
     c.add_argument("--plates", default=str(PLATES))
+    return ap
+
+
+def _print_map(path: Path, as_json: bool) -> int:
+    """After plan or answer: each row's tray and the questions still open."""
+    m = load(path)
+    qs = [r["question"] for r in pending(m)]
+    if as_json:
+        print(json.dumps({"map": str(path), "stopped": m["stopped"], "questions": qs}, indent=2))
+        return 0
+    for r in m["rows"]:
+        state = r["answer"] or "ASK"
+        where = r["send_tray"]["where"] if r.get("send_tray") else "no tray"
+        print(f"[{state:9}] {r['design_hex']} {r['name']} → {where}{' ' + r['color'] if r.get('color') else ''}")
+    for q in qs:
+        print(f"\nASK {q['plate']}: {q['text']}")
+        for o in q["options"]:
+            print(f"  {o['answer']:9} {o['label']}: {o['says']}")
+    print(f"\n{path}" + (" (stopped)" if m["stopped"] else ""))
+    return 0
+
+
+def _write_pages(map_path: Path, plates: Path) -> None:
+    written, skipped, sends = pages(map_path, plates)
+    for w in written:
+        print(f"wrote the color block on {w}")
+    for s in skipped:
+        print(f"skipped {s}")
+    print("\nEach send names its color:")
+    for s in sends:
+        print(f"  {s}")
+
+
+def main() -> int:
+    if sys.argv[1:] == ["--self-test"]:
+        return self_test()
+    ap = _parser()
     args, rest = ap.parse_known_args()
     if rest and args.cmd != "plan":
         ap.error(f"unrecognized arguments: {' '.join(rest)}")
-
-    if args.cmd in ("plan", "answer"):
-        if args.cmd == "plan":
-            path = plan(args.pieces, rest, args.by_color, args.trays, args.out)
-        else:
-            path = Path(args.map)
-            answer(path, args.plate, args.answer, args.trays)
-        m = load(path)
-        qs = [r["question"] for r in pending(m)]
-        if getattr(args, "json", False):
-            print(json.dumps({"map": str(path), "stopped": m["stopped"], "questions": qs}, indent=2))
-            return 0
-        for r in m["rows"]:
-            state = r["answer"] or "ASK"
-            where = r["send_tray"]["where"] if r.get("send_tray") else "no tray"
-            print(f"[{state:9}] {r['design_hex']} {r['name']} → {where}{' ' + r['color'] if r.get('color') else ''}")
-        for q in qs:
-            print(f"\nASK {q['plate']}: {q['text']}")
-            for o in q["options"]:
-                print(f"  {o['answer']:9} {o['label']}: {o['says']}")
-        print(f"\n{path}" + (" (stopped)" if m["stopped"] else ""))
-        return 0
+    if args.cmd == "plan":
+        return _print_map(plan(args.pieces, rest, args.by_color, args.trays, args.out), args.json)
+    if args.cmd == "answer":
+        answer(Path(args.map), args.plate, args.answer, args.trays)
+        return _print_map(Path(args.map), False)
     if args.cmd == "pages":
-        written, skipped, sends = pages(Path(args.map), Path(args.plates))
-        for w in written:
-            print(f"wrote the color block on {w}")
-        for s in skipped:
-            print(f"skipped {s}")
-        print("\nEach send names its color:")
-        for s in sends:
-            print(f"  {s}")
+        _write_pages(Path(args.map), Path(args.plates))
     f, n = check(load(args.map), Path(args.plates))
     for x in n:
         print(f"note {x}")

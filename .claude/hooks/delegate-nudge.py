@@ -92,43 +92,53 @@ def _apply_record(state: dict, rec: dict) -> None:
     """
     result = rec.get("toolUseResult")
     if isinstance(result, dict) and isinstance(result.get("tasks"), list):
-        state.clear()
-        for task in result["tasks"]:
-            tid = str(task.get("id"))
-            state[tid] = {
-                "status": task.get("status", "pending"),
-                "blockedBy": [str(b) for b in task.get("blockedBy", [])],
-            }
+        _apply_task_list(state, result["tasks"])
         return
     if isinstance(result, dict) and isinstance(result.get("task"), dict):
-        task = result["task"]
-        tid = str(task.get("id"))
-        if tid and tid != "None":
-            entry = state.setdefault(tid, {"status": "pending", "blockedBy": []})
-            if "status" in task:
-                entry["status"] = task["status"]
-            if "blockedBy" in task:
-                entry["blockedBy"] = [str(b) for b in task["blockedBy"]]
-
+        _apply_one_task(state, result["task"])
     message = rec.get("message")
-    if not isinstance(message, dict):
+    if isinstance(message, dict):
+        for block in message.get("content", []) or []:
+            if isinstance(block, dict) and block.get("type") == "tool_use" \
+                    and block.get("name") == "TaskUpdate":
+                _apply_task_update(state, block.get("input") or {})
+
+
+def _apply_task_list(state: dict, tasks: list) -> None:
+    """A TaskList result: the whole snapshot, replacing what was there."""
+    state.clear()
+    for task in tasks:
+        tid = str(task.get("id"))
+        state[tid] = {
+            "status": task.get("status", "pending"),
+            "blockedBy": [str(b) for b in task.get("blockedBy", [])],
+        }
+
+
+def _apply_one_task(state: dict, task: dict) -> None:
+    """A single-task result: add the task, or refresh its status and blockers."""
+    tid = str(task.get("id"))
+    if not tid or tid == "None":
         return
-    for block in message.get("content", []) or []:
-        if not isinstance(block, dict) or block.get("type") != "tool_use":
-            continue
-        if block.get("name") != "TaskUpdate":
-            continue
-        inp = block.get("input") or {}
-        tid = str(inp.get("taskId"))
-        if not tid or tid == "None":
-            continue
-        entry = state.setdefault(tid, {"status": "pending", "blockedBy": []})
-        if inp.get("status"):
-            entry["status"] = inp["status"]
-        for dep in inp.get("addBlockedBy", []) or []:
-            dep = str(dep)
-            if dep not in entry["blockedBy"]:
-                entry["blockedBy"].append(dep)
+    entry = state.setdefault(tid, {"status": "pending", "blockedBy": []})
+    if "status" in task:
+        entry["status"] = task["status"]
+    if "blockedBy" in task:
+        entry["blockedBy"] = [str(b) for b in task["blockedBy"]]
+
+
+def _apply_task_update(state: dict, inp: dict) -> None:
+    """A TaskUpdate call: a new status and any added blockers."""
+    tid = str(inp.get("taskId"))
+    if not tid or tid == "None":
+        return
+    entry = state.setdefault(tid, {"status": "pending", "blockedBy": []})
+    if inp.get("status"):
+        entry["status"] = inp["status"]
+    for dep in inp.get("addBlockedBy", []) or []:
+        dep = str(dep)
+        if dep not in entry["blockedBy"]:
+            entry["blockedBy"].append(dep)
 
 
 def count_ready(state: dict) -> int:

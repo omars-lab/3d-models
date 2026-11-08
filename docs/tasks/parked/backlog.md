@@ -4,22 +4,6 @@ Moved here on 2026-09-25 from [`docs/working-model/backlog.md`](../../working-mo
 "is not printer-gated". None of the five [loops](../../../.claude/loop-prompts/README.md) is pointed at these. A loop that
 takes one on moves it into its own backlog; a loop that finds work nobody owns adds it here.
 
-## Pattern catalog vault — step 5, the rest of the bikar library, is next
-
-[`docs/catalog/plan.md`](../../catalog/plan.md) plans the Obsidian vault in `docs/`: one note per
-pattern (planned ones too), a generated catalog page, deep links for every picture, review-md
-through BRAT, and a check plus a skill that keep it current. Asked for by Omar, 2026-09-27.
-
-Steps 1 to 4 are done (see [done.md](done.md)). The catalog page is
-[`docs/catalog/index.md`](../../catalog/index.md); the `pattern-catalog` skill writes it, a
-queued pattern gets its note from [`docs/catalog/planned.yaml`](../../catalog/planned.yaml), and
-`make validate` fails when bikar has a construction file no note claims.
-Step 5 is next: notes for the rest of the bikar library (stars, rosettes, tiled, weave, orbs,
-lego, coupons), mostly generated, per [the plan](../../catalog/plan.md#steps-in-order-of-value).
-
-Step 5's size question now has a number: the 36 pictures step 2 committed average 39 kB, 1.4 MB
-in all.
-
 ## The FAQ — waiting on Omar
 
 Five of the six candidates in `docs/faq-proposal.md` are already answered as Q-001 to Q-005 in
@@ -112,11 +96,15 @@ complexity check lists the 86 Python functions over 10 and stops any new one.
   the exit code left in `run`; self-test unchanged, and the same printed text and exit code on
   2,080 made-up runs (the declaration check failing or not, up to three hooks each passing,
   failing or missing its tool, up to two extra checks each passing, warning or failing, strict on
-  or off; exit codes 0, 1 and 2 all seen).
-  69 left. The `self_test` functions (`branch_inventory.py` 34, `theme_plates.py` 22,
+  or off; exit codes 0, 1 and 2 all seen). Then `.claude/gates/plates_gate.py::check_print_logs`
+  (17), one helper each for the pages' links, one log file, and one log's rows; self-test
+  unchanged, and the same findings in the same order on 1,655 cases: the real plates folder and
+  copies with each log's plate, header, rows, events and order broken in turn, each log deleted,
+  each page's link removed, wrong or left beside a `## Print log` heading, each under master's
+  copy absent, the same, a row changed, rows added, and a log master has gone from disk.
+  68 left. The `self_test` functions (`branch_inventory.py` 34, `theme_plates.py` 22,
   `site_graph.py` 21, `docs_gate.py` 20, `plates_gate.py` 19, `validate.py` 18) are skipped: each
-  is a list of test cases, so splitting it buys little. Next are the three at 17:
-  `.claude/gates/plates_gate.py::check_print_logs`,
+  is a list of test cases, so splitting it buys little. Next are the two at 17:
   `.claude/skills/pattern-catalog/scripts/catalog.py::build` and
   `.claude/skills/simulate-buyers/scripts/buyers.py::sweep_problems`. A
   cleanup skill comes back only if

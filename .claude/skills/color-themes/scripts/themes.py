@@ -532,24 +532,42 @@ def plates(con: dict, theme: dict, vols: dict | None) -> list[dict]:
 def check_one(cid: str, root: Path = THEMES_DIR, pal: dict | None = None, quiet=False, silent=False) -> int:
     con = construction(cid, root)
     pal = pal or palette()
-    folder = con["_folder"]
-    errors = []
-    base_path = folder / "base.svg"
+    base_path = con["_folder"] / "base.svg"
     if not base_path.exists():
         print(f"{cid}: no base.svg; run `themes.py base {cid}`")
         return 1
     base = base_path.read_text()
     faces, _ = parse_base(base)
     pairs = neighbors(con, faces)
+    errors = _rule_errors(con, pal)
+    if errors:
+        print("\n".join(f"{cid}: {e}" for e in errors))
+        return 1
+    errors = _stale_errors(cid, con, base, pal, pairs, root)
+    if not quiet:
+        _print_summary(con, pal, pairs)
+    if not silent:
+        for e in errors:
+            print(f"{cid}: {e}")
+    return 1 if errors else 0
+
+
+def _rule_errors(con: dict, pal: dict) -> list[str]:
+    """Theme ids that clash and every theme's broken rules: the errors that stop the check early."""
+    errors = []
     ids = [t["id"] for t in con["themes"]]
     if len(ids) != len(set(ids)):
         errors.append("two themes share an id")
     for t in con["themes"]:
         for p in theme_problems(con, t, pal):
             errors.append(f"{t['id']}: {p}")
-    if errors:
-        print("\n".join(f"{cid}: {e}" for e in errors))
-        return 1
+    return errors
+
+
+def _stale_errors(cid: str, con: dict, base: str, pal: dict, pairs: set, root: Path) -> list[str]:
+    """Each theme picture and the gallery page that no longer match what would be drawn now."""
+    folder = con["_folder"]
+    errors = []
     for t in con["themes"]:
         pic = folder / f"{t['id']}.svg"
         if not pic.exists() or pic.read_text() != draw(con, t, base, pal):
@@ -557,19 +575,19 @@ def check_one(cid: str, root: Path = THEMES_DIR, pal: dict | None = None, quiet=
     page = root / f"{cid}-themes.md"
     if not page.exists() or page.read_text() != gallery_text(con, pal, pairs):
         errors.append(f"{page.name} is stale or missing; run `themes.py gallery {cid}`")
-    if not quiet:
-        vols = load_vols(con)
-        for t in con["themes"]:
-            print(f"{t['id']}: {', '.join(color_word(pal, c) for c in used_colors(con, t))}")
-            for w in warnings(con, t, pal, pairs):
-                print(f"  warn: {w}")
-            for p in plates(con, t, vols):
-                cost = f", about {p['minutes']:.0f} min, {p['grams']:.1f} g" if "share" in p else ""
-                print(f"  plate {pal[p['color']]['name']}: {', '.join(p['groups'])}{cost}")
-    if not silent:
-        for e in errors:
-            print(f"{cid}: {e}")
-    return 1 if errors else 0
+    return errors
+
+
+def _print_summary(con: dict, pal: dict, pairs: set) -> None:
+    """Per theme: its colors, its warnings, and its plates with their time and grams."""
+    vols = load_vols(con)
+    for t in con["themes"]:
+        print(f"{t['id']}: {', '.join(color_word(pal, c) for c in used_colors(con, t))}")
+        for w in warnings(con, t, pal, pairs):
+            print(f"  warn: {w}")
+        for p in plates(con, t, vols):
+            cost = f", about {p['minutes']:.0f} min, {p['grams']:.1f} g" if "share" in p else ""
+            print(f"  plate {pal[p['color']]['name']}: {', '.join(p['groups'])}{cost}")
 
 
 def load_vols(con: dict) -> dict | None:
