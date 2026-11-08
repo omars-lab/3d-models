@@ -558,58 +558,8 @@ def calibrate(args):
     cache = json.loads(cache_p.read_text()) if cache_p.exists() else {}
     bfs.log("calibrate_start", pairs=len(spec["pairs"]), spreads=args.spread)
     taught = {n: p["model"] for n, p in profiles().items() if p.get("can_fit") and p.get("model")}
-    plates, scores, digests = {}, {}, {}
-    for key, piece in spec["pieces"].items():
-        key = str(key)
-        if piece["plate"] not in plates:
-            p = find_plate(piece["plate"], args.plates)
-            objs, text = plate_objects(p)
-            stamp = f"{p.stat().st_size}-{p.stat().st_mtime_ns}"
-            plates[piece["plate"]] = ({lab: lid for lab, _, lid in objs}, text, stamp)
-        ids, text, stamp = plates[piece["plate"]]
-        if piece["label"] not in ids:
-            raise SystemExit(f"simulate: {piece['plate']} has no piece labeled {piece['label']}")
-        h, moves = first_moves(text, ids[piece["label"]])
-        digests[key] = shape_digest(moves)
-        flow, lower = float(piece.get("flow", 1)), float(piece.get("lower_mm", 0))
-        for s in spreads:
-            if s == "fitted":
-                model = taught.get(piece.get("setup"))
-                if not model:
-                    scores[(key, s)] = None
-                    continue
-                f = factor_for(model["spread"], flow, lower, h)
-                ck = f"{piece['plate']}|{stamp}|{piece['label']}|fitted|{model_key(model)}|{f:.5f}"
-                if ck not in cache:
-                    cache[ck] = score_at(moves, f, key, fitted(moves, model, flow, lower, h))[0]
-                    cache_p.write_text(json.dumps(cache, indent=1) + "\n")
-            else:
-                f = factor_for(s, flow, lower, h)
-                ck = f"{piece['plate']}|{stamp}|{piece['label']}|{f:.5f}"
-                if ck not in cache:
-                    cache[ck] = score_at(moves, f, key)[0]
-                    cache_p.write_text(json.dumps(cache, indent=1) + "\n")
-            scores[(key, s)] = cache[ck]
-    by_spread, rows = {}, []
-    for s in spreads:
-        tally = {"plan": [0, 0], "model": [0, 0], "ties": [0, 0], "not_ties": [0, 0]}
-        for pair in spec["pairs"]:
-            a, b = str(pair["a"]), str(pair["b"])
-            group = "model" if digests[a] == digests[b] else "plan"
-            sa, sb = scores[(a, s)], scores[(b, s)]
-            if s == "fitted" and (sa is None or sb is None
-                                  or spec["pieces"][pair["a"]].get("setup") != spec["pieces"][pair["b"]].get("setup")):
-                continue          # Fitted reads a pair only inside one taught setup
-            plan = relation(sa["share_pct"], sb["share_pct"], band)
-            ok = agrees(pair["omar"], plan)
-            for g in (group, "ties" if is_tie(pair) else "not_ties"):
-                tally[g][0] += ok
-                tally[g][1] += 1
-            rows.append({"spread": s, "a": a, "b": b, "omar": pair["omar"], "words": pair["words"],
-                         "plan": plan, "agrees": ok, "seen_by": group,
-                         "a_share": sa["share_pct"], "b_share": sb["share_pct"],
-                         "a_slits": sa["slits"], "b_slits": sb["slits"]})
-        by_spread[s] = tally
+    scores, digests = _piece_scores(spec, spreads, args.plates, taught, cache, cache_p)
+    by_spread, rows = _tally_pairs(spec, spreads, scores, digests, band)
     total = {s: t["plan"][0] + t["model"][0] for s, t in by_spread.items()}
     m = len(spec["pairs"])
     bar = {k: scores[(str(k), spreads[0])]["pass"] for k in spec["pieces"] if scores[(str(k), spreads[0])]}
@@ -642,6 +592,79 @@ def calibrate(args):
     print(f"The 0.6% bar, {first}: {len(passing)} of {len(bar)} judged pieces pass it "
           f"({', '.join(map(str, passing)) or 'none'}); every one of them still slit in print.")
     bfs.log("calibrate_end", best=max(t["not_ties"][0] for t in by_spread.values()), of=m)
+
+
+def _piece_scores(spec, spreads, plates_dir, taught, cache, cache_p):
+    """Each judged piece's first-layer score at every reading, from its plate's slice (cached), and
+    the digest that says which pieces the plain plan draws alike."""
+    plates, scores, digests = {}, {}, {}
+    for key, piece in spec["pieces"].items():
+        key = str(key)
+        if piece["plate"] not in plates:
+            p = find_plate(piece["plate"], plates_dir)
+            objs, text = plate_objects(p)
+            stamp = f"{p.stat().st_size}-{p.stat().st_mtime_ns}"
+            plates[piece["plate"]] = ({lab: lid for lab, _, lid in objs}, text, stamp)
+        ids, text, stamp = plates[piece["plate"]]
+        if piece["label"] not in ids:
+            raise SystemExit(f"simulate: {piece['plate']} has no piece labeled {piece['label']}")
+        h, moves = first_moves(text, ids[piece["label"]])
+        digests[key] = shape_digest(moves)
+        for s in spreads:
+            scores[(key, s)] = _score_piece(key, piece, stamp, h, moves, s, taught, cache, cache_p)
+    return scores, digests
+
+
+def _score_piece(key, piece, stamp, h, moves, s, taught, cache, cache_p):
+    """One piece at one reading, through the cache; None for Fitted when its setup is not taught."""
+    flow, lower = float(piece.get("flow", 1)), float(piece.get("lower_mm", 0))
+    if s == "fitted":
+        model = taught.get(piece.get("setup"))
+        if not model:
+            return None
+        f = factor_for(model["spread"], flow, lower, h)
+        ck = f"{piece['plate']}|{stamp}|{piece['label']}|fitted|{model_key(model)}|{f:.5f}"
+        if ck not in cache:
+            cache[ck] = score_at(moves, f, key, fitted(moves, model, flow, lower, h))[0]
+            cache_p.write_text(json.dumps(cache, indent=1) + "\n")
+    else:
+        f = factor_for(s, flow, lower, h)
+        ck = f"{piece['plate']}|{stamp}|{piece['label']}|{f:.5f}"
+        if ck not in cache:
+            cache[ck] = score_at(moves, f, key)[0]
+            cache_p.write_text(json.dumps(cache, indent=1) + "\n")
+    return cache[ck]
+
+
+def _tally_pairs(spec, spreads, scores, digests, band):
+    """At each reading, whether the plan agrees with Omar on each judged pair, and the counts by group."""
+    by_spread, rows = {}, []
+    for s in spreads:
+        tally = {"plan": [0, 0], "model": [0, 0], "ties": [0, 0], "not_ties": [0, 0]}
+        for pair in spec["pairs"]:
+            row = _pair_row(spec, pair, s, scores, digests, band)
+            if row is None:
+                continue          # Fitted reads a pair only inside one taught setup
+            for g in (row["seen_by"], "ties" if is_tie(pair) else "not_ties"):
+                tally[g][0] += row["agrees"]
+                tally[g][1] += 1
+            rows.append(row)
+        by_spread[s] = tally
+    return by_spread, rows
+
+
+def _pair_row(spec, pair, s, scores, digests, band):
+    a, b = str(pair["a"]), str(pair["b"])
+    group = "model" if digests[a] == digests[b] else "plan"
+    sa, sb = scores[(a, s)], scores[(b, s)]
+    if s == "fitted" and (sa is None or sb is None
+                          or spec["pieces"][pair["a"]].get("setup") != spec["pieces"][pair["b"]].get("setup")):
+        return None
+    plan = relation(sa["share_pct"], sb["share_pct"], band)
+    return {"spread": s, "a": a, "b": b, "omar": pair["omar"], "words": pair["words"],
+            "plan": plan, "agrees": agrees(pair["omar"], plan), "seen_by": group,
+            "a_share": sa["share_pct"], "b_share": sb["share_pct"],
+            "a_slits": sa["slits"], "b_slits": sb["slits"]}
 
 
 def model_key(model):
