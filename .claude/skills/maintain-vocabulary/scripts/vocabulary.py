@@ -136,34 +136,52 @@ def problems(data, vocab_dir=VOCAB_DIR, plates_dir=PLATES, docs=DOCS):
         if tid in seen:
             out.append(f"{tid}: the id is used twice")
         seen.add(tid)
-        for k in NEEDED:
-            if not t.get(k):
-                out.append(f"{tid}: has no `{k}`")
-        for k in set(t) - FIELDS:
-            out.append(f"{tid}: `{k}` is not a field this page knows")
-        if t.get("group") and t["group"] not in groups:
-            out.append(f"{tid}: group `{t['group']}` is not in `groups`")
-        if t.get("snippet") and not t.get("lang"):
-            out.append(f"{tid}: has a snippet but no `lang`")
-        for r in t.get("related") or []:
-            if r not in ids:
-                out.append(f"{tid}: related `{r}` is not a term")
-        for p in t.get("plates") or []:
-            if not (plates_dir / f"{p}.md").exists():
-                out.append(f"{tid}: plate `{p}` has no page in docs/design/plates")
-        if t.get("picture"):
-            for path, alt, src, _ in pictures_of(t):
-                full = (vocab_dir / path).resolve()
-                if not full.is_relative_to(docs.resolve()):
-                    out.append(f"{tid}: picture {path} is outside docs/")
-                elif not full.exists():
-                    out.append(f"{tid}: picture {path} does not exist")
-                if not alt or not src:
-                    out.append(f"{tid}: picture {path} needs `alt` and `from`")
-        if t.get("cookbook"):
-            target = t["cookbook"].split("#")[0]
-            if not (vocab_dir / target).exists():
-                out.append(f"{tid}: cookbook link {target} does not exist")
+        out += _field_problems(t, tid, groups)
+        out += _link_problems(t, tid, ids, plates_dir)
+        out += _file_problems(t, tid, vocab_dir, docs)
+    return out
+
+
+def _field_problems(t, tid, groups):
+    """A term's own fields: the needed ones there, no unknown ones, a known group, a snippet's lang."""
+    out = []
+    for k in NEEDED:
+        if not t.get(k):
+            out.append(f"{tid}: has no `{k}`")
+    for k in set(t) - FIELDS:
+        out.append(f"{tid}: `{k}` is not a field this page knows")
+    if t.get("group") and t["group"] not in groups:
+        out.append(f"{tid}: group `{t['group']}` is not in `groups`")
+    if t.get("snippet") and not t.get("lang"):
+        out.append(f"{tid}: has a snippet but no `lang`")
+    return out
+
+
+def _link_problems(t, tid, ids, plates_dir):
+    """Each related term is a term, and each plate it names has a page."""
+    out = [f"{tid}: related `{r}` is not a term" for r in t.get("related") or [] if r not in ids]
+    for p in t.get("plates") or []:
+        if not (plates_dir / f"{p}.md").exists():
+            out.append(f"{tid}: plate `{p}` has no page in docs/design/plates")
+    return out
+
+
+def _file_problems(t, tid, vocab_dir, docs):
+    """Each picture is inside docs/, exists and has its alt and from; the cookbook link exists."""
+    out = []
+    if t.get("picture"):
+        for path, alt, src, _ in pictures_of(t):
+            full = (vocab_dir / path).resolve()
+            if not full.is_relative_to(docs.resolve()):
+                out.append(f"{tid}: picture {path} is outside docs/")
+            elif not full.exists():
+                out.append(f"{tid}: picture {path} does not exist")
+            if not alt or not src:
+                out.append(f"{tid}: picture {path} needs `alt` and `from`")
+    if t.get("cookbook"):
+        target = t["cookbook"].split("#")[0]
+        if not (vocab_dir / target).exists():
+            out.append(f"{tid}: cookbook link {target} does not exist")
     return out
 
 

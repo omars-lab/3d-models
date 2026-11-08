@@ -78,11 +78,15 @@ complexity check lists the 86 Python functions over 10 and stops any new one.
   plate, the answers, shared trays and the plate pages, only the check and nothing on the send
   path, self-test unchanged and the same failures and notices on color maps made from all 66 plate
   pages with a recipe, through the real `bambu filament map` (no saved color map exists), under four tray
-  loadouts, with every answer each question offers, and each map broken in turn (775 maps, 68,243 cases, every rule firing). 76 left.
+  loadouts, with every answer each question offers, and each map broken in turn (775 maps, 68,243 cases, every rule firing) (#940).
+  Then `.claude/skills/maintain-vocabulary/scripts/vocabulary.py::problems` (19), one helper each
+  for a term's own fields, its links and its files, self-test unchanged and the same problems on
+  the real vocabulary.yaml with each of its 19 terms broken field by field (1,149 cases, every
+  rule firing). 75 left.
   The `self_test` functions (`branch_inventory.py` 34, `theme_plates.py` 22, `site_graph.py` 21,
   `docs_gate.py` 20) are skipped: each is a list of test cases, so splitting it buys little. Next
-  are the three at 19: `maintain-vocabulary/scripts/vocabulary.py::problems`,
-  `draw-side-view/scripts/side_view.py::check_part` and `color-themes/scripts/themes.py::main`. A
+  are the two at 19: `draw-side-view/scripts/side_view.py::check_part` and
+  `color-themes/scripts/themes.py::main`. A
   cleanup skill comes back only if
   this proves a repeated manual task, and then as an extension of the built-in `simplify` skill.
 - **A post about the design**, which Omar asked for once he signed off: written with the
