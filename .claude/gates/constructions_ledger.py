@@ -428,7 +428,24 @@ def check(
     pin, date, rows = parse_ledger(ledger_path)
     rel = ledger_path.relative_to(root) if root in ledger_path.parents else Path(LEDGER_REL)
 
-    # L1 — a written path must be real.
+    _check_paths(rel, rows, root, findings, reports)
+    _check_youtube(rel, pin, rows, root, yt, findings, reports, owed)
+
+    unmigrated = [r.id for r in rows if not r.migrated and not r.by_design]
+    stats = {
+        "rows": len(rows),
+        "migrated": sum(1 for r in rows if r.migrated),
+        "by_design": sum(1 for r in rows if r.by_design),
+        "unmigrated": unmigrated,
+        "owed": owed,
+        "pin": pin,
+        "date": date,
+    }
+    return findings, reports, stats
+
+
+def _check_paths(rel, rows, root, findings, reports) -> None:
+    """L1 — a written path must be real."""
     for r in rows:
         bkr = BKR_CELL.search(_bare(r.naqsh))
         if bkr:
@@ -451,7 +468,9 @@ def check(
                 f"not on disk under this repo. Vendor the STL or leave the cell `—`."
             )
 
-    # L2 — the pin, and the youtube cross-checks that hang off it.
+
+def _check_youtube(rel, pin, rows, root, yt, findings, reports, owed) -> None:
+    """L2 — the pin, and the youtube cross-checks that hang off it."""
     if not pin:
         findings.append(
             f"{rel}: L2 the ledger header states no youtube pin (a 40-hex commit "
@@ -471,72 +490,69 @@ def check(
                 f"in {yt} — re-pin the header to a commit that exists."
             )
         else:
-            # L3 — every reconstruction has a row, and the pin sees every row.
-            recon = youtube_recon_ids(yt, pin)
-            have = {r.id for r in rows}
-            tip = youtube_tip(yt)
-            at_tip = youtube_recon_ids(yt, tip) if tip else set()
-            for cid in sorted((recon | at_tip) - have):
-                where = "the pin" if cid in recon else f"youtube {tip.rsplit('/', 1)[-1]}"
-                owed.append(cid)
-                findings.append(
-                    f"{rel}: L3 youtube reconstruction {cid} exists at {where} but has "
-                    f"no ledger row — a row is owed. tools/reconstruction_intake.py "
-                    f"--write adds it (youtube cell from its rung.yaml, the other cells "
-                    f"`—` until the work lands) and advances the pin."
-                )
-            for r in rows:
-                if r.id not in recon:
-                    findings.append(
-                        f"{rel}:{r.lineno}: L3 {r.id} has a row but no reconstruction "
-                        f"at the pin {pin[:12]} — advance the pin to a youtube commit "
-                        f"that has it."
-                    )
-            # L2 — the pin must sit on youtube's tip ref's history, not a side branch.
-            if tip and not is_ancestor(yt, pin, tip):
-                findings.append(
-                    f"{rel}: L2 the pinned youtube commit {pin[:12]} is not an ancestor "
-                    f"of youtube {tip.rsplit('/', 1)[-1]} — the pin is on a side branch; "
-                    f"re-pin to a commit on {tip.rsplit('/', 1)[-1]}."
-                )
-            # L4 — the youtube cell is read from the rung's own state file at the pin.
-            rungs = read_rungs(yt, pin)
-            for r in rows:
-                rung = rungs.get(r.id)
-                if rung is None:
-                    if r.id in recon:
-                        reports.append(
-                            f"{rel}:{r.lineno}: {r.id} has no rung.yaml at the pin "
-                            f"{pin[:12]} — its youtube cell cannot be checked (advance "
-                            f"the pin past youtube 30a2709)."
-                        )
-                    continue
-                if r.youtube == rung.status:
-                    continue
-                if r.youtube == "done":
-                    findings.append(
-                        f"{rel}:{r.lineno}: L4 {r.id} says done but its rung.yaml at the "
-                        f"pin says {rung.status} — a row may not claim a rung finished "
-                        f"that youtube has not; run tools/reconstruction_intake.py --write."
-                    )
-                else:
-                    reports.append(
-                        f"{rel}:{r.lineno}: {r.id} says {r.youtube} but its rung.yaml at "
-                        f"the pin says {rung.status} — the row is behind its source; "
-                        f"tools/reconstruction_intake.py --write refreshes it."
-                    )
+            recon = _check_ids(rel, pin, rows, yt, findings, owed)
+            _check_rungs(rel, pin, rows, yt, recon, findings, reports)
 
-    unmigrated = [r.id for r in rows if not r.migrated and not r.by_design]
-    stats = {
-        "rows": len(rows),
-        "migrated": sum(1 for r in rows if r.migrated),
-        "by_design": sum(1 for r in rows if r.by_design),
-        "unmigrated": unmigrated,
-        "owed": owed,
-        "pin": pin,
-        "date": date,
-    }
-    return findings, reports, stats
+
+def _check_ids(rel, pin, rows, yt, findings, owed) -> set[str]:
+    """L3 — every reconstruction has a row, and the pin sees every row; then L2 —
+    the pin sits on youtube's tip ref's history. Returns the ids at the pin."""
+    recon = youtube_recon_ids(yt, pin)
+    have = {r.id for r in rows}
+    tip = youtube_tip(yt)
+    at_tip = youtube_recon_ids(yt, tip) if tip else set()
+    for cid in sorted((recon | at_tip) - have):
+        where = "the pin" if cid in recon else f"youtube {tip.rsplit('/', 1)[-1]}"
+        owed.append(cid)
+        findings.append(
+            f"{rel}: L3 youtube reconstruction {cid} exists at {where} but has "
+            f"no ledger row — a row is owed. tools/reconstruction_intake.py "
+            f"--write adds it (youtube cell from its rung.yaml, the other cells "
+            f"`—` until the work lands) and advances the pin."
+        )
+    for r in rows:
+        if r.id not in recon:
+            findings.append(
+                f"{rel}:{r.lineno}: L3 {r.id} has a row but no reconstruction "
+                f"at the pin {pin[:12]} — advance the pin to a youtube commit "
+                f"that has it."
+            )
+    if tip and not is_ancestor(yt, pin, tip):
+        findings.append(
+            f"{rel}: L2 the pinned youtube commit {pin[:12]} is not an ancestor "
+            f"of youtube {tip.rsplit('/', 1)[-1]} — the pin is on a side branch; "
+            f"re-pin to a commit on {tip.rsplit('/', 1)[-1]}."
+        )
+    return recon
+
+
+def _check_rungs(rel, pin, rows, yt, recon, findings, reports) -> None:
+    """L4 — the youtube cell is read from the rung's own state file at the pin."""
+    rungs = read_rungs(yt, pin)
+    for r in rows:
+        rung = rungs.get(r.id)
+        if rung is None:
+            if r.id in recon:
+                reports.append(
+                    f"{rel}:{r.lineno}: {r.id} has no rung.yaml at the pin "
+                    f"{pin[:12]} — its youtube cell cannot be checked (advance "
+                    f"the pin past youtube 30a2709)."
+                )
+            continue
+        if r.youtube == rung.status:
+            continue
+        if r.youtube == "done":
+            findings.append(
+                f"{rel}:{r.lineno}: L4 {r.id} says done but its rung.yaml at the "
+                f"pin says {rung.status} — a row may not claim a rung finished "
+                f"that youtube has not; run tools/reconstruction_intake.py --write."
+            )
+        else:
+            reports.append(
+                f"{rel}:{r.lineno}: {r.id} says {r.youtube} but its rung.yaml at "
+                f"the pin says {rung.status} — the row is behind its source; "
+                f"tools/reconstruction_intake.py --write refreshes it."
+            )
 
 
 def ledger_counts(root: Path = ROOT) -> dict[str, int]:
