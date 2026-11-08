@@ -132,9 +132,6 @@
   ".claude/skills/review-print/scripts/prints_page.py::render": [
    14
   ],
-  ".claude/skills/send-plate/scripts/color_map.py::main": [
-   15
-  ],
   ".claude/skills/simulate-first-layer/scripts/simulate.py::line_starts": [
    12
   ],
