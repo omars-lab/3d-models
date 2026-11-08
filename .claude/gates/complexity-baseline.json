@@ -231,9 +231,6 @@
   "tools/move_doc.py::plan_run": [
    15
   ],
-  "tools/move_doc.py::rewrite_text": [
-   35
-  ],
   "tools/move_doc.py::summary": [
    16
   ],
