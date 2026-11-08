@@ -147,9 +147,6 @@
   ".claude/skills/review-print/scripts/prints_page.py::render": [
    14
   ],
-  ".claude/skills/review-theme/scripts/reviews.py::problems": [
-   15
-  ],
   ".claude/skills/send-plate/scripts/color_map.py::main": [
    15
   ],
