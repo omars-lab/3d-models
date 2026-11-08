@@ -63,9 +63,6 @@
   ".claude/skills/color-themes/scripts/theme_plates.py::self_test": [
    22
   ],
-  ".claude/skills/color-themes/scripts/themes.py::check_one": [
-   15
-  ],
   ".claude/skills/color-themes/scripts/themes.py::draw": [
    13
   ],
