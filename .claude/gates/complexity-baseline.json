@@ -54,9 +54,6 @@
   ".claude/gates/plates_gate.py::check_maturity": [
    11
   ],
-  ".claude/gates/plates_gate.py::check_page": [
-   33
-  ],
   ".claude/gates/plates_gate.py::check_print_logs": [
    17
   ],
