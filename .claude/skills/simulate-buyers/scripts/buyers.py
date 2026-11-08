@@ -103,20 +103,12 @@ def order_problems(who: str, verdicts: list[tuple[float, str]]) -> list[str]:
 
 def sweep_problems(sweep: dict, theme: dict | None, buyers: list[str]) -> list[str]:
     tid = sweep.get("theme")
-    out = []
     if theme is None:
         return [f"a sweep names theme {tid!r}, which themes.yaml does not have"]
-    if sweep.get("coloring") != th.theme_hash(theme):
-        out.append(f"{tid}: the sweep is for an earlier coloring; show the buyers the new picture and "
-                   f"sweep again (coloring is now {th.theme_hash(theme)})")
-    if not one_line(sweep.get("shown")):
-        out.append(f"{tid}: `shown` must say in one line what the buyers saw")
-    prices = sweep.get("prices") or []
-    if not prices or not all(isinstance(p, (int, float)) and not isinstance(p, bool) and p > 0 for p in prices):
-        out.append(f"{tid}: prices must be a list of positive numbers")
+    out: list[str] = []
+    prices = _header_problems(tid, sweep, theme, out)
+    if prices is None:
         return out
-    if sorted(set(prices)) != list(prices):
-        out.append(f"{tid}: prices must rise, each once")
     cells_by = sweep.get("buyers") or {}
     for bid in buyers:
         if bid not in cells_by:
@@ -125,32 +117,60 @@ def sweep_problems(sweep: dict, theme: dict | None, buyers: list[str]) -> list[s
         if bid not in buyers:
             out.append(f"{tid}: {bid} is not a buyer in buyers.md")
             continue
-        cells = cells or {}
-        verdicts = []
-        for p in prices:
-            k = price_key(cells, p)
-            if k is None:
-                out.append(f"{tid}: {bid} has no reaction at ${p:g}")
-                continue
-            c = cells[k] or {}
-            v = c.get("verdict")
-            if v not in VERDICTS:
-                out.append(f"{tid}: {bid} at ${p:g}: verdict {v!r} is not one of {', '.join(VERDICTS)}")
-                continue
-            t = c.get("thought")
-            if not one_line(t):
-                out.append(f"{tid}: {bid} at ${p:g}: the thought must be one line of text")
-            elif len(t.strip()) > MAX_THOUGHT:
-                out.append(f"{tid}: {bid} at ${p:g}: the thought is {len(t.strip())} characters; keep it "
-                           f"to one line of at most {MAX_THOUGHT}")
-            verdicts.append((float(p), v))
-        extra = [k for k in cells if all(price_key({k: 0}, p) is None for p in prices)]
-        for k in extra:
-            out.append(f"{tid}: {bid} reacts at {k!r}, which is not in prices")
-        out += [f"{tid}: {e}" for e in order_problems(bid, verdicts)]
+        out += _buyer_problems(tid, bid, cells or {}, prices)
     if not one_line(sweep.get("overall")):
         out.append(f"{tid}: the overall line must be one line of text")
     return out
+
+
+def _header_problems(tid, sweep: dict, theme: dict, out: list[str]) -> list | None:
+    """The sweep's coloring, `shown` line and prices. Returns the prices, or None when they are unusable."""
+    if sweep.get("coloring") != th.theme_hash(theme):
+        out.append(f"{tid}: the sweep is for an earlier coloring; show the buyers the new picture and "
+                   f"sweep again (coloring is now {th.theme_hash(theme)})")
+    if not one_line(sweep.get("shown")):
+        out.append(f"{tid}: `shown` must say in one line what the buyers saw")
+    prices = sweep.get("prices") or []
+    if not prices or not all(isinstance(p, (int, float)) and not isinstance(p, bool) and p > 0 for p in prices):
+        out.append(f"{tid}: prices must be a list of positive numbers")
+        return None
+    if sorted(set(prices)) != list(prices):
+        out.append(f"{tid}: prices must rise, each once")
+    return prices
+
+
+def _buyer_problems(tid: str, bid: str, cells: dict, prices: list) -> list[str]:
+    """One buyer's reactions across the sweep's prices: one per price, none at other prices, in one window."""
+    out: list[str] = []
+    verdicts = []
+    for p in prices:
+        k = price_key(cells, p)
+        if k is None:
+            out.append(f"{tid}: {bid} has no reaction at ${p:g}")
+            continue
+        v = _cell_problems(tid, bid, p, cells[k] or {}, out)
+        if v is not None:
+            verdicts.append((float(p), v))
+    extra = [k for k in cells if all(price_key({k: 0}, p) is None for p in prices)]
+    for k in extra:
+        out.append(f"{tid}: {bid} reacts at {k!r}, which is not in prices")
+    out += [f"{tid}: {e}" for e in order_problems(bid, verdicts)]
+    return out
+
+
+def _cell_problems(tid: str, bid: str, p, c: dict, out: list[str]) -> str | None:
+    """One reaction: a known verdict and a one-line thought. Returns the verdict, or None when it is not one."""
+    v = c.get("verdict")
+    if v not in VERDICTS:
+        out.append(f"{tid}: {bid} at ${p:g}: verdict {v!r} is not one of {', '.join(VERDICTS)}")
+        return None
+    t = c.get("thought")
+    if not one_line(t):
+        out.append(f"{tid}: {bid} at ${p:g}: the thought must be one line of text")
+    elif len(t.strip()) > MAX_THOUGHT:
+        out.append(f"{tid}: {bid} at ${p:g}: the thought is {len(t.strip())} characters; keep it "
+                   f"to one line of at most {MAX_THOUGHT}")
+    return v
 
 
 def problems(con: dict, data: dict | None, buyers: list[str]) -> list[str]:

@@ -156,9 +156,6 @@
   ".claude/skills/send-plate/scripts/color_map.py::main": [
    15
   ],
-  ".claude/skills/simulate-buyers/scripts/buyers.py::sweep_problems": [
-   17
-  ],
   ".claude/skills/simulate-first-layer/scripts/simulate.py::calibrate": [
    16
   ],
