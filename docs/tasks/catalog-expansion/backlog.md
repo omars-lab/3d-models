@@ -13,6 +13,21 @@ to wrap up consturciotn and move back to split coasters and split inflills"). Th
 construction, `n_ICgwOr6qs`, was finished on 2026-11-03 (see the done list); the next one starts
 from the queue in item 2 when Omar asks for it.
 
+**A spinner coaster: pause the print, drop in a bearing, resume.** Omar, 2026-11-08 (relayed by
+the manager session): "creating a spinner version of our coaster that we've been making in full
+where the print maybe stops halfway and then we put in a spinning bearing, and then we resume the
+print ... design it ... and create design.md with potentially the technique to stop the print
+midway and then resume it after it's been inserted." Run as research that decides something: two
+independent passes, [A](../../research/spinner-coaster-research-a.md) with its
+[design draft](../../design/pieces/spinner-coaster-design-a.md) (#952) and
+[B](../../research/spinner-coaster-research-b.md) with its
+[design draft](../../design/pieces/spinner-coaster-design-b.md) (#951), both merged, and a
+checker writing the one design doc to act on, spinner-coaster-design.md in the same folder, on
+its own PR. Both passes picked a 6704 bearing (20 × 27 × 4 mm) under a single pause, and both
+found no source on what the X2D does while paused. **No plate and no print until Omar says yes
+to that doc**; then the first test piece (a small pocket coupon, the first with no steel in it)
+goes to the plates-and-feedback session. Nothing in it may risk the printer.
+
 1. **`nmEjCTzMbDg` still FAILs O1 and O2, and waits on youtube.** Causes found on
    2026-09-27 ([the FAILs note](../../research/ledger-oracle-fails-2026-09-27.md)). The
    youtube source's `R = Intersect(t, m, 2)` picks the other root in bikar. The patch,
