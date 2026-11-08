@@ -65,9 +65,14 @@ complexity check lists the 86 Python functions over 10 and stops any new one.
   change (no reply, someone else's job, first sight, a state change, the 25/50/75% marks, a
   stall), self-test unchanged and the same watch state and rows after every poll on all 36 runs
   in the 32 saved watch logs, each replayed four ways (its own settings, short stall and lost
-  windows, pick-up flipped): 144 replays, 5,068 polls. 79 left.
-  `branch_inventory.py::self_test` (34) is skipped: it is a list of test cases, so splitting it
-  buys little. Next is `.claude/gates/plates_gate.py::check_approvals` at 23. A
+  windows, pick-up flipped): 144 replays, 5,068 polls (#937). Then
+  `.claude/gates/plates_gate.py::check_approvals` (23), one helper each for a row, its Spent by,
+  the open approval and the sends, the same findings on all 67 plate pages with every approval
+  cell, row and 'sent' timeline row broken in turn (43,230 cases, 35,540 with a finding, every
+  rule firing). 78 left.
+  The `self_test` functions (`branch_inventory.py` 34, `theme_plates.py` 22, `site_graph.py` 21)
+  are skipped: each is a list of test cases, so splitting it buys little. Next is
+  `.claude/gates/constructions_ledger.py::check` at 20. A
   cleanup skill comes back only if
   this proves a repeated manual task, and then as an extension of the built-in `simplify` skill.
 - **A post about the design**, which Omar asked for once he signed off: written with the
