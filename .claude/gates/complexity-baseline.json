@@ -66,9 +66,6 @@
   ".claude/gates/plates_gate.py::self_test": [
    19
   ],
-  ".claude/gates/prints_gate.py::check_record": [
-   57
-  ],
   ".claude/gates/site_graph.py::check": [
    28
   ],
