@@ -256,105 +256,135 @@ def hit(c, sid, line, ts, authored):
         c["samples"].append([sid, line, ts])
 
 
-def census(files: list[tuple[Path, str, str]]) -> dict:
-    stats = {"main_sessions": 0, "subagent_files": 0, "lines": 0, "parse_errors": 0,
-             "assistant_turns": 0, "tool_use": defaultdict(int),
-             "entry_types": defaultdict(int)}
-    reads = defaultdict(lambda: {"n": 0, "line": None, "first_ts": None, "last_ts": None})
-    wrote = set()
-    clusters = defaultdict(new_cluster)       # "fact:<name>" | "cmd:<shape>"
-    ques = defaultdict(new_cluster)           # display only; never an FAQ candidate
-    start = {}                                # session -> earliest timestamp
+class _Census:
+    """The running tally census() builds, one transcript line at a time."""
 
-    for path, sid, agent in files:
-        stats["main_sessions" if agent == "main" else "subagent_files"] += 1
-        recent = deque()                       # (line, kind, text): recent failures, reads, commands
-        mentioned = set()                      # facts this file has already authored
+    def __init__(self):
+        self.stats = {"main_sessions": 0, "subagent_files": 0, "lines": 0, "parse_errors": 0,
+                      "assistant_turns": 0, "tool_use": defaultdict(int),
+                      "entry_types": defaultdict(int)}
+        self.reads = defaultdict(lambda: {"n": 0, "line": None, "first_ts": None,
+                                          "last_ts": None})
+        self.wrote = set()
+        self.clusters = defaultdict(new_cluster)  # "fact:<name>" | "cmd:<shape>"
+        self.ques = defaultdict(new_cluster)      # display only; never an FAQ candidate
+        self.start = {}                           # session -> earliest timestamp
+
+    def add_file(self, path: Path, sid: str, agent: str) -> None:
+        self.stats["main_sessions" if agent == "main" else "subagent_files"] += 1
+        self.recent = deque()     # (line, kind, text): recent failures, reads, commands
+        self.mentioned = set()    # facts this file has already authored
         with path.open(errors="replace") as fh:
             for i, raw in enumerate(fh):
-                stats["lines"] += 1
-                try:
-                    e = json.loads(raw)
-                except json.JSONDecodeError:
-                    stats["parse_errors"] += 1
-                    continue
-                if not isinstance(e, dict):
-                    stats["parse_errors"] += 1
-                    continue
-                etype = e.get("type", "?")
-                stats["entry_types"][etype] += 1
-                ts = e.get("timestamp")
-                if ts and (sid not in start or ts < start[sid]):
-                    start[sid] = ts
-                if etype == "assistant":
-                    stats["assistant_turns"] += 1
-                mine = authored_text(e)
-                while recent and i - recent[0][0] > WINDOW:
-                    recent.popleft()
-                now = []                       # this line's own reads and commands
-                for b in blocks(e) if etype == "assistant" else ():
-                    if b.get("type") == "tool_use":
-                        inp = b.get("input", {}) or {}
-                        if b.get("name") in READ_TOOLS and inp.get("file_path"):
-                            now.append((i, "read", inp["file_path"]))
-                        elif b.get("name") == "Bash" and inp.get("command"):
-                            now.append((i, "bash", inp["command"]))
+                self.line(i, raw, sid, agent)
 
-                for name, pat in FACT_PROBES.items():
-                    if pat.search(raw):
-                        c = clusters[f"fact:{name}"]
-                        authored = bool(pat.search(mine))
-                        hit(c, sid, i, ts, authored)
-                        if authored and name not in mentioned:
-                            mentioned.add(name)
-                            ev = list(recent) + now
-                            c["contexts"].append([sid, i, [(k, t[:160]) for _, k, t in ev]])
-                            how = learned(pat, ev)
-                            c["how"][how] += 1
-                            if how != "knew":
-                                c["rederived"][sid] += 1
+    def parse(self, raw: str) -> dict | None:
+        self.stats["lines"] += 1
+        try:
+            e = json.loads(raw)
+        except json.JSONDecodeError:
+            e = None
+        if not isinstance(e, dict):
+            self.stats["parse_errors"] += 1
+            return None
+        return e
 
-                err = error_text(e)
-                if err:
-                    recent.append((i, "fail", err))
-                recent.extend(now)
+    def line(self, i: int, raw: str, sid: str, agent: str) -> None:
+        e = self.parse(raw)
+        if e is None:
+            return
+        etype = e.get("type", "?")
+        self.stats["entry_types"][etype] += 1
+        ts = e.get("timestamp")
+        if ts and (sid not in self.start or ts < self.start[sid]):
+            self.start[sid] = ts
+        if etype == "assistant":
+            self.stats["assistant_turns"] += 1
+        while self.recent and i - self.recent[0][0] > WINDOW:
+            self.recent.popleft()
+        now = self.evidence(e, etype, i)       # this line's own reads and commands
+        self.probe_facts(raw, authored_text(e), sid, i, ts, now)
+        err = error_text(e)
+        if err:
+            self.recent.append((i, "fail", err))
+        self.recent.extend(now)
+        if etype == "assistant":
+            for b in blocks(e):
+                self.block(b, sid, agent, i, ts)
 
-                if etype != "assistant":
-                    continue
-                for b in blocks(e):
-                    bt = b.get("type")
-                    if bt == "tool_use":
-                        name = b.get("name", "?")
-                        stats["tool_use"][name] += 1
-                        inp = b.get("input", {}) or {}
-                        fp = inp.get("file_path")
-                        if name in READ_TOOLS and fp:
-                            r = reads[(sid, agent, fp)]
-                            r["n"] += 1
-                            if r["line"] is None:
-                                r["line"] = i
-                            if ts:
-                                r["first_ts"] = r["first_ts"] or ts
-                                r["last_ts"] = ts
-                        elif name in WRITE_TOOLS and fp:
-                            wrote.add((sid, agent, fp))
-                        elif name == "Bash":
-                            cmd = (inp.get("command") or "").strip()
-                            shape = cmd_shape(cmd)
-                            if shape:
-                                c = clusters[f"cmd:{shape}"]
-                                hit(c, sid, i, ts, True)
-                                if specific_name(search_term(cmd) or ""):
-                                    c["rederived"][sid] += 1   # the search is the lookup
-                                    c["how"]["search"] += 1
-                    elif bt in ("thinking", "text"):
-                        txt = b.get("thinking") or b.get("text") or ""
-                        for name, pat in QUESTION_SHAPES.items():
-                            if pat.search(txt):
-                                hit(ques[name], sid, i, ts, True)
+    @staticmethod
+    def evidence(e: dict, etype: str, i: int) -> list[tuple]:
+        now = []
+        for b in blocks(e) if etype == "assistant" else ():
+            if b.get("type") == "tool_use":
+                inp = b.get("input", {}) or {}
+                if b.get("name") in READ_TOOLS and inp.get("file_path"):
+                    now.append((i, "read", inp["file_path"]))
+                elif b.get("name") == "Bash" and inp.get("command"):
+                    now.append((i, "bash", inp["command"]))
+        return now
 
-    return {"stats": stats, "reads": reads, "wrote": wrote, "clusters": clusters,
-            "ques": ques, "start": start}
+    def probe_facts(self, raw: str, mine: str, sid: str, i: int, ts, now: list) -> None:
+        for name, pat in FACT_PROBES.items():
+            if not pat.search(raw):
+                continue
+            c = self.clusters[f"fact:{name}"]
+            authored = bool(pat.search(mine))
+            hit(c, sid, i, ts, authored)
+            if authored and name not in self.mentioned:
+                self.mentioned.add(name)
+                ev = list(self.recent) + now
+                c["contexts"].append([sid, i, [(k, t[:160]) for _, k, t in ev]])
+                how = learned(pat, ev)
+                c["how"][how] += 1
+                if how != "knew":
+                    c["rederived"][sid] += 1
+
+    def block(self, b: dict, sid: str, agent: str, i: int, ts) -> None:
+        bt = b.get("type")
+        if bt == "tool_use":
+            self.tool_use(b, sid, agent, i, ts)
+        elif bt in ("thinking", "text"):
+            txt = b.get("thinking") or b.get("text") or ""
+            for name, pat in QUESTION_SHAPES.items():
+                if pat.search(txt):
+                    hit(self.ques[name], sid, i, ts, True)
+
+    def tool_use(self, b: dict, sid: str, agent: str, i: int, ts) -> None:
+        name = b.get("name", "?")
+        self.stats["tool_use"][name] += 1
+        inp = b.get("input", {}) or {}
+        fp = inp.get("file_path")
+        if name in READ_TOOLS and fp:
+            r = self.reads[(sid, agent, fp)]
+            r["n"] += 1
+            if r["line"] is None:
+                r["line"] = i
+            if ts:
+                r["first_ts"] = r["first_ts"] or ts
+                r["last_ts"] = ts
+        elif name in WRITE_TOOLS and fp:
+            self.wrote.add((sid, agent, fp))
+        elif name == "Bash":
+            self.bash((inp.get("command") or "").strip(), sid, i, ts)
+
+    def bash(self, cmd: str, sid: str, i: int, ts) -> None:
+        shape = cmd_shape(cmd)
+        if not shape:
+            return
+        c = self.clusters[f"cmd:{shape}"]
+        hit(c, sid, i, ts, True)
+        if specific_name(search_term(cmd) or ""):
+            c["rederived"][sid] += 1   # the search is the lookup
+            c["how"]["search"] += 1
+
+
+def census(files: list[tuple[Path, str, str]]) -> dict:
+    t = _Census()
+    for path, sid, agent in files:
+        t.add_file(path, sid, agent)
+    return {"stats": t.stats, "reads": t.reads, "wrote": t.wrote, "clusters": t.clusters,
+            "ques": t.ques, "start": t.start}
 
 
 def loops(C: dict, threshold: int = LOOP_READS_PROVISIONAL) -> list[tuple]:
