@@ -20,7 +20,18 @@ the coaster-print session closed on 2026-11-02.
 **Judge [toys-1](../../design/plates/toys-1.md) on the hub, then write its record.** The magic
 cube, the ping-pong ball and the fidget star printed in silk blue on 2026-11-07, in 6 h 14 min,
 and finished clean (#928). Its three questions wait on Omar's hands on the pieces; the print
-record and the Timeline's `printed` row follow his answers.
+record and the Timeline's `printed` row follow his answers. Two calls he made on 2026-11-08,
+relayed by the other sessions, go into that record and the next prints:
+
+- **The ball: supports outside only.** His words: "for the ball, i only want support outside the
+  orb, not inside". toys-1 had supports on for the whole bed (`tools/bambu/presets/supports-0.20.json`),
+  so the slicer filled the lattice too. Next time the ball prints, slice it with supports that
+  stand only on the bed (Bambu Studio's "on build plate only", `support_on_build_plate_only`),
+  which cannot start inside the ball, and check the slice picture that none do. Not built yet:
+  he has not asked for another ball.
+- **The star on its own.** His words: "i want to create an individual plate with just the
+  start", read as the star. Built as [fidget-star-1](../../design/plates/fidget-star-1.md), no
+  supports, waiting on his yes and color.
 
 1. **The kite fits split-10 dropped.** On Omar's word, split-10's iteration 4 left out
    KITE-G10 (gap 0.10 mm a face) and KITE-PIN20 and KITE-PIN15 (pin holes 0.20 and 0.15 mm wider
