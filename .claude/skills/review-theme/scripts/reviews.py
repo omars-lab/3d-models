@@ -66,31 +66,45 @@ def problems(con: dict, data: dict | None, personas: list[str]) -> list[str]:
         if tid in seen:
             out.append(f"{tid}: reviewed twice")
         seen.add(tid)
-        if r.get("coloring") != th.theme_hash(themes[tid]):
-            out.append(f"{tid}: the review is for an earlier coloring; look at the new picture and "
-                       f"review it again (coloring is now {th.theme_hash(themes[tid])})")
-        scores = r.get("scores") or {}
-        for pid in personas:
-            if pid not in scores:
-                out.append(f"{tid}: no score from {pid}")
-        for pid, sc in scores.items():
-            if pid not in personas:
-                out.append(f"{tid}: {pid} is not a persona in personas.md")
-                continue
-            s = (sc or {}).get("score")
-            if not isinstance(s, int) or isinstance(s, bool) or not 1 <= s <= 5:
-                out.append(f"{tid}: {pid}'s score {s!r} is not a whole number from 1 to 5")
-            why = (sc or {}).get("why")
-            if not one_line(why):
-                out.append(f"{tid}: {pid}'s reason must be one line of text")
-            elif len(why.strip()) > MAX_WHY:
-                out.append(f"{tid}: {pid}'s reason is {len(why.strip())} characters; keep it to one line "
-                           f"of at most {MAX_WHY}")
-        if not one_line(r.get("overall")):
-            out.append(f"{tid}: the overall line must be one line of text")
+        out += _review_problems(tid, r, themes[tid], personas)
     for tid in themes:
         if tid not in seen:
             out.append(f"{tid}: not reviewed; `reviews.py stub {con['_folder'].name} {tid}`")
+    return out
+
+
+def _review_problems(tid: str, r: dict, theme: dict, personas: list[str]) -> list[str]:
+    """What is wrong with one review of a known theme: its coloring, its scores, its overall line."""
+    out = []
+    if r.get("coloring") != th.theme_hash(theme):
+        out.append(f"{tid}: the review is for an earlier coloring; look at the new picture and "
+                   f"review it again (coloring is now {th.theme_hash(theme)})")
+    scores = r.get("scores") or {}
+    for pid in personas:
+        if pid not in scores:
+            out.append(f"{tid}: no score from {pid}")
+    for pid, sc in scores.items():
+        if pid not in personas:
+            out.append(f"{tid}: {pid} is not a persona in personas.md")
+            continue
+        out += _score_problems(tid, pid, sc)
+    if not one_line(r.get("overall")):
+        out.append(f"{tid}: the overall line must be one line of text")
+    return out
+
+
+def _score_problems(tid: str, pid: str, sc) -> list[str]:
+    """What is wrong with one persona's score and reason."""
+    out = []
+    s = (sc or {}).get("score")
+    if not isinstance(s, int) or isinstance(s, bool) or not 1 <= s <= 5:
+        out.append(f"{tid}: {pid}'s score {s!r} is not a whole number from 1 to 5")
+    why = (sc or {}).get("why")
+    if not one_line(why):
+        out.append(f"{tid}: {pid}'s reason must be one line of text")
+    elif len(why.strip()) > MAX_WHY:
+        out.append(f"{tid}: {pid}'s reason is {len(why.strip())} characters; keep it to one line "
+                   f"of at most {MAX_WHY}")
     return out
 
 
