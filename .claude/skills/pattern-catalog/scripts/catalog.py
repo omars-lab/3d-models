@@ -649,30 +649,58 @@ def build(bikar: Bikar) -> tuple[dict[Path, bytes], list[str], list[str]]:
         if path in seen_paths:
             sys.exit(f"catalog: two ledger rows map to {path.relative_to(ROOT)}")
         seen_paths.add(path)
-        pictures: dict[str, Picture] = {}
-        for s in styles_here:
-            fname = next(f for f in files if style_of(row.id, f) == s)
-            entry = roster.get(fname)
-            thumb = f"{THUMBS}{entry['id']}.png" if entry else None
-            if thumb and thumb in bikar.tree:
-                media = MEDIA / row.id / f"{row.id}-{s}.png"
-                pictures[s] = Picture(s, f"../media/{row.id}/{media.name}", bikar.read(thumb))
-                out[media] = pictures[s].data
-            else:
-                warnings.append(f"{row.id}: no Coaster Lab picture for {fname}")
-        if row.no_piece:
-            status = "built"  # nothing to make, and nothing left to do: the status list has no better word
-        elif not row.migrated:
-            status = "rebuilding"
-        elif any(o.file in files for o in prints):
-            status = "printed"
-        else:
-            status = "built"
-        b = Built(row, path, files, styles_here, pictures, status)
+        pictures = _row_pictures(row, files, styles_here, roster, bikar, out, warnings)
+        b = Built(row, path, files, styles_here, pictures, _row_status(row, files, prints))
         built.append(b)
         out[path] = assemble(path, note_top(b, style_what, roster, plates, prints), NEW_NOTE_HAND_PART).encode()
 
     ledger_ids = {r.id for r in rows}
+    planned = _planned_notes(ledger_ids, by_id, seen_paths, out, warnings)
+
+    known = ledger_ids | {p.id for p, _ in planned}
+    for nid, path in by_id.items():
+        if nid not in known:
+            warnings.append(f"{path.relative_to(ROOT)}: id {nid} is not in the ledger or the planned list (left as it is)")
+
+    all_styles, by_style = _style_notes(built, style_what, style_order, roster, out)
+    out[CATALOG / "index.md"] = index_page(built, planned, all_styles, by_style).encode()
+    return out, warnings, unclaimed(bikar.pattern_files(), known)
+
+
+def _row_pictures(
+    row: Row, files: list[str], styles_here: list[str], roster: dict, bikar: Bikar,
+    out: dict[Path, bytes], warnings: list[str],
+) -> dict[str, Picture]:
+    """One Coaster Lab picture per style of this row, copied into the media folder; a warning for each missing one."""
+    pictures: dict[str, Picture] = {}
+    for s in styles_here:
+        fname = next(f for f in files if style_of(row.id, f) == s)
+        entry = roster.get(fname)
+        thumb = f"{THUMBS}{entry['id']}.png" if entry else None
+        if thumb and thumb in bikar.tree:
+            media = MEDIA / row.id / f"{row.id}-{s}.png"
+            pictures[s] = Picture(s, f"../media/{row.id}/{media.name}", bikar.read(thumb))
+            out[media] = pictures[s].data
+        else:
+            warnings.append(f"{row.id}: no Coaster Lab picture for {fname}")
+    return pictures
+
+
+def _row_status(row: Row, files: list[str], prints: list[PrintObject]) -> str:
+    if row.no_piece:
+        return "built"  # nothing to make, and nothing left to do: the status list has no better word
+    if not row.migrated:
+        return "rebuilding"
+    if any(o.file in files for o in prints):
+        return "printed"
+    return "built"
+
+
+def _planned_notes(
+    ledger_ids: set[str], by_id: dict[str, Path], seen_paths: set[Path],
+    out: dict[Path, bytes], warnings: list[str],
+) -> list[tuple[Planned, Path]]:
+    """A note for each planned pattern not yet in the ledger."""
     planned: list[tuple[Planned, Path]] = []
     for p in read_planned():
         if p.id in ledger_ids:
@@ -684,13 +712,14 @@ def build(bikar: Bikar) -> tuple[dict[Path, bytes], list[str], list[str]]:
         seen_paths.add(path)
         planned.append((p, path))
         out[path] = assemble(path, planned_top(p, path), NEW_NOTE_HAND_PART).encode()
+    return planned
 
-    known = ledger_ids | {p.id for p, _ in planned}
-    for nid, path in by_id.items():
-        if nid not in known:
-            warnings.append(f"{path.relative_to(ROOT)}: id {nid} is not in the ledger or the planned list (left as it is)")
 
-    # style notes
+def _style_notes(
+    built: list[Built], style_what: dict[str, str], style_order: dict[str, int], roster: dict,
+    out: dict[Path, bytes],
+) -> tuple[list[str], dict[str, list[Built]]]:
+    """A note per style, listing the patterns drawn in it."""
     by_style: dict[str, list[Built]] = {}
     for b in built:
         for s in b.styles:
@@ -700,9 +729,7 @@ def build(bikar: Bikar) -> tuple[dict[Path, bytes], list[str], list[str]]:
     for s in all_styles:
         path = style_paths.get(s, STYLES / f"{s}.md")
         out[path] = assemble(path, style_top(s, style_what, by_style.get(s, []), roster), NEW_STYLE_HAND_PART).encode()
-
-    out[CATALOG / "index.md"] = index_page(built, planned, all_styles, by_style).encode()
-    return out, warnings, unclaimed(bikar.pattern_files(), known)
+    return all_styles, by_style
 
 
 def style_top(s: str, style_what: dict[str, str], members: list[Built], roster: dict) -> str:

@@ -123,9 +123,6 @@
   ".claude/skills/monitor-print/scripts/print_monitor.py::publish": [
    11
   ],
-  ".claude/skills/pattern-catalog/scripts/catalog.py::build": [
-   17
-  ],
   ".claude/skills/pattern-catalog/scripts/catalog.py::check_lines": [
    11
   ],
