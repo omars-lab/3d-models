@@ -1,0 +1,22 @@
+# Call 3, option 4: a 6705 (25 x 32 x 4 mm) beside the 6704, drawn at one scale. The 6705's size
+# was read by one research pass only. From docs/design/pieces/spinner-coaster-design.md.
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+title: "Call 3, option 4: a 6705 instead (25 x 32 x 4 mm), beside the 6704"
+columns: 1
+panels:
+  - title: "6704: 20 mm hole, 27 mm across, button about 25 mm"
+    width: 36
+    scale: [24, 36]
+    parts:
+      - {kind: piece, color: "#5a6270", box: [28, 0, 3.5, 4.0], both: true, label: "6704", label_at: [29.75, 2]}
+      - {kind: air, box: [8, 0, 20, 4.0]}
+      - {kind: piece, color: "#dcaa33", box: [5.7, 4.2, 24.6, 1.6], label: "button about 25 mm", label_at: [24, 5]}
+  - title: "6705: 25 mm hole, 32 mm across, button about 30 mm"
+    width: 36
+    scale: [24, 36]
+    parts:
+      - {kind: piece, color: "#5a6270", box: [30.5, 0, 3.5, 4.0], both: true, label: "6705", label_at: [32.25, 2]}
+      - {kind: air, box: [5.5, 0, 25, 4.0]}
+      - {kind: piece, color: "#dcaa33", box: [3, 4.2, 30, 1.6], label: "button about 30 mm", label_at: [26, 5]}
+    notes:
+      - "Good: a bigger button at the same thickness. But: its size was read by one pass and not checked, the pattern loses more of its middle, and the coupons get redrawn."

@@ -1,0 +1,21 @@
+# Call 3, option 1 (recommended for the coupons): a sealed chrome steel 6704, 20 x 27 x 4 mm.
+# The ring and ball split across the 3.5 mm wall is drawn for the picture, not measured.
+# From docs/design/pieces/spinner-coaster-design.md, "The bearing and why".
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+title: "Call 3, option 1: a sealed chrome steel 6704 (20 x 27 x 4 mm)"
+columns: 1
+panels:
+  - title: "Cut through the bearing, as it sits in the pocket"
+    width: 30
+    scale: [40, 60]
+    parts:
+      - {kind: piece, color: "#aba69f", box: [28.5, 0, 1.5, 4.0], both: true, label: "pocket wall", label_at: [29.2, 2]}
+      - {kind: piece, color: "#5a6270", box: [25, 0, 1, 4.0], both: true, label: inner ring, label_at: [25.5, 1]}
+      - {kind: piece, color: "#5a6270", box: [27.5, 0, 1, 4.0], both: true, label: outer ring, label_at: [28, 1]}
+      - {kind: air, box: [26, 0.5, 1.5, 3.0], both: true}
+      - {kind: piece, color: "#c3c8d0", box: [26.1, 1.25, 1.3, 1.5], both: true, label: balls, label_at: [26.7, 2]}
+      - {kind: piece, color: "#222222", box: [26, 3.5, 1.5, 0.5], both: true, label: "rubber seal, top and bottom", label_at: [26.7, 3.75]}
+      - {kind: piece, color: "#222222", box: [26, 0, 1.5, 0.5], both: true}
+      - {kind: air, box: [5, 0, 20, 4.0], label: "20 mm hole", label_at: [12, 2], label_side: left}
+    notes:
+      - "Good: a shop page read gives the size and the seals, and the seals keep sagging plastic off the balls. But: chrome steel may rust under wet mugs, so stainless gets searched for before a coaster is sold."

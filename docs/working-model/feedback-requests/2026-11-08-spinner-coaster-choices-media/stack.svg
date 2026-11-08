@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1501" height="815.3" viewBox="0 0 1501 815.3" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>The spinner coaster as recommended: the bearing goes in at a pause, the button after</title>
+<rect width="100%" height="100%" fill="#f8f7f4"/>
+<text x="20" y="37" font-size="17" font-weight="bold" fill="#222222">The spinner coaster as recommended: the bearing goes in at a pause, the button after</text>
+<text x="20" y="53.5" font-size="12.5" fill="#555555">Cut through, side view. White: air. Solid blue: printed on the bed (first layer). Orange dashed: printed last (top surface). Not to scale.</text>
+<g data-panel="1. At the pause, before layer 27 (5.2 mm)">
+<text x="20" y="89.5" font-size="14" font-weight="bold" fill="#222222">1. At the pause, before layer 27 (5.2 mm)</text>
+<g transform="translate(212.64,107.5)">
+<polygon data-kind="piece" points="0,237.6 900,237.6 900,216 0,216" fill="#aba69f"/>
+<line data-mark="first" x1="0" y1="237.6" x2="900" y2="237.6" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="piece" points="0,216 243,216 243,201.6 0,201.6" fill="#aba69f"/>
+<polygon data-kind="piece" points="657,216 900,216 900,201.6 657,201.6" fill="#aba69f"/>
+<polygon data-kind="air" points="243,216 657,216 657,201.6 243,201.6" fill="#ffffff"/>
+<polygon data-kind="piece" points="0,201.6 204.3,201.6 204.3,50.4 0,50.4" fill="#aba69f"/>
+<polygon data-kind="piece" points="695.7,201.6 900,201.6 900,50.4 695.7,50.4" fill="#aba69f"/>
+<polygon data-kind="piece" points="207,201.6 270,201.6 270,57.6 207,57.6" fill="#5a6270"/>
+<polygon data-kind="piece" points="630,201.6 693,201.6 693,57.6 630,57.6" fill="#5a6270"/>
+<polygon data-kind="air" points="270,201.6 630,201.6 630,57.6 270,57.6" fill="#ffffff"/>
+<line data-kind="arrow" x1="450" y1="0" x2="450" y2="43.2" stroke="#444444" stroke-width="1.6"/>
+<polyline points="445,34.2 450,43.2 455,34.2" fill="none" stroke="#444444" stroke-width="1.6"/>
+<text x="462" y="25.6" font-size="12" fill="#444444">the nozzle comes back at 5.4 mm</text>
+<rect data-kind="bed" x="-6" y="241.6" width="912" height="5" fill="#cfcbc3"/>
+<text x="910" y="247.6" font-size="12" fill="#444444">print bed</text>
+</g>
+<circle data-label-dot="1" cx="572.64" cy="237.1" r="2.6" fill="#222222"/>
+<polyline points="572.64,237.1 192.64,237.1 182.64,237.1" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="178.64" y="241.1" font-size="12" fill="#222222" text-anchor="end">the bearing's 20 mm hole</text>
+<circle data-label-dot="1" cx="266.64" cy="334.3" r="2.6" fill="#222222"/>
+<polyline points="266.64,334.3 192.64,334.3 182.64,334.3" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="178.64" y="338.3" font-size="12" fill="#222222" text-anchor="end">floor 0.6 mm</text>
+<circle data-label-dot="1" cx="878.64" cy="179.5" r="2.6" fill="#222222"/>
+<polyline points="878.64,179.5 1193.88,179.5 1203.88,179.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1207.88" y="183.5" font-size="12" fill="#222222" text-anchor="start">6704 bearing, dropped in: top at 5.0 mm</text>
+<circle data-label-dot="1" cx="1022.64" cy="237.1" r="2.6" fill="#222222"/>
+<polyline points="1022.64,237.1 1193.88,237.1 1203.88,237.1" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1207.88" y="241.1" font-size="12" fill="#222222" text-anchor="start">coaster body: rim at 5.2 mm</text>
+<circle data-label-dot="1" cx="662.64" cy="316.3" r="2.6" fill="#222222"/>
+<polyline points="662.64,316.3 1193.88,316.3 1203.88,316.3" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1207.88" y="320.3" font-size="12" fill="#222222" text-anchor="start">air under the turning ring</text>
+<text x="20" y="384.7" font-size="12" fill="#444444">The printer stops with 26 layers done. You drop the bearing in and press resume. Its top sits at 5.0 mm, one layer below the rim, so the nozzle passes 0.4 mm above the steel.</text>
+</g>
+<g data-panel="2. Printed, with the button pressed in">
+<text x="20" y="449.7" font-size="14" font-weight="bold" fill="#222222">2. Printed, with the button pressed in</text>
+<g transform="translate(225.36,469.7)">
+<polygon data-kind="piece" points="0,252 900,252 900,230.4 0,230.4" fill="#aba69f"/>
+<line data-mark="first" x1="0" y1="252" x2="900" y2="252" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="piece" points="0,230.4 243,230.4 243,216 0,216" fill="#aba69f"/>
+<polygon data-kind="piece" points="657,230.4 900,230.4 900,216 657,216" fill="#aba69f"/>
+<polygon data-kind="air" points="243,230.4 657,230.4 657,216 243,216" fill="#ffffff"/>
+<polygon data-kind="piece" points="0,216 204.3,216 204.3,64.8 0,64.8" fill="#aba69f"/>
+<polygon data-kind="piece" points="695.7,216 900,216 900,64.8 695.7,64.8" fill="#aba69f"/>
+<polygon data-kind="piece" points="0,64.8 221.4,64.8 221.4,43.2 0,43.2" fill="#aba69f"/>
+<polygon data-kind="piece" points="678.6,64.8 900,64.8 900,43.2 678.6,43.2" fill="#aba69f"/>
+<polygon data-kind="piece" points="72,43.2 126,43.2 126,0 72,0" fill="#aba69f"/>
+<line data-mark="last" x1="72" y1="0" x2="126" y2="0" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<polygon data-kind="piece" points="774,43.2 828,43.2 828,0 774,0" fill="#aba69f"/>
+<line data-mark="last" x1="774" y1="0" x2="828" y2="0" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<polygon data-kind="piece" points="207,216 270,216 270,72 207,72" fill="#5a6270"/>
+<polygon data-kind="piece" points="630,216 693,216 693,72 630,72" fill="#5a6270"/>
+<polygon data-kind="piece" points="228.6,64.8 671.4,64.8 671.4,7.2 228.6,7.2" fill="#dcaa33"/>
+<polygon data-kind="piece" points="259.2,72 640.8,72 640.8,64.8 259.2,64.8" fill="#dcaa33"/>
+<polygon data-kind="piece" points="270,180 630,180 630,72 270,72" fill="#dcaa33"/>
+<rect data-kind="bed" x="-6" y="256" width="912" height="5" fill="#cfcbc3"/>
+<text x="910" y="262" font-size="12" fill="#444444">print bed</text>
+</g>
+<circle data-label-dot="1" cx="585.36" cy="595.7" r="2.6" fill="#222222"/>
+<polyline points="585.36,595.7 205.36,595.7 195.36,595.7" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="191.36" y="599.7" font-size="12" fill="#222222" text-anchor="end">stub pressed into the hole</text>
+<circle data-label-dot="1" cx="1026.36" cy="484.1" r="2.6" fill="#222222"/>
+<polyline points="1026.36,484.1 1206.6,484.1 1216.6,484.1" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1220.6" y="488.1" font-size="12" fill="#222222" text-anchor="start">strap, where the mug sits: top at 7.0 mm</text>
+<circle data-label-dot="1" cx="765.36" cy="498.5" r="2.6" fill="#222222"/>
+<polyline points="765.36,498.5 1206.6,500.1 1216.6,500.1" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1220.6" y="504.1" font-size="12" fill="#222222" text-anchor="start">button, about 25 mm: it spins</text>
+<circle data-label-dot="1" cx="1017.36" cy="523.7" r="2.6" fill="#222222"/>
+<polyline points="1017.36,523.7 1206.6,523.7 1216.6,523.7" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1220.6" y="527.7" font-size="12" fill="#222222" text-anchor="start">cap: 3 layers over the outer ring</text>
+<circle data-label-dot="1" cx="891.36" cy="613.7" r="2.6" fill="#222222"/>
+<polyline points="891.36,613.7 1206.6,613.7 1216.6,613.7" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1220.6" y="617.7" font-size="12" fill="#222222" text-anchor="start">bearing</text>
+<text x="20" y="761.3" font-size="12" fill="#444444">Gray is the coaster, blue-gray the steel bearing, gold the button. The button is printed on its own and pressed into the bearing's hole after the print comes off the bed.</text>
+<text x="20" y="778.3" font-size="12" fill="#444444">The button's top is 0.2 mm below the strap tops, so a mug does not stop it. A finger flick does.</text>
+</g>
+</svg>

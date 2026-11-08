@@ -1,0 +1,28 @@
+# Call 2, option 1 (recommended): 7.0 mm at the straps, against today's 5.2 mm.
+# From docs/design/pieces/spinner-coaster-design.md, open question 2.
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+title: "Call 2, option 1: 7.0 mm at a strap, the button inside the cap"
+columns: 1
+panels:
+  - title: "Today's straps coaster: 5.2 mm at a strap, 4.0 between"
+    width: 50
+    parts:
+      - {kind: piece, color: "#aba69f", box: [0, 0, 50, 4.0], first: bottom, label: "slab, 4.0 mm", label_at: [40, 2]}
+      - {kind: piece, color: "#aba69f", box: [43, 4.0, 3, 1.2], both: true, last: top, label: "strap top at 5.2 mm", label_at: [44.5, 4.6]}
+      - {kind: bed, line: [0, 0, 50]}
+  - title: "The spinner: 7.0 mm at a strap, 5.8 between, 1.8 mm more"
+    width: 50
+    parts:
+      - {kind: piece, color: "#aba69f", box: [0, 0, 50, 0.6], first: bottom}
+      - {kind: piece, color: "#aba69f", box: [36.5, 0.6, 13.5, 0.4], both: true}
+      - {kind: air, box: [13.5, 0.6, 23, 0.4]}
+      - {kind: piece, color: "#aba69f", box: [38.65, 1.0, 11.35, 4.2], both: true, label: "body and cap: 5.8 mm", label_at: [46, 3]}
+      - {kind: piece, color: "#aba69f", box: [37.7, 5.2, 12.3, 0.6], both: true}
+      - {kind: piece, color: "#aba69f", box: [43, 5.8, 3, 1.2], both: true, last: top, label: "strap top at 7.0 mm", label_at: [44.5, 6.6]}
+      - {kind: piece, color: "#5a6270", box: [35, 1.0, 3.5, 4.0], both: true}
+      - {kind: piece, color: "#dcaa33", box: [12.7, 5.2, 24.6, 1.6], label: "button about 25 mm, beside the cap, not over it", label_at: [30, 6.2]}
+      - {kind: piece, color: "#dcaa33", box: [14.4, 5.0, 21.2, 0.2]}
+      - {kind: piece, color: "#dcaa33", box: [15, 2.0, 20, 3.0]}
+      - {kind: bed, line: [0, 0, 50]}
+    notes:
+      - "Good: the thinnest stack that holds a 4 mm bearing. But: the turning button is only about 25 mm across."

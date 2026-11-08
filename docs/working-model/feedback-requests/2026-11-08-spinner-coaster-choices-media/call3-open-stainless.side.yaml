@@ -1,0 +1,20 @@
+# Call 3, option 3: an open stainless 6704 (SKDIN S6704, page read). No seals, so a sagging strand
+# of the cap can reach the balls. From docs/design/pieces/spinner-coaster-design.md.
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+title: "Call 3, option 3: an open stainless 6704 (no seals)"
+columns: 1
+panels:
+  - title: "No seals: the cap printed over it can sag into the balls"
+    width: 30
+    scale: [40, 60]
+    parts:
+      - {kind: piece, color: "#aba69f", box: [27.4, 4.2, 2.6, 0.6], both: true, label: "cap printed over the outer ring", label_at: [29, 4.5]}
+      - {kind: piece, color: "#aba69f", box: [26.6, 3.4, 0.8, 0.8], both: true, label: "a sagging strand reaching the balls", label_at: [27, 3.8]}
+      - {kind: piece, color: "#aba69f", box: [28.5, 0, 1.5, 4.2], both: true, label: "pocket wall", label_at: [29.2, 2]}
+      - {kind: piece, color: "#a9b2bc", box: [25, 0, 1, 4.0], both: true, label: "inner ring", label_at: [25.5, 1]}
+      - {kind: piece, color: "#a9b2bc", box: [27.5, 0, 1, 4.0], both: true, label: "outer ring", label_at: [28, 1]}
+      - {kind: air, box: [26, 0, 1.5, 3.4], both: true}
+      - {kind: piece, color: "#d6dae0", box: [26.1, 1.25, 1.3, 1.5], both: true, label: "balls, open to the air", label_at: [26.7, 2]}
+      - {kind: air, box: [5, 0, 20, 4.8], label: "20 mm hole", label_at: [12, 2], label_side: left}
+    notes:
+      - "Good: a shop page was read, so the size and its tolerance are known. But: nothing keeps sagged plastic off the balls and cage, so the cap must reach less far and the spin test is more at risk."

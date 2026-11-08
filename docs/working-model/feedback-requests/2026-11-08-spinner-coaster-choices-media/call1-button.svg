@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1339.8" height="805.5" viewBox="0 0 1339.8 805.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>Call 1, option 1: a button, printed on its own and pressed in after</title>
+<rect width="100%" height="100%" fill="#f8f7f4"/>
+<text x="20" y="37" font-size="17" font-weight="bold" fill="#222222">Call 1, option 1: a button, printed on its own and pressed in after</text>
+<text x="20" y="53.5" font-size="12.5" fill="#555555">Cut through, side view. White: air. Solid blue: printed on the bed (first layer). Orange dashed: printed last (top surface). Not to scale.</text>
+<g data-panel="The button on the bed: its top face down, the stub up">
+<text x="20" y="89.5" font-size="14" font-weight="bold" fill="#222222">The button on the bed: its top face down, the stub up</text>
+<g transform="translate(26,109.5)">
+<polygon data-kind="piece" points="228.6,172.8 671.4,172.8 671.4,115.2 228.6,115.2" fill="#dcaa33"/>
+<line data-mark="first" x1="228.6" y1="172.8" x2="671.4" y2="172.8" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="piece" points="259.2,115.2 640.8,115.2 640.8,108 259.2,108" fill="#dcaa33"/>
+<polygon data-kind="piece" points="270,108 630,108 630,0 270,0" fill="#dcaa33"/>
+<line data-mark="last" x1="270" y1="0" x2="630" y2="0" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<rect data-kind="bed" x="-6" y="176.8" width="912" height="5" fill="#cfcbc3"/>
+<text x="910" y="182.8" font-size="12" fill="#444444">print bed</text>
+</g>
+<circle data-label-dot="1" cx="566" cy="163.5" r="2.6" fill="#222222"/>
+<polyline points="566,163.5 1007.24,163.5 1017.24,163.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1021.24" y="167.5" font-size="12" fill="#222222" text-anchor="start">stub, 3 mm long: pressed into the 20 mm hole</text>
+<circle data-label-dot="1" cx="638" cy="221.1" r="2.6" fill="#222222"/>
+<polyline points="638,221.1 1007.24,221.1 1017.24,221.1" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1021.24" y="225.1" font-size="12" fill="#222222" text-anchor="start">collar: the only part that touches the bearing</text>
+<circle data-label-dot="1" cx="620" cy="253.5" r="2.6" fill="#222222"/>
+<polyline points="620,253.5 1007.24,253.5 1017.24,253.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1021.24" y="257.5" font-size="12" fill="#222222" text-anchor="start">the button's top: 24.6 mm across, 1.6 mm thick</text>
+<text x="20" y="321.9" font-size="12" fill="#444444">A small print of a few minutes, apart from the coaster. If the press fit is wrong, only this is reprinted.</text>
+</g>
+<g data-panel="Pressed into the coaster that spins (the straps coaster, printed face up)">
+<text x="20" y="386.9" font-size="14" font-weight="bold" fill="#222222">Pressed into the coaster that spins (the straps coaster, printed face up)</text>
+<g transform="translate(104.52,404.9)">
+<polygon data-kind="piece" points="0,324 900,324 900,302.4 0,302.4" fill="#aba69f"/>
+<line data-mark="first" x1="0" y1="324" x2="900" y2="324" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="piece" points="0,302.4 243,302.4 243,288 0,288" fill="#aba69f"/>
+<polygon data-kind="piece" points="657,302.4 900,302.4 900,288 657,288" fill="#aba69f"/>
+<polygon data-kind="air" points="243,302.4 657,302.4 657,288 243,288" fill="#ffffff"/>
+<polygon data-kind="piece" points="0,288 204.3,288 204.3,136.8 0,136.8" fill="#aba69f"/>
+<polygon data-kind="piece" points="695.7,288 900,288 900,136.8 695.7,136.8" fill="#aba69f"/>
+<polygon data-kind="piece" points="0,136.8 221.4,136.8 221.4,115.2 0,115.2" fill="#aba69f"/>
+<polygon data-kind="piece" points="678.6,136.8 900,136.8 900,115.2 678.6,115.2" fill="#aba69f"/>
+<polygon data-kind="piece" points="72,115.2 126,115.2 126,72 72,72" fill="#aba69f"/>
+<line data-mark="last" x1="72" y1="72" x2="126" y2="72" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<polygon data-kind="piece" points="774,115.2 828,115.2 828,72 774,72" fill="#aba69f"/>
+<line data-mark="last" x1="774" y1="72" x2="828" y2="72" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<polygon data-kind="piece" points="207,288 270,288 270,144 207,144" fill="#5a6270"/>
+<polygon data-kind="piece" points="630,288 693,288 693,144 630,144" fill="#5a6270"/>
+<polygon data-kind="piece" points="228.6,136.8 671.4,136.8 671.4,79.2 228.6,79.2" fill="#dcaa33"/>
+<polygon data-kind="piece" points="259.2,144 640.8,144 640.8,136.8 259.2,136.8" fill="#dcaa33"/>
+<polygon data-kind="piece" points="270,252 630,252 630,144 270,144" fill="#dcaa33"/>
+<line data-kind="arrow" x1="450" y1="0" x2="450" y2="72" stroke="#444444" stroke-width="1.6"/>
+<polyline points="445,63 450,72 455,63" fill="none" stroke="#444444" stroke-width="1.6"/>
+<text x="462" y="40" font-size="12" fill="#444444">pressed in by hand after the print</text>
+<rect data-kind="bed" x="-6" y="328" width="912" height="5" fill="#cfcbc3"/>
+<text x="910" y="334" font-size="12" fill="#444444">print bed</text>
+</g>
+<circle data-label-dot="1" cx="338.52" cy="620.9" r="2.6" fill="#222222"/>
+<polyline points="338.52,620.9 84.52,620.9 74.52,620.9" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="70.52" y="624.9" font-size="12" fill="#222222" text-anchor="end">bearing</text>
+<circle data-label-dot="1" cx="905.52" cy="491.3" r="2.6" fill="#222222"/>
+<polyline points="905.52,491.3 1085.76,491.3 1095.76,491.3" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1099.76" y="495.3" font-size="12" fill="#222222" text-anchor="start">strap: the mug sits here</text>
+<circle data-label-dot="1" cx="644.52" cy="505.7" r="2.6" fill="#222222"/>
+<polyline points="644.52,505.7 1085.76,507.3 1095.76,507.3" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1099.76" y="511.3" font-size="12" fill="#222222" text-anchor="start">button: a finger flick spins it</text>
+<circle data-label-dot="1" cx="950.52" cy="620.9" r="2.6" fill="#222222"/>
+<polyline points="950.52,620.9 1085.76,620.9 1095.76,620.9" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1099.76" y="624.9" font-size="12" fill="#222222" text-anchor="start">coaster</text>
+<text x="20" y="768.5" font-size="12" fill="#444444">Good: the coaster we make today, and the steel turns against nothing printed. But: a second part to print and press in.</text>
+</g>
+</svg>

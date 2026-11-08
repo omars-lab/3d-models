@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="956.48" height="697.1" viewBox="0 0 956.48 697.1" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>Call 3, option 4: a 6705 instead (25 x 32 x 4 mm), beside the 6704</title>
+<rect width="100%" height="100%" fill="#f8f7f4"/>
+<text x="20" y="37" font-size="17" font-weight="bold" fill="#222222">Call 3, option 4: a 6705 instead (25 x 32 x 4 mm), beside the 6704</text>
+<text x="20" y="53.5" font-size="12.5" fill="#555555">Cut through, side view. White: air. Not to scale.</text>
+<g data-panel="6704: 20 mm hole, 27 mm across, button about 25 mm">
+<text x="20" y="89.5" font-size="14" font-weight="bold" fill="#222222">6704: 20 mm hole, 27 mm across, button about 25 mm</text>
+<g transform="translate(-88,107.5)">
+<polygon data-kind="piece" points="108,208.8 192,208.8 192,64.8 108,64.8" fill="#5a6270"/>
+<polygon data-kind="piece" points="672,208.8 756,208.8 756,64.8 672,64.8" fill="#5a6270"/>
+<polygon data-kind="air" points="192,208.8 672,208.8 672,64.8 192,64.8" fill="#ffffff"/>
+<polygon data-kind="piece" points="136.8,57.6 727.2,57.6 727.2,0 136.8,0" fill="#dcaa33"/>
+</g>
+<circle data-label-dot="1" cx="488" cy="136.3" r="2.6" fill="#222222"/>
+<polyline points="488,136.3 682,136.3 692,136.3" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="696" y="140.3" font-size="12" fill="#222222" text-anchor="start">button about 25 mm</text>
+<circle data-label-dot="1" cx="626" cy="244.3" r="2.6" fill="#222222"/>
+<polyline points="626,244.3 682,244.3 692,244.3" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="696" y="248.3" font-size="12" fill="#222222" text-anchor="start">6704</text>
+</g>
+<g data-panel="6705: 25 mm hole, 32 mm across, button about 30 mm">
+<text x="20" y="390.3" font-size="14" font-weight="bold" fill="#222222">6705: 25 mm hole, 32 mm across, button about 30 mm</text>
+<g transform="translate(-28,408.3)">
+<polygon data-kind="piece" points="48,208.8 132,208.8 132,64.8 48,64.8" fill="#5a6270"/>
+<polygon data-kind="piece" points="732,208.8 816,208.8 816,64.8 732,64.8" fill="#5a6270"/>
+<polygon data-kind="air" points="132,208.8 732,208.8 732,64.8 132,64.8" fill="#ffffff"/>
+<polygon data-kind="piece" points="72,57.6 792,57.6 792,0 72,0" fill="#dcaa33"/>
+</g>
+<circle data-label-dot="1" cx="596" cy="437.1" r="2.6" fill="#222222"/>
+<polyline points="596,437.1 802,437.1 812,437.1" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="816" y="441.1" font-size="12" fill="#222222" text-anchor="start">button about 30 mm</text>
+<circle data-label-dot="1" cx="746" cy="545.1" r="2.6" fill="#222222"/>
+<polyline points="746,545.1 802,545.1 812,545.1" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="816" y="549.1" font-size="12" fill="#222222" text-anchor="start">6705</text>
+<text x="20" y="643.1" font-size="12" fill="#444444">Good: a bigger button at the same thickness. But: its size was read by one pass and not checked, the pattern loses more of its middle, and the</text>
+<text x="20" y="660.1" font-size="12" fill="#444444">coupons get redrawn.</text>
+</g>
+</svg>

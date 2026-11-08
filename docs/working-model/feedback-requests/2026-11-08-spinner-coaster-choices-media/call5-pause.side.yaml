@@ -1,0 +1,20 @@
+# Call 5, option 1 (recommended): pause and cap, tried first through the two coupons.
+# From docs/design/pieces/spinner-coaster-design.md, "Closing over the bearing" and the coupons.
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+title: "Call 5, option 1: pause and cap, one solid coaster"
+columns: 1
+panels:
+  - title: "The printer waits at 5.2 mm; you drop the bearing in; it prints the cap over it"
+    width: 50
+    parts:
+      - {kind: piece, color: "#aba69f", box: [0, 0, 50, 0.6], first: bottom}
+      - {kind: piece, color: "#aba69f", box: [36.5, 0.6, 13.5, 0.4], both: true}
+      - {kind: air, box: [13.5, 0.6, 23, 0.4]}
+      - {kind: piece, color: "#aba69f", box: [38.65, 1.0, 11.35, 4.2], both: true, label: "one body, no seam", label_at: [46, 3]}
+      - {kind: piece, color: "#5a6270", box: [35, 1.0, 3.5, 4.0], both: true, label: "bearing, dropped in by hand at the pause", label_at: [37, 3]}
+      - {kind: air, box: [15, 1.0, 20, 4.0]}
+      - {kind: piece, color: "#aba69f", box: [37.7, 5.2, 12.3, 0.6], both: true, last: top, label: "cap, printed after you press resume: the bearing cannot fall out", label_at: [44, 5.5]}
+      - {kind: arrow, from: [36.75, 8.4], to: [36.75, 5.4], text: "your hand, at the printer"}
+      - {kind: bed, line: [0, 0, 50]}
+    notes:
+      - "Good: what you asked for, one solid coaster. But: you are at the printer for every one, and our slicing must learn to carry the pause first (call 4)."

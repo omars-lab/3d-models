@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="460" viewBox="0 0 1400 460" font-family="Helvetica, Arial, sans-serif">
+  <!-- Call 4, option 2: slice and send from the Bambu Studio window by hand.
+       From docs/design/pieces/spinner-coaster-design.md, open question 4. Hand-drawn flow. -->
+  <rect width="1400" height="460" fill="#f7f6f2"/>
+  <text x="30" y="44" font-size="26" font-weight="bold" fill="#222">Call 4, option 2: slice and send from the Bambu Studio window</text>
+  <text x="30" y="74" font-size="17" fill="#555">No code. The file goes round our checks: the crossed-out boxes are the steps it skips.</text>
+  <defs><marker id="a" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#444"/></marker></defs>
+  <g font-size="18" fill="#222">
+    <rect x="30" y="130" width="220" height="110" rx="10" fill="#e4e1db" stroke="#888"/>
+    <text x="140" y="178" text-anchor="middle">the coaster's</text><text x="140" y="202" text-anchor="middle">model file</text>
+    <rect x="300" y="130" width="250" height="110" rx="10" fill="#e4e1db" stroke="#888"/>
+    <text x="425" y="166" text-anchor="middle">you open it in</text><text x="425" y="190" text-anchor="middle">Bambu Studio, add</text><text x="425" y="214" text-anchor="middle">the pause by hand</text>
+    <g opacity="0.55">
+      <rect x="600" y="130" width="230" height="110" rx="10" fill="#fff" stroke="#b33" stroke-dasharray="8 6"/>
+      <text x="715" y="178" text-anchor="middle">check: one pause,</text><text x="715" y="202" text-anchor="middle">at 5.2 mm</text>
+      <rect x="880" y="130" width="230" height="110" rx="10" fill="#fff" stroke="#b33" stroke-dasharray="8 6"/>
+      <text x="995" y="166" text-anchor="middle">approval on the</text><text x="995" y="190" text-anchor="middle">page, warnings</text><text x="995" y="214" text-anchor="middle">check, print log</text>
+    </g>
+    <g stroke="#b33" stroke-width="4"><line x1="610" y1="140" x2="820" y2="230"/><line x1="890" y1="140" x2="1100" y2="230"/></g>
+    <rect x="1160" y="130" width="210" height="110" rx="10" fill="#e4e1db" stroke="#888"/>
+    <text x="1265" y="178" text-anchor="middle">send to</text><text x="1265" y="202" text-anchor="middle">the printer</text>
+  </g>
+  <path d="M550,215 C700,320 1100,320 1250,244" fill="none" stroke="#444" stroke-width="2.5" marker-end="url(#a)"/>
+  <line x1="250" y1="185" x2="296" y2="185" stroke="#444" stroke-width="2.5" marker-end="url(#a)"/>
+  <text x="900" y="322" font-size="17" fill="#b33" text-anchor="middle">sent by hand from the window</text>
+  <text x="30" y="370" font-size="18" fill="#222">Good: nothing to build. But: no approval on record, no warnings check, no print log, and nothing checks the pause height.</text>
+  <text x="30" y="400" font-size="18" fill="#222">Leads to: a hand path for every spinner print. (Pushing a window-sliced file through our send with its check turned off is not offered.)</text>
+</svg>

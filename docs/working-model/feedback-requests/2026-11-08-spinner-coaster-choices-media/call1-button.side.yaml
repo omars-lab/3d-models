@@ -1,0 +1,32 @@
+# Call 1, option 1 (recommended): a button pressed into the bearing, in the straps coaster printed
+# face up. From docs/design/pieces/spinner-coaster-design.md, "The button".
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+title: "Call 1, option 1: a button, printed on its own and pressed in after"
+columns: 1
+panels:
+  - title: "The button on the bed: its top face down, the stub up"
+    width: 50
+    parts:
+      - {kind: piece, color: "#dcaa33", box: [12.7, 0, 24.6, 1.6], first: bottom, label: "the button's top: 24.6 mm across, 1.6 mm thick", label_at: [33, 0.8]}
+      - {kind: piece, color: "#dcaa33", box: [14.4, 1.6, 21.2, 0.2], label: "collar: the only part that touches the bearing", label_at: [34, 1.7]}
+      - {kind: piece, color: "#dcaa33", box: [15, 1.8, 20, 3.0], last: top, label: "stub, 3 mm long: pressed into the 20 mm hole", label_at: [30, 3.3]}
+      - {kind: bed, line: [0, 0, 50]}
+    notes:
+      - "A small print of a few minutes, apart from the coaster. If the press fit is wrong, only this is reprinted."
+  - title: "Pressed into the coaster that spins (the straps coaster, printed face up)"
+    width: 50
+    parts:
+      - {kind: piece, color: "#aba69f", box: [0, 0, 50, 0.6], first: bottom}
+      - {kind: piece, color: "#aba69f", box: [36.5, 0.6, 13.5, 0.4], both: true}
+      - {kind: air, box: [13.5, 0.6, 23, 0.4]}
+      - {kind: piece, color: "#aba69f", box: [38.65, 1.0, 11.35, 4.2], both: true, label: coaster, label_at: [47, 3]}
+      - {kind: piece, color: "#aba69f", box: [37.7, 5.2, 12.3, 0.6], both: true}
+      - {kind: piece, color: "#aba69f", box: [43, 5.8, 3, 1.2], both: true, last: top, label: "strap: the mug sits here", label_at: [44.5, 6.6]}
+      - {kind: piece, color: "#5a6270", box: [35, 1.0, 3.5, 4.0], both: true, label: bearing, label_at: [13, 3], label_side: left}
+      - {kind: piece, color: "#dcaa33", box: [12.7, 5.2, 24.6, 1.6], label: "button: a finger flick spins it", label_at: [30, 6.2]}
+      - {kind: piece, color: "#dcaa33", box: [14.4, 5.0, 21.2, 0.2]}
+      - {kind: piece, color: "#dcaa33", box: [15, 2.0, 20, 3.0]}
+      - {kind: arrow, from: [25, 9.0], to: [25, 7.0], text: "pressed in by hand after the print"}
+      - {kind: bed, line: [0, 0, 50]}
+    notes:
+      - "Good: the coaster we make today, and the steel turns against nothing printed. But: a second part to print and press in."

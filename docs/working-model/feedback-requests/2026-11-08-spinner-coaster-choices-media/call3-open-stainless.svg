@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1594.2" height="458.5" viewBox="0 0 1594.2 458.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>Call 3, option 3: an open stainless 6704 (no seals)</title>
+<rect width="100%" height="100%" fill="#f8f7f4"/>
+<text x="20" y="37" font-size="17" font-weight="bold" fill="#222222">Call 3, option 3: an open stainless 6704 (no seals)</text>
+<text x="20" y="53.5" font-size="12.5" fill="#555555">Cut through, side view. White: air. Not to scale.</text>
+<g data-panel="No seals: the cap printed over it can sag into the balls">
+<text x="20" y="89.5" font-size="14" font-weight="bold" fill="#222222">No seals: the cap printed over it can sag into the balls</text>
+<g transform="translate(117.6,107.5)">
+<polygon data-kind="piece" points="0,36 104,36 104,0 0,0" fill="#aba69f"/>
+<polygon data-kind="piece" points="1096,36 1200,36 1200,0 1096,0" fill="#aba69f"/>
+<polygon data-kind="piece" points="104,84 136,84 136,36 104,36" fill="#aba69f"/>
+<polygon data-kind="piece" points="1064,84 1096,84 1096,36 1064,36" fill="#aba69f"/>
+<polygon data-kind="piece" points="0,288 60,288 60,36 0,36" fill="#aba69f"/>
+<polygon data-kind="piece" points="1140,288 1200,288 1200,36 1140,36" fill="#aba69f"/>
+<polygon data-kind="piece" points="160,288 200,288 200,48 160,48" fill="#a9b2bc"/>
+<polygon data-kind="piece" points="1000,288 1040,288 1040,48 1000,48" fill="#a9b2bc"/>
+<polygon data-kind="piece" points="60,288 100,288 100,48 60,48" fill="#a9b2bc"/>
+<polygon data-kind="piece" points="1100,288 1140,288 1140,48 1100,48" fill="#a9b2bc"/>
+<polygon data-kind="air" points="100,288 160,288 160,84 100,84" fill="#ffffff"/>
+<polygon data-kind="air" points="1040,288 1100,288 1100,84 1040,84" fill="#ffffff"/>
+<polygon data-kind="piece" points="104,213 156,213 156,123 104,123" fill="#d6dae0"/>
+<polygon data-kind="piece" points="1044,213 1096,213 1096,123 1044,123" fill="#d6dae0"/>
+<polygon data-kind="air" points="200,288 1000,288 1000,0 200,0" fill="#ffffff"/>
+</g>
+<circle data-label-dot="1" cx="597.6" cy="275.5" r="2.6" fill="#222222"/>
+<polyline points="597.6,275.5 103.6,275.5 93.6,275.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="89.6" y="279.5" font-size="12" fill="#222222" text-anchor="end">20 mm hole</text>
+<circle data-label-dot="1" cx="1277.6" cy="125.5" r="2.6" fill="#222222"/>
+<polyline points="1277.6,125.5 1331.6,125.5 1341.6,125.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1345.6" y="129.5" font-size="12" fill="#222222" text-anchor="start">cap printed over the outer ring</text>
+<circle data-label-dot="1" cx="1197.6" cy="167.5" r="2.6" fill="#222222"/>
+<polyline points="1197.6,167.5 1331.6,167.5 1341.6,167.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1345.6" y="171.5" font-size="12" fill="#222222" text-anchor="start">a sagging strand reaching the balls</text>
+<circle data-label-dot="1" cx="1285.6" cy="275.5" r="2.6" fill="#222222"/>
+<polyline points="1285.6,275.5 1331.6,275.5 1341.6,275.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1345.6" y="279.5" font-size="12" fill="#222222" text-anchor="start">pocket wall</text>
+<circle data-label-dot="1" cx="1185.6" cy="275.5" r="2.6" fill="#222222"/>
+<polyline points="1185.6,275.5 1331.6,291.5 1341.6,291.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1345.6" y="295.5" font-size="12" fill="#222222" text-anchor="start">balls, open to the air</text>
+<circle data-label-dot="1" cx="1137.6" cy="335.5" r="2.6" fill="#222222"/>
+<polyline points="1137.6,335.5 1331.6,335.5 1341.6,335.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1345.6" y="339.5" font-size="12" fill="#222222" text-anchor="start">inner ring</text>
+<circle data-label-dot="1" cx="1237.6" cy="335.5" r="2.6" fill="#222222"/>
+<polyline points="1237.6,335.5 1331.6,351.5 1341.6,351.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1345.6" y="355.5" font-size="12" fill="#222222" text-anchor="start">outer ring</text>
+<text x="20" y="421.5" font-size="12" fill="#444444">Good: a shop page was read, so the size and its tolerance are known. But: nothing keeps sagged plastic off the balls and cage, so the cap must reach less far and the spin test is more at risk.</text>
+</g>
+</svg>
