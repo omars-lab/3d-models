@@ -133,6 +133,20 @@ inside the ring. Seen from above, the pulled-in toy reads as nested outlines, th
 That is a real loss for a pattern whose beauty is in its interlace, and it is why the choice of
 pattern matters (open question 4).
 
+**Who and what it touches.**
+
+```mermaid
+flowchart LR
+    O([Omar]) -- picks a pattern and judges the print --> T[The ring toy]
+    B[bikar: the pattern and its rings] -- ring outlines --> T
+    T -- one model per toy --> R[A plate recipe and plate page]
+    R -- sliced, sent with Omar's yes --> X[The printer]
+    X -- loose rings, or fused --> O
+```
+
+**No app surface.** Nothing changes in the gallery, the Lab or the store. It shows up as a new
+bikar declaration, a plate recipe with its page, and the usual page Omar judges the print on.
+
 ## 5. Options
 
 ```mermaid
@@ -147,12 +161,14 @@ flowchart LR
 |---|---|---|---|
 | What it is | The star, with our outlines | Flat round bands, each with its ring of the pattern on top; turn them to line the rosette back up | Option A at coaster height, 4.4 mm |
 | Pros | Proven by the star; the shape *is* the pattern; prints in one go with no supports | Mixes any patterns; a puzzle as well as a fidget | Fits the coaster line |
-| Cons | Shows outlines, not interlace; rings do not turn | A star cannot turn in a star-shaped hole, so the walls must be round and the pattern moves onto the top face; a new toy, nothing to copy | Slide ≈ gap ÷ tan(lean): with 2.2 mm of height either side of the bulge, the slide is about a millimetre, which is not a toy |
-| What it commits us to | A new bikar declaration (§6) | The same plus a round-bearing design, close to the [turning middle piece](../coaster/spinner-middle-design.md) | Nothing new, and nothing worth having |
-| Verifies | The gap print in §7 | Nothing until A's gap is known | — |
+| Cons | Shows outlines, not interlace; rings do not turn | A star cannot turn in a star-shaped hole, so the walls must be round and the pattern moves onto the top face; a new toy, nothing to copy | The slide can never pass half the height, 2.2 mm, and is less in practice: not a toy |
+| What it commits us to | A new bikar declaration (§7) | The same plus a round-bearing design, close to the [turning middle piece](../coaster/spinner-middle-design.md) | Nothing new, and nothing worth having |
+| Verifies | The gap print in §8 | Nothing until A's gap is known | — |
 
-**Option C is out.** The slide comes from the height. A coaster-thin toy barely moves, so the toy is
-its own object, about as tall as the star (18 mm).
+**Option C is out.** The slide comes from the height. A ring is held in only if its bulge is wider
+than the gap, and the bulge is the half-height × tan(lean). So the slide, gap ÷ tan(lean), is always
+less than half the height. A coaster-thin toy moves under 2.2 mm a ring, so the toy is its own
+object, about as tall as the star (18 mm).
 
 **Option B is a second toy, not a variant of A.** A round wall keeps nothing of the star's look; the
 pattern has to be cut or raised on each band's top face. It reuses the round undercut worked out for
@@ -205,14 +221,17 @@ whose counts share a factor if the lined-up toy should look whole.
 **Default:** wall 1.2 mm, three lines of a 0.4 mm nozzle, from the feature floor bet CAL-FEA-01.
 The star's walls are thinner (1.035 mm); ours start at the floor we already trust.
 
-**Starting bulge, not yet a default:** 3.0 mm at mid-height on an 18 mm toy, the round middle of
-the 2.90 and 3.79 mm measured on the star from [toys-1](../plates/toys-1.md) (Appendix A). It leans
-the wall about 18 degrees. It is copied from a toy, not settled by a source or a bet. The first
-print holds it fixed, so it stays a starting value until a print varies it.
+**Starting bulge, not yet a default:** 2.7 mm at mid-height on an 18 mm toy, measured square to
+the wall's face. That is the star's own bulge from [toys-1](../plates/toys-1.md) (9 mm × tan 16.6°;
+its points move 3.79 mm along their line from the centre, which is the same wall seen at a slant),
+so the wall leans 16.6 degrees, as the star's does. It is copied from a toy, not settled by a source
+or a bet. The first print holds it fixed, so it stays a starting value until a print varies it.
 
-**Validator:** a ring is held in when its widest outline (the bulge, minus the gap) is wider than
-the opening of the ring outside it at every height it can reach, by at least one wall line.
-PASS: bulge 3.0, gap 0.8: held in by 2.2 mm, more than the 0.42 mm wall line.
+**Validator:** a ring is held in when its widest outline (the bulge, minus the gap, both square to
+the wall) is wider than the opening of the ring outside it at every height it can reach, by at
+least one wall line. On the star this rough rule gives 1.05 mm for rings 1–2 and 1.72 mm for rings
+7–8, against 1.07 and 1.81 mm measured at the valleys.
+PASS: bulge 2.7, gap 0.8: held in by 1.9 mm, more than the 0.42 mm wall line.
 FAIL: bulge 1.0, gap 0.8: held in by 0.2 mm, less than one wall line. The printed ring's own
 roughness may let it pass through, so the toy falls apart.
 
@@ -250,13 +269,14 @@ The top rung, 1.2 mm, is a test rung, not a default. It sits inside the 0.96 to 
 star from [toys-1](../plates/toys-1.md) (Appendix A), so one toy matches a geometry we have already
 printed.
 
-What each gap should show, worked from *slide ≈ gap ÷ tan(lean)* with an 18-degree lean:
+What each gap should show, worked from *slide ≈ gap ÷ tan(lean)* with the star's 16.6-degree lean
+(the same rule matched the star's measured slides to 0.1 mm) and *held in ≈ bulge − gap*:
 
 | Gap | Slide per ring (about) | Pull-out for three rings (about) | Held in by |
 |---|---|---|---|
-| 0.4 mm | 1.2 mm | 2.5 mm | 2.6 mm |
-| 0.8 mm | 2.5 mm | 4.9 mm | 2.2 mm |
-| 1.2 mm | 3.7 mm | 7.4 mm | 1.8 mm |
+| 0.4 mm | 1.3 mm | 2.7 mm | 2.3 mm |
+| 0.8 mm | 2.7 mm | 5.4 mm | 1.9 mm |
+| 1.2 mm | 4.0 mm | 8.1 mm | 1.5 mm |
 
 Three rings make two sliding pairs, hence pull-out = two slides. The 0.4 mm toy will barely move
 even if it prints loose. That is the point of the ladder: the fun toy is likely to be the wider gap,
