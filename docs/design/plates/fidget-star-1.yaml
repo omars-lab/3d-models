@@ -1,0 +1,36 @@
+# fidget-star-1 — the 8-point fidget star from toys-1, on a plate of its own
+#
+# Omar, 2026-11-08: "for the toys plage, i want to create an individual plate with just the start",
+# and through the manager session: "i want a plate with just the star from the toys". "start" is read
+# as the star. One star, as the model comes:
+#
+#   FIDGET STAR  x1   scale 1   about 78.0 x 78.0 x 18.0 mm, flat on a base about 70 mm across
+#
+# The star was downloaded as 8ptFidgetStar.stl (exported from Blender 2.92; the file names no maker
+# or source). It is the same file toys-1 printed, held to the same sha256. It stays out of git: this
+# repo is public and the model is someone else's.
+#
+# No supports. toys-1 turned them on for the whole plate only because the ping-pong ball's lattice
+# has floating regions; the star lies flat and slices clean without them, and supports between its
+# rings were toys-1's first suspect for stuck rings.
+#
+# One color, picked at the send. Until then the plate slices on PLA Basic.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/fidget-star-1.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: FS1
+
+items:
+  - stl:    .bambu/imports/8pt-fidget-star.stl # 8ptFidgetStar.stl as downloaded
+    sha256:   4ac4e45a65a3336d6098bf1e02a83f63e8cc7b57c87cc8e02f8c971f87c21340
+    count:    1
+    label:    FIDGET STAR
+    no_id:    "the only piece on the bed; an outside mesh, so nothing is cut into it"
+    # Our standard profile: our walls and 15% infill, whatever the maker set. A recipe cannot set
+    # the maker's own settings on an outside mesh.
