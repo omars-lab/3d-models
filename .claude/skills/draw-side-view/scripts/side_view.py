@@ -173,6 +173,14 @@ def _nums(value, n: int, where: str) -> list[float]:
     return [float(v) for v in value]
 
 
+def _num(part: dict, key: str, where: str, default=None) -> float:
+    """One size in mm, refused in plain words when it is not a number (it used to crash)."""
+    value = part.get(key, default)
+    if not isinstance(value, (int, float)):
+        raise Refusal(f"{where}: {key} is a number of mm, got {value!r}")
+    return float(value)
+
+
 def _color(part: dict, where: str) -> str:
     if "color" in part:
         c = str(part["color"])
@@ -195,8 +203,11 @@ def check_part(part, where: str) -> dict:
     _check_numbers(part, where)
     if kind in ("piece", "flange", "stud", "dovetail"):
         _color(part, where)
-    if kind == "stud" and part.get("toward", "up") not in ("up", "down"):
-        raise Refusal(f"{where}: a stud's free end is toward up or down")
+    if kind == "stud":
+        if part.get("toward", "up") not in ("up", "down"):
+            raise Refusal(f"{where}: a stud's free end is toward up or down")
+        if _num(part, "chamfer", where, 0.2) < 0:
+            raise Refusal(f"{where}: a stud's chamfer is zero or more mm, got {part['chamfer']!r}")
     if kind == "dovetail":
         check_dovetail(part, where)
     return part
@@ -207,7 +218,7 @@ def _check_kind(part, where: str) -> str:
     if not isinstance(part, dict) or "kind" not in part:
         raise Refusal(f"{where}: a part is a mapping with a `kind`, got {part!r}")
     kind = part["kind"]
-    if kind not in KINDS:
+    if not isinstance(kind, str) or kind not in KINDS:
         raise Refusal(f"{where}: no part kind {kind!r}; the kit has {', '.join(KINDS)}")
     spec = KINDS[kind]
     unknown = set(part) - COMMON - spec["keys"]
@@ -221,7 +232,7 @@ def _check_kind(part, where: str) -> str:
 
 def _check_words(part: dict, kind: str, where: str) -> None:
     """The keys that take a word from a short list: side, a dim's place, the marked faces, the label."""
-    if "side" in part and part["side"] not in HALF_FILL:
+    if "side" in part and (not isinstance(part["side"], str) or part["side"] not in HALF_FILL):
         raise Refusal(f"{where}: side is lower or upper, got {part['side']!r}")
     if kind == "dim" and part.get("place", "right") not in ("left", "right", "above", "below"):
         raise Refusal(f"{where}: a dim's text is placed left, right, above or below")
@@ -250,9 +261,9 @@ def _check_numbers(part: dict, where: str) -> None:
 
 
 def check_dovetail(part: dict, where: str) -> None:
-    width, height, flare = (float(part[k]) for k in ("width", "height", "flare"))
-    gap = float(part.get("gap", 0))
-    depth = float(part.get("depth", height))
+    width, height, flare = (_num(part, k, where) for k in ("width", "height", "flare"))
+    gap = _num(part, "gap", where, 0)
+    depth = _num(part, "depth", where, height)
     if width <= 0 or height <= 0:
         raise Refusal(f"{where}: a dovetail has a root width and a height above zero")
     if flare <= gap:
@@ -268,7 +279,7 @@ def check_dovetail(part: dict, where: str) -> None:
     if part.get("show", "both") not in ("both", "rail", "slot"):
         raise Refusal(f"{where}: show is both, rail or slot")
     if "steps" in part:
-        steps = float(part["steps"])
+        steps = _num(part, "steps", where)
         layers = height / steps if steps > 0 else 0
         if steps <= 0 or abs(layers - round(layers)) > 1e-6 or round(layers) < 2:
             raise Refusal(f"{where}: steps ({part['steps']!r}) must split the {height:g} mm rail into two or more whole layers")
@@ -831,6 +842,17 @@ panels:
 """
 
 
+def _refusal_failures(what: str, part: dict, reason: str) -> list[str]:
+    """One refusal case of the self-test: the part must be refused with the reason, not drawn and not crash."""
+    try:
+        read_spec({"title": "t", "panels": [{"title": "p", "width": 10, "parts": [part]}]})
+    except Refusal as e:
+        return [] if reason in str(e) else [f"refuses {what} with the reason ({reason!r} not in {e})"]
+    except Exception as e:  # noqa: BLE001 - a crash is the failure this case exists to catch
+        return [f"refuses {what}: it crashed with {type(e).__name__}: {e}"]
+    return [f"refuses {what}: it drew it"]
+
+
 def _self_test() -> int:
     failures: list[str] = []
 
@@ -875,13 +897,17 @@ def _self_test() -> int:
         "steps that do not divide": ({"kind": "dovetail", "at": [5, 0], "width": 4, "height": 0.8, "flare": 0.3, "steps": 0.3}, "whole layers"),
         "a label on a bad side": ({"kind": "piece", "box": [0, 0, 1, 1], "label": "x", "label_side": "top"}, "left or right"),
         "a part outside the panel": ({"kind": "piece", "box": [8, 0, 4, 1]}, "outside the panel"),
+        # each of these crashed with a TypeError or ValueError before it was refused
+        "a dovetail width in words": ({"kind": "dovetail", "at": [5, 0], "width": "wide", "height": 0.8, "flare": 0.3}, "width is a number"),
+        "a dovetail gap left empty": ({"kind": "dovetail", "at": [5, 0], "width": 4, "height": 0.8, "flare": 0.3, "gap": None}, "gap is a number"),
+        "dovetail steps in a list": ({"kind": "dovetail", "at": [5, 0], "width": 4, "height": 0.8, "flare": 0.3, "steps": [0.2]}, "steps is a number"),
+        "a kind in a list": ({"kind": ["piece"], "box": [0, 0, 1, 1]}, "no part kind"),
+        "a side in a list": ({"kind": "half", "box": [0, 0, 1, 1], "side": ["lower"]}, "lower or upper"),
+        "a stud chamfer in words": ({"kind": "stud", "box": [0, 0, 1, 1], "chamfer": "round"}, "chamfer is a number"),
+        "a stud chamfer below zero": ({"kind": "stud", "box": [0, 0, 1, 1], "chamfer": -0.1}, "zero or more"),
     }
     for what, (part, reason) in bad.items():
-        try:
-            read_spec({"title": "t", "panels": [{"title": "p", "width": 10, "parts": [part]}]})
-            failures.append(f"refuses {what}: it drew it")
-        except Refusal as e:
-            expect(reason in str(e), f"refuses {what} with the reason ({reason!r} not in {e})")
+        failures += _refusal_failures(what, part, reason)
     try:
         read_spec({"title": "t", "panels": [{"title": "p", "parts": [{"kind": "piece", "box": [0, 0, 1, 1], "both": True}]}]})
         failures.append("refuses `both` without a panel width: it drew it")
