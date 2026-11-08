@@ -97,11 +97,16 @@ complexity check lists the 86 Python functions over 10 and stops any new one.
   declares and the summary, self-test unchanged and the same violations, summary and printed lines
   on the real catalog and on copies with each of its 70 knobs renamed or excused, each entry's
   model file missing, the baseline missing or broken four ways and bikar's grammar and lego
-  sources unavailable, each with the full listing on and off (1,504 cases, every verdict seen).
-  72 left. The `self_test` functions (`branch_inventory.py` 34, `theme_plates.py` 22,
+  sources unavailable, each with the full listing on and off (1,504 cases, every verdict seen)
+  (#945). Then `build/verify_machine_card.py::verify` (18), one helper each for the STL's
+  triangles and volume, the print gate and the mesh gate, problems in the old order, self-test
+  unchanged, the same report on the real 23-rung run, and the same problems and volume on every
+  rung against made-up bikar output with each line the check reads missing, right or wrong
+  (60,720 cases, 60,412 with a problem).
+  71 left. The `self_test` functions (`branch_inventory.py` 34, `theme_plates.py` 22,
   `site_graph.py` 21, `docs_gate.py` 20, `plates_gate.py` 19, `validate.py` 18) are skipped: each
-  is a list of test cases, so splitting it buys little. Next are the two at 18:
-  `build/verify_machine_card.py::verify` and `tools/print_review.py::bed_picture`. A
+  is a list of test cases, so splitting it buys little. Next is the other one at 18,
+  `tools/print_review.py::bed_picture`. A
   cleanup skill comes back only if
   this proves a repeated manual task, and then as an extension of the built-in `simplify` skill.
 - **A post about the design**, which Omar asked for once he signed off: written with the

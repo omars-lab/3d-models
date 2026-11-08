@@ -133,36 +133,19 @@ def num_eq(expected: str, actual: str) -> bool:
         return False
 
 
-def verify(row: dict, bikar_dir: Path, out: Path, tmp: Path) -> list[str]:
-    piece, want = row["piece"], row["check"]
-    bad: list[str] = []
-    dest = out / f"{piece}.stl"
-    code, log = run(
-        bikar_dir, [*check_mode(piece, want), "--piece", piece, "-o", str(dest)]
-    )
-
-    stl = STL_RE.search(log)
-    if not stl:
-        return [f"{piece}: no STL written (exit {code})\n{log.strip()}"]
+def _stl_problems(row: dict, stl: re.Match) -> list[str]:
+    """The STL line against §7: triangle count and volume."""
+    piece, bad = row["piece"], []
     if int(stl["tris"]) != row["tris"]:
         bad.append(f"{piece}: tris {stl['tris']} ≠ doc {row['tris']}")
     if stl["vol"] != row["vol"]:
         bad.append(f"{piece}: volume {stl['vol']} ≠ doc {row['vol']} cm³")
+    return bad
 
-    if want == FAIL_BY_DESIGN:
-        # The whole point of the wall ladder: prove the floor actually rejects
-        # these, at the minFeature the doc names. A PASS here is the defect.
-        code, log = run(
-            bikar_dir,
-            ["--check", "--piece", piece, "-o", str(tmp / f"{piece}.stl")],
-        )
-        if code == 0:
-            bad.append(f"{piece}: --check succeeded; doc says it must FAIL by design")
 
-    mesh = MESH_RE.search(log)
-    if not mesh:
-        return bad + [f"{piece}: no mesh-gate line\n{log.strip()}"]
-
+def _print_gate(row: dict, mesh: re.Match, log: str) -> tuple[str, list[str]]:
+    """The `--check` verdict this rung earned, and what the print gate got wrong on the way."""
+    piece, want, bad = row["piece"], row["check"], []
     verdict = FAIL_BY_DESIGN if mesh["verdict"] == "FAIL" else PASS
     if want == PASS_WARN:
         pg = PRINT_RE.search(log)
@@ -180,9 +163,12 @@ def verify(row: dict, bikar_dir: Path, out: Path, tmp: Path) -> list[str]:
         pg = PRINT_RE.search(log)
         if pg and int(pg["warn"]) != 0:
             bad.append(f"{piece}: print gate warn={pg['warn']}; doc says a clean PASS")
+    return verdict, bad
 
-    if verdict != want:
-        bad.append(f"{piece}: --check {verdict} ≠ doc {want}")
+
+def _mesh_problems(row: dict, mesh: re.Match) -> list[str]:
+    """The mesh-gate line against §7: watertight, euler, degenerate, minFeature."""
+    piece, bad = row["piece"], []
     if mesh["wt"] != ("true" if row["watertight"] == "yes" else "false"):
         bad.append(f"{piece}: watertight={mesh['wt']} ≠ doc {row['watertight']}")
     if int(mesh["euler"]) != row["euler"]:
@@ -191,6 +177,40 @@ def verify(row: dict, bikar_dir: Path, out: Path, tmp: Path) -> list[str]:
         bad.append(f"{piece}: degenerate {mesh['degen']} ≠ doc {row['degenerate']}")
     if not num_eq(row["minfeature"], mesh["minf"]):
         bad.append(f"{piece}: minFeature {mesh['minf']} ≠ doc {row['minfeature']}")
+    return bad
+
+
+def verify(row: dict, bikar_dir: Path, out: Path, tmp: Path) -> list[str]:
+    piece, want = row["piece"], row["check"]
+    dest = out / f"{piece}.stl"
+    code, log = run(
+        bikar_dir, [*check_mode(piece, want), "--piece", piece, "-o", str(dest)]
+    )
+
+    stl = STL_RE.search(log)
+    if not stl:
+        return [f"{piece}: no STL written (exit {code})\n{log.strip()}"]
+    bad = _stl_problems(row, stl)
+
+    if want == FAIL_BY_DESIGN:
+        # The whole point of the wall ladder: prove the floor actually rejects
+        # these, at the minFeature the doc names. A PASS here is the defect.
+        code, log = run(
+            bikar_dir,
+            ["--check", "--piece", piece, "-o", str(tmp / f"{piece}.stl")],
+        )
+        if code == 0:
+            bad.append(f"{piece}: --check succeeded; doc says it must FAIL by design")
+
+    mesh = MESH_RE.search(log)
+    if not mesh:
+        return bad + [f"{piece}: no mesh-gate line\n{log.strip()}"]
+
+    verdict, gate_bad = _print_gate(row, mesh, log)
+    bad += gate_bad
+    if verdict != want:
+        bad.append(f"{piece}: --check {verdict} ≠ doc {want}")
+    bad += _mesh_problems(row, mesh)
 
     row["actual_vol"] = float(stl["vol"])
     return bad
