@@ -300,28 +300,31 @@ def rooted_pattern(mapper: Mapper) -> re.Pattern[str] | None:
     return re.compile(r"(?:(?<=3d-models/)|(?<=3d-models:)|(?<![\w./:-]))(" + "|".join(alts) + ")")
 
 
-def rewrite_text(rel: str, text: str, mapper: Mapper, rooted: re.Pattern | None) -> tuple[str, list[Change]]:
-    """Every rewrite this file gets. `rel` is its path before the move."""
-    new_rel = mapper.map(rel) or rel
-    moved = new_rel != rel
-    old_dir, new_dir = posixpath.dirname(rel), posixpath.dirname(new_rel)
-    is_md = rel.endswith(".md")
-    research = rel.startswith(RESEARCH)  # link targets move, prose is kept
-    in_vault = rel.startswith("docs/")
-    changes: list[Change] = []
+class _Rewrite:
+    """One file's rewrites, and the changes they made. `rel` is its path before the move."""
 
-    def fix_link(n: int, target: str) -> str:
+    def __init__(self, rel: str, mapper: Mapper, rooted: re.Pattern | None) -> None:
+        self.mapper, self.rooted = mapper, rooted
+        new_rel = mapper.map(rel) or rel
+        self.moved = new_rel != rel
+        self.old_dir, self.new_dir = posixpath.dirname(rel), posixpath.dirname(new_rel)
+        self.is_md = rel.endswith(".md")
+        self.research = rel.startswith(RESEARCH)  # link targets move, prose is kept
+        self.in_vault = rel.startswith("docs/")
+        self.changes: list[Change] = []
+
+    def fix_link(self, n: int, target: str) -> str:
         if target.startswith(SKIP_SCHEMES) or target.startswith(("#", "/", "<")) or "://" in target:
             return target
         bare, hashmark, frag = target.partition("#")
         if not bare:
             return target
         decoded = unquote(bare)
-        was = resolve_from(old_dir, decoded)
-        now = mapper.map(was) or was
-        if not moved and now == was:
+        was = resolve_from(self.old_dir, decoded)
+        now = self.mapper.map(was) or was
+        if not self.moved and now == was:
             return target
-        new_bare = rel_between(now, new_dir)
+        new_bare = rel_between(now, self.new_dir)
         if decoded.endswith("/") and not new_bare.endswith("/"):
             new_bare += "/"
         if decoded.startswith("./") and not new_bare.startswith("."):
@@ -331,66 +334,95 @@ def rewrite_text(rel: str, text: str, mapper: Mapper, rooted: re.Pattern | None)
         if new_bare == bare:
             return target
         out = new_bare + hashmark + frag
-        changes.append(Change("link-out" if moved else "link-in", n, target, out))
+        self.changes.append(Change("link-out" if self.moved else "link-in", n, target, out))
         return out
 
-    def fix_link_match(n: int, m: re.Match) -> str:
+    def fix_link_match(self, n: int, m: re.Match) -> str:
         """A link, and its label too when the label is the address itself
         ([`../x.md`](../x.md)) — then it is part of the address, not prose."""
         head, target, tail = m.group(1), m.group(2), m.group(3)
-        new = fix_link(n, target)
+        new = self.fix_link(n, target)
         if new != target and head in (f"[{target}](", f"[`{target}`]("):
             head = head.replace(target, new, 1)
         return head + new + tail
 
-    def fix_wikilink(n: int, target: str) -> str:
+    def fix_wikilink(self, n: int, target: str) -> str:
         t = target.strip()
-        if "/" not in t or not in_vault:
+        if "/" not in t or not self.in_vault:
             return target
         vault_rel = "docs/" + t
-        cands = [vault_rel, vault_rel + ".md"]
-        for c in cands:
-            if mapper.exists_before(c):
-                now = mapper.map(c)
+        for c in (vault_rel, vault_rel + ".md"):
+            if self.mapper.exists_before(c):
+                now = self.mapper.map(c)
                 if now is None:
                     return target
                 out = now[len("docs/"):]
                 if c.endswith(".md") and not t.endswith(".md"):
                     out = out[:-3]
-                changes.append(Change("wikilink", n, target, out))
+                self.changes.append(Change("wikilink", n, target, out))
                 return out
         return target
 
-    def fix_relative(n: int, tok: str) -> str:
+    def fix_relative(self, n: int, tok: str) -> str:
         """A backticked path the doc writes relative to itself."""
         if tok.startswith(("docs/", "3d-models")) or "/" not in tok:
             return tok
-        if mapper.exists_before(norm(tok)):
+        if self.mapper.exists_before(norm(tok)):
             return tok  # a path from the repo root, which the pointer gate tries first
-        was = resolve_from(old_dir, tok)
-        if not mapper.exists_before(was):
+        was = resolve_from(self.old_dir, tok)
+        if not self.mapper.exists_before(was):
             return tok
-        now = mapper.map(was) or was
-        if not moved and now == was:
+        now = self.mapper.map(was) or was
+        if not self.moved and now == was:
             return tok
-        out = rel_between(now, new_dir)
+        out = rel_between(now, self.new_dir)
         if tok.endswith("/") and not out.endswith("/"):
             out += "/"
         if out == tok:
             return tok
-        changes.append(Change("relative", n, tok, out))
+        self.changes.append(Change("relative", n, tok, out))
         return out
 
-    def fix_front(n: int, m: re.Match) -> str:
+    def fix_front(self, n: int, m: re.Match) -> str:
         """A frontmatter value that names a file (a plate page's `pictures:`) is a link too."""
         tok = m.group(3)
-        if "/" not in tok or not mapper.exists_before(resolve_from(old_dir, unquote(tok))):
+        if "/" not in tok or not self.mapper.exists_before(resolve_from(self.old_dir, unquote(tok))):
             return m.group(0)
-        return m.group(1) + m.group(2) + fix_link(n, tok) + m.group(2) + m.group(4)
+        return m.group(1) + m.group(2) + self.fix_link(n, tok) + m.group(2) + m.group(4)
 
+    def front_line(self, n: int, line: str) -> str:
+        return FRONT_PATH.sub(lambda m: self.fix_front(n, m), line)
+
+    def body_line(self, n: int, line: str, opened: bool) -> tuple[str, bool]:
+        """A markdown body line's links, path wikilinks and doc-relative paths,
+        and whether a code span is still open at its end."""
+        spans, span_open = code_spans(line, opened)
+        line = LINK.sub(lambda m: m.group(0) if inside(spans, m.start())
+                        else self.fix_link_match(n, m), line)
+        spans, _ = code_spans(line, opened)
+        line = WIKILINK.sub(lambda m: m.group(0) if inside(spans, m.start())
+                            else m.group(1) + self.fix_wikilink(n, m.group(2)) + m.group(3), line)
+        if not self.research:
+            line = BACKTICKED.sub(lambda m: "`" + self.fix_relative(n, m.group(1)) + "`", line)
+        return line, span_open
+
+    def sub_rooted(self, n: int, m: re.Match) -> str:
+        out = self.mapper.map(m.group(1))
+        self.changes.append(Change("path", n, m.group(1), out))
+        return out
+
+    def rooted_line(self, n: int, line: str) -> str:
+        if self.rooted is None or self.research:
+            return line
+        return self.rooted.sub(lambda m: self.sub_rooted(n, m), line)
+
+
+def rewrite_text(rel: str, text: str, mapper: Mapper, rooted: re.Pattern | None) -> tuple[str, list[Change]]:
+    """Every rewrite this file gets. `rel` is its path before the move."""
+    rw = _Rewrite(rel, mapper, rooted)
     lines = text.split("\n")
     in_fence = False
-    in_front = is_md and bool(lines) and lines[0] == "---"
+    in_front = rw.is_md and bool(lines) and lines[0] == "---"
     span_open = False  # a code span wrapped onto this line from the one above
     for i, line in enumerate(lines):
         n = i + 1
@@ -398,31 +430,17 @@ def rewrite_text(rel: str, text: str, mapper: Mapper, rooted: re.Pattern | None)
             if line in ("---", "..."):
                 in_front = False
             else:
-                lines[i] = FRONT_PATH.sub(lambda m: fix_front(n, m), line)
+                lines[i] = rw.front_line(n, line)
             continue
-        if is_md:
+        if rw.is_md:
             if FENCE.match(line):
                 in_fence = not in_fence
             if in_fence or FENCE.match(line) or not line.strip():
                 span_open = False  # a paragraph ends, and an unclosed backtick with it
             else:
-                opened = span_open
-                spans, span_open = code_spans(line, opened)
-                line = LINK.sub(lambda m: m.group(0) if inside(spans, m.start())
-                                else fix_link_match(n, m), line)
-                spans, _ = code_spans(line, opened)
-                line = WIKILINK.sub(lambda m: m.group(0) if inside(spans, m.start())
-                                    else m.group(1) + fix_wikilink(n, m.group(2)) + m.group(3), line)
-                if not research:
-                    line = BACKTICKED.sub(lambda m: "`" + fix_relative(n, m.group(1)) + "`", line)
-        if rooted is not None and not research:
-            def sub_rooted(m: re.Match) -> str:
-                out = mapper.map(m.group(1))
-                changes.append(Change("path", n, m.group(1), out))
-                return out
-            line = rooted.sub(sub_rooted, line)
-        lines[i] = line
-    return "\n".join(lines), changes
+                line, span_open = rw.body_line(n, line, span_open)
+        lines[i] = rw.rooted_line(n, line)
+    return "\n".join(lines), rw.changes
 
 
 def leftovers(rel: str, text: str, mapper: Mapper, why: str) -> list[Leftover]:
