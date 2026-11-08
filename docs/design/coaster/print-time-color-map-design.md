@@ -214,7 +214,7 @@ The answers go in color-map.json: one row per design color with the design hex, 
 hex, the status, the answer, and the time the trays were read. The plate page shows the same row,
 in a block the script owns between `<!-- color-map:start -->` and `<!-- color-map:end -->`, put
 before the page's "Your call" section and rewritten in place on the next run
-(`3d-models:.claude/skills/send-plate/scripts/color_map.py:L317 "def block_for("`).
+(`3d-models:.claude/skills/send-plate/scripts/color_map.py:L336 "def block_for("`).
 Omar's yes on that page covers that plate in that tray color. The skill records the color with the
 yes: `plate_approve.py --approved --color "#RRGGBB"` puts the color into the yes row's "Covers"
 cell (`iteration 2 @ 1a2b3c4d5e in #0047BB`). Without it, a yes on a recipe with no color would not

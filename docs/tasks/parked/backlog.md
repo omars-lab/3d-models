@@ -73,10 +73,15 @@ complexity check lists the 86 Python functions over 10 and stops any new one.
   for the file paths, the youtube pin, the ids at the pin and the rung states, self-test unchanged
   and the same findings, reports and counts on the real ledger with each row's youtube, naqsh and
   coaster cells changed, each row dropped or renamed, the pin removed, made up or moved to 12
-  older youtube commits, and youtube missing (928 cases, every rule firing). 77 left.
+  older youtube commits, and youtube missing (928 cases, every rule firing) (#939). Then
+  `.claude/skills/send-plate/scripts/color_map.py::check` (19), one helper each for one row per
+  plate, the answers, shared trays and the plate pages, only the check and nothing on the send
+  path, self-test unchanged and the same failures and notices on color maps made from all 66 plate
+  pages with a recipe, through the real `bambu filament map` (no saved color map exists), under four tray
+  loadouts, with every answer each question offers, and each map broken in turn (775 maps, 68,243 cases, every rule firing). 76 left.
   The `self_test` functions (`branch_inventory.py` 34, `theme_plates.py` 22, `site_graph.py` 21,
   `docs_gate.py` 20) are skipped: each is a list of test cases, so splitting it buys little. Next
-  are the four at 19: `send-plate/scripts/color_map.py::check`, `maintain-vocabulary/scripts/vocabulary.py::problems`,
+  are the three at 19: `maintain-vocabulary/scripts/vocabulary.py::problems`,
   `draw-side-view/scripts/side_view.py::check_part` and `color-themes/scripts/themes.py::main`. A
   cleanup skill comes back only if
   this proves a repeated manual task, and then as an extension of the built-in `simplify` skill.

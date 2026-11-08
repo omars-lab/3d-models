@@ -260,12 +260,21 @@ def check(m: dict, plates: Path | None = None) -> tuple[list[str], list[str]]:
     notes: list[str] = []
     if m.get("stopped"):
         fails.append("the map was stopped: nothing is planned to send")
+    rows = m["rows"]
+    _check_one_row_each(m, rows, fails)
+    _check_shared_trays(_check_answers(rows, fails, notes), fails)
+    if plates is not None:
+        _check_pages(rows, plates, fails, notes)
+    return fails, notes
+
+
+def _check_one_row_each(m: dict, rows: list[dict], fails: list[str]) -> None:
+    """Each by-color row has exactly one row in the map, and the map has no row of its own."""
     try:
         names = [r["name"] for r in json.loads(Path(m["by_color"]).read_text())]
     except (OSError, ValueError, KeyError) as e:
         fails.append(f"cannot read the by-color rows the map was made from: {e}")
         names = []
-    rows = m["rows"]
     for n in names:
         k = sum(1 for r in rows if r["name"] == n)
         if k != 1:
@@ -273,6 +282,10 @@ def check(m: dict, plates: Path | None = None) -> tuple[list[str], list[str]]:
     for r in rows:
         if r["name"] not in names:
             fails.append(f"{r['name']}: in the map but not in the by-color rows")
+
+
+def _check_answers(rows: list[dict], fails: list[str], notes: list[str]) -> dict[str, list[dict]]:
+    """Each row answered, and each send's --color the hex of its tray. Returns the sends by hex."""
     by_hex: dict[str, list[dict]] = {}
     for r in rows:
         a = r.get("answer")
@@ -286,24 +299,30 @@ def check(m: dict, plates: Path | None = None) -> tuple[list[str], list[str]]:
                 fails.append(f"{r['name']}: --color {r.get('color')} is not the hex of the tray it prints from ({t.get('hex')})")
             else:
                 by_hex.setdefault(r["color"], []).append(r)
+    return by_hex
+
+
+def _check_shared_trays(by_hex: dict[str, list[dict]], fails: list[str]) -> None:
     for hex_, group in by_hex.items():
         # Sharing a tray is allowed only when every plate that came to share it, beyond the one
         # that holds it, was Omar's "use the nearest", asked with the holder named (§4).
         chosen = [r for r in group if r["answer"] == "nearest"]
         if len(group) > 1 and len(group) - len(chosen) > 1:
             fails.append(f"{' and '.join(r['name'] for r in group)} all on the {hex_} tray, and not by Omar's 'use the nearest'")
-    if plates is not None:
-        for r in rows:
-            page = plates / f"{r['name']}.md"
-            if not page.exists():
-                notes.append(f"{r['name']}: no plate page yet")
-                continue
-            block = page_block(page.read_text())
-            if block is None:
-                notes.append(f"{r['name']}: its page has no color block yet (run pages)")
-            elif r.get("color") and f"`--color \"{r['color']}\"`" not in block:
-                fails.append(f"{r['name']}: its page's color block does not name {r['color']}")
-    return fails, notes
+
+
+def _check_pages(rows: list[dict], plates: Path, fails: list[str], notes: list[str]) -> None:
+    """Each plate page that exists carries a color block naming its row's --color."""
+    for r in rows:
+        page = plates / f"{r['name']}.md"
+        if not page.exists():
+            notes.append(f"{r['name']}: no plate page yet")
+            continue
+        block = page_block(page.read_text())
+        if block is None:
+            notes.append(f"{r['name']}: its page has no color block yet (run pages)")
+        elif r.get("color") and f"`--color \"{r['color']}\"`" not in block:
+            fails.append(f"{r['name']}: its page's color block does not name {r['color']}")
 
 
 # --- the pages ----------------------------------------------------------------------------------
