@@ -86,6 +86,7 @@ import datetime
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -438,6 +439,10 @@ def make_gif(name: str, log: Log) -> Path | None:
 MEDIA_WIDTH = 480
 MEDIA_QUALITY = 60
 MEDIA_MAX_BYTES = 400_000
+# A long print makes more frames, and toys-1's 6 h 14 min (38 frames) came to 413,740 bytes at 60, 3%
+# over the cap (2026-11-07). So a timelapse over the cap is made again a step lower each time; only
+# one still over at the last step is refused. The first step that fits is the one published.
+MEDIA_QUALITY_STEPS = (MEDIA_QUALITY, 50, 40)
 PUBLISH_TIMEOUT_S = 180
 PRINT_HEADING = "## The print"
 
@@ -446,11 +451,11 @@ def media_of(page: Path) -> Path:
     return page.parent / f"{page.stem}-media"
 
 
-def webp_cmd(frames: list[Path], out: Path) -> list[str]:
+def webp_cmd(frames: list[Path], out: Path, quality: int = MEDIA_QUALITY) -> list[str]:
     """The GIF's timing, as an animated WebP: smaller, and with no picture metadata."""
     return ["magick", "-loop", "0", "-delay", "50", *map(str, frames[:-1]),
             "-delay", "200", str(frames[-1]), "-resize", f"{MEDIA_WIDTH}x", "-strip",
-            "-quality", str(MEDIA_QUALITY), str(out)]
+            "-quality", str(quality), str(out)]
 
 
 def still_cmd(frame: Path, out: Path) -> list[str]:
@@ -556,6 +561,29 @@ def with_print_section(text: str, section: str, n: int = 1) -> str:
     return out.rstrip("\n") + "\n"
 
 
+def magick_ok(cmd: list[str], log: Log) -> bool:
+    r = subprocess.run(cmd, capture_output=True, text=True, timeout=PUBLISH_TIMEOUT_S)
+    if r.returncode != 0:
+        log("publish_failed", rc=r.returncode, msg=cell(r.stderr)[:200])
+        print(f"print-monitor: magick failed: {cell(r.stderr)[:200]}", file=sys.stderr)
+    return r.returncode == 0
+
+
+def fit_timelapse(frames: list[Path], out: Path, log: Log) -> int | None:
+    """The timelapse already made at the first quality step, made again a step lower while it is
+    over the cap. The quality it ends at (maybe still over the cap: the caller refuses that), or
+    None when magick failed."""
+    quality = MEDIA_QUALITY_STEPS[0]
+    for lower in MEDIA_QUALITY_STEPS[1:]:
+        if out.stat().st_size <= MEDIA_MAX_BYTES:
+            break
+        log("publish_retry", quality=lower, bytes=out.stat().st_size)
+        quality = lower
+        if not magick_ok(webp_cmd(frames, out, quality), log):
+            return None
+    return quality
+
+
 def publish(plate: str, log: Log, leave_out: list[str] = ()) -> int:
     """Make `<plate>-media/timelapse.webp` and `finished.webp` beside the page and show both in its
     `## The print` section, without the frames named in `leave_out`. Only the newest print's
@@ -584,12 +612,11 @@ def publish(plate: str, log: Log, leave_out: list[str] = ()) -> int:
             f"finished{sfx}.webp": still_cmd(frames[-1], work / f"finished{sfx}.webp")}
     log("publish_start", print=n, frames=len(frames), left_out=len(drop))
     try:
-        for cmd in made.values():
-            r = subprocess.run(cmd, capture_output=True, text=True, timeout=PUBLISH_TIMEOUT_S)
-            if r.returncode != 0:
-                log("publish_failed", rc=r.returncode, msg=cell(r.stderr)[:200])
-                print(f"print-monitor: magick failed: {cell(r.stderr)[:200]}", file=sys.stderr)
-                return 1
+        if not all(magick_ok(cmd, log) for cmd in made.values()):
+            return 1
+        quality = fit_timelapse(frames, work / f"timelapse{sfx}.webp", log)
+        if quality is None:
+            return 1
         codes = codes_in([work / f for f in made])
     except subprocess.TimeoutExpired:
         log("publish_timeout", timeout_s=PUBLISH_TIMEOUT_S)
@@ -618,9 +645,9 @@ def publish(plate: str, log: Log, leave_out: list[str] = ()) -> int:
                                        print_section(name, frames, len(drop), n, gap), n),
                     encoding="utf-8")
     sizes = " ".join(f"{f.split('.')[0]}_bytes={(media / f).stat().st_size}" for f in made)
-    log("publish_done", print=n, frames=len(frames), left_out=len(drop), msg=sizes)
-    print(f"ev=publish plate={name} print={n} frames={len(frames)} left_out={len(drop)} {sizes} "
-          f"dir={media}", flush=True)
+    log("publish_done", print=n, frames=len(frames), left_out=len(drop), quality=quality, msg=sizes)
+    print(f"ev=publish plate={name} print={n} frames={len(frames)} left_out={len(drop)} "
+          f"quality={quality} {sizes} dir={media}", flush=True)
     return 0
 
 
@@ -903,7 +930,7 @@ def self_test() -> int:
           "the cursor skips what the watcher has already seen", hits)
     check(next_events(log_lines[:2], 0) == ([], 2), "polls alone wake nobody")
     with tempfile.TemporaryDirectory() as tmp:
-        global LOGS
+        global LOGS, MEDIA_MAX_BYTES
         saved, LOGS = LOGS, Path(tmp)
         try:
             line = add_look("x", "/a/b/20261010T152335Z.jpg", "first layer down | flat")
@@ -1037,6 +1064,41 @@ def self_test() -> int:
                   "that frame left out by name: both WebPs beside the page, under the cap, the "
                   "section saying one was left out, and the frame itself kept in .bambu/",
                   f"rc={rc} sizes={sizes}")
+
+            # The size cap (toys-1, 2026-11-07: 3% over at 60). Noisy frames, where quality moves
+            # the size: measured at the first and last step, a cap between the two makes the first
+            # try too big and a lower step fit; a cap under the last step refuses, writing nothing.
+            for stamp in ("20261010T154500Z", "20261010T155500Z", "20261010T160500Z"):
+                subprocess.run(["magick", "-size", "800x600", "plasma:", str(fr / f"{stamp}.jpg")],
+                               check=True, timeout=60)
+            noisy = [f for f in sorted(fr.glob("*.jpg")) if f.name != "20261010T152500Z.jpg"]
+            hi, lo = MEDIA_QUALITY_STEPS[0], MEDIA_QUALITY_STEPS[-1]
+            size = {}
+            for q in (hi, lo):
+                subprocess.run(webp_cmd(noisy, t / f"q{q}.webp", q), check=True,
+                               timeout=PUBLISH_TIMEOUT_S)
+                size[q] = (t / f"q{q}.webp").stat().st_size
+            saved_cap = MEDIA_MAX_BYTES
+            try:
+                MEDIA_MAX_BYTES = (size[hi] + size[lo]) // 2
+                shutil.rmtree(media)
+                (pg.PLATES / "x.md").write_text(body, encoding="utf-8")
+                rc = publish("x", quiet, ["20261010T152500Z"])
+                lapse = media / "timelapse.webp"
+                got = lapse.stat().st_size if lapse.is_file() else None
+                check(size[hi] > size[lo] and rc == 0 and got is not None and got <= MEDIA_MAX_BYTES
+                      and "ev=publish_retry" in (t / "x.log").read_text(encoding="utf-8"),
+                      "a timelapse over the cap at the first quality: made again lower, published "
+                      "under the cap", f"rc={rc} sizes={size} cap={MEDIA_MAX_BYTES} got={got}")
+                MEDIA_MAX_BYTES = size[lo] - 1
+                shutil.rmtree(media)
+                (pg.PLATES / "x.md").write_text(body, encoding="utf-8")
+                rc = publish("x", quiet, ["20261010T152500Z"])
+                check(rc == 1 and not media.exists()
+                      and (pg.PLATES / "x.md").read_text(encoding="utf-8") == body,
+                      "still over the cap at the last quality: refused, nothing written", f"rc={rc}")
+            finally:
+                MEDIA_MAX_BYTES = saved_cap
         except (FileNotFoundError, subprocess.CalledProcessError) as e:
             check(False, "publishing needs magick and zbarimg", f"{e} (brew install imagemagick zbar)")
         finally:
