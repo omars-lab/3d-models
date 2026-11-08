@@ -1282,7 +1282,8 @@ def cmd_listing(cid: str, out_dir: str, size: int, only: list[str] | None = None
 # ---------------------------------------------------------------- main
 
 
-def main() -> int:
+def _parser() -> argparse.ArgumentParser:
+    """The command line: one subcommand a job, as the module's usage lists them."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--self-test", action="store_true")
     sub = ap.add_subparsers(dest="cmd")
@@ -1309,6 +1310,49 @@ def main() -> int:
     s.add_argument("--reverse", action="store_true", help="gradient: swap the ends")
     s.add_argument("--lines", help="gradient: catalog lines to pick from, comma-separated "
                                    "(default: the ends' own lines)")
+    return ap
+
+
+def _cmd_check(a: argparse.Namespace, ap: argparse.ArgumentParser) -> int:
+    """`check <id>` or `check --all`: the worst exit code of the constructions checked."""
+    ids = all_constructions() if a.all else [a.id]
+    if not ids or ids == [None]:
+        ap.error("check needs an id or --all")
+    return max(check_one(i, quiet=a.quiet) for i in ids)
+
+
+def _cmd_suggest(a: argparse.Namespace, ap: argparse.ArgumentParser) -> None:
+    """`suggest`: one theme from a helper, printed as yaml, then any colors to buy and its warnings."""
+    con = construction(a.id)
+    pal = palette()
+    colors = [x for x in a.colors.split(",") if x]
+    for x in colors:
+        if x not in pal:
+            raise SystemExit(f"{x} is not a palette color id")
+    if a.helper in ("one-color", "alternate") and not colors:
+        ap.error(f"--helper {a.helper} needs --colors")
+    add = []
+    if a.helper == "gradient":
+        if not (a.frm and a.to):
+            ap.error("--helper gradient needs --from and --to")
+        lines = [x.strip() for x in a.lines.split(",")] if a.lines else None
+        t, add = gradient(con, a.frm, a.to, pal, bambu.load_catalog(), lines, a.reverse)
+    else:
+        t = suggest(con, a.helper, colors, pal)
+    faces, _ = parse_base((con["_folder"] / "base.svg").read_text())
+    print(yaml.safe_dump([t], sort_keys=False).rstrip())
+    if add:
+        print("# add to palette.yaml buy: first (from the catalog)")
+        for c in add:
+            print("#   - " + yaml.safe_dump(c, default_flow_style=True, sort_keys=False, width=300).strip())
+    full = pal | {c["id"]: {**c, "hexes": [c["hex"]], "owned": False, "kind": "single",
+                            "finish": bambu.finish_of(c["line"]), "alpha": 1.0} for c in add}
+    for w in warnings(con, t, full, neighbors(con, faces)):
+        print(f"# warn: {w}")
+
+
+def main() -> int:
+    ap = _parser()
     a = ap.parse_args()
 
     if a.self_test:
@@ -1324,37 +1368,9 @@ def main() -> int:
     elif a.cmd == "listing":
         cmd_listing(a.id, a.out, a.size, a.theme)
     elif a.cmd == "check":
-        ids = all_constructions() if a.all else [a.id]
-        if not ids or ids == [None]:
-            ap.error("check needs an id or --all")
-        return max(check_one(i, quiet=a.quiet) for i in ids)
+        return _cmd_check(a, ap)
     elif a.cmd == "suggest":
-        con = construction(a.id)
-        pal = palette()
-        colors = [x for x in a.colors.split(",") if x]
-        for x in colors:
-            if x not in pal:
-                raise SystemExit(f"{x} is not a palette color id")
-        if a.helper in ("one-color", "alternate") and not colors:
-            ap.error(f"--helper {a.helper} needs --colors")
-        add = []
-        if a.helper == "gradient":
-            if not (a.frm and a.to):
-                ap.error("--helper gradient needs --from and --to")
-            lines = [x.strip() for x in a.lines.split(",")] if a.lines else None
-            t, add = gradient(con, a.frm, a.to, pal, bambu.load_catalog(), lines, a.reverse)
-        else:
-            t = suggest(con, a.helper, colors, pal)
-        faces, _ = parse_base((con["_folder"] / "base.svg").read_text())
-        print(yaml.safe_dump([t], sort_keys=False).rstrip())
-        if add:
-            print("# add to palette.yaml buy: first (from the catalog)")
-            for c in add:
-                print("#   - " + yaml.safe_dump(c, default_flow_style=True, sort_keys=False, width=300).strip())
-        full = pal | {c["id"]: {**c, "hexes": [c["hex"]], "owned": False, "kind": "single",
-                                "finish": bambu.finish_of(c["line"]), "alpha": 1.0} for c in add}
-        for w in warnings(con, t, full, neighbors(con, faces)):
-            print(f"# warn: {w}")
+        _cmd_suggest(a, ap)
     else:
         ap.print_help()
         return 2
