@@ -187,6 +187,23 @@ def _color(part: dict, where: str) -> str:
 
 
 def check_part(part, where: str) -> dict:
+    """Refuse a part the kit will not draw. The checks run in a fixed order, so a part broken two
+    ways is refused for the first: its kind and keys, then its words, then its numbers, then the
+    rules of its kind."""
+    kind = _check_kind(part, where)
+    _check_words(part, kind, where)
+    _check_numbers(part, where)
+    if kind in ("piece", "flange", "stud", "dovetail"):
+        _color(part, where)
+    if kind == "stud" and part.get("toward", "up") not in ("up", "down"):
+        raise Refusal(f"{where}: a stud's free end is toward up or down")
+    if kind == "dovetail":
+        check_dovetail(part, where)
+    return part
+
+
+def _check_kind(part, where: str) -> str:
+    """A mapping with a kind the kit has, only that kind's keys, and every key it needs."""
     if not isinstance(part, dict) or "kind" not in part:
         raise Refusal(f"{where}: a part is a mapping with a `kind`, got {part!r}")
     kind = part["kind"]
@@ -199,6 +216,11 @@ def check_part(part, where: str) -> dict:
     missing = spec["needs"] - set(part)
     if missing:
         raise Refusal(f"{where}: {kind} needs {', '.join(sorted(missing))}")
+    return kind
+
+
+def _check_words(part: dict, kind: str, where: str) -> None:
+    """The keys that take a word from a short list: side, a dim's place, the marked faces, the label."""
     if "side" in part and part["side"] not in HALF_FILL:
         raise Refusal(f"{where}: side is lower or upper, got {part['side']!r}")
     if kind == "dim" and part.get("place", "right") not in ("left", "right", "above", "below"):
@@ -212,6 +234,10 @@ def check_part(part, where: str) -> dict:
         raise Refusal(f"{where}: a label is one short line")
     if part.get("label_side", "right") not in ("left", "right"):
         raise Refusal(f"{where}: a label sits left or right of the drawing, got {part.get('label_side')!r}")
+
+
+def _check_numbers(part: dict, where: str) -> None:
+    """A box is four numbers with a width and height above zero, a line three, a point two."""
     if "box" in part:
         x, z, w, h = _nums(part["box"], 4, f"{where} box")
         if w <= 0 or h <= 0:
@@ -221,13 +247,6 @@ def check_part(part, where: str) -> dict:
     for key in ("from", "to", "at", "label_at"):
         if key in part:
             _nums(part[key], 2, f"{where} {key}")
-    if kind in ("piece", "flange", "stud", "dovetail"):
-        _color(part, where)
-    if kind == "stud" and part.get("toward", "up") not in ("up", "down"):
-        raise Refusal(f"{where}: a stud's free end is toward up or down")
-    if kind == "dovetail":
-        check_dovetail(part, where)
-    return part
 
 
 def check_dovetail(part: dict, where: str) -> None:
