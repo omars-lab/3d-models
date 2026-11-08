@@ -7,8 +7,9 @@ description: Keep the pattern catalog in docs/catalog/ in step — one Obsidian 
 
 The catalog lives in `docs/catalog/`: `patterns/` holds a note for every construction in the
 [ledger](../../../docs/constructions/ledger.md), `styles/` a note for every coaster style,
-`media/<id>/` the pictures, and [`index.md`](../../../docs/catalog/index.md) the page that lists
-them. How it is laid out and why: [the plan](../../../docs/catalog/plan.md).
+`media/<id>/` the pictures, `library/<family>/` a note for every other file in bikar's seven
+library families (stars, rosettes, tiled, weave, orbs, lego, coupons) with its picture in
+`media/library/`, and [`index.md`](../../../docs/catalog/index.md) the page that lists them. How it is laid out and why: [the plan](../../../docs/catalog/plan.md).
 
 Each note has two parts. The top — properties, pictures, checks, plates and prints — is written
 by the sync tool from the ledger, bikar, the plate files and the print records. Everything from
@@ -22,7 +23,8 @@ hand: what makes the pattern work, what went wrong, what to try next. The tool n
 | `scripts/catalog.py sync` | Writes every note's top, the style notes, the catalog page and the pictures; leaves files that are already right alone | after the ledger, a bikar construction, a plate or a print record changes | `python3 .claude/skills/pattern-catalog/scripts/catalog.py sync` |
 | `scripts/catalog.py sync --check` | Writes nothing; names each file that is out of date, and each bikar pattern file no ledger row or `planned.yaml` entry claims, and exits 1 | run for you by hook `51-pattern-catalog` when a commit stages the ledger, the catalog, a plate, a print record or the styles table, and by `make validate`; run it by hand to see why it failed | `python3 .claude/skills/pattern-catalog/scripts/catalog.py sync --check` |
 | `scripts/catalog.py note` | Prints a link to the catalog note (and style heading) for each `.bkr` piece, pattern id, or every piece in a plate `.yaml`; exits 1 and names any piece with no note | writing a plate page, a review sheet's verdict table or a print record, so each piece links to its note | `python3 .claude/skills/pattern-catalog/scripts/catalog.py note docs/design/plates/<plate>.yaml --from docs/design/plates` |
-| `scripts/catalog.py --self-test` | Checks the file-to-pattern naming rule, that today's bikar has no unclaimed pattern file, and that one added to a throwaway copy of bikar is caught | after any edit to the script; `make validate-pattern-catalog` runs it first | `python3 .claude/skills/pattern-catalog/scripts/catalog.py --self-test` |
+| `scripts/catalog.py render-library` | Draws a 480 px WebP for each library file whose source changed since its picture was drawn (an orb is drawn straight on to one face), records which version of the file each picture shows in `docs/catalog/media/library/renders.json`, and drops the picture of a file that draws nothing flat | after bikar adds or changes a file in a library family; `sync` then warns about any picture drawn from an older version of its file. Needs bikar's CLI built, and `rsvg-convert` and `magick` on the PATH (`/opt/homebrew/bin`) | `python3 .claude/skills/pattern-catalog/scripts/catalog.py render-library [Stars/ ...] [--force]` |
+| `scripts/catalog.py --self-test` | Checks the file-to-pattern naming rule, that today's bikar has no unclaimed pattern file, that one added to a throwaway copy of bikar is caught, and that a file added to a library family there gets a note | after any edit to the script; `make validate-pattern-catalog` runs it first | `python3 .claude/skills/pattern-catalog/scripts/catalog.py --self-test` |
 
 bikar is read at a git ref (`origin/main` unless `--bikar-ref` says otherwise), never from its
 working tree, so another session's checkout cannot change the result. It is found through
