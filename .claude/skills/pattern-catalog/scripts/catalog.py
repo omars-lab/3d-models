@@ -473,7 +473,26 @@ def note_top(b: Built, style_what: dict[str, str], roster: dict, plates: dict, p
     out = [frontmatter(props).rstrip("\n"), ""]
     heading = f"# {row.title_md}" + (f" ({row.catalog_id})" if row.catalog_id else "")
     out += [heading, ""]
+    out += _intro_lines(b, video)
+    if b.styles:
+        out += _picture_lines(b, style_what, roster)
+    if not row.no_piece:
+        out += ["## Checks against the video", ""]
+        out.append("From the [constructions ledger](../../constructions/ledger.md).")
+        out.append("")
+        out += check_lines(row)
+        out.append("")
+    if b.styles:
+        out += _plate_lines(b, plates)
+        out += _print_lines(b, prints)
+    return "\n".join(out)
+
+
+def _intro_lines(b: Built, video: str) -> list[str]:
+    """The note's opening paragraph: where it was rebuilt from and how far it has got."""
+    row = b.row
     who = f"[{row.creator}'s video]({video})" if row.creator else f"[the video]({video})"
+    out: list[str] = []
     if row.no_piece:
         out.append(f"Rebuilt from {who}. The video shows a way of drawing, not a finished piece, so there is nothing")
         out.append("to make from it: the ledger marks it \"no piece by design\".")
@@ -486,64 +505,67 @@ def note_top(b: Built, style_what: dict[str, str], roster: dict, plates: dict, p
         cat = f" Its catalog id is {row.catalog_id}." if row.catalog_id else ""
         out.append(f"Rebuilt step by step from {who}, written in naqsh and made {made}.{cat}")
     out.append("")
+    return out
 
-    if b.styles:
-        out += ["## Pictures", ""]
-        out.append("One heading per style, so each picture has its own link: the note's link plus the style")
-        out.append(f"name, for example #{b.styles[0]}.")
-        out.append("")
-        for s in b.styles:
-            out += [f"### {s}", ""]
-            fname = next(f for f in b.files if style_of(row.id, f) == s)
-            what = style_what.get(s) or roster.get(fname, {}).get("blurb", "")
-            if what:
-                out += [what[0].upper() + what[1:] + ("" if what.endswith(".") else "."), ""]
-            pic = b.pictures.get(s)
-            if pic:
-                out += [f"![{s.replace('-', ' ')}]({pic.rel})", ""]
-            else:
-                out += ["No picture yet: Coaster Lab has no thumbnail for this file.", ""]
 
-    if not row.no_piece:
-        out += ["## Checks against the video", ""]
-        out.append("From the [constructions ledger](../../constructions/ledger.md).")
-        out.append("")
-        out += check_lines(row)
-        out.append("")
-
-    if b.styles:
-        out += ["## Coaster styles and plates", ""]
-        on: dict[str, list[str]] = {}
-        for f in b.files:
-            for plate in plates.get(f, []):
-                s = style_of(row.id, f)
-                if s and s not in on.setdefault(plate, []):
-                    on[plate].append(s)
-        if on:
-            out += ["| Plate | Styles of this pattern on it |", "|---|---|"]
-            for plate in sorted(on):
-                page = PLATES / f"{plate}.md"
-                link = f"../../design/plates/{plate}.md" if page.exists() else f"../../design/plates/{plate}.yaml"
-                out.append(f"| [{plate}]({link}) | {', '.join(s.replace('-', ' ') for s in on[plate])} |")
+def _picture_lines(b: Built, style_what: dict[str, str], roster: dict) -> list[str]:
+    """The Pictures section: a heading, a sentence and a picture per coaster style."""
+    out = ["## Pictures", ""]
+    out.append("One heading per style, so each picture has its own link: the note's link plus the style")
+    out.append(f"name, for example #{b.styles[0]}.")
+    out.append("")
+    for s in b.styles:
+        out += [f"### {s}", ""]
+        fname = next(f for f in b.files if style_of(b.row.id, f) == s)
+        what = style_what.get(s) or roster.get(fname, {}).get("blurb", "")
+        if what:
+            out += [what[0].upper() + what[1:] + ("" if what.endswith(".") else "."), ""]
+        pic = b.pictures.get(s)
+        if pic:
+            out += [f"![{s.replace('-', ' ')}]({pic.rel})", ""]
         else:
-            out.append("No plate uses this pattern yet.")
-        out.append("")
+            out += ["No picture yet: Coaster Lab has no thumbnail for this file.", ""]
+    return out
 
-        out += ["## Prints", ""]
-        mine = [o for o in prints if o.file in b.files]
-        if mine:
-            out += ["| Print | Piece | Verdict | What was seen |", "|---|---|---|---|"]
-            for o in mine:
-                s = style_of(row.id, o.file) or ""
-                seen = "; ".join(o.notes) or "nothing written yet"
-                out.append(
-                    f"| [{o.run}](../../prints/{o.run}/index.md) | {md_cell(piece_words(o, s))} "
-                    f"| {o.verdict or 'not judged'} | {md_cell(seen)} |"
-                )
-        else:
-            out.append("No print record names this pattern yet.")
-        out.append("")
-    return "\n".join(out)
+
+def _plate_lines(b: Built, plates: dict) -> list[str]:
+    """The plates section: which plate carries which styles of this pattern."""
+    out = ["## Coaster styles and plates", ""]
+    on: dict[str, list[str]] = {}
+    for f in b.files:
+        for plate in plates.get(f, []):
+            s = style_of(b.row.id, f)
+            if s and s not in on.setdefault(plate, []):
+                on[plate].append(s)
+    if on:
+        out += ["| Plate | Styles of this pattern on it |", "|---|---|"]
+        for plate in sorted(on):
+            page = PLATES / f"{plate}.md"
+            link = f"../../design/plates/{plate}.md" if page.exists() else f"../../design/plates/{plate}.yaml"
+            out.append(f"| [{plate}]({link}) | {', '.join(s.replace('-', ' ') for s in on[plate])} |")
+    else:
+        out.append("No plate uses this pattern yet.")
+    out.append("")
+    return out
+
+
+def _print_lines(b: Built, prints: list[PrintObject]) -> list[str]:
+    """The Prints section: every printed piece of this pattern and its verdict."""
+    out = ["## Prints", ""]
+    mine = [o for o in prints if o.file in b.files]
+    if mine:
+        out += ["| Print | Piece | Verdict | What was seen |", "|---|---|---|---|"]
+        for o in mine:
+            s = style_of(b.row.id, o.file) or ""
+            seen = "; ".join(o.notes) or "nothing written yet"
+            out.append(
+                f"| [{o.run}](../../prints/{o.run}/index.md) | {md_cell(piece_words(o, s))} "
+                f"| {o.verdict or 'not judged'} | {md_cell(seen)} |"
+            )
+    else:
+        out.append("No print record names this pattern yet.")
+    out.append("")
+    return out
 
 
 def planned_top(p: Planned, path: Path) -> str:

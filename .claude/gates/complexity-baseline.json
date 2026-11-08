@@ -120,9 +120,6 @@
   ".claude/skills/pattern-catalog/scripts/catalog.py::check_lines": [
    11
   ],
-  ".claude/skills/pattern-catalog/scripts/catalog.py::note_top": [
-   16
-  ],
   ".claude/skills/place-pins/scripts/ledge_check.py::check_piece": [
    16
   ],
