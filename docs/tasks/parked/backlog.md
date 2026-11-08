@@ -60,9 +60,14 @@ complexity check lists the 86 Python functions over 10 and stops any new one.
   node and host field broken in turn (8,358 cases) (#935). Then
   `.claude/skills/draw-side-view/scripts/side_view.py::draw_panel` (27), its per-part drawing made
   methods of a small class, self-test unchanged and every SVG and PNG byte for byte the same on the
-  15 real side-view descriptions plus one written to reach the branches they miss. 80 left.
+  15 real side-view descriptions plus one written to reach the branches they miss (#936). Then
+  `.claude/skills/monitor-print/scripts/print_monitor.py::step` (25), one helper per kind of
+  change (no reply, someone else's job, first sight, a state change, the 25/50/75% marks, a
+  stall), self-test unchanged and the same watch state and rows after every poll on all 36 runs
+  in the 32 saved watch logs, each replayed four ways (its own settings, short stall and lost
+  windows, pick-up flipped): 144 replays, 5,068 polls. 79 left.
   `branch_inventory.py::self_test` (34) is skipped: it is a list of test cases, so splitting it
-  buys little. Next is `.claude/skills/monitor-print/scripts/print_monitor.py::step` at 25. A
+  buys little. Next is `.claude/gates/plates_gate.py::check_approvals` at 23. A
   cleanup skill comes back only if
   this proves a repeated manual task, and then as an extension of the built-in `simplify` skill.
 - **A post about the design**, which Omar asked for once he signed off: written with the

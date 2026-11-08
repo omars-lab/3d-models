@@ -148,83 +148,115 @@ def is_ours(frame: dict, plate: str) -> bool:
     return str(frame.get("subtask_name") or "") in (f"{plate}.plate", plate)
 
 
+def _no_reply(st: dict, now: float, lost_after_s: float) -> list[tuple[str, str]]:
+    """The poll got nothing: lost once the silence has lasted the whole window."""
+    if now - st.get("last_reply", st.setdefault("started", now)) >= lost_after_s:
+        return [("lost", f"no reply for {int((now - st.get('last_reply', st['started'])) // 60)} min")]
+    return []
+
+
+def _not_ours(st: dict, frame: dict, now: float, plate: str, lost_after_s: float,
+              state: str) -> list[tuple[str, str]]:
+    """The printer is on some other job: a stop if ours was seen, lost if it never showed up."""
+    if st.get("seen"):
+        return [("stopped", f"the printer moved on to {frame.get('subtask_name') or 'nothing'} ({state})")]
+    if now - st["started"] >= lost_after_s:
+        return [("lost", f"{plate} never showed up; the printer is on "
+                         f"{frame.get('subtask_name') or 'nothing'} ({state})")]
+    return []
+
+
+def _first_sight(st: dict, state: str, code: str | None) -> tuple[str, str]:
+    st["seen"] = True
+    # A watch picked up after a lost one (`--pick-up`) may find the print already over: the
+    # end is its first row, or the log would say `watching` forever (split-02, 2026-10-15).
+    if st.get("pick_up") and state in ("FINISH", "FAILED"):
+        ended = ("finished" if state == "FINISH" else
+                 "stopped" if code == CANCELLED else "failed")
+        return ended, f"{said(code, state)}, {PICKED_UP}"
+    return "watching", said(code, state)
+
+
+def _change(state: str, prev: str | None, code: str | None) -> tuple[str, str] | None:
+    """The row for a move from `prev` to `state`, or None for a state with no row."""
+    if state in ("PREPARE", "SLICING"):
+        return "preparing", state
+    if state == "RUNNING":
+        return ("resumed" if prev == "PAUSE" else "printing"), state
+    if state == "PAUSE":
+        return "paused", said(code, state)
+    if state == "FINISH":
+        return "finished", state
+    if state == "FAILED":
+        # A cancel reports FAILED too (sheets-04b, 2026-10-03); it is a stop, not a failure.
+        return ("stopped" if code == CANCELLED else "failed"), said(code, state)
+    if state == "IDLE":
+        return "stopped", "the printer went idle"
+    return None
+
+
+def _milestones(st: dict, frame: dict) -> list[tuple[str, str]]:
+    """The highest 25/50/75% mark newly passed, once each."""
+    try:
+        pct = int(frame.get("mc_percent") or 0)
+    except (TypeError, ValueError):
+        pct = 0
+    rows = []
+    done = st.setdefault("milestones", [])
+    for m in MILESTONES:
+        if pct >= m and m not in done:
+            done.append(m)
+            if m == max(x for x in MILESTONES if pct >= x):
+                rows.append(("progress", f"{m}%"))
+    return rows
+
+
+def _stall(st: dict, frame: dict, now: float, prev: str | None,
+           stall_after_s: float) -> list[tuple[str, str]]:
+    """Is it moving? RUNNING with the same layer and percent for the whole window is a stall. The
+    clock starts again on every move and on every return to RUNNING (a resume, the first layer)."""
+    mark = (frame.get("layer_num"), frame.get("mc_percent"))
+    if mark != st.get("mark") or prev != "RUNNING":
+        rows = []
+        if st.get("stalled") and prev == "RUNNING":
+            rows.append(("printing", f"moving again: layer {mark[0]}, {mark[1]}%"))
+        st["stalled"], st["mark"], st["moved_at"] = False, mark, now
+        return rows
+    if not st.get("stalled") and now - st["moved_at"] >= stall_after_s:
+        st["stalled"] = True
+        return [("stalled", f"no new layer or percent for {int((now - st['moved_at']) // 60)} min "
+                            f"(layer {mark[0]}, {mark[1]}%)")]
+    return []
+
+
 def step(st: dict, frame: dict | None, now: float, plate: str, lost_after_s: float,
          stall_after_s: float = 900) -> tuple[dict, list[tuple[str, str]]]:
     """One poll's worth of change. `st` is the watch so far; returns it updated and the new
     (event, what-the-printer-said) pairs, in order. `frame` None means the poll got no reply."""
     st = dict(st)
-    rows: list[tuple[str, str]] = []
     if frame is None:
-        if now - st.get("last_reply", st.setdefault("started", now)) >= lost_after_s:
-            rows.append(("lost", f"no reply for {int((now - st.get('last_reply', st['started'])) // 60)} min"))
-        return st, rows
+        return st, _no_reply(st, now, lost_after_s)
     st["last_reply"] = now
     st.setdefault("started", now)
     state = str(frame.get("gcode_state") or "UNKNOWN")
     code = error_code(frame.get("print_error"))
     st["frame"] = frame
-
     if not is_ours(frame, plate):
-        if st.get("seen"):
-            rows.append(("stopped", f"the printer moved on to {frame.get('subtask_name') or 'nothing'} ({state})"))
-        elif now - st["started"] >= lost_after_s:
-            rows.append(("lost", f"{plate} never showed up; the printer is on "
-                                 f"{frame.get('subtask_name') or 'nothing'} ({state})"))
-        return st, rows
+        return st, _not_ours(st, frame, now, plate, lost_after_s, state)
 
     prev = st.get("state")
+    rows: list[tuple[str, str]] = []
     if not st.get("seen"):
-        st["seen"] = True
-        # A watch picked up after a lost one (`--pick-up`) may find the print already over: the
-        # end is its first row, or the log would say `watching` forever (split-02, 2026-10-15).
-        if st.get("pick_up") and state in ("FINISH", "FAILED"):
-            ended = ("finished" if state == "FINISH" else
-                     "stopped" if code == CANCELLED else "failed")
-            rows.append((ended, f"{said(code, state)}, {PICKED_UP}"))
-        else:
-            rows.append(("watching", said(code, state)))
-    elif state != prev:
-        if state in ("PREPARE", "SLICING"):
-            rows.append(("preparing", state))
-        elif state == "RUNNING":
-            rows.append(("resumed" if prev == "PAUSE" else "printing", state))
-        elif state == "PAUSE":
-            rows.append(("paused", said(code, state)))
-        elif state == "FINISH":
-            rows.append(("finished", state))
-        elif state == "FAILED":
-            # A cancel reports FAILED too (sheets-04b, 2026-10-03); it is a stop, not a failure.
-            rows.append(("stopped" if code == CANCELLED else "failed", said(code, state)))
-        elif state == "IDLE":
-            rows.append(("stopped", "the printer went idle"))
+        rows.append(_first_sight(st, state, code))
+    elif state != prev and (row := _change(state, prev, code)):
+        rows.append(row)
     if code and code != st.get("code") and not any(e in ("paused", "failed", "stopped", "watching") for e, _ in rows):
         rows.append(("error", said(code, state)))
     st["code"] = code
 
     if state == "RUNNING" and not any(e in TERMINAL for e, _ in rows):
-        try:
-            pct = int(frame.get("mc_percent") or 0)
-        except (TypeError, ValueError):
-            pct = 0
-        done = st.setdefault("milestones", [])
-        for m in MILESTONES:
-            if pct >= m and m not in done:
-                done.append(m)
-                if m == max(x for x in MILESTONES if pct >= x):
-                    rows.append(("progress", f"{m}%"))
-
-    # Is it moving? RUNNING with the same layer and percent for the whole window is a stall. The
-    # clock starts again on every move and on every return to RUNNING (a resume, the first layer).
-    if state == "RUNNING" and not any(e in TERMINAL for e, _ in rows):
-        mark = (frame.get("layer_num"), frame.get("mc_percent"))
-        if mark != st.get("mark") or prev != "RUNNING":
-            if st.get("stalled") and prev == "RUNNING":
-                rows.append(("printing", f"moving again: layer {mark[0]}, {mark[1]}%"))
-            st["stalled"], st["mark"], st["moved_at"] = False, mark, now
-        elif not st.get("stalled") and now - st["moved_at"] >= stall_after_s:
-            st["stalled"] = True
-            rows.append(("stalled", f"no new layer or percent for {int((now - st['moved_at']) // 60)} min "
-                                    f"(layer {mark[0]}, {mark[1]}%)"))
+        rows += _milestones(st, frame)
+        rows += _stall(st, frame, now, prev, stall_after_s)
     st["state"] = state
     return st, rows
 
