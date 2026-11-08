@@ -33,9 +33,6 @@
   ".claude/gates/docs_gate.py::self_test": [
    20
   ],
-  ".claude/gates/hook_parity.py::run": [
-   17
-  ],
   ".claude/gates/plates_gate.py::check_ids": [
    12
   ],

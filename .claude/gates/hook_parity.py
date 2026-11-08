@@ -246,17 +246,8 @@ def _stream(command: str) -> tuple[int, list[str]]:
     return proc.wait(), warn_lines
 
 
-def run(strict: bool) -> int:
-    rc = check(quiet=True)
-    if rc:
-        return check()  # re-run loudly, for the message
-
-    hooks, _ = load_hooks()
-    passed: list[str] = []
-    failed: list[tuple[str, int]] = []
-    warned: list[tuple[str, str]] = []
-    unverified: list[tuple[str, str]] = []
-
+def _run_hooks(hooks, passed, failed, unverified) -> None:
+    """Run each hook's wholesale form, or mark it not verified when its tool is missing."""
     for hook in hooks:
         if hook.requires and not shutil.which(hook.requires):
             unverified.append((hook.name, f"`{hook.requires}` is not on PATH"))
@@ -273,6 +264,9 @@ def run(strict: bool) -> int:
             failed.append((hook.name, step.returncode))
             print(f"    FAILED rc={step.returncode} ({took:.1f}s)")
 
+
+def _run_extra(passed, failed, warned) -> None:
+    """Run the checks with no hook behind them, keeping their WARN lines for the summary."""
     for command, _reason in EXTRA:
         print(f"\n==> [no hook behind this one] {command}")
         rc, warn_lines = _stream(command)
@@ -287,6 +281,9 @@ def run(strict: bool) -> int:
             failed.append((command, rc))
             print(f"    FAILED rc={rc}")
 
+
+def _summary(passed, failed, warned, unverified) -> None:
+    """Print what did not run, what failed and what warned, then the one verdict line."""
     print("\n" + "=" * 72)
     if unverified:
         print("NOT VERIFIED — these gates did not run on this machine:")
@@ -313,6 +310,21 @@ def run(strict: bool) -> int:
     if warned:
         verdict += f", {len(warned)} with a warning"
     print(f"hook-parity: {verdict}")
+
+
+def run(strict: bool) -> int:
+    rc = check(quiet=True)
+    if rc:
+        return check()  # re-run loudly, for the message
+
+    hooks, _ = load_hooks()
+    passed: list[str] = []
+    failed: list[tuple[str, int]] = []
+    warned: list[tuple[str, str]] = []
+    unverified: list[tuple[str, str]] = []
+    _run_hooks(hooks, passed, failed, unverified)
+    _run_extra(passed, failed, warned)
+    _summary(passed, failed, warned, unverified)
 
     if failed:
         return 1
