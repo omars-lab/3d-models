@@ -69,10 +69,15 @@ complexity check lists the 86 Python functions over 10 and stops any new one.
   `.claude/gates/plates_gate.py::check_approvals` (23), one helper each for a row, its Spent by,
   the open approval and the sends, the same findings on all 67 plate pages with every approval
   cell, row and 'sent' timeline row broken in turn (43,230 cases, 35,540 with a finding, every
-  rule firing). 78 left.
-  The `self_test` functions (`branch_inventory.py` 34, `theme_plates.py` 22, `site_graph.py` 21)
-  are skipped: each is a list of test cases, so splitting it buys little. Next is
-  `.claude/gates/constructions_ledger.py::check` at 20. A
+  rule firing) (#938). Then `.claude/gates/constructions_ledger.py::check` (20), one helper each
+  for the file paths, the youtube pin, the ids at the pin and the rung states, self-test unchanged
+  and the same findings, reports and counts on the real ledger with each row's youtube, naqsh and
+  coaster cells changed, each row dropped or renamed, the pin removed, made up or moved to 12
+  older youtube commits, and youtube missing (928 cases, every rule firing). 77 left.
+  The `self_test` functions (`branch_inventory.py` 34, `theme_plates.py` 22, `site_graph.py` 21,
+  `docs_gate.py` 20) are skipped: each is a list of test cases, so splitting it buys little. Next
+  are the four at 19: `send-plate/scripts/color_map.py::check`, `maintain-vocabulary/scripts/vocabulary.py::problems`,
+  `draw-side-view/scripts/side_view.py::check_part` and `color-themes/scripts/themes.py::main`. A
   cleanup skill comes back only if
   this proves a repeated manual task, and then as an extension of the built-in `simplify` skill.
 - **A post about the design**, which Omar asked for once he signed off: written with the

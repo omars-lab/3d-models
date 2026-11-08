@@ -15,9 +15,6 @@
   ".claude/gates/coaster_pictures.py::enclosed_regions": [
    12
   ],
-  ".claude/gates/constructions_ledger.py::check": [
-   20
-  ],
   ".claude/gates/counts_gate.py::check": [
    13
   ],
