@@ -54,9 +54,13 @@ complexity check lists the 86 Python functions over 10 and stops any new one.
   (#930). Then `.claude/gates/plates_gate.py::check_page` (33), one helper per rule group, the
   same findings on all 67 plate pages with each field broken in turn (44,820 cases). Then
   `tools/session_reflect.py::census` (30), its per-line work made methods of a small tally class,
-  self-test unchanged and the same result on every real transcript of this repo. 82 left.
+  self-test unchanged and the same result on all 458 real transcripts of this repo not touched in
+  the 30 minutes before the run (#934). Then `.claude/gates/site_graph.py::check` (28), one helper
+  per rule G0 to G5, self-test unchanged and the same findings on the real graph with each edge,
+  node and host field broken in turn (8,358 cases). 81 left.
   `branch_inventory.py::self_test` (34) is skipped: it is a list of test cases, so splitting it
-  buys little. Next is `.claude/gates/site_graph.py::check` at 28. A cleanup skill comes back only if
+  buys little. Next is `.claude/skills/draw-side-view/scripts/side_view.py::draw_panel` at 27. A
+  cleanup skill comes back only if
   this proves a repeated manual task, and then as an extension of the built-in `simplify` skill.
 - **A post about the design**, which Omar asked for once he signed off: written with the
   claude-techniques session, numbers and design only. A second post can follow with the trial's
