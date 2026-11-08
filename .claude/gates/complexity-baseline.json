@@ -18,9 +18,6 @@
   ".claude/gates/counts_gate.py::enumerations_in": [
    13
   ],
-  ".claude/gates/doc_pointers.py::resolve_under": [
-   14
-  ],
   ".claude/gates/doc_pointers.py::run": [
    11
   ],

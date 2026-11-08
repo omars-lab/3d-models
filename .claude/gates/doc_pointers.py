@@ -442,31 +442,38 @@ def resolve_under(path: str, doc: str, root: Path = ROOT) -> str | None:
     to the document doing the pointing (how a markdown link resolves, and the
     only way `../x.md` means anything), then each checked-out sibling.
     """
-    label = None
-    rest = path
-    if ":" in path.split("/", 1)[0]:
+    head = path.split("/", 1)[0]
+    if ":" in head:
         label, rest = path.split(":", 1)
         if label in NON_DIRECTORY_LABELS:
             return "skipped"
         if label not in SIBLING_REPOS:
             return None
-    elif path.split("/", 1)[0] in SIBLING_REPOS:
+        return _resolve_in_sibling(label, rest, root)
+    if head in SIBLING_REPOS:
         label, rest = path.split("/", 1)
+        return _resolve_in_sibling(label, rest, root)
+    return _resolve_bare(path, doc, root)
 
-    if label is None:
-        if (root / path).exists() or _shipped_by_makefile(root, path):
-            return "."
-        if (root / Path(doc).parent / path).resolve().exists():
-            return f"{Path(doc).parent.as_posix()}/ (doc-relative)"
-        # Unprefixed shorthand for a sibling's own layout — `kernel3d/x.ts`.
-        bikar = _sibling_root("bikar", root)
-        if bikar is None:
-            return "skipped"
-        for base in BIKAR_ROOTS:
-            if _exists_in_sibling(bikar, f"{base}/{path}" if base else path):
-                return f"bikar/{base}" if base else "bikar/"
-        return None
 
+def _resolve_bare(path: str, doc: str, root: Path) -> str | None:
+    """A path with no repo in front: this repo, then beside the doc, then bikar's own layout."""
+    if (root / path).exists() or _shipped_by_makefile(root, path):
+        return "."
+    if (root / Path(doc).parent / path).resolve().exists():
+        return f"{Path(doc).parent.as_posix()}/ (doc-relative)"
+    # Unprefixed shorthand for a sibling's own layout — `kernel3d/x.ts`.
+    bikar = _sibling_root("bikar", root)
+    if bikar is None:
+        return "skipped"
+    for base in BIKAR_ROOTS:
+        if _exists_in_sibling(bikar, f"{base}/{path}" if base else path):
+            return f"bikar/{base}" if base else "bikar/"
+    return None
+
+
+def _resolve_in_sibling(label: str, rest: str, root: Path) -> str | None:
+    """A path a sibling repo's name starts (`bikar:x` or `bikar/x`): look in that repo."""
     sibling = _sibling_root(label, root)
     if sibling is None:
         return "skipped"
