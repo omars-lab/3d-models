@@ -47,13 +47,12 @@ Written by `python3 .claude/gates/plates_gate.py --write` from the plate pages a
 | 25 | [theme-midnight-blue-10101](theme-midnight-blue-10101.md) | waiting | 1 | 1.1 | 0.90 | ok | Midnight blue, one of its 2 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Black (10101)? |
 | 26 | [theme-terracotta-souk-10101](theme-terracotta-souk-10101.md) | waiting | 1 | 1.1 | 0.90 | ok | Terracotta souk, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Basic Black (10101)? |
 | 27 | [theme-night-sky-13101](theme-night-sky-13101.md) | waiting | 1 | 1.1 | 0.89 | ok | Night sky, one of its 4 plates: does its frame ×1 come out as the theme draws it, in PLA Sparkle Onyx Black Sparkle (13101)? |
-| 28 | [toys-1](toys-1.md) | approved | 2 | 6.6 | 0.31 | ok | Do the magic cube, the airless ping-pong ball and the 8-point fidget star all print clean on one X2D bed, with supports on for the whole plate? |
 
 **Waiting on a build** (no recipe or slice yet, so no hours; highest value first): [pkt-2](pkt-2.md) (value 6), [sheets-05](sheets-05.md) (value 5).
 
 **Held for hardware risk:** none.
 
-**Went to the printer, no record yet:** [closeout-1](closeout-1.md), [dragon-egg-1](dragon-egg-1.md), [minis-01](minis-01.md), [minis-02](minis-02.md).
+**Went to the printer, no record yet:** [closeout-1](closeout-1.md), [dragon-egg-1](dragon-egg-1.md), [minis-01](minis-01.md), [minis-02](minis-02.md), [toys-1](toys-1.md).
 
 **Printed:** [bedface-1](bedface-1.md) ×1, [bedface-2](bedface-2.md) ×1, [bedface-3](bedface-3.md) ×1, [bedface-4](bedface-4.md) ×1, [bedface-5](bedface-5.md) ×1, [cedar-stencil-1](cedar-stencil-1.md) ×1, [hexfit-1](hexfit-1.md) ×1, [hexfit-2](hexfit-2.md) ×1, [minis-03](minis-03.md) ×1, [minis-04](minis-04.md) ×1, [phones-01](phones-01.md) ×1, [phones-02](phones-02.md) ×1, [pkt-1](pkt-1.md) ×1, [sheets-04](sheets-04.md) ×1, [sheets-04b](sheets-04b.md) ×1, [sheets-04c](sheets-04c.md) ×1, [sheets-04g-fit](sheets-04g-fit.md) ×1, [sheets-04g-fit2](sheets-04g-fit2.md) ×1, [sheets-04g](sheets-04g.md) ×1, [sld-1](sld-1.md) ×1, [spl-1](spl-1.md) ×1, [spl-2](spl-2.md) ×1, [split-02](split-02.md) ×1, [split-03](split-03.md) ×0, [split-04](split-04.md) ×1, [split-05](split-05.md) ×1, [split-06](split-06.md) ×1, [split-07](split-07.md) ×1, [split-08](split-08.md) ×1, [split-10](split-10.md) ×1, [star-1](star-1.md) ×1, [star-2](star-2.md) ×1, [star-3](star-3.md) ×1.
 <!-- queue:end -->

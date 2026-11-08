@@ -52,3 +52,7 @@ Plates printed and finished but not judged yet. Until they are, what they test i
   - Row 5: a brim kite whose bottom edge is straighter and whose corners are sharper than its plain twin, with no lip left from the brim, and whether it still fits the pocket like its twin.
 - [dragon-egg-1 — one small dragon egg, in silk blue](../design/plates/dragon-egg-1.md): 0 of 1 questions answered. Still open:
   - Row 1: 1. Take the egg off the bed. 2. Turn it in your hand and look at the scale tips, most of all on the lower half. Do the scales come out clean, or do some tips droop or string? Clean, rough tips, or failed
+- [toys-1 — a magic cube, an airless ping-pong ball and an 8-point fidget star](../design/plates/toys-1.md): 0 of 3 questions answered. Still open:
+  - Row 1: 1. Take the cube off the bed. 2. If it has moving parts, try to move them. Does it come out clean and, if it is meant to move, does it move? Clean, rough, or stuck
+  - Row 2: 1. Take the ball off the bed. 2. Pull off any support, inside and out, and look at its bottom, where it stood. 3. Squeeze it gently. Did it print round all the way up, did the supports come out, and does it bounce? Clean, supports stuck inside, rough, or failed
+  - Row 3: 1. Take the star off the bed. 2. Pull off any support. 3. Try to move its rings and points. Do they move freely, or are any stuck to each other? Free, stiff, or stuck

@@ -1,8 +1,9 @@
 ---
 plate: toys-1
+print_log: '[[print-logs/toys-1|print log]]'
 recipe: toys-1.yaml
 iteration: 3
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "Do the magic cube, the airless ping-pong ball and the 8-point fidget star all print clean on one X2D bed, with supports on for the whole plate?"
@@ -72,6 +73,14 @@ The slice: the cube, the ball and the star together on the bed.
 | PING-PONG BALL | about 40.0 x 39.9 x 39.3 | 186.1, 96 |
 | FIDGET STAR | about 78.0 x 78.0 x 18.0 | 109.6, 120.4 |
 
+## The print
+
+The print as the chamber camera saw it: 38 pictures from 17:43 to 23:57 UTC, half a second each, the last held. Made by the monitor-print skill's `print_monitor.py --publish`; what the printer said is in the print log.
+
+![toys-1 printing, as the chamber camera saw it](toys-1-media/timelapse.webp)
+
+![toys-1 finished, on the bed](toys-1-media/finished.webp)
+
 ## Cost and risk
 
 One bed, 5 h 40 min, 89.48 g (local slice, 2026-11-07, X2D 0.20 mm Standard preset with supports
@@ -104,7 +113,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-11-07 | approved | Omar, in chat: "yes, all in Silk blue" | iteration 3 @ f08bbbc482 in #0047BB | |
+| 2026-11-07 | approved | Omar, in chat: "yes, all in Silk blue" | iteration 3 @ f08bbbc482 in #0047BB | sent 2026-11-07 |
 
 ## Timeline
 
@@ -112,3 +121,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-11-07 | proposed — at Omar's ask: a magic cube, a ping-pong ball and an 8-point fidget star on one plate | this page |
 | 2026-11-07 | sliced — the first slice warned of floating regions on the ball; Omar picked supports on for the plate; the slice with supports fits one bed, 5 h 40 min, 89.48 g, no warnings | this page |
+| 2026-11-07 | sent — by `bambu print send`; spends the approval of 2026-11-07, iteration 3 @ f08bbbc482 in #0047BB | this page |
