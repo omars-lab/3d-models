@@ -2,7 +2,7 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
-- 2026-11-07 — master's split-flange coaster source now matches bikar main's: three 1.2 mm star pins on a triangle by default whenever there is a pin size. Only the two star-pin lines changed, and the 90 mm standard STL renders byte for byte as committed, since star pins show only on halved pieces (3d-models #930)
+- 2026-11-07 — master's split-flange coaster source now matches bikar main's: three 1.2 mm star pins on a triangle by default whenever there is a pin size. Only the two star-pin lines changed, and the 90 mm standard STL renders byte for byte as committed, since star pins show only on halved pieces (3d-models #931)
 - 2026-11-07 — toys-1 (magic cube, ping-pong ball, fidget star) sent in silk blue on Omar's yes and printed to the finish in 6 h 14 min, with its log, timelapse and last picture. Judging it waits on Omar (3d-models #925, #926, #928)
 - 2026-11-06 — split-10's open questions, with split-07's, star-1's and star-3's, went onto one small plate, closeout-1, instead of a next split-10 plate; split-10 and the others were closed as replaced by it, and closeout-1 was approved, sent and printed in green. Judging it waits on Omar (3d-models #895, #904, #906, #909, #915)
 - 2026-11-05 — hexfit-2 judged in chat: the hexagon halves stay flat with the rail as it is at 0.01 mm a side (1 dot, the control); the taller rail, the wider rail and pins in place of the rail did no better ("they are all very identical, just go with 1 dot"), so the rocking is settled and the pin-beside-the-rail bikar change is not needed. hexfit-1's record gets Omar's "might have been the best" back (3d-models #890, #891, #893, #894)
