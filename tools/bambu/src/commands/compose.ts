@@ -51,6 +51,7 @@ import { recordProfileFrom } from "../header.js";
 import { platesDir, recordsDir, repoRoot } from "../paths.js";
 import { recipeHashOf, recipeIterationOf } from "../send-gate.js";
 import { footprintCentres, layoutGroups, writePlacements, type GroupLayout, type LayoutPiece, type PlacedPiece } from "../group-layout.js";
+import { checkSupportBlocker, injectSupportBlockers, blockersByName, blockersMissing, type SupportBlocker } from "../support-blocker.js";
 import { readMember, writePlatePreview, readBeds, readPlacements, type Placement, type SlicedBed } from "../threemf.js";
 
 // ── The manifest ─────────────────────────────────────────────────────────────────────────────────
@@ -100,6 +101,7 @@ export interface ManifestItemStl {
   group?: string;
   filament?: number;
   no_id?: string; // a file bikar did not make cannot be cut: say why it has none
+  support_blocker?: SupportBlocker; // a sphere inside the piece where Studio builds no support (support-blocker.ts)
 }
 export type ManifestItem = ManifestItemBkr | ManifestItemIteration | ManifestItemStl;
 export interface PlateManifest {
@@ -505,17 +507,18 @@ async function writeObjectSettings(
   out: string,
   byName: Map<string, Record<string, string>>,
   placed: PlacedPiece[] | null,
+  blockers: Map<string, SupportBlocker> = new Map(),
 ): Promise<void> {
   const member = "Metadata/model_settings.config";
   const xml = await readMember(arranged, member);
   if (xml === null) throw new Error(`the arranged plate has no ${member}`);
   const work = mkdtempSync(join(tmpdir(), "bambu-object-settings-"));
   mkdirSync(join(work, "Metadata"));
-  writeFileSync(join(work, member), injectObjectSettings(xml, byName));
+  let settings = injectObjectSettings(xml, byName);
   const members = [member];
-  if (placed) {
+  if (placed || blockers.size > 0) {
     const modelMember = "3D/3dmodel.model";
-    const model = await readMember(arranged, modelMember);
+    let model = await readMember(arranged, modelMember);
     if (model === null) throw new Error(`the arranged plate has no ${modelMember}`);
     const meshes = new Map<string, string>();
     for (const path of new Set([...model.matchAll(/\bp:path="([^"]*)"/g)].map((m) => m[1]!))) {
@@ -523,10 +526,31 @@ async function writeObjectSettings(
       if (mesh === null) throw new Error(`the arranged plate has no ${path}`);
       meshes.set(path, mesh);
     }
-    mkdirSync(join(work, "3D"));
-    writeFileSync(join(work, modelMember), writePlacements(model, xml, placed, footprintCentres(model, meshes)));
+    mkdirSync(join(work, "3D"), { recursive: true });
+    if (placed) model = writePlacements(model, xml, placed, footprintCentres(model, meshes));
+    if (blockers.size > 0) {
+      // After the placements: the blocker sits in each object's own frame, so a move carries it along.
+      const b = injectSupportBlockers(model, settings, meshes, blockers);
+      model = b.rootModel;
+      settings = b.settingsXml;
+      for (const p of b.placed) {
+        console.log(
+          `support blocker in ${p.name}: radius ${p.radius} mm at its centre (the piece reaches ${p.inner.toFixed(2)} ` +
+            `to ${p.outer.toFixed(2)} mm from it)`,
+        );
+      }
+      for (const [path, text] of b.meshes) {
+        if (text === meshes.get(path)) continue;
+        const rel = path.replace(/^\//, "");
+        mkdirSync(join(work, dirname(rel)), { recursive: true });
+        writeFileSync(join(work, rel), text);
+        members.push(rel);
+      }
+    }
+    writeFileSync(join(work, modelMember), model);
     members.push(modelMember);
   }
+  writeFileSync(join(work, member), settings);
   copyFileSync(arranged, out);
   const res = await runWithTimeout("zip", ["-q", out, ...members], { cwd: work, timeoutMs: 30_000, label: "zip_object_settings" });
   if (res.code !== 0) throw new Error(`zip exit ${res.code ?? "null"}: ${(res.stderr || res.stdout).trim()}`);
@@ -557,6 +581,10 @@ export function parseManifest(text: string): PlateManifest {
         throw new Error(`${where}: only a \`bkr:\` item takes \`object_settings:\` (its id is minted with them)`);
       }
       it.object_settings = checkObjectSettings(it.object_settings, where);
+    }
+    if (it.support_blocker !== undefined) {
+      if (it.stl === undefined) throw new Error(`${where}: only an \`stl:\` item takes \`support_blocker:\` so far`);
+      it.support_blocker = checkSupportBlocker(it.support_blocker, where);
     }
     if (it.stl !== undefined) {
       checkStlItem(it, where);
@@ -824,6 +852,7 @@ export interface ResolvedItem {
   filament: number; // the 1-based filament slot (1 when the item names none)
   file?: string; // an `stl:` item's absolute path: copied (scaled by its scale params) instead of rendered
   objectSettings?: Record<string, string>; // the item's `object_settings:`, absent when it has none
+  supportBlocker?: SupportBlocker; // the item's `support_blocker:`, absent when it has none
 }
 
 /** Resolve a bikar-tracked blob's source_sha256 at a ref, or throw a clear error. */
@@ -911,6 +940,7 @@ function resolveStlItem(
     source_sha256: item.sha256,
     piece: "",
     params,
+    ...(item.support_blocker ? { support_blocker: item.support_blocker } : {}), // absent unless set: ids stay byte-identical
     slice_profile: itemSliceProfile(item, sliceProfile),
   };
   return {
@@ -928,6 +958,7 @@ function resolveStlItem(
     group: item.group ?? "",
     filament: item.filament ?? 1,
     file,
+    ...(item.support_blocker ? { supportBlocker: item.support_blocker } : {}),
   };
 }
 
@@ -1257,7 +1288,9 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
       return;
     }
   }
-  const twoPass = settingsByName.size > 0 || layout !== null;
+  const blockersByStaged = new Map<string, SupportBlocker>();
+  for (const r of resolved) if (r.supportBlocker) blockersByStaged.set(stagedName(r), r.supportBlocker);
+  const twoPass = settingsByName.size > 0 || layout !== null || blockersByStaged.size > 0;
   const arrangedDir = twoPass ? mkdtempSync(join(tmpdir(), "bambu-arranged-")) : "";
   const arrangedPath = join(arrangedDir, "arranged.3mf");
   const withSettingsPath = join(arrangedDir, "with-settings.3mf");
@@ -1314,6 +1347,9 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
         const set = Object.entries(r.objectSettings!).map(([k, v]) => `${k}=${v}`).join(" ");
         console.log(`  ${r.entry}: ${stagedName(r)} ${set}`);
       }
+      for (const r of resolved.filter((x) => x.supportBlocker)) {
+        console.log(`  ${r.entry}: ${stagedName(r)} a support blocker of radius ${r.supportBlocker!.radius_mm} mm at the centre its vertices fit`);
+      }
       console.log("dry run — would execute, arrange and slice as stock:");
       console.log(shown(studioArgs));
       console.log("then the slice again, of that plate with the settings written in:");
@@ -1353,7 +1389,7 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
       return;
     }
     try {
-      await writeObjectSettings(arrangedPath, withSettingsPath, settingsByName, layout?.pieces ?? null);
+      await writeObjectSettings(arrangedPath, withSettingsPath, settingsByName, layout?.pieces ?? null, blockersByStaged);
     } catch (err) {
       console.error(`could not write the per-piece settings into the arranged plate: ${(err as Error).message}`);
       process.exitCode = 1;
@@ -1401,6 +1437,18 @@ async function runCompose(manifestPath: string, opts: ComposeOpts, raw: string[]
       return;
     }
     console.log(`per-piece settings check: PASS — ${want.length} piece(s) carry their settings in the slice, and the rest carry none.`);
+    const wantBlockers = resolved.filter((r) => r.supportBlocker).map((r) => ({ name: stagedName(r), count: r.count }));
+    const blockerProblems = xml === null ? [] : blockersMissing(blockersByName(xml), wantBlockers);
+    if (blockerProblems.length > 0) {
+      const rejected = outPath.replace(/\.3mf$/i, "") + ".blocker-mismatch.3mf";
+      renameSync(outPath, rejected);
+      console.error("support blocker check: FAIL — the slice does not carry them as the recipe says:");
+      for (const p of blockerProblems) console.error(`  ✗ ${p}`);
+      console.error(`The plate was moved aside to ${rejected}; do not send it.`);
+      process.exitCode = 1;
+      return;
+    }
+    if (wantBlockers.length > 0) console.log(`support blocker check: PASS — ${wantBlockers.length} piece(s) carry one blocker each in the slice.`);
   }
 
   // A plate that spilled onto more beds than the manifest allows is refused: no sidecar, no record,

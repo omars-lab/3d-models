@@ -36,6 +36,9 @@ export interface IterationKey {
   // ONLY when the item carries some: the same mesh printed another way is another recipe, and every id
   // minted before per-piece settings is unchanged.
   object_settings?: Record<string, string>;
+  // A sphere inside the piece where the slicer builds no support (`support_blocker:`), present ONLY
+  // when the item asks for one: the same mesh with its hollow kept clear is another print.
+  support_blocker?: { radius_mm: number };
   slice_profile: {
     settings: string; // "<machine>;<process>" display names
     filament: string; // filament display name(s)

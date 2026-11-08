@@ -1,0 +1,43 @@
+# ball-1 — the airless ping-pong ball from toys-1, alone, with supports only from the bed
+#
+# Omar, 2026-11-08, after toys-1: "for the ball, i only want support outside the orb, not inside",
+# and today: "is our ball without iner support ready?", "if so send it in green". One ball, as the
+# model comes:
+#
+#   PING-PONG BALL  x1   scale 1   about 40.0 x 39.9 x 39.3 mm, on a flat base about 6 mm across
+#
+# The ball is the airless ping-pong ball from MakerWorld (the file's header names model 376496),
+# downloaded as airlesspingpongball20.stl. It is the same file toys-1 printed, held to the same
+# sha256. It stays out of git: this repo is public and the model is someone else's.
+#
+# Supports stand only on the bed. toys-1 turned supports on with the slicer free to start them
+# anywhere, so it filled the lattice too. This preset adds Bambu Studio's "on build plate only"
+# (support_on_build_plate_only): a support may not start on the ball. That alone was not enough:
+# a slice with it still grew support up through the windows of the ball's bottom half into the
+# hollow. So the ball also carries a support blocker, a sphere of radius 18.6 mm at the ball's own
+# centre (its inner face is about 17.6 to 18 mm out, its outer face 20 mm), where Studio builds no
+# support at all. The preset also uses plain supports (normal(auto)): tree supports branch round a
+# blocker and still reached inside. The slice's G-code is read for any support inside the ball
+# before it goes out (`print_review.py supports-inside`; the plate page says what it found).
+#
+# One color, picked at the send. Until then the plate slices on PLA Basic.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/ball-1.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;tools/bambu/presets/supports-bed-only-0.20.json"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: BL1
+
+items:
+  - stl:     .bambu/imports/airless-ping-pong-ball-20.stl # airlesspingpongball20.stl as downloaded
+    sha256:   0b9ba2089962c7e678d6f1c8b568afa3c96c9e9d74a160de06cc43083eff0102
+    count:    1
+    label:    PING-PONG BALL
+    no_id:    "the only piece on the bed; an outside mesh, so nothing is cut into it"
+    support_blocker: { radius_mm: 18.6 } # no support in the hollow; compose centres it on the ball
+    # Our standard profile apart from supports: our walls and 15% infill, whatever the maker set.
+    # A recipe cannot set the maker's own settings on an outside mesh.

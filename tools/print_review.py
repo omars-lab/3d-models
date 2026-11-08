@@ -10,6 +10,7 @@
     python3 tools/print_review.py grams <plate.3mf>
     python3 tools/print_review.py side <out.png> <frame.stl> <label> <x0>,<y0>,<x1>,<y1> <piece.stl> [...]
     python3 tools/print_review.py paths <out.png> <plate.3mf> <z> <x>,<y>,<side> [--below] [--px N] [--check]
+    python3 tools/print_review.py supports-inside <plate.3mf> --radius R [--centre X,Y,Z]
     python3 tools/print_review.py join <out.png> <a.png> <b.png> [<c.png> ...]
     python3 tools/print_review.py compare <out.png> <LABEL>=<picture>@<x>,<y>,<w>,<h> | <LABEL>=<picture>@<cx>,<cy>,<r>,<a0>,<a1> [...]
     python3 tools/print_review.py --self-test
@@ -81,6 +82,13 @@ asked for, not as they came out). `--check` is the bed-face design's check: it d
 millimeter unless `--px` says otherwise, prints PASS or FAIL, and exits 1 when the bare share is
 0.6% or more or the largest bare pocket is 0.2 sq mm or more.
 
+`supports-inside` reads a sliced plate of one hollow ball and says whether any support is inside
+it: every extruding move under a Support feature, checked every quarter millimetre, counts when the
+edge of its bead comes nearer the ball's centre than `--radius` (the inside of the shell). The
+centre is fitted from the ball's mesh in the plate, or given with `--centre`. It prints the
+nearest any support bead comes, and PASS or FAIL, and exits 1 on a fail. It is the G-code half of
+the outside-supports design's first validator; ball-1 (2026-11-08) is the plate it was made for.
+
 `join` puts pictures side by side on black, each scaled to the same height, for a page that
 compares two drawings: a piece's first layer on stock beside the same piece on other settings.
 
@@ -97,6 +105,7 @@ size, so cut the same span of coaster from each, or the slits will not read at o
 The numbers flag, the eyes decide: read the sheet every time (review-print skill).
 Only Pillow is needed.
 """
+import io
 import json
 import math
 import re
@@ -480,7 +489,11 @@ def plate_objects(zf, with_z=False):
     model = zf.read("3D/3dmodel.model").decode()
     comps = {}
     for oid, body in re.findall(r'<object id="([^"]+)"[^>]*>(.*?)</object>', model, re.S):
-        comps[oid] = re.findall(r'<component[^>]*?path="([^"]+)"[^>]*?objectid="([^"]+)"[^>]*?(?:transform="([^"]*)")?[^>]*/>', body)
+        # Each attribute is read on its own: an optional transform group after a lazy match
+        # never captures, which once dropped a component's offset (ball-1's plain slice).
+        comps[oid] = [(re.search(r'path="([^"]+)"', c).group(1), re.search(r'objectid="([^"]+)"', c).group(1),
+                       (re.search(r'transform="([^"]*)"', c) or [None, ""])[1])
+                      for c in re.findall(r"<component\b[^>]*/>", body)]
     meshes = {}
 
     def mesh(path, oid):
@@ -1355,6 +1368,240 @@ def paths_self_test():
     ]
 
 
+SUPPORT_STEP = 0.25  # mm: a support move is checked at points this far apart along it
+
+
+def _gcode_words(head):
+    """The X, Y, Z, E, I and J words of one G-code move, as floats; a word that is not a number is skipped."""
+    words = {}
+    for w in head.split()[1:]:
+        if len(w) > 1 and w[0] in "XYZEIJ":
+            try:
+                words[w[0]] = float(w[1:])
+            except ValueError:
+                pass
+    return words
+
+
+def _arc_points(head, words, start, end):
+    """A G2 (clockwise) or G3 arc from start to end, walked in chords SUPPORT_STEP long, start left out."""
+    (x, y, z), (nx, ny, nz) = start, end
+    cx, cy = x + words.get("I", 0), y + words.get("J", 0)
+    a0, a1 = math.atan2(y - cy, x - cx), math.atan2(ny - cy, nx - cx)
+    sweep = a1 - a0
+    if head[:2] == "G3" and sweep <= 0:
+        sweep += 2 * math.pi
+    if head[:2] == "G2" and sweep >= 0:
+        sweep -= 2 * math.pi
+    r = math.hypot(x - cx, y - cy)
+    n = max(2, int(abs(sweep) * r / SUPPORT_STEP))
+    return [(cx + r * math.cos(a0 + sweep * i / n), cy + r * math.sin(a0 + sweep * i / n),
+             z + (nz - z) * i / n) for i in range(1, n + 1)]
+
+
+class _SupportReader:
+    """The state support_runs walks a G-code file with: the feature, the line width, the head's
+    position, relative or absolute moves, and the run being drawn."""
+
+    def __init__(self):
+        self.runs, self.feature, self.width = [], None, 0.0
+        self.pos, self.rel, self.run = (0.0, 0.0, 0.0), False, []
+
+    def close(self):
+        if len(self.run) >= 2 and self.feature and self.feature.startswith("Support"):
+            self.runs.append((self.feature, self.width, self.run))
+        self.run = []
+
+    def comment_or_mode(self, line, head):
+        """Reads a feature, width or positioning-mode line; False when the line is none of those."""
+        if line.startswith("; FEATURE:"):
+            self.close()
+            self.feature = line.split(":", 1)[1].strip()
+        elif line.startswith("; LINE_WIDTH:"):
+            self.close()
+            self.width = float(line.split(":")[1])
+        elif head == "M82":
+            raise SystemExit("supports-inside: the G-code has 'M82' (absolute extrusion), which this check does not read")
+        elif head in ("G90", "G91"):
+            self.rel = head == "G91"
+        else:
+            return False
+        return True
+
+    def move(self, head):
+        words = _gcode_words(head)
+        x, y, z = self.pos
+        if self.rel:
+            end = (x + words.get("X", 0), y + words.get("Y", 0), z + words.get("Z", 0))
+        else:
+            end = (words.get("X", x), words.get("Y", y), words.get("Z", z))
+        if words.get("E", 0) <= 0:
+            self.close()
+            self.pos = end
+            return
+        if end == self.pos and head[:2] in ("G0", "G1"):
+            # A push with no move (`G1 E.4` after a retract) lays no bead. Counted, it once made a
+            # one-point "support" wherever the next wall began (ball-1, on the shell's inner face).
+            return
+        if not self.run:
+            self.run = [self.pos]
+        self.run += _arc_points(head, words, self.pos, end) if head[:2] in ("G2", "G3") else [end]
+        self.pos = end
+
+
+def support_runs(text):
+    """Every extruding move under a Support feature (Support, Support interface, Support
+    transition) in a whole G-code file, as (feature, line width, [(x, y, z), ...]), arcs walked in
+    chords. Positions follow G90 and G91 (the start G-code steps in relative moves); absolute
+    extrusion (M82) is refused, since an extruding move is read as one with E above zero."""
+    reader = _SupportReader()
+    for raw in text.splitlines():
+        line = raw.strip()
+        head = line.split(";")[0].strip()
+        if not reader.comment_or_mode(line, head) and head[:3] in ("G0 ", "G1 ", "G2 ", "G3 "):
+            reader.move(head)
+    reader.close()
+    return reader.runs
+
+
+def sphere_fit(points):
+    """The centre of the sphere that best fits the points, by least squares on
+    x²+y²+z² = 2ax + 2by + 2cz + d. A hollow ball's inner and outer faces share one centre, so
+    fitting both together still finds it."""
+    m = [[0.0] * 5 for _ in range(4)]
+    for x, y, z in points:
+        row = (2 * x, 2 * y, 2 * z, 1.0)
+        rhs = x * x + y * y + z * z
+        for i in range(4):
+            for j in range(4):
+                m[i][j] += row[i] * row[j]
+            m[i][4] += row[i] * rhs
+    for c in range(4):  # Gauss-Jordan on the 4 x 4 normal equations
+        p = max(range(c, 4), key=lambda r: abs(m[r][c]))
+        m[c], m[p] = m[p], m[c]
+        for r in range(4):
+            if r != c:
+                f = m[r][c] / m[c][c]
+                m[r] = [a - f * b for a, b in zip(m[r], m[c])]
+    return tuple(m[i][4] / m[i][i] for i in range(3))
+
+
+def supports_inside(runs, centre, radius):
+    """How much of the support lies inside `radius` of `centre`: a support bead counts when its
+    centre line comes within radius + half its width. Returns (moves inside, mm inside, nearest
+    approach of any support bead's edge, total support mm, [heights of the inside moves])."""
+    inside_moves, inside_mm, nearest, total, zs = 0, 0.0, math.inf, 0.0, []
+    for _, width, pts in runs:
+        hit = False
+        for a, b in zip(pts, pts[1:]):
+            seg = math.dist(a, b)
+            total += seg
+            n = max(1, int(seg / SUPPORT_STEP))
+            closest = min(math.dist(tuple(a[k] + (b[k] - a[k]) * i / n for k in range(3)), centre)
+                          for i in range(n + 1)) - width / 2
+            nearest = min(nearest, closest)
+            if closest < radius:
+                hit = True
+                inside_mm += seg
+                zs.append(round((a[2] + b[2]) / 2, 2))
+        inside_moves += hit
+    return inside_moves, inside_mm, nearest, total, zs
+
+
+def supports_inside_report(plate, radius, centre=None):
+    """The supports-inside check on a sliced plate: fit the ball's centre from its mesh (or take
+    the one given), read every support move in the G-code, print PASS or FAIL. True on a pass."""
+    with zipfile.ZipFile(plate) as zf:
+        name = next(n for n in zf.namelist() if n.endswith(".gcode"))
+        text = zf.read(name).decode("utf-8", "replace")
+        objects = plate_objects(zf, with_z=True)
+    if centre is None:
+        if len(objects) != 1:
+            raise SystemExit(f"supports-inside: the plate has {len(objects)} objects; pass --centre X,Y,Z")
+        pts = list({p for tri in objects[0][1] for p in tri})
+        low = min(p[2] for p in pts)  # the slicer sets the mesh's lowest point on the bed
+        pts = [(px, py, pz - low) for px, py, pz in pts]
+        centre = sphere_fit(pts)
+        dists = sorted(math.dist(p, centre) for p in pts)
+        print(f"centre fitted from {len(pts)} points: x {centre[0]:.2f}  y {centre[1]:.2f}  z {centre[2]:.2f}  "
+              f"(mesh points sit {dists[0]:.2f} to {dists[-1]:.2f} mm from it)")
+    runs = support_runs(text)
+    moves, mm, nearest, total, zs = supports_inside(runs, centre, radius)
+    kinds = sorted({f for f, _, _ in runs})
+    print(f"support: {len(runs)} runs, {total:.0f} mm of bead ({', '.join(kinds) or 'none'})")
+    print(f"nearest support edge to the centre: {nearest:.2f} mm (inside radius {radius:g} mm)")
+    print(f"support inside: {moves} runs, {mm:.1f} mm" +
+          (f", on {len(set(zs))} layers from z {min(zs):.2f} to {max(zs):.2f} mm" if zs else ""))
+    ok = moves == 0
+    print("PASS: no support inside the ball" if ok else "FAIL: support inside the ball")
+    return ok
+
+
+def supports_self_test():
+    """Made-up G-code round a ball centred at (0, 0, 20), inside radius 18: a support column under
+    it from the bed, 21 mm out, passes; a column straight up the middle fails; a bead whose centre
+    line stays outside but whose edge reaches in counts; a sphere's points give back its centre;
+    and absolute extrusion is refused."""
+    def g(*cols):
+        out = ["M83"]
+        for feat, (x, y), z1 in cols:
+            out += [f"; FEATURE: {feat}", "; LINE_WIDTH: 0.4", f"G1 X{x} Y{y} Z0.2"]
+            out += [f"G1 Z{z / 10:.1f}\nG1 X{x + 0.5} Y{y} E0.02\nG1 X{x} Y{y} E0.02"
+                    for z in range(2, int(z1 * 10) + 1, 2)]
+        return "\n".join(out)
+    outside = g(("Support", (21, 0), 6), ("Outer wall", (0, 0), 30))
+    middle = g(("Support", (0, 0), 6))
+    edge = g(("Support interface", (17.9, 0), 20))  # x 17.9..18.4 at z 20: bead edge 17.7
+    o = supports_inside(support_runs(outside), (0, 0, 20), 18)
+    mid = supports_inside(support_runs(middle), (0, 0, 20), 18)
+    e = supports_inside(support_runs(edge), (0, 0, 20), 18)
+    pts = [(5 + 10 * math.cos(a) * math.cos(b), -3 + 10 * math.sin(a) * math.cos(b), 7 + 10 * math.sin(b))
+           for a in [i * 0.7 for i in range(9)] for b in (-1.0, -0.3, 0.4, 1.1)]
+    fit = sphere_fit(pts)
+    # A support bead drawn with relative moves, 21 mm out: read as absolute it would sit at the
+    # middle of the ball, so only following G91 passes it.
+    lifted = supports_inside(support_runs("M83\nG90\nG1 X0 Y0 Z20\nG91\nG1 X21\n; FEATURE: Support\n"
+                                          "; LINE_WIDTH: 0.4\nG1 X0.5 E0.02\nG1 X-0.5 E0.02\nG90\n"), (0, 0, 20), 18)
+    # After a support bead 21 mm out, a travel to the middle and a push of filament with no move,
+    # still under the Support label, then the wall starts there: no support bead is laid inside.
+    pushed = supports_inside(support_runs(outside + "\nG1 X0 Y0 Z20\nG1 E.4 F1800\n; FEATURE: Inner wall\n"
+                                          "G1 X0.5 Y0 E0.02"), (0, 0, 20), 18)
+    # A component whose transform comes after another attribute, as Bambu Studio writes it.
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w") as zf:
+        zf.writestr("3D/3dmodel.model", '<model><resources><object id="2"><components><component '
+                    'p:path="/3D/Objects/o.model" objectid="1" p:UUID="u" transform="1 0 0 0 1 0 0 0 1 100 0 5"/>'
+                    '</components></object></resources><build><item objectid="2" transform="1 0 0 0 1 0 0 0 1 10 0 0"/>'
+                    '</build></model>')
+        zf.writestr("3D/Objects/o.model", '<model><object id="1"><mesh><vertices><vertex x="0" y="0" z="0"/>'
+                    '<vertex x="1" y="0" z="0"/><vertex x="0" y="1" z="0"/></vertices><triangles>'
+                    '<triangle v1="0" v2="1" v3="2"/></triangles></mesh></object></model>')
+    with zipfile.ZipFile(buf) as zf:
+        placed = plate_objects(zf, with_z=True)[0][1][0][0]
+    try:
+        support_runs("M82\n" + middle)
+        refused = False
+    except SystemExit:
+        refused = True
+    return [
+        ("supports-inside: a column under the ball from the bed, outside it, passes",
+         o[0] == 0 and o[3] > 0 and o[2] > 18),
+        ("supports-inside: a wall move is not counted as support",
+         {f for f, _, _ in support_runs(outside)} == {"Support"}),
+        ("supports-inside: a column up the middle of the ball fails", mid[0] >= 1 and mid[1] > 0),
+        ("supports-inside: a bead whose edge reaches inside counts, at half its width",
+         e[0] >= 1 and 17.6 < e[2] < 17.8),
+        ("supports-inside: the sphere fit gives back the centre", math.dist(fit, (5, -3, 7)) < 1e-6),
+        ("supports-inside: absolute extrusion (M82) is refused", refused),
+        ("supports-inside: a relative move (G91) is followed, and G90 ends it",
+         lifted[0] == 0 and lifted[3] > 0 and lifted[2] > 18),
+        ("supports-inside: a push of filament with no move lays no support bead",
+         pushed[0] == 0 and pushed[2] > 18),
+        ("supports-inside: a component's own transform is applied when another attribute comes first",
+         math.dist(placed, (110, 0, 5)) < 1e-9),
+    ]
+
+
 def side_self_test():
     """A 4 x 4 x 4 mm frame with a 2 mm square hole through it, and a 1 mm tall piece in the hole,
     cut through the middle: the frame stands either side of the hole and not in it, the piece sits
@@ -1446,6 +1693,7 @@ def self_test():
     checks += bed_self_test()
     checks += side_self_test()
     checks += paths_self_test()
+    checks += supports_self_test()
     tall, wide = Image.new("RGB", (100, 200), (255, 0, 0)), Image.new("RGB", (300, 100), (0, 0, 255))
     joined = join_pictures([tall, wide], height=200)
     checks += [
@@ -1809,6 +2057,9 @@ if __name__ == "__main__":
                 print(("PASS" if ok else "FAIL") + f": bed face (bare share under {CHECK_MAX_SHARE}%, "
                       f"largest pocket under {CHECK_MAX_POCKET} sq mm, at {px / region[2]:.0f} px a mm)")
             sys.exit(0 if ok or not check else 1)
+    if len(a) in (4, 6) and a[0] == "supports-inside" and a[2] == "--radius" and (len(a) == 4 or a[4] == "--centre"):
+        c = tuple(float(v) for v in a[5].split(",")) if len(a) == 6 else None
+        sys.exit(0 if supports_inside_report(a[1], float(a[3]), c) else 1)
     if len(a) >= 4 and a[0] == "edge":
         edge_sheet(a[1], parse_region(a[2]), a[3:])
         sys.exit(0)
