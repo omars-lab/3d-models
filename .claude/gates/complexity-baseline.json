@@ -180,9 +180,6 @@
   "build/verify_machine_card.py::run_verification": [
    12
   ],
-  "build/verify_machine_card.py::verify": [
-   18
-  ],
   "tools/cookbook_render.py::main": [
    12
   ],
