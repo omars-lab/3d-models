@@ -28,10 +28,11 @@ it.
   that writes `M400 U1` into the file (L1 to L3). The file is checked for it before sending (§3).
 - **First print.** A small pocket coupon, not a coaster: three pocket sizes, one pause, and a
   no-pocket control beside them (§7).
-- **The biggest open risk.** The first layer after the pause has to land on the bearing's outer
-  ring, a flat steel band about 1 mm wide between the pocket wall and the seal. Nobody publishes
-  that width for the 6704 (section 4 of the research). It has to be measured with calipers, and the
-  coupon tests whether plastic laid there holds.
+- **The biggest open risk.** The cap's inner edge has to reach over the bearing's outer ring, a
+  flat steel band about 1 mm wide between the pocket wall and the seal. With the default pocket it
+  is laid one layer (0.2 mm) above the steel and sags onto it. Nobody publishes that band's width
+  for the 6704 (section 4 of the research). It has to be measured with calipers, and the coupon
+  tests whether plastic laid there holds.
 
 ## 1. Which bearing, and why
 
@@ -77,9 +78,10 @@ can shift it or the bed (§6, risk 7).
 **Default:** pocket depth 4.2 mm, which is the bearing's 4.0 mm plus one 0.2 mm layer. The fetched
 guides size the pocket to the part's height so it sits "just below a layer that will later cover
 it" (E2), and one snippet adds about a layer for sag (E8). One extra layer means a bearing that sits
-a little high, on a crumb or a bulge, still stays below the nozzle (§6, risk 2). The bet that this
-is enough is CAL-FIT-01; the coupon also prints a 4.0 mm pocket to see whether the bearing then
-rattles under the cap.
+a little high, on a crumb or a bulge, still stays below the nozzle (§6, risk 2). The nearest
+registered bet is CAL-FIT-01, though it is a ladder across diameters, not depths, so it does not
+settle this. The cost of the extra layer: the bearing can lift up to 0.2 mm under the cap. The
+coupon prints a 4.2 mm pocket and a 4.0 mm one side by side to measure whether that play matters.
 
 **Default:** floor 1.0 mm (5 layers), under CAL-CST-03, the bet on the thinnest floor that stays
 flat and closed under a pocket. Under the inner ring the floor steps down another 0.4 mm, two layers
@@ -152,9 +154,11 @@ figure found is for a 608, by snippet (B8). **Measure it** (Q1).
 
 The cap ring then reaches from the pocket wall inward by that measured width less 0.2 mm, so it
 never touches the seal. Each layer of the ring is mostly anchored on the plastic body around the
-pocket, with only its inner edge, about one line, lying on steel. That is on purpose: hot plastic
-barely sticks to cold steel, so the plastic body carries the ring and the steel only stops the
-bearing lifting.
+pocket, with only its inner edge, about one line, reaching over the steel. With the default 4.2 mm
+pocket that edge is laid one layer above the steel face, over 0.2 mm of air, and sags onto it; only
+in a 4.0 mm pocket (coupon block P3) does it lie straight on the steel. Either way that is on
+purpose: hot plastic barely sticks to cold steel, so the plastic body carries the ring and the
+steel only stops the bearing lifting.
 
 The cap ring starts at 0.6 mm, three layers. This is a starting value for the coupon, not a
 settled default: no source and no registered bet covers plastic laid over a steel ring after a
@@ -164,7 +168,8 @@ whole ([pkt-1](../plates/pkt-1.md)), so three layers is one more than the thinne
 on steel instead of air is new; the coupon tests it.
 
 What holds the bearing in: the snug pocket stops it sliding sideways, and the cap ring stops it
-lifting out. The bearing is not glued and not pressed in. If the cap ring fails, the bearing can
+lifting out, with up to 0.2 mm of lift in the default pocket. The bearing is not glued and not
+pressed in. If the cap ring fails, the bearing can
 lift out under a pull from the medallion; the coupon's pull test (§7) checks for that.
 
 ## 5. What spins and what stays still
@@ -189,6 +194,12 @@ The medallion's top sits 0.2 mm below the coaster's top, as the spinner-middle w
 the still coaster and the medallion turns only when a finger flicks it. If Omar wants the mug itself
 to turn on the medallion, the medallion sits proud instead and has to be big enough to carry a mug
 (Q3).
+
+A gap in this stack, stated rather than hidden: with the recess floor on the cap's top (5.8 mm),
+0.4 mm of air under the disc and its top 0.2 mm below the straps (7.0 mm), the disc is only 0.6 mm
+thick, a wafer. Two ways out, not chosen here: let the coaster grow by about 0.6 mm more, or keep
+the cap ring only as wide as it must be over the pocket rim and drop the recess floor elsewhere
+under the disc to 5.2 mm, which gives a disc about 1.2 mm thick (Q6).
 
 The stub's press fit into the 20 mm hole is the CAL-FIT-01 press rung, tested on a second, pause-free
 coupon (§7). It is done on the bench after printing, so it carries no risk to the printer.
@@ -279,6 +290,8 @@ one-piece coaster, or the coaster is cut into the two pieces of way B. Neither i
 - **Q4.** Is a coaster about 7 mm thick acceptable, against today's 5.2 mm?
 - **Q5.** Is the pause-and-cap way (A) the one, or would the split way (B), with no pause, be
   preferred once you have seen both?
+- **Q6.** The turning disc comes out 0.6 mm thick in the stack as drawn (§5). Should the coaster
+  grow a little more, or should the recess under the disc go deeper outside the cap ring?
 
 ## Follow-ups
 
