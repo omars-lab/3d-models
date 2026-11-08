@@ -109,7 +109,8 @@ def resolve_wikilink(vault: Path, target: str) -> Path | None:
     return vault / min(hits, key=len) if hits else None
 
 
-def audit(vault: Path) -> dict:
+def _plugins(vault: Path) -> dict:
+    """Which community and core plugins the vault turns on, and its graph color groups."""
     obs = vault / ".obsidian"
 
     def read_json(name: str):
@@ -120,69 +121,90 @@ def audit(vault: Path) -> dict:
 
     core = read_json("core-plugins.json")
     graph = read_json("graph.json") or {}
-    report: dict = {
-        "vault": str(vault),
-        "plugins": {
-            "community": read_json("community-plugins.json") or [],
-            "core": ({k: bool(core.get(k)) for k in CORE_WANTED}
-                     if isinstance(core, dict) else "core-plugins.json not in this checkout"),
-            "graph_color_groups": len(graph.get("colorGroups", [])),
-        },
+    return {
+        "community": read_json("community-plugins.json") or [],
+        "core": ({k: bool(core.get(k)) for k in CORE_WANTED}
+                 if isinstance(core, dict) else "core-plugins.json not in this checkout"),
+        "graph_color_groups": len(graph.get("colorGroups", [])),
     }
 
+
+class _Links:
+    """What the links across the vault add up to: counts, links in, broken ones, base embeds."""
+
+    def __init__(self, vault: Path):
+        self.vault = vault
+        self.inbound: Counter = Counter()
+        self.markdown = self.wikilinks = self.embeds = 0
+        self.broken: list[str] = []
+        self.bases_embedded: dict[str, list[str]] = defaultdict(list)
+
+    def markdown_links(self, p: Path, line: str) -> None:
+        for target in LINK.findall(line):
+            if target.startswith(SKIP_SCHEMES) or target.startswith("#"):
+                continue
+            bare = unquote(target.split("#")[0])
+            dest = (p.parent / bare).resolve()
+            if dest.suffix == ".md" and dest.is_relative_to(self.vault.resolve()):
+                self.markdown += 1
+                if dest != p.resolve():
+                    self.inbound[dest.relative_to(self.vault.resolve()).as_posix()] += 1
+
+    def wiki_links(self, rel: str, n: int, line: str, body_exempt: bool) -> None:
+        for m in WIKILINK.finditer(line):
+            target = m.group(1)
+            if not target.strip():
+                continue
+            self.wikilinks += 1
+            self.embeds += m.group(0).startswith("!")
+            dest = resolve_wikilink(self.vault, target)
+            if dest is None:
+                if not body_exempt:
+                    self.broken.append(f"{rel}:{n + 1}: [[{target}]]")
+                continue
+            d = dest.relative_to(self.vault).as_posix()
+            if d.endswith(".base"):
+                self.bases_embedded[d].append(rel)
+            elif d != rel:
+                self.inbound[d] += 1
+
+
+def _new_folder() -> dict:
+    return {"notes": 0, "with_properties": 0, "keys": Counter()}
+
+
+def _read_note(vault: Path, p: Path, by_folder: dict, bad_yaml: list[str], links: _Links) -> None:
+    """Count one note's properties into its folder and its links into the vault's tally."""
+    rel = p.relative_to(vault).as_posix()
+    raw = p.read_text(encoding="utf-8").splitlines()
+    keys = frontmatter_keys(raw)
+    f = by_folder[folder(vault, p)]
+    f["notes"] += 1
+    bad_yaml += check_d8_frontmatter(p, raw)
+    if keys:
+        f["with_properties"] += 1
+        f["keys"].update(keys)
+
+    fm_end = frontmatter_end(raw)
+    archived = ARCHIVED_BODY in p.relative_to(vault).parts
+    for n, line in enumerate(strip_code(raw)):
+        links.markdown_links(p, line)
+        links.wiki_links(rel, n, line, archived and n > fm_end)
+
+
+def audit(vault: Path) -> dict:
     all_notes = notes(vault)
-    by_folder: dict[str, dict] = defaultdict(lambda: {"notes": 0, "with_properties": 0, "keys": Counter()})
-    inbound: Counter = Counter()
-    md_links = wikilinks = embeds = 0
-    broken: list[str] = []
+    by_folder: dict[str, dict] = defaultdict(_new_folder)
     bad_yaml: list[str] = []
-    bases_embedded: dict[str, list[str]] = defaultdict(list)
-
+    links = _Links(vault)
     for p in all_notes:
-        rel = p.relative_to(vault).as_posix()
-        raw = p.read_text(encoding="utf-8").splitlines()
-        keys = frontmatter_keys(raw)
-        f = by_folder[folder(vault, p)]
-        f["notes"] += 1
-        bad_yaml += check_d8_frontmatter(p, raw)
-        if keys:
-            f["with_properties"] += 1
-            f["keys"].update(keys)
-
-        lines = strip_code(raw)
-        fm_end = frontmatter_end(raw)
-        archived = ARCHIVED_BODY in p.relative_to(vault).parts
-        for n, line in enumerate(lines):
-            for target in LINK.findall(line):
-                if target.startswith(SKIP_SCHEMES) or target.startswith("#"):
-                    continue
-                bare = unquote(target.split("#")[0])
-                dest = (p.parent / bare).resolve()
-                if dest.suffix == ".md" and dest.is_relative_to(vault.resolve()):
-                    md_links += 1
-                    if dest != p.resolve():
-                        inbound[dest.relative_to(vault.resolve()).as_posix()] += 1
-            for m in WIKILINK.finditer(line):
-                target = m.group(1)
-                if not target.strip():
-                    continue
-                wikilinks += 1
-                embeds += m.group(0).startswith("!")
-                dest = resolve_wikilink(vault, target)
-                if dest is None:
-                    if not (archived and n > fm_end):
-                        broken.append(f"{rel}:{n + 1}: [[{target}]]")
-                    continue
-                d = dest.relative_to(vault).as_posix()
-                if d.endswith(".base"):
-                    bases_embedded[d].append(rel)
-                elif d != rel:
-                    inbound[d] += 1
+        _read_note(vault, p, by_folder, bad_yaml, links)
 
     rels = [p.relative_to(vault).as_posix() for p in all_notes]
-    orphans = [r for r in rels if not inbound[r] and r != "README.md"]
     base_files = sorted(p.relative_to(vault).as_posix() for p in vault.rglob("*.base"))
-    report.update({
+    return {
+        "vault": str(vault),
+        "plugins": _plugins(vault),
         "notes": len(all_notes),
         "comment_sidecars": sum(1 for p in vault.rglob(".*.comments.md")),
         "properties": {
@@ -191,13 +213,12 @@ def audit(vault: Path) -> dict:
             for k, v in sorted(by_folder.items())
         },
         "invalid_frontmatter": bad_yaml,
-        "bases": {b: bases_embedded.get(b, []) for b in base_files},
-        "links": {"markdown": md_links, "wikilinks": wikilinks, "embeds": embeds,
-                  "broken_wikilinks": broken},
-        "orphans": orphans,
+        "bases": {b: links.bases_embedded.get(b, []) for b in base_files},
+        "links": {"markdown": links.markdown, "wikilinks": links.wikilinks, "embeds": links.embeds,
+                  "broken_wikilinks": links.broken},
+        "orphans": [r for r in rels if not links.inbound[r] and r != "README.md"],
         "opaque_names": [r for r in rels if OPAQUE.match(Path(r).stem)],
-    })
-    return report
+    }
 
 
 def print_report(r: dict) -> None:

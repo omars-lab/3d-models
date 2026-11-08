@@ -176,9 +176,6 @@
   ],
   "tools/reconstruction_intake.py::main": [
    11
-  ],
-  "tools/vault_audit.py::audit": [
-   16
   ]
  }
 }
