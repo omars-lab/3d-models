@@ -2,7 +2,7 @@
 plate: fidget-star-1
 recipe: fidget-star-1.yaml
 iteration: 1
-stage: proposed
+stage: approved
 times_printed: 0
 runs: []
 answers: "Does the 8-point fidget star print on its own, with no supports, with rings that move freely?"
@@ -89,6 +89,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
+| 2026-11-08 | approved | Omar, in chat: "Send it in green" | iteration 1 @ e391cb8ec8 in #00AE42 | |
 
 ## Timeline
 
