@@ -435,134 +435,169 @@ class Drawn:
     used: set[str]
 
 
-def draw_panel(panel: Panel) -> Drawn:
-    sx, sz = panel.scale
-    zs = [v for part in panel.parts for v in (_extent(part)[1], _extent(part)[3])]
-    ztop = max(zs)
+class _PanelDraw:
+    """One panel being drawn: the scale, the SVG lines so far, and what they cover."""
 
-    def P(x: float, z: float) -> tuple[float, float]:
-        return x * sx, (ztop - z) * sz
+    def __init__(self, panel: Panel) -> None:
+        self.sx, self.sz = panel.scale
+        zs = [v for part in panel.parts for v in (_extent(part)[1], _extent(part)[3])]
+        self.ztop = max(zs)
+        self.out: list[str] = []
+        self.box = Box()
+        self.labels: list[tuple[float, float, str, str]] = []
+        self.used: set[str] = set()
 
-    out: list[str] = []
-    box = Box()
-    labels: list[tuple[float, float, str, str]] = []
-    used: set[str] = set()
+    def P(self, x: float, z: float) -> tuple[float, float]:
+        return x * self.sx, (self.ztop - z) * self.sz
 
-    def poly(pts, fill: str, kind: str) -> None:
-        px = [P(x, z) for x, z in pts]
+    def poly(self, pts, fill: str, kind: str) -> None:
+        px = [self.P(x, z) for x, z in pts]
         for x, y in px:
-            box.add(x, y)
+            self.box.add(x, y)
         d = " ".join(f"{_f(x)},{_f(y)}" for x, y in px)
-        out.append(f'<polygon data-kind="{kind}" points="{d}" fill="{fill}"/>')
+        self.out.append(f'<polygon data-kind="{kind}" points="{d}" fill="{fill}"/>')
 
-    def rect(x0: float, z0: float, x1: float, z1: float, fill: str, kind: str) -> None:
-        poly([(x0, z0), (x1, z0), (x1, z1), (x0, z1)], fill, kind)
+    def rect(self, x0: float, z0: float, x1: float, z1: float, fill: str, kind: str) -> None:
+        self.poly([(x0, z0), (x1, z0), (x1, z1), (x0, z1)], fill, kind)
 
-    def marks(part: dict, x0: float, z0: float, x1: float, z1: float) -> None:
+    def marks(self, part: dict, x0: float, z0: float, x1: float, z1: float) -> None:
         for mark, color, dash in (("first", FIRST_LAYER, ""), ("last", LAST_LAYER, ' stroke-dasharray="6 4"')):
             faces = part.get(mark, [])
             for face in [faces] if isinstance(faces, str) else faces:
                 z = z1 if face == "top" else z0
-                (ax, ay), (bx, _) = P(x0, z), P(x1, z)
-                out.append(
+                (ax, ay), (bx, _) = self.P(x0, z), self.P(x1, z)
+                self.out.append(
                     f'<line data-mark="{mark}" x1="{_f(ax)}" y1="{_f(ay)}" x2="{_f(bx)}" y2="{_f(ay)}"'
                     f' stroke="{color}" stroke-width="{_f(MARK_W)}"{dash}/>'
                 )
-                box.add(ax, ay - MARK_W / 2)
-                box.add(bx, ay + MARK_W / 2)
-                used.add(mark)
+                self.box.add(ax, ay - MARK_W / 2)
+                self.box.add(bx, ay + MARK_W / 2)
+                self.used.add(mark)
 
+    def piece_color(self, cp: dict, kind: str) -> str:
+        """A solid's fill, noting which legend word it needs."""
+        if kind in HOLE_KINDS:
+            self.used.add("hole")
+            return HOLE
+        if kind in ("half", "lip"):
+            self.used.add(cp["side"])
+            return HALF_FILL[cp["side"]]
+        self.used.add("piece" if "side" not in cp or "color" in cp else cp["side"])
+        return _color(cp, kind)
+
+    def solid(self, cp: dict, x0: float, z0: float, x1: float, z1: float) -> None:
+        kind = cp["kind"]
+        fill = self.piece_color(cp, kind)
+        if kind == "stud":
+            c = min(float(cp.get("chamfer", 0.2)), (x1 - x0) / 3, (z1 - z0) / 2)
+            if cp.get("toward", "up") == "up":
+                pts = [(x0, z0), (x1, z0), (x1, z1 - c), (x1 - c, z1), (x0 + c, z1), (x0, z1 - c)]
+            else:
+                pts = [(x0, z0 + c), (x0 + c, z0), (x1 - c, z0), (x1, z0 + c), (x1, z1), (x0, z1)]
+            self.poly(pts, fill, kind)
+        else:
+            self.rect(x0, z0, x1, z1, fill, kind)
+        self.marks(cp, x0, z0, x1, z1)
+
+    def dovetail(self, cp: dict) -> None:
+        slot, rail = dovetail_polys(cp)
+        if slot:
+            self.poly(slot, HOLE, "slot")
+            self.used.add("hole")
+        if rail:
+            self.poly(rail, _color(cp, cp["kind"]), "rail")
+            self.used.add("piece" if "side" not in cp or "color" in cp else cp["side"])
+            rx0, rz0, rx1, rz1 = _extent(dict(cp, show="rail"))
+            self.marks(cp, rx0, rz0, rx1, rz1)
+
+    def seam(self, x0: float, z0: float, x1: float) -> None:
+        (ax, ay), (bx, _) = self.P(x0, z0), self.P(x1, z0)
+        self.out.append(f'<line data-kind="seam" x1="{_f(ax)}" y1="{_f(ay)}" x2="{_f(bx)}" y2="{_f(ay)}" stroke="{HOLE}" stroke-width="1.5" stroke-dasharray="3 2"/>')
+        self.box.add(ax, ay)
+        self.box.add(bx, ay)
+
+    def bed(self, cp: dict, x0: float, z0: float, x1: float) -> None:
+        (ax, ay), (bx, _) = self.P(x0, z0), self.P(x1, z0)
+        y = ay + MARK_W / 2 + 2
+        self.out.append(f'<rect data-kind="bed" x="{_f(ax - 6)}" y="{_f(y)}" width="{_f(bx - ax + 12)}" height="5" fill="#cfcbc3"/>')
+        text = str(cp.get("text", "print bed"))
+        self.out.append(f'<text x="{_f(bx + 10)}" y="{_f(y + 6)}" font-size="{NOTE_PX}" fill="{NOTE_INK}">{_esc(text)}</text>')
+        self.box.add(ax - 6, y + 5)
+        self.box.add_text(bx + 10, y + 6, text, NOTE_PX, "start")
+
+    def arrow(self, cp: dict) -> None:
+        (ax, ay), (bx, by) = self.P(*cp["from"]), self.P(*cp["to"])
+        ang = math.atan2(by - ay, bx - ax)
+        hx, hy = bx - 9 * math.cos(ang), by - 9 * math.sin(ang)
+        nx, ny = -math.sin(ang) * 5, math.cos(ang) * 5
+        self.out.append(f'<line data-kind="arrow" x1="{_f(ax)}" y1="{_f(ay)}" x2="{_f(bx)}" y2="{_f(by)}" stroke="{NOTE_INK}" stroke-width="1.6"/>')
+        self.out.append(f'<polyline points="{_f(hx + nx)},{_f(hy + ny)} {_f(bx)},{_f(by)} {_f(hx - nx)},{_f(hy - ny)}" fill="none" stroke="{NOTE_INK}" stroke-width="1.6"/>')
+        self.box.add(ax, ay)
+        self.box.add(bx, by)
+        if cp.get("text"):
+            tx, ty = (ax + bx) / 2 + 12, (ay + by) / 2 + 4
+            self.out.append(f'<text x="{_f(tx)}" y="{_f(ty)}" font-size="{NOTE_PX}" fill="{NOTE_INK}">{_esc(str(cp["text"]))}</text>')
+            self.box.add_text(tx, ty, str(cp["text"]), NOTE_PX, "start")
+
+    def dim(self, cp: dict) -> None:
+        (ax, ay), (bx, by) = self.P(*cp["from"]), self.P(*cp["to"])
+        ang = math.atan2(by - ay, bx - ax)
+        tx, ty = -math.sin(ang) * 4, math.cos(ang) * 4
+        self.out.append(f'<g data-kind="dim" stroke="{LEADER}" stroke-width="1">')
+        self.out.append(f'<line x1="{_f(ax)}" y1="{_f(ay)}" x2="{_f(bx)}" y2="{_f(by)}"/>')
+        for qx, qy in ((ax, ay), (bx, by)):
+            self.out.append(f'<line x1="{_f(qx - tx)}" y1="{_f(qy - ty)}" x2="{_f(qx + tx)}" y2="{_f(qy + ty)}"/>')
+        self.out.append("</g>")
+        text, mx, my = str(cp["text"]), (ax + bx) / 2, (ay + by) / 2
+        tx, ty, anchor = {
+            "right": (mx + 7, my + 4, "start"),
+            "left": (mx - 7, my + 4, "end"),
+            "above": (mx, my - 6, "middle"),
+            "below": (mx, my + 15, "middle"),
+        }[cp.get("place", "right")]
+        self.out.append(f'<text x="{_f(tx)}" y="{_f(ty)}" font-size="{NOTE_PX - 1}" fill="{NOTE_INK}" text-anchor="{anchor}">{_esc(text)}</text>')
+        self.box.add(ax, ay)
+        self.box.add(bx, by)
+        self.box.add_text(tx, ty, text, NOTE_PX - 1, anchor)
+
+    def copy(self, cp: dict) -> tuple[float, float, float, float]:
+        """Draw one copy of a part; return its extent for the label."""
+        kind = cp["kind"]
+        x0, z0, x1, z1 = _extent(cp)
+        if kind in BOX_KINDS:
+            self.solid(cp, x0, z0, x1, z1)
+        elif kind == "dovetail":
+            self.dovetail(cp)
+        elif kind == "seam":
+            self.seam(x0, z0, x1)
+        elif kind == "bed":
+            self.bed(cp, x0, z0, x1)
+        elif kind == "arrow":
+            self.arrow(cp)
+        elif kind == "dim":
+            self.dim(cp)
+        return x0, z0, x1, z1
+
+    def label(self, cp: dict, x0: float, z0: float, x1: float, z1: float) -> None:
+        if "label_at" in cp:
+            lx, ly = self.P(*cp["label_at"])
+        else:
+            lx, ly = self.P((x0 + x1) / 2, (z0 + z1) / 2)
+        self.labels.append((lx, ly, str(cp["label"]), str(cp.get("label_side", "right"))))
+
+
+def draw_panel(panel: Panel) -> Drawn:
+    d = _PanelDraw(panel)
     for part in panel.parts:
         copies = [part]
         if part.get("both"):
             copies = sorted([part, mirrored(part, panel.width)], key=lambda c: _extent(c)[0] + _extent(c)[2])
         for n, cp in enumerate(copies):
-            kind = cp["kind"]
-            x0, z0, x1, z1 = _extent(cp)
-            if kind in BOX_KINDS:
-                if kind in HOLE_KINDS:
-                    fill = HOLE
-                    used.add("hole")
-                elif kind in ("half", "lip"):
-                    fill = HALF_FILL[cp["side"]]
-                    used.add(cp["side"])
-                else:
-                    fill = _color(cp, kind)
-                    used.add("piece" if "side" not in cp or "color" in cp else cp["side"])
-                if kind == "stud":
-                    c = min(float(cp.get("chamfer", 0.2)), (x1 - x0) / 3, (z1 - z0) / 2)
-                    if cp.get("toward", "up") == "up":
-                        pts = [(x0, z0), (x1, z0), (x1, z1 - c), (x1 - c, z1), (x0 + c, z1), (x0, z1 - c)]
-                    else:
-                        pts = [(x0, z0 + c), (x0 + c, z0), (x1 - c, z0), (x1, z0 + c), (x1, z1), (x0, z1)]
-                    poly(pts, fill, kind)
-                else:
-                    rect(x0, z0, x1, z1, fill, kind)
-                marks(cp, x0, z0, x1, z1)
-            elif kind == "dovetail":
-                slot, rail = dovetail_polys(cp)
-                if slot:
-                    poly(slot, HOLE, "slot")
-                    used.add("hole")
-                if rail:
-                    poly(rail, _color(cp, kind), "rail")
-                    used.add("piece" if "side" not in cp or "color" in cp else cp["side"])
-                    rx0, rz0, rx1, rz1 = _extent(dict(cp, show="rail"))
-                    marks(cp, rx0, rz0, rx1, rz1)
-            elif kind == "seam":
-                (ax, ay), (bx, _) = P(x0, z0), P(x1, z0)
-                out.append(f'<line data-kind="seam" x1="{_f(ax)}" y1="{_f(ay)}" x2="{_f(bx)}" y2="{_f(ay)}" stroke="{HOLE}" stroke-width="1.5" stroke-dasharray="3 2"/>')
-                box.add(ax, ay)
-                box.add(bx, ay)
-            elif kind == "bed":
-                (ax, ay), (bx, _) = P(x0, z0), P(x1, z0)
-                y = ay + MARK_W / 2 + 2
-                out.append(f'<rect data-kind="bed" x="{_f(ax - 6)}" y="{_f(y)}" width="{_f(bx - ax + 12)}" height="5" fill="#cfcbc3"/>')
-                text = str(cp.get("text", "print bed"))
-                out.append(f'<text x="{_f(bx + 10)}" y="{_f(y + 6)}" font-size="{NOTE_PX}" fill="{NOTE_INK}">{_esc(text)}</text>')
-                box.add(ax - 6, y + 5)
-                box.add_text(bx + 10, y + 6, text, NOTE_PX, "start")
-            elif kind == "arrow":
-                (ax, ay), (bx, by) = P(*cp["from"]), P(*cp["to"])
-                ang = math.atan2(by - ay, bx - ax)
-                hx, hy = bx - 9 * math.cos(ang), by - 9 * math.sin(ang)
-                nx, ny = -math.sin(ang) * 5, math.cos(ang) * 5
-                out.append(f'<line data-kind="arrow" x1="{_f(ax)}" y1="{_f(ay)}" x2="{_f(bx)}" y2="{_f(by)}" stroke="{NOTE_INK}" stroke-width="1.6"/>')
-                out.append(f'<polyline points="{_f(hx + nx)},{_f(hy + ny)} {_f(bx)},{_f(by)} {_f(hx - nx)},{_f(hy - ny)}" fill="none" stroke="{NOTE_INK}" stroke-width="1.6"/>')
-                box.add(ax, ay)
-                box.add(bx, by)
-                if cp.get("text"):
-                    tx, ty = (ax + bx) / 2 + 12, (ay + by) / 2 + 4
-                    out.append(f'<text x="{_f(tx)}" y="{_f(ty)}" font-size="{NOTE_PX}" fill="{NOTE_INK}">{_esc(str(cp["text"]))}</text>')
-                    box.add_text(tx, ty, str(cp["text"]), NOTE_PX, "start")
-            elif kind == "dim":
-                (ax, ay), (bx, by) = P(*cp["from"]), P(*cp["to"])
-                ang = math.atan2(by - ay, bx - ax)
-                tx, ty = -math.sin(ang) * 4, math.cos(ang) * 4
-                out.append(f'<g data-kind="dim" stroke="{LEADER}" stroke-width="1">')
-                out.append(f'<line x1="{_f(ax)}" y1="{_f(ay)}" x2="{_f(bx)}" y2="{_f(by)}"/>')
-                for qx, qy in ((ax, ay), (bx, by)):
-                    out.append(f'<line x1="{_f(qx - tx)}" y1="{_f(qy - ty)}" x2="{_f(qx + tx)}" y2="{_f(qy + ty)}"/>')
-                out.append("</g>")
-                text, mx, my = str(cp["text"]), (ax + bx) / 2, (ay + by) / 2
-                tx, ty, anchor = {
-                    "right": (mx + 7, my + 4, "start"),
-                    "left": (mx - 7, my + 4, "end"),
-                    "above": (mx, my - 6, "middle"),
-                    "below": (mx, my + 15, "middle"),
-                }[cp.get("place", "right")]
-                out.append(f'<text x="{_f(tx)}" y="{_f(ty)}" font-size="{NOTE_PX - 1}" fill="{NOTE_INK}" text-anchor="{anchor}">{_esc(text)}</text>')
-                box.add(ax, ay)
-                box.add(bx, by)
-                box.add_text(tx, ty, text, NOTE_PX - 1, anchor)
+            x0, z0, x1, z1 = d.copy(cp)
             # the label goes on the copy drawn last, the right-hand one when mirrored
             if "label" in cp and n == len(copies) - 1:
-                if "label_at" in cp:
-                    lx, ly = P(*cp["label_at"])
-                else:
-                    lx, ly = P((x0 + x1) / 2, (z0 + z1) / 2)
-                labels.append((lx, ly, str(cp["label"]), str(cp.get("label_side", "right"))))
-    return Drawn(out, box, labels, used)
+                d.label(cp, x0, z0, x1, z1)
+    return Drawn(d.out, d.box, d.labels, d.used)
 
 
 def legend_for(spec: Spec, used: set[str]) -> str:
