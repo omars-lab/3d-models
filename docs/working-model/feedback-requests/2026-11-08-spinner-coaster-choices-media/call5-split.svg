@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1346.16" height="411.4" viewBox="0 0 1346.16 411.4" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>Call 5, option 2: split halves now, no pause</title>
+<rect width="100%" height="100%" fill="#f8f7f4"/>
+<text x="20" y="37" font-size="17" font-weight="bold" fill="#222222">Call 5, option 2: split halves now, no pause</text>
+<text x="20" y="53.5" font-size="12.5" fill="#555555">Cut through, side view. Dark gray: lower half of the coaster. Light gray: upper half. White: air. Solid blue: printed on the bed (first layer). Orange dashed: printed last (top surface). Not to</text>
+<text x="20" y="70" font-size="12.5" fill="#555555">scale.</text>
+<g data-panel="Two halves printed apart; the bearing goes in on the bench; pegs hold them together">
+<text x="20" y="106" font-size="14" font-weight="bold" fill="#222222">Two halves printed apart; the bearing goes in on the bench; pegs hold them together</text>
+<g transform="translate(26,126)">
+<polygon data-kind="half" points="0,208.8 204.3,208.8 204.3,100.8 0,100.8" fill="#8e8a83"/>
+<line data-mark="first" x1="0" y1="208.8" x2="204.3" y2="208.8" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="695.7,208.8 900,208.8 900,100.8 695.7,100.8" fill="#8e8a83"/>
+<line data-mark="first" x1="695.7" y1="208.8" x2="900" y2="208.8" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="204.3,208.8 657,208.8 657,172.8 204.3,172.8" fill="#8e8a83"/>
+<line data-mark="first" x1="204.3" y1="208.8" x2="657" y2="208.8" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="half" points="243,208.8 695.7,208.8 695.7,172.8 243,172.8" fill="#8e8a83"/>
+<line data-mark="first" x1="243" y1="208.8" x2="695.7" y2="208.8" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="air" points="243,187.2 657,187.2 657,172.8 243,172.8" fill="#ffffff"/>
+<polygon data-kind="half" points="0,100.8 221.4,100.8 221.4,0 0,0" fill="#aba69f"/>
+<line data-mark="last" x1="0" y1="0" x2="221.4" y2="0" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<polygon data-kind="half" points="678.6,100.8 900,100.8 900,0 678.6,0" fill="#aba69f"/>
+<line data-mark="last" x1="678.6" y1="0" x2="900" y2="0" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<polygon data-kind="socket" points="70.2,129.6 109.8,129.6 109.8,100.8 70.2,100.8" fill="#ffffff"/>
+<polygon data-kind="socket" points="790.2,129.6 829.8,129.6 829.8,100.8 790.2,100.8" fill="#ffffff"/>
+<polygon data-kind="stud" points="72,118.8 75.6,126 104.4,126 108,118.8 108,100.8 72,100.8" fill="#aba69f"/>
+<polygon data-kind="stud" points="792,118.8 795.6,126 824.4,126 828,118.8 828,100.8 792,100.8" fill="#aba69f"/>
+<polygon data-kind="piece" points="207,172.8 270,172.8 270,28.8 207,28.8" fill="#5a6270"/>
+<polygon data-kind="piece" points="630,172.8 693,172.8 693,28.8 630,28.8" fill="#5a6270"/>
+<polygon data-kind="air" points="270,172.8 630,172.8 630,28.8 270,28.8" fill="#ffffff"/>
+<line data-kind="seam" x1="0" y1="100.8" x2="204.3" y2="100.8" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="3 2"/>
+<line data-kind="seam" x1="695.7" y1="100.8" x2="900" y2="100.8" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="3 2"/>
+<rect data-kind="bed" x="-6" y="212.8" width="912" height="5" fill="#cfcbc3"/>
+<text x="910" y="218.8" font-size="12" fill="#444444">print bed</text>
+</g>
+<circle data-label-dot="1" cx="854" cy="172.8" r="2.6" fill="#222222"/>
+<polyline points="854,172.8 1007.24,172.8 1017.24,172.8" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1021.24" y="176.8" font-size="12" fill="#222222" text-anchor="start">upper half, printed upside down and turned over</text>
+<circle data-label-dot="1" cx="908" cy="226.8" r="2.6" fill="#222222"/>
+<polyline points="908,226.8 1007.24,226.8 1017.24,226.8" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1021.24" y="230.8" font-size="12" fill="#222222" text-anchor="start">a seam round the edge</text>
+<circle data-label-dot="1" cx="836" cy="241.2" r="2.6" fill="#222222"/>
+<polyline points="836,241.2 1007.24,242.8 1017.24,242.8" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1021.24" y="246.8" font-size="12" fill="#222222" text-anchor="start">peg on the upper half, in a hole in the lower</text>
+<circle data-label-dot="1" cx="687.5" cy="262.8" r="2.6" fill="#222222"/>
+<polyline points="687.5,262.8 1007.24,262.8 1017.24,262.8" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1021.24" y="266.8" font-size="12" fill="#222222" text-anchor="start">bearing, placed by hand: no printer involved</text>
+<text x="20" y="374.4" font-size="12" fill="#444444">Good: no pause and no risk to the printer; the split coasters already have pockets and pegs. But: a seam shows round the edge, and the join has to hold under mugs.</text>
+</g>
+</svg>

@@ -1,0 +1,25 @@
+# Call 2, option 2: about 7.6 mm, a 40 mm disc riding over the cap with 0.4 mm of air (draft B's
+# first way out). From docs/design/pieces/spinner-coaster-design.md, open question 2. The disc's
+# 1.2 mm and its stem are drawn for the picture; the doc gives only the total and the air.
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+title: "Call 2, option 2: about 7.6 mm, a 40 mm disc over the cap"
+columns: 1
+panels:
+  - title: "A bigger turning disc that can carry its own pattern, 0.6 mm thicker again"
+    width: 60
+    parts:
+      - {kind: piece, color: "#aba69f", box: [0, 0, 60, 0.6], first: bottom}
+      - {kind: piece, color: "#aba69f", box: [41.5, 0.6, 18.5, 0.4], both: true}
+      - {kind: air, box: [18.5, 0.6, 23, 0.4]}
+      - {kind: piece, color: "#aba69f", box: [43.65, 1.0, 16.35, 4.2], both: true, label: coaster body, label_at: [56, 3]}
+      - {kind: piece, color: "#aba69f", box: [42.7, 5.2, 17.3, 0.6], both: true, label: cap, label_at: [52, 5.5]}
+      - {kind: piece, color: "#aba69f", box: [54, 5.8, 3, 1.8], both: true, last: top, label: "strap top at 7.6 mm", label_at: [55.5, 7.0]}
+      - {kind: piece, color: "#5a6270", box: [40, 1.0, 3.5, 4.0], both: true, label: bearing, label_at: [18, 4], label_side: left}
+      - {kind: air, box: [20, 1.0, 20, 1.0]}
+      - {kind: piece, color: "#dcaa33", box: [20, 2.0, 20, 3.0], label: stub in the hole, label_at: [30, 3.5]}
+      - {kind: piece, color: "#dcaa33", box: [17.6, 5.0, 24.8, 1.2]}
+      - {kind: air, box: [42.4, 5.8, 7.6, 0.4], both: true, label: "0.4 mm of air between disc and cap", label_at: [46, 6.0]}
+      - {kind: piece, color: "#dcaa33", box: [10, 6.2, 40, 1.2], label: "disc, 40 mm across: it spins", label_at: [35, 6.8]}
+      - {kind: bed, line: [0, 0, 60]}
+    notes:
+      - "Good: a turning disc big enough to carry a pattern. But: 0.6 mm thicker than option 1, and the disc's edge rides 0.4 mm over the cap."

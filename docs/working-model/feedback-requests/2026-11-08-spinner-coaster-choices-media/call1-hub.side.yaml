@@ -1,0 +1,20 @@
+# Call 1, option 2: draft A's hub, printed in the same job, in a flat-faced coaster printed face
+# down. A sketch only: the doc does not size A's hub, and it needs both ring faces measured first.
+# From docs/design/pieces/spinner-coaster-design.md, "Why this split".
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+title: "Call 1, option 2: a hub printed in the same job, in a flat coaster printed face down (a sketch, sizes not settled)"
+columns: 1
+panels:
+  - title: "At the pause: the hub stands alone in the middle while the bearing goes in round it"
+    width: 50
+    parts:
+      - {kind: piece, color: "#aba69f", box: [38.5, 0, 11.5, 5.2], both: true, first: bottom, label: "coaster, its mug face on the bed", label_at: [45, 2.5]}
+      - {kind: piece, color: "#aba69f", box: [36.5, 0, 2.0, 0.6], both: true, first: bottom, label: "lower cap under the outer ring", label_at: [37.5, 0.3]}
+      - {kind: air, box: [34.8, 0, 1.7, 0.6], both: true}
+      - {kind: piece, color: "#5a6270", box: [35, 0.6, 3.5, 4.0], both: true, label: "6704 bearing, dropped over the hub", label_at: [37, 3.8]}
+      - {kind: piece, color: "#c99a2e", box: [15.2, 0, 19.6, 4.8], first: bottom, label: "hub: a 21 mm island on its own", label_at: [20, 2.4], label_side: left}
+      - {kind: arrow, from: [25, 7.4], to: [25, 5.0], text: "the bearing must miss the hub on the way down"}
+      - {kind: bed, line: [0, 0, 50]}
+    notes:
+      - "After the pause an upper cap closes over both rings. The hub turns with the inner ring, and the mug face is flat across hub and coaster."
+      - "Good: one print, nothing to press. But: the straps coaster cannot lie face down (its straps would be on the bed), so this needs a flat-faced coaster we do not make, and a knocked hub spoils the whole print."

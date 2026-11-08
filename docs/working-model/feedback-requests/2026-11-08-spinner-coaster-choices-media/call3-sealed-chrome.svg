@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1543.32" height="410.5" viewBox="0 0 1543.32 410.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>Call 3, option 1: a sealed chrome steel 6704 (20 x 27 x 4 mm)</title>
+<rect width="100%" height="100%" fill="#f8f7f4"/>
+<text x="20" y="37" font-size="17" font-weight="bold" fill="#222222">Call 3, option 1: a sealed chrome steel 6704 (20 x 27 x 4 mm)</text>
+<text x="20" y="53.5" font-size="12.5" fill="#555555">Cut through, side view. White: air. Not to scale.</text>
+<g data-panel="Cut through the bearing, as it sits in the pocket">
+<text x="20" y="89.5" font-size="14" font-weight="bold" fill="#222222">Cut through the bearing, as it sits in the pocket</text>
+<g transform="translate(117.6,107.5)">
+<polygon data-kind="piece" points="0,240 60,240 60,0 0,0" fill="#aba69f"/>
+<polygon data-kind="piece" points="1140,240 1200,240 1200,0 1140,0" fill="#aba69f"/>
+<polygon data-kind="piece" points="160,240 200,240 200,0 160,0" fill="#5a6270"/>
+<polygon data-kind="piece" points="1000,240 1040,240 1040,0 1000,0" fill="#5a6270"/>
+<polygon data-kind="piece" points="60,240 100,240 100,0 60,0" fill="#5a6270"/>
+<polygon data-kind="piece" points="1100,240 1140,240 1140,0 1100,0" fill="#5a6270"/>
+<polygon data-kind="air" points="100,210 160,210 160,30 100,30" fill="#ffffff"/>
+<polygon data-kind="air" points="1040,210 1100,210 1100,30 1040,30" fill="#ffffff"/>
+<polygon data-kind="piece" points="104,165 156,165 156,75 104,75" fill="#c3c8d0"/>
+<polygon data-kind="piece" points="1044,165 1096,165 1096,75 1044,75" fill="#c3c8d0"/>
+<polygon data-kind="piece" points="100,30 160,30 160,0 100,0" fill="#222222"/>
+<polygon data-kind="piece" points="1040,30 1100,30 1100,0 1040,0" fill="#222222"/>
+<polygon data-kind="piece" points="100,240 160,240 160,210 100,210" fill="#222222"/>
+<polygon data-kind="piece" points="1040,240 1100,240 1100,210 1040,210" fill="#222222"/>
+<polygon data-kind="air" points="200,240 1000,240 1000,0 200,0" fill="#ffffff"/>
+</g>
+<circle data-label-dot="1" cx="597.6" cy="227.5" r="2.6" fill="#222222"/>
+<polyline points="597.6,227.5 103.6,227.5 93.6,227.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="89.6" y="231.5" font-size="12" fill="#222222" text-anchor="end">20 mm hole</text>
+<circle data-label-dot="1" cx="1185.6" cy="122.5" r="2.6" fill="#222222"/>
+<polyline points="1185.6,122.5 1331.6,122.5 1341.6,122.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1345.6" y="126.5" font-size="12" fill="#222222" text-anchor="start">rubber seal, top and bottom</text>
+<circle data-label-dot="1" cx="1285.6" cy="227.5" r="2.6" fill="#222222"/>
+<polyline points="1285.6,227.5 1331.6,227.5 1341.6,227.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1345.6" y="231.5" font-size="12" fill="#222222" text-anchor="start">pocket wall</text>
+<circle data-label-dot="1" cx="1185.6" cy="227.5" r="2.6" fill="#222222"/>
+<polyline points="1185.6,227.5 1331.6,243.5 1341.6,243.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1345.6" y="247.5" font-size="12" fill="#222222" text-anchor="start">balls</text>
+<circle data-label-dot="1" cx="1137.6" cy="287.5" r="2.6" fill="#222222"/>
+<polyline points="1137.6,287.5 1331.6,287.5 1341.6,287.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1345.6" y="291.5" font-size="12" fill="#222222" text-anchor="start">inner ring</text>
+<circle data-label-dot="1" cx="1237.6" cy="287.5" r="2.6" fill="#222222"/>
+<polyline points="1237.6,287.5 1331.6,303.5 1341.6,303.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1345.6" y="307.5" font-size="12" fill="#222222" text-anchor="start">outer ring</text>
+<text x="20" y="373.5" font-size="12" fill="#444444">Good: a shop page read gives the size and the seals, and the seals keep sagging plastic off the balls. But: chrome steel may rust under wet mugs, so stainless gets searched for before a coaster is sold.</text>
+</g>
+</svg>

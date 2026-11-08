@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1454.28" height="486.5" viewBox="0 0 1454.28 486.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>Call 5, option 1: pause and cap, one solid coaster</title>
+<rect width="100%" height="100%" fill="#f8f7f4"/>
+<text x="20" y="37" font-size="17" font-weight="bold" fill="#222222">Call 5, option 1: pause and cap, one solid coaster</text>
+<text x="20" y="53.5" font-size="12.5" fill="#555555">Cut through, side view. White: air. Solid blue: printed on the bed (first layer). Orange dashed: printed last (top surface). Not to scale.</text>
+<g data-panel="The printer waits at 5.2 mm; you drop the bearing in; it prints the cap over it">
+<text x="20" y="89.5" font-size="14" font-weight="bold" fill="#222222">The printer waits at 5.2 mm; you drop the bearing in; it prints the cap over it</text>
+<g transform="translate(26,107.5)">
+<polygon data-kind="piece" points="0,302.4 900,302.4 900,280.8 0,280.8" fill="#aba69f"/>
+<line data-mark="first" x1="0" y1="302.4" x2="900" y2="302.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="piece" points="0,280.8 243,280.8 243,266.4 0,266.4" fill="#aba69f"/>
+<polygon data-kind="piece" points="657,280.8 900,280.8 900,266.4 657,266.4" fill="#aba69f"/>
+<polygon data-kind="air" points="243,280.8 657,280.8 657,266.4 243,266.4" fill="#ffffff"/>
+<polygon data-kind="piece" points="0,266.4 204.3,266.4 204.3,115.2 0,115.2" fill="#aba69f"/>
+<polygon data-kind="piece" points="695.7,266.4 900,266.4 900,115.2 695.7,115.2" fill="#aba69f"/>
+<polygon data-kind="piece" points="207,266.4 270,266.4 270,122.4 207,122.4" fill="#5a6270"/>
+<polygon data-kind="piece" points="630,266.4 693,266.4 693,122.4 630,122.4" fill="#5a6270"/>
+<polygon data-kind="air" points="270,266.4 630,266.4 630,122.4 270,122.4" fill="#ffffff"/>
+<polygon data-kind="piece" points="0,115.2 221.4,115.2 221.4,93.6 0,93.6" fill="#aba69f"/>
+<line data-mark="last" x1="0" y1="93.6" x2="221.4" y2="93.6" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<polygon data-kind="piece" points="678.6,115.2 900,115.2 900,93.6 678.6,93.6" fill="#aba69f"/>
+<line data-mark="last" x1="678.6" y1="93.6" x2="900" y2="93.6" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
+<line data-kind="arrow" x1="661.5" y1="0" x2="661.5" y2="108" stroke="#444444" stroke-width="1.6"/>
+<polyline points="656.5,99 661.5,108 666.5,99" fill="none" stroke="#444444" stroke-width="1.6"/>
+<text x="673.5" y="58" font-size="12" fill="#444444">your hand, at the printer</text>
+<rect data-kind="bed" x="-6" y="306.4" width="912" height="5" fill="#cfcbc3"/>
+<text x="910" y="312.4" font-size="12" fill="#444444">print bed</text>
+</g>
+<circle data-label-dot="1" cx="818" cy="211.9" r="2.6" fill="#222222"/>
+<polyline points="818,211.9 1007.24,211.9 1017.24,211.9" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1021.24" y="215.9" font-size="12" fill="#222222" text-anchor="start">cap, printed after you press resume: the bearing cannot fall out</text>
+<circle data-label-dot="1" cx="854" cy="301.9" r="2.6" fill="#222222"/>
+<polyline points="854,301.9 1007.24,301.9 1017.24,301.9" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1021.24" y="305.9" font-size="12" fill="#222222" text-anchor="start">one body, no seam</text>
+<circle data-label-dot="1" cx="692" cy="301.9" r="2.6" fill="#222222"/>
+<polyline points="692,301.9 1007.24,317.9 1017.24,317.9" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1021.24" y="321.9" font-size="12" fill="#222222" text-anchor="start">bearing, dropped in by hand at the pause</text>
+<text x="20" y="449.5" font-size="12" fill="#444444">Good: what you asked for, one solid coaster. But: you are at the printer for every one, and our slicing must learn to carry the pause first (call 4).</text>
+</g>
+</svg>

@@ -1,0 +1,22 @@
+# Call 5, option 2: split halves now, no pause. The bearing is placed by hand between two printed
+# halves held by pegs, the way our split coasters join. Heights drawn for the picture.
+# From docs/design/pieces/spinner-coaster-design.md, "The fallback: split halves, no pause".
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+title: "Call 5, option 2: split halves now, no pause"
+columns: 1
+panels:
+  - title: "Two halves printed apart; the bearing goes in on the bench; pegs hold them together"
+    width: 50
+    parts:
+      - {kind: half, side: lower, box: [38.65, 0, 11.35, 3.0], both: true, first: bottom}
+      - {kind: half, side: lower, box: [13.5, 0, 25.15, 1.0], both: true, first: bottom}
+      - {kind: air, box: [13.5, 0.6, 23, 0.4]}
+      - {kind: half, side: upper, box: [37.7, 3.0, 12.3, 2.8], both: true, last: top, label: "upper half, printed upside down and turned over", label_at: [46, 4.5]}
+      - {kind: socket, box: [43.9, 2.2, 2.2, 0.8], both: true}
+      - {kind: stud, side: upper, box: [44, 2.3, 2, 0.7], toward: down, both: true, label: "peg on the upper half, in a hole in the lower", label_at: [45, 2.6]}
+      - {kind: piece, color: "#5a6270", box: [35, 1.0, 3.5, 4.0], both: true, label: "bearing, placed by hand: no printer involved", label_at: [36.75, 2]}
+      - {kind: air, box: [15, 1.0, 20, 4.0]}
+      - {kind: seam, line: [38.65, 3.0, 11.35], both: true, label: "a seam round the edge", label_at: [49, 3.0]}
+      - {kind: bed, line: [0, 0, 50]}
+    notes:
+      - "Good: no pause and no risk to the printer; the split coasters already have pockets and pegs. But: a seam shows round the edge, and the join has to hold under mugs."

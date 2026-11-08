@@ -1,0 +1,40 @@
+# The recommended spinner stack, from docs/design/pieces/spinner-coaster-design.md ("The coaster
+# and its thickness", "Closing over the bearing"). Drawn by the draw-side-view skill:
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+# x is across the middle 50 mm of the coaster (the centre at 25), z is up from the bed.
+# Gray: the coaster body. Steel blue-gray: the 6704 bearing. Gold: the button.
+title: "The spinner coaster as recommended: the bearing goes in at a pause, the button after"
+columns: 1
+panels:
+  - title: "1. At the pause, before layer 27 (5.2 mm)"
+    width: 50
+    parts:
+      - {kind: piece, color: "#aba69f", box: [0, 0, 50, 0.6], first: bottom, label: floor 0.6 mm, label_at: [3, 0.3], label_side: left}
+      - {kind: piece, color: "#aba69f", box: [0, 0.6, 13.5, 0.4], both: true}
+      - {kind: air, box: [13.5, 0.6, 23, 0.4], label: air under the turning ring, label_at: [25, 0.8]}
+      - {kind: piece, color: "#aba69f", box: [38.65, 1.0, 11.35, 4.2], both: true, label: "coaster body: rim at 5.2 mm", label_at: [45, 3]}
+      - {kind: piece, color: "#5a6270", box: [35, 1.0, 3.5, 4.0], both: true, label: "6704 bearing, dropped in: top at 5.0 mm", label_at: [37, 4.6]}
+      - {kind: air, box: [15, 1.0, 20, 4.0], label: "the bearing's 20 mm hole", label_at: [20, 3], label_side: left}
+      - {kind: arrow, from: [25, 6.6], to: [25, 5.4], text: "the nozzle comes back at 5.4 mm"}
+      - {kind: bed, line: [0, 0, 50]}
+    notes:
+      - "The printer stops with 26 layers done. You drop the bearing in and press resume. Its top sits
+        at 5.0 mm, one layer below the rim, so the nozzle passes 0.4 mm above the steel."
+  - title: "2. Printed, with the button pressed in"
+    width: 50
+    parts:
+      - {kind: piece, color: "#aba69f", box: [0, 0, 50, 0.6], first: bottom}
+      - {kind: piece, color: "#aba69f", box: [0, 0.6, 13.5, 0.4], both: true}
+      - {kind: air, box: [13.5, 0.6, 23, 0.4]}
+      - {kind: piece, color: "#aba69f", box: [38.65, 1.0, 11.35, 4.2], both: true}
+      - {kind: piece, color: "#aba69f", box: [37.7, 5.2, 12.3, 0.6], both: true, label: "cap: 3 layers over the outer ring", label_at: [44, 5.5]}
+      - {kind: piece, color: "#aba69f", box: [43, 5.8, 3, 1.2], both: true, last: top, label: "strap, where the mug sits: top at 7.0 mm", label_at: [44.5, 6.6]}
+      - {kind: piece, color: "#5a6270", box: [35, 1.0, 3.5, 4.0], both: true, label: bearing, label_at: [37, 3]}
+      - {kind: piece, color: "#dcaa33", box: [12.7, 5.2, 24.6, 1.6], label: "button, about 25 mm: it spins", label_at: [30, 6.2]}
+      - {kind: piece, color: "#dcaa33", box: [14.4, 5.0, 21.2, 0.2]}
+      - {kind: piece, color: "#dcaa33", box: [15, 2.0, 20, 3.0], label: stub pressed into the hole, label_at: [20, 3.5], label_side: left}
+      - {kind: bed, line: [0, 0, 50]}
+    notes:
+      - "Gray is the coaster, blue-gray the steel bearing, gold the button. The button is printed on its
+        own and pressed into the bearing's hole after the print comes off the bed."
+      - "The button's top is 0.2 mm below the strap tops, so a mug does not stop it. A finger flick does."

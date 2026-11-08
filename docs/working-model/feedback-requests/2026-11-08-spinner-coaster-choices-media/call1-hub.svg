@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1488.28" height="467.5" viewBox="0 0 1488.28 467.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>Call 1, option 2: a hub printed in the same job, in a flat coaster printed face down (a sketch, sizes not settled)</title>
+<rect width="100%" height="100%" fill="#f8f7f4"/>
+<text x="20" y="37" font-size="17" font-weight="bold" fill="#222222">Call 1, option 2: a hub printed in the same job, in a flat coaster printed face down (a sketch, sizes not settled)</text>
+<text x="20" y="53.5" font-size="12.5" fill="#555555">Cut through, side view. White: air. Solid blue: printed on the bed (first layer). Not to scale.</text>
+<g data-panel="At the pause: the hub stands alone in the middle while the bearing goes in round it">
+<text x="20" y="89.5" font-size="14" font-weight="bold" fill="#222222">At the pause: the hub stands alone in the middle while the bearing goes in round it</text>
+<g transform="translate(250.8,107.5)">
+<polygon data-kind="piece" points="0,266.4 207,266.4 207,79.2 0,79.2" fill="#aba69f"/>
+<line data-mark="first" x1="0" y1="266.4" x2="207" y2="266.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="piece" points="693,266.4 900,266.4 900,79.2 693,79.2" fill="#aba69f"/>
+<line data-mark="first" x1="693" y1="266.4" x2="900" y2="266.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="piece" points="207,266.4 243,266.4 243,244.8 207,244.8" fill="#aba69f"/>
+<line data-mark="first" x1="207" y1="266.4" x2="243" y2="266.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="piece" points="657,266.4 693,266.4 693,244.8 657,244.8" fill="#aba69f"/>
+<line data-mark="first" x1="657" y1="266.4" x2="693" y2="266.4" stroke="#2f6fd8" stroke-width="4"/>
+<polygon data-kind="air" points="243,266.4 273.6,266.4 273.6,244.8 243,244.8" fill="#ffffff"/>
+<polygon data-kind="air" points="626.4,266.4 657,266.4 657,244.8 626.4,244.8" fill="#ffffff"/>
+<polygon data-kind="piece" points="207,244.8 270,244.8 270,100.8 207,100.8" fill="#5a6270"/>
+<polygon data-kind="piece" points="630,244.8 693,244.8 693,100.8 630,100.8" fill="#5a6270"/>
+<polygon data-kind="piece" points="273.6,266.4 626.4,266.4 626.4,93.6 273.6,93.6" fill="#c99a2e"/>
+<line data-mark="first" x1="273.6" y1="266.4" x2="626.4" y2="266.4" stroke="#2f6fd8" stroke-width="4"/>
+<line data-kind="arrow" x1="450" y1="0" x2="450" y2="86.4" stroke="#444444" stroke-width="1.6"/>
+<polyline points="445,77.4 450,86.4 455,77.4" fill="none" stroke="#444444" stroke-width="1.6"/>
+<text x="462" y="47.2" font-size="12" fill="#444444">the bearing must miss the hub on the way down</text>
+<rect data-kind="bed" x="-6" y="270.4" width="912" height="5" fill="#cfcbc3"/>
+<text x="910" y="276.4" font-size="12" fill="#444444">print bed</text>
+</g>
+<circle data-label-dot="1" cx="610.8" cy="287.5" r="2.6" fill="#222222"/>
+<polyline points="610.8,287.5 230.8,287.5 220.8,287.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="216.8" y="291.5" font-size="12" fill="#222222" text-anchor="end">hub: a 21 mm island on its own</text>
+<circle data-label-dot="1" cx="916.8" cy="237.1" r="2.6" fill="#222222"/>
+<polyline points="916.8,237.1 1232.04,237.1 1242.04,237.1" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1246.04" y="241.1" font-size="12" fill="#222222" text-anchor="start">6704 bearing, dropped over the hub</text>
+<circle data-label-dot="1" cx="1060.8" cy="283.9" r="2.6" fill="#222222"/>
+<polyline points="1060.8,283.9 1232.04,283.9 1242.04,283.9" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1246.04" y="287.9" font-size="12" fill="#222222" text-anchor="start">coaster, its mug face on the bed</text>
+<circle data-label-dot="1" cx="925.8" cy="363.1" r="2.6" fill="#222222"/>
+<polyline points="925.8,363.1 1232.04,363.1 1242.04,363.1" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1246.04" y="367.1" font-size="12" fill="#222222" text-anchor="start">lower cap under the outer ring</text>
+<text x="20" y="413.5" font-size="12" fill="#444444">After the pause an upper cap closes over both rings. The hub turns with the inner ring, and the mug face is flat across hub and coaster.</text>
+<text x="20" y="430.5" font-size="12" fill="#444444">Good: one print, nothing to press. But: the straps coaster cannot lie face down (its straps would be on the bed), so this needs a flat-faced coaster we do not make, and a knocked hub spoils the whole print.</text>
+</g>
+</svg>
