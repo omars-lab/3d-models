@@ -354,6 +354,71 @@ def read_baseline(text: str, label: str) -> list[dict[str, str]]:
 # --- run ------------------------------------------------------------------
 
 
+def _excused(root: Path) -> set[tuple[str, str, str]]:
+    """The claims the baseline grandfathers, as (entry, flag, name); none when there is no baseline."""
+    baseline_path = root / BASELINE_REL
+    baseline = (
+        read_baseline(baseline_path.read_text(encoding="utf-8"), BASELINE_REL)
+        if baseline_path.exists()
+        else []
+    )
+    return {(e["entry"], e["flag"], e["name"]) for e in baseline}
+
+
+def _verdict(c, excused, params, pieces, fit_fields, fit_reason, decl_reason) -> tuple[str, str]:
+    """One claim's verdict and why: `base` grandfathered, `skip` unchecked, `ok  ` or `MISS` checked."""
+    if (c.entry, c.flag, c.name) in excused:
+        return "base", "grandfathered"
+    if c.flag == "param":
+        return ("ok  ", "declared") if c.name in params else ("MISS", "no `param` declares it")
+    if c.flag == "piece":
+        if decl_reason is not None:
+            return "skip", "declaration keywords unavailable"
+        return ("ok  ", "declared") if c.name in pieces else (
+            "MISS", "no declaration in the model gives it that name"
+        )
+    # brick-fit
+    if fit_reason is not None:
+        return "skip", "BrickFit field set unavailable"
+    return ("ok  ", "a BrickFit field") if c.name in fit_fields else ("MISS", "not a BrickFit field")
+
+
+def _miss(entry: Entry, c, detail: str) -> str:
+    """The violation for one claim no model declares, with the three ways to fix it."""
+    where = ", ".join(entry.models) if c.flag != "brick-fit" else LEGO_TS_REL
+    return (
+        f"{CATALOG_REL}:{c.line}: {c.entry} prescribes `--{c.flag} {c.name}` — {detail}"
+        f" in {where}.\n"
+        f"    Fix the entry, fix the model, or — if the entry names it deliberately,"
+        f" as LG-F1 does —\n"
+        f"    record it in {BASELINE_REL} with:\n"
+        f'      {{ "entry": {json.dumps(c.entry)}, "flag": {json.dumps(c.flag)},'
+        f' "name": {json.dumps(c.name)}, "why": "…" }}'
+    )
+
+
+def _summary(n_entries: int, counts: dict[str, int], pending_entries: list[str],
+             fit_reason: str | None, decl_reason: str | None) -> list[str]:
+    """The lines printed after the check: the counts, what is pending, and what went unchecked."""
+    summary = [
+        f"catalog models: {n_entries} entries; {counts['checked']} claim(s) checked, "
+        f"{counts['grandfathered']} grandfathered, {counts['pending']} pending a to-author model"
+    ]
+    if pending_entries:
+        summary.append("  pending: " + "; ".join(pending_entries))
+    if fit_reason is not None:
+        summary.append(f"  --brick-fit UNCHECKED: {fit_reason}")
+    if decl_reason is not None:
+        summary.append(f"  --piece UNCHECKED: {decl_reason}")
+    if counts["unchecked"]:
+        summary.append(f"  {counts['unchecked']} claim(s) went unchecked for the reason(s) above")
+    return summary
+
+
+# which count a verdict adds to
+_COUNTED = {"base": "grandfathered", "skip": "unchecked", "ok  ": "checked", "MISS": "checked"}
+
+
 def run(root: Path, list_all: bool) -> tuple[list[str], list[str]]:
     """Check the catalog. Returns (violations, summary lines)."""
     catalog = root / CATALOG_REL
@@ -363,17 +428,10 @@ def run(root: Path, list_all: bool) -> tuple[list[str], list[str]]:
     fit_fields, fit_reason = brickfit_fields(root)
     decl_kws, decl_reason = declaration_keywords(root)
     frame = loose_frame_piece(root)
-
-    baseline_path = root / BASELINE_REL
-    baseline = (
-        read_baseline(baseline_path.read_text(encoding="utf-8"), BASELINE_REL)
-        if baseline_path.exists()
-        else []
-    )
-    excused = {(e["entry"], e["flag"], e["name"]) for e in baseline}
+    excused = _excused(root)
 
     violations: list[str] = []
-    checked = pending = grandfathered = unchecked = 0
+    counts = {"checked": 0, "pending": 0, "grandfathered": 0, "unchecked": 0}
     pending_entries: list[str] = []
 
     for entry in entries:
@@ -383,7 +441,7 @@ def run(root: Path, list_all: bool) -> tuple[list[str], list[str]]:
         if not entry.models or missing:
             # The model is to-author or unreadable. `doc_pointers.py` owns that
             # claim; reporting it again here would mean two gates for one fix.
-            pending += len(entry.claims)
+            counts["pending"] += len(entry.claims)
             what = ", ".join(missing) if missing else "no model file named"
             pending_entries.append(f"{entry.id} ({what})")
             if list_all:
@@ -392,58 +450,14 @@ def run(root: Path, list_all: bool) -> tuple[list[str], list[str]]:
             continue
 
         for c in entry.claims:
-            if (c.entry, c.flag, c.name) in excused:
-                grandfathered += 1
-                verdict, detail = "base", "grandfathered"
-            elif c.flag == "param":
-                ok = c.name in params
-                checked += 1
-                verdict, detail = ("ok  ", "declared") if ok else ("MISS", "no `param` declares it")
-            elif c.flag == "piece":
-                if decl_reason is not None:
-                    unchecked += 1
-                    verdict, detail = "skip", "declaration keywords unavailable"
-                else:
-                    ok = c.name in pieces
-                    checked += 1
-                    verdict, detail = ("ok  ", "declared") if ok else (
-                        "MISS", "no declaration in the model gives it that name"
-                    )
-            else:  # brick-fit
-                if fit_reason is not None:
-                    unchecked += 1
-                    verdict, detail = "skip", "BrickFit field set unavailable"
-                else:
-                    ok = c.name in fit_fields
-                    checked += 1
-                    verdict, detail = ("ok  ", "a BrickFit field") if ok else ("MISS", "not a BrickFit field")
+            verdict, detail = _verdict(c, excused, params, pieces, fit_fields, fit_reason, decl_reason)
+            counts[_COUNTED[verdict]] += 1
             if list_all:
                 print(f"{verdict} {CATALOG_REL}:{c.line}  {c.entry} --{c.flag} {c.name}   [{detail}]")
             if verdict == "MISS":
-                where = ", ".join(entry.models) if c.flag != "brick-fit" else LEGO_TS_REL
-                violations.append(
-                    f"{CATALOG_REL}:{c.line}: {c.entry} prescribes `--{c.flag} {c.name}` — {detail}"
-                    f" in {where}.\n"
-                    f"    Fix the entry, fix the model, or — if the entry names it deliberately,"
-                    f" as LG-F1 does —\n"
-                    f"    record it in {BASELINE_REL} with:\n"
-                    f'      {{ "entry": {json.dumps(c.entry)}, "flag": {json.dumps(c.flag)},'
-                    f' "name": {json.dumps(c.name)}, "why": "…" }}'
-                )
+                violations.append(_miss(entry, c, detail))
 
-    summary = [
-        f"catalog models: {len(entries)} entries; {checked} claim(s) checked, "
-        f"{grandfathered} grandfathered, {pending} pending a to-author model"
-    ]
-    if pending_entries:
-        summary.append("  pending: " + "; ".join(pending_entries))
-    if fit_reason is not None:
-        summary.append(f"  --brick-fit UNCHECKED: {fit_reason}")
-    if decl_reason is not None:
-        summary.append(f"  --piece UNCHECKED: {decl_reason}")
-    if unchecked:
-        summary.append(f"  {unchecked} claim(s) went unchecked for the reason(s) above")
-    return violations, summary
+    return violations, _summary(len(entries), counts, pending_entries, fit_reason, decl_reason)
 
 
 def self_test() -> int:
