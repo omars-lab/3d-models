@@ -6,9 +6,6 @@
   ".claude/gates/catalog_models.py::parse_catalog": [
    11
   ],
-  ".claude/gates/catalog_models.py::run": [
-   19
-  ],
   ".claude/gates/coaster_pictures.py::enclosed_non_opaque": [
    11
   ],

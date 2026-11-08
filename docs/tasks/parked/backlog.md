@@ -92,10 +92,16 @@ complexity check lists the 86 Python functions over 10 and stops any new one.
   `suggest` each in a helper, self-test unchanged and the same exit code, output and errors on 97
   command lines (help, check on every construction and `--all`, suggest with every helper and good
   and bad colors, a made-up id) and the same listing pictures, apart from the hero pictures, which
-  differ between two runs of the same copy. 73 left.
-  The `self_test` functions (`branch_inventory.py` 34, `theme_plates.py` 22, `site_graph.py` 21,
-  `docs_gate.py` 20) are skipped: each is a list of test cases, so splitting it buys little. Next
-  is `.claude/gates/catalog_models.py::run` (19). A
+  differ between two runs of the same copy (#944). Then `.claude/gates/catalog_models.py::run`
+  (19), one helper each for the excused knobs, one knob's verdict, the message for a knob no model
+  declares and the summary, self-test unchanged and the same violations, summary and printed lines
+  on the real catalog and on copies with each of its 70 knobs renamed or excused, each entry's
+  model file missing, the baseline missing or broken four ways and bikar's grammar and lego
+  sources unavailable, each with the full listing on and off (1,504 cases, every verdict seen).
+  72 left. The `self_test` functions (`branch_inventory.py` 34, `theme_plates.py` 22,
+  `site_graph.py` 21, `docs_gate.py` 20, `plates_gate.py` 19, `validate.py` 18) are skipped: each
+  is a list of test cases, so splitting it buys little. Next are the two at 18:
+  `build/verify_machine_card.py::verify` and `tools/print_review.py::bed_picture`. A
   cleanup skill comes back only if
   this proves a repeated manual task, and then as an extension of the built-in `simplify` skill.
 - **A post about the design**, which Omar asked for once he signed off: written with the
