@@ -42,9 +42,6 @@
   ".claude/gates/plates_gate.py::check_maturity": [
    11
   ],
-  ".claude/gates/plates_gate.py::check_print_logs": [
-   17
-  ],
   ".claude/gates/plates_gate.py::id_findings": [
    15
   ],
