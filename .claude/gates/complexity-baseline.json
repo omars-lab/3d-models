@@ -147,9 +147,6 @@
   ".claude/skills/monitor-print/scripts/print_monitor.py::publish": [
    11
   ],
-  ".claude/skills/monitor-print/scripts/print_monitor.py::step": [
-   25
-  ],
   ".claude/skills/pattern-catalog/scripts/catalog.py::build": [
    17
   ],
