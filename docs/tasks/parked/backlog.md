@@ -105,12 +105,18 @@ complexity check lists the 86 Python functions over 10 and stops any new one.
   (60,720 cases, 60,412 with a problem) (#946). Then `tools/print_review.py::bed_picture` (18),
   one helper each for the part of the bed drawn, the grid, painting the pieces, the set boxes,
   placing the labels and inking the boxes, drawn in the old order, self-test unchanged and every
-  picture pixel for pixel the same, with the same names, boxes and lines, on 1,408 cases: the 61 built plates, each with no bed map, its own bed map where it has
-  one, and two made-up sets, under every mix of names, zoom and key.
-  70 left. The `self_test` functions (`branch_inventory.py` 34, `theme_plates.py` 22,
+  picture pixel for pixel the same, with the same names, boxes and lines, on 1,408 cases: the
+  61 built plates, each with no bed map, its own bed map where it has one, and two made-up sets,
+  under every mix of names, zoom and key (#954). Then `.claude/gates/hook_parity.py::run` (17),
+  one helper each for running the hooks, running the checks with no hook, and the summary, with
+  the exit code left in `run`; self-test unchanged, and the same printed text and exit code on
+  2,080 made-up runs (the declaration check failing or not, up to three hooks each passing,
+  failing or missing its tool, up to two extra checks each passing, warning or failing, strict on
+  or off; exit codes 0, 1 and 2 all seen).
+  69 left. The `self_test` functions (`branch_inventory.py` 34, `theme_plates.py` 22,
   `site_graph.py` 21, `docs_gate.py` 20, `plates_gate.py` 19, `validate.py` 18) are skipped: each
-  is a list of test cases, so splitting it buys little. Next are the four at 17:
-  `.claude/gates/hook_parity.py::run`, `.claude/gates/plates_gate.py::check_print_logs`,
+  is a list of test cases, so splitting it buys little. Next are the three at 17:
+  `.claude/gates/plates_gate.py::check_print_logs`,
   `.claude/skills/pattern-catalog/scripts/catalog.py::build` and
   `.claude/skills/simulate-buyers/scripts/buyers.py::sweep_problems`. A
   cleanup skill comes back only if
