@@ -42,9 +42,6 @@
   ".claude/gates/plates_gate.py::check_maturity": [
    11
   ],
-  ".claude/gates/plates_gate.py::id_findings": [
-   15
-  ],
   ".claude/gates/plates_gate.py::self_test": [
    19
   ],

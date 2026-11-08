@@ -1291,41 +1291,53 @@ def id_findings(name: str, recipe: object, chars: str, forms: tuple[str, ...]) -
     seen: dict[str, int] = {}
     items = recipe.get("items") if isinstance(recipe.get("items"), list) else recipe.get("cells")
     for i, item in enumerate(items or []):
-        where = f"{name}: P13 item {i + 1}"
-        if not isinstance(item, dict):
-            continue
-        has_id, has_no = "id" in item, "no_id" in item
-        if "id_form" in item:
-            if not has_id:
-                out.append(f"{where}: `id_form:` says how much of an `id:` to cut, and the item "
-                           "has no `id:`")
-            elif item["id_form"] not in forms:
-                out.append(f"{where}: `id_form: {item['id_form']!r}` is one of {', '.join(forms)} "
-                           "(D-114)")
-            elif item["id_form"] == "short" and re.fullmatch("[0-9]", str(item["id"])):
-                out.append(f"{where}: `id_form: short` cuts the iteration then the id, so a digit "
-                           f"id reads as one number with it (3 then {item['id']}); give it a letter")
-        if has_id == has_no:
-            out.append(f"{where} needs `id:` (one character) or `no_id:` (why it has none), "
-                       + ("not both" if has_id else "and has neither"))
-            continue
-        if has_no:
-            if not (isinstance(item["no_id"], str) and item["no_id"].strip()):
-                out.append(f"{where}: `no_id:` says why the piece has no id and how it is told "
-                           "apart instead")
-            continue
-        pid = str(item["id"])
-        if "bkr" not in item:
-            out.append(f"{where}: only a `bkr:` item is rendered, so only it can be cut; give it "
-                       "`no_id:` instead")
-        if not one.match(pid):
-            out.append(f"{where}: `id: {item['id']!r}` is one of {chars}")
-        elif pid in seen:
-            out.append(f"{where}: `id: {pid}` is item {seen[pid]}'s too — two pieces with one id "
-                       "cannot be told apart")
-        else:
-            seen[pid] = i + 1
+        if isinstance(item, dict):
+            out += _item_id_findings(f"{name}: P13 item {i + 1}", item, i, one, chars, forms, seen)
     return out
+
+
+def _item_id_findings(where: str, item: dict, i: int, one: re.Pattern, chars: str,
+                      forms: tuple[str, ...], seen: dict[str, int]) -> list[str]:
+    """P13 on one recipe item: its `id_form:`, then an `id:` or a `no_id:`, and the id unique.
+    Records a good id in `seen`."""
+    out = _id_form_findings(where, item, forms)
+    has_id, has_no = "id" in item, "no_id" in item
+    if has_id == has_no:
+        out.append(f"{where} needs `id:` (one character) or `no_id:` (why it has none), "
+                   + ("not both" if has_id else "and has neither"))
+        return out
+    if has_no:
+        if not (isinstance(item["no_id"], str) and item["no_id"].strip()):
+            out.append(f"{where}: `no_id:` says why the piece has no id and how it is told "
+                       "apart instead")
+        return out
+    pid = str(item["id"])
+    if "bkr" not in item:
+        out.append(f"{where}: only a `bkr:` item is rendered, so only it can be cut; give it "
+                   "`no_id:` instead")
+    if not one.match(pid):
+        out.append(f"{where}: `id: {item['id']!r}` is one of {chars}")
+    elif pid in seen:
+        out.append(f"{where}: `id: {pid}` is item {seen[pid]}'s too — two pieces with one id "
+                   "cannot be told apart")
+    else:
+        seen[pid] = i + 1
+    return out
+
+
+def _id_form_findings(where: str, item: dict, forms: tuple[str, ...]) -> list[str]:
+    """P13 on one item's `id_form:`: it needs an `id:`, is a form compose cuts, and `short` takes
+    a letter (D-114)."""
+    if "id_form" not in item:
+        return []
+    if "id" not in item:
+        return [f"{where}: `id_form:` says how much of an `id:` to cut, and the item has no `id:`"]
+    if item["id_form"] not in forms:
+        return [f"{where}: `id_form: {item['id_form']!r}` is one of {', '.join(forms)} (D-114)"]
+    if item["id_form"] == "short" and re.fullmatch("[0-9]", str(item["id"])):
+        return [f"{where}: `id_form: short` cuts the iteration then the id, so a digit id reads as "
+                f"one number with it (3 then {item['id']}); give it a letter"]
+    return []
 
 
 def check_ids(pages: list, plates: Path, compose: Path = COMPOSE_TS,
