@@ -836,25 +836,24 @@ def check_maturity(path: Path, data: dict, body: str, history: dict, runs: dict,
     return out, notes
 
 
-def check_page(path: Path, data: dict, body: str, records: dict[str, list[str]],
-               bet_ids: set[str]) -> list[str]:
-    name = path.stem
+def _check_shape(path: Path, name: str, data: dict) -> list[str]:
+    """P1: the plate's name, its recipe beside it, and the three fixed vocabularies."""
     out: list[str] = []
-    missing = [k for k in REQUIRED if k not in data]
-    if missing:
-        return [f"{name}: P1 frontmatter is missing {missing}"]
-
-    # P1 — shape
     if data["plate"] != name:
         out.append(f"{name}: P1 plate '{data['plate']}' is not the file name")
-    stage = data["stage"]
-    no_recipe_yet = stage == "planned" and data["recipe"] is None
+    no_recipe_yet = data["stage"] == "planned" and data["recipe"] is None
     if not no_recipe_yet and (data["recipe"] != f"{name}.yaml"
                               or not (path.parent / f"{name}.yaml").is_file()):
         out.append(f"{name}: P1 recipe '{data['recipe']}' is not the {name}.yaml beside the page")
     for key, vocab in (("stage", STAGES), ("kind", KINDS), ("risk", RISKS)):
         if data[key] not in vocab:
             out.append(f"{name}: P1 {key} '{data[key]}' is not one of {list(vocab)}")
+    return out
+
+
+def _check_fields(path: Path, name: str, data: dict, bet_ids: set[str]) -> list[str]:
+    """P1: bets, unblocks, answers and derived_from each hold what they say."""
+    out: list[str] = []
     bets = data["bets"] if isinstance(data["bets"], list) else None
     if bets is None:
         out.append(f"{name}: P1 bets is not a list")
@@ -871,7 +870,13 @@ def check_page(path: Path, data: dict, body: str, records: dict[str, list[str]],
     if parent is not None and (not isinstance(parent, str) or parent == name
                                or not (path.parent / f"{parent}.md").is_file()):
         out.append(f"{name}: P1 derived_from {parent!r} is not another plate page in docs/design/plates/")
-    needs = data.get("needs")
+    return out
+
+
+def _check_stage(name: str, data: dict) -> list[str]:
+    """P1: a planned plate says what it waits on; a ranked one has its cost numbers."""
+    out: list[str] = []
+    stage, needs = data["stage"], data.get("needs")
     if stage == "planned":
         if not isinstance(needs, list) or not needs or not all(
                 isinstance(n, str) and n.strip() for n in needs):
@@ -884,13 +889,13 @@ def check_page(path: Path, data: dict, body: str, records: dict[str, list[str]],
             if not _pos(data[key]):
                 out.append(f"{name}: P1 stage '{stage}' is ranked, so {key} must be a positive "
                            f"number, not {data[key]!r}")
+    return out
 
-    # P2 — approvals: the table, not the frontmatter
-    out += check_approvals(name, data, body)
 
-    # P3 — the count is the records, not what the page says about itself
+def _check_runs(name: str, data: dict, actual: list[str]) -> list[str]:
+    """P3: the count is the records, not what the page says about itself."""
+    out: list[str] = []
     runs = data["runs"] if isinstance(data["runs"], list) else None
-    actual = records.get(name, [])
     times = data["times_printed"]
     if runs is None:
         out.append(f"{name}: P3 runs is not a list")
@@ -899,21 +904,26 @@ def check_page(path: Path, data: dict, body: str, records: dict[str, list[str]],
     if not isinstance(times, int) or isinstance(times, bool) or times != len(actual):
         out.append(f"{name}: P3 times_printed {times!r} but docs/prints/ holds {len(actual)} "
                    "record(s) for this plate")
-    if stage == "printed" and not actual:
+    if data["stage"] == "printed" and not actual:
         out.append(f"{name}: P3 stage 'printed' but no record for this plate")
+    return out
 
-    # P4 — pictures
+
+def _check_pictures(path: Path, name: str, data: dict) -> list[str]:
+    """P4: every picture is beside the page, and a page that asks Omar to look has one."""
     pics = data["pictures"] if isinstance(data["pictures"], list) else None
     if pics is None:
-        out.append(f"{name}: P4 pictures is not a list")
-    else:
-        for pic in pics:
-            if not isinstance(pic, str) or not (path.parent / pic).is_file():
-                out.append(f"{name}: P4 picture '{pic}' does not exist beside the page")
-        if stage in SHOWN and not pics:
-            out.append(f"{name}: P4 stage '{stage}' asks Omar to look, but there is no picture")
+        return [f"{name}: P4 pictures is not a list"]
+    out = [f"{name}: P4 picture '{pic}' does not exist beside the page"
+           for pic in pics if not isinstance(pic, str) or not (path.parent / pic).is_file()]
+    if data["stage"] in SHOWN and not pics:
+        out.append(f"{name}: P4 stage '{data['stage']}' asks Omar to look, but there is no picture")
+    return out
 
-    # P6 — timeline
+
+def _check_timeline(name: str, data: dict, body: str, actual: list[str]) -> list[str]:
+    """P6: dated rows of known events, in order, a 'printed' row for each record."""
+    out: list[str] = []
     rows = timeline(body)
     if not rows:
         out.append(f"{name}: P6 no dated rows under '## Timeline'")
@@ -927,12 +937,27 @@ def check_page(path: Path, data: dict, body: str, records: dict[str, list[str]],
     for run_id in actual:
         if not any(run_id in rest for rest in printed_rows):
             out.append(f"{name}: P6 run {run_id} has no 'printed' row naming it")
+    times = data["times_printed"]
     if isinstance(times, int) and len(printed_rows) != times:
         out.append(f"{name}: P6 {len(printed_rows)} 'printed' row(s) but times_printed {times}")
-
-    # P12 — what gets asked after the print, written before it
-    out += check_after_print(name, data, body)
     return out
+
+
+def check_page(path: Path, data: dict, body: str, records: dict[str, list[str]],
+               bet_ids: set[str]) -> list[str]:
+    name = path.stem
+    missing = [k for k in REQUIRED if k not in data]
+    if missing:
+        return [f"{name}: P1 frontmatter is missing {missing}"]
+    actual = records.get(name, [])
+    return (_check_shape(path, name, data)
+            + _check_fields(path, name, data, bet_ids)
+            + _check_stage(name, data)
+            + check_approvals(name, data, body)          # P2 — the table, not the frontmatter
+            + _check_runs(name, data, actual)
+            + _check_pictures(path, name, data)
+            + _check_timeline(name, data, body, actual)
+            + check_after_print(name, data, body))      # P12 — asked after, written before
 
 
 def after_print(body: str) -> tuple[list[list[str]], str | None]:
