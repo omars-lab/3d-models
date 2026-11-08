@@ -4,22 +4,6 @@ Moved here on 2026-09-25 from [`docs/working-model/backlog.md`](../../working-mo
 "is not printer-gated". None of the five [loops](../../../.claude/loop-prompts/README.md) is pointed at these. A loop that
 takes one on moves it into its own backlog; a loop that finds work nobody owns adds it here.
 
-## Pattern catalog vault — step 5, the rest of the bikar library, is next
-
-[`docs/catalog/plan.md`](../../catalog/plan.md) plans the Obsidian vault in `docs/`: one note per
-pattern (planned ones too), a generated catalog page, deep links for every picture, review-md
-through BRAT, and a check plus a skill that keep it current. Asked for by Omar, 2026-09-27.
-
-Steps 1 to 4 are done (see [done.md](done.md)). The catalog page is
-[`docs/catalog/index.md`](../../catalog/index.md); the `pattern-catalog` skill writes it, a
-queued pattern gets its note from [`docs/catalog/planned.yaml`](../../catalog/planned.yaml), and
-`make validate` fails when bikar has a construction file no note claims.
-Step 5 is next: notes for the rest of the bikar library (stars, rosettes, tiled, weave, orbs,
-lego, coupons), mostly generated, per [the plan](../../catalog/plan.md#steps-in-order-of-value).
-
-Step 5's size question now has a number: the 36 pictures step 2 committed average 39 kB, 1.4 MB
-in all.
-
 ## The FAQ — waiting on Omar
 
 Five of the six candidates in `docs/faq-proposal.md` are already answered as Q-001 to Q-005 in

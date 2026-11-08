@@ -208,6 +208,16 @@ committed:
    only where there is something to say. Rough size: one or two pictures of about 40 kB each
    per pattern file. Whether that is worth committing is decided here, at the numbers step 2
    actually measured, not before.
+
+   *Done 2026-11-08.* 76 files, a note each in `library/<family>/`. **Decided:** commit one
+   picture per file, 480 px WebP, drawn by `catalog.py render-library` and redrawn only when the
+   file changes. Measured: 69 pictures, 1.1 MB in all, about 16 kB each, well under the 40 kB
+   guessed. The rendering stays out of `sync --check`, so a check never needs bikar's CLI built;
+   `renders.json` records which version of each file its picture shows, and `sync` warns when the
+   file has moved on. Seven files draw nothing flat (two Maclado orbs, two lego pieces, three
+   coupons): their notes say so and carry no picture. bikar's other folders (Showcase, Spirals,
+   Flower of Life, Petal Tutorial, Assemblies, Walls, Pieces, witness and the four loose files at
+   the top) are not in this step.
 6. **Optional: an "open note" link on each Coaster Lab card**, in local dev mode only.
 
 ## Assumptions to check first
