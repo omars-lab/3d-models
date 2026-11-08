@@ -190,8 +190,9 @@ PASS: one `; PAUSE_PRINTING`, then `M400 U1`, sitting after the move to 5.0 mm a
 first extrusion.
 
 FAIL: one `; PAUSE_PRINTING` above the 4.8 mm layer instead. One tag is present and the count alone
-would pass, but the pause would come a layer early, with the walls lower than the bearing, so the
-nozzle would cross proud steel. This is why V1 checks the height, not just the count. Zero tags (by
+would pass, but the pause would come a layer early: the walls end at 4.6 mm, flush with the
+bearing's top, and any tilt or blob makes it proud. This is why V1 checks the height, not just the
+count. Zero tags (by
 object mode, or a project that lost its pause) and two tags also fail.
 
 ## Risks, and the guard for each
@@ -202,7 +203,7 @@ stops the print before the nozzle gets near steel.
 | What goes wrong | What it would do | Guard | How it is caught |
 |---|---|---|---|
 | **The pause is missing** (by-object mode, a lost pause, our command line) | the print runs on and caps an empty pocket: a wasted print, no harm to the printer | slice by layer; re-check after opening the project | V1 before the send |
-| **The pause is a layer early** (scarf seam bug, off by one) | the walls end below the bearing's top: the nozzle would cross steel | scarf seam off; V1 checks the height | V1; and V2 at the printer: the rim check fails, so the print is stopped, not resumed |
+| **The pause is a layer early** (scarf seam bug, off by one) | the walls end flush with the bearing's top (two layers early: below it); the recess is gone and the nozzle passes 0.2 mm or less over steel | scarf seam off; V1 checks the height | V1; and V2 at the printer: the rim check fails, so the print is stopped, not resumed |
 | **The pause is late** | the cap has started over the empty pocket; the bearing cannot go in | as above | Omar sees it at the pause and stops the print; plastic only |
 | **The bearing sits proud** (tilted, not pushed down, a blob or string in the pocket, a thick bearing) | the nozzle strikes it | 0.2 mm recess; the post and wall hold it level; Omar pushes it down; each bearing measured first | V0 before, V2 at the pause; if either fails, stop, never resume |
 | **The bearing is pulled up by the toolhead** | a steel ring lifted into the nozzle path | the post keeps it centred; it is not a magnet itself | unknown whether the X2D head has a magnet (Prusa users report one in theirs, S23, search summary); coupon 2's first pass is watched, and the print stopped if the ring moves |
@@ -219,18 +220,23 @@ stops the print before the nozzle gets near steel.
 Each piece carries a carved id and is judged on its own. "The plate spun fine" is not an answer:
 one stuck hub among good ones is the case that matters.
 
-**Coupon 1 — the pause with no steel.** One small plate, about 20 minutes, no bearings needed:
+**Coupon 1 — the pause with no steel.** One small plate, about 20 minutes, no bearings needed.
+Beforehand, print a **plastic stand-in**: a PLA ring the bearing's size (27 mm across, 20 mm hole,
+4 mm thick), measured like a bearing (V0). It goes in at the pause in the bearing's place, so the
+whole routine is rehearsed with no steel on the bed. The cap will likely weld onto a PLA ring, so
+the stand-in tests the drop-in and the first layer over it, not whether anything spins.
 
 - three **open pocket tiles**, each a 32 mm square at 4.8 mm tall with a pocket and post at
   clearance 0.10, 0.15 and 0.20 mm per side, and no cap. They stop at the rim, so the pause does
   nothing to them. Once bearings are in hand, Omar tries one in each and says which drops in, which
   sticks, which rattles.
 - one **closed tile** at 0.15 mm, the full 5.6 mm with its cap. The printer pauses before layer 25,
-  Omar drops in nothing, checks the empty pocket with a straightedge, and resumes.
+  Omar drops in the stand-in ring, runs the ruler check (V2) on it, and resumes.
 
 It answers, with nothing to damage: where the X2D parks during a pause; whether the nozzle and the
 bed stay hot (read from the printer's own reports, R9); how the head moves up and down on pause and
-resume; whether layer 25 starts clean or with a blob; whether the caps print over air at 0.95 mm.
+resume; how long the drop-in and the ruler check really take; whether layer 25 starts clean or
+with a blob; whether the caps reach 0.95 mm over the 0.2 mm of air and settle onto the ring.
 
 **Coupon 2 — real bearings.** Two closed tiles at the clearance coupon 1 picked, each with a 6704
 dropped in at the pause. It answers: does the hub turn, does the first layer over steel hold, does
@@ -257,8 +263,8 @@ the way across.
 
 FAIL: the ruler rests on the rim but touches the bearing's edge on one side only. The bearing is
 tilted, with a blob or a string under one side, so one edge stands higher than the rest. Stop the
-print; do not resume. The same goes when the ruler cannot sit on the rim at all because the bearing
-stands higher than the walls (the pause came early).
+print; do not resume. The same goes when the ruler touches the bearing all round, or cannot sit on the
+rim at all: the bearing is flush with or above the walls, so the pause came early.
 
 ### V3. After the print: the hub turns, all the way round
 
@@ -310,7 +316,9 @@ Nothing here exists yet (R10).
 2. **Is a 5.6 mm coaster all right?** Today's are 4 to 4.4 mm. The 4 mm bearing cannot fit in less.
 3. **Which coaster?** The pocket needs a plain round middle about 30 mm across (the bearing's 27 mm
    plus the wall). Patterns with a star or kites in the middle would lose them there, as the earlier
-   study found for the 6704 (R6).
+   study found for the 6704 (R6). And since the coaster prints face down, its pattern face is the
+   side on the bed. The split-pocket coaster already prints that way (R1); for any other coaster we
+   have not seen whether its pattern comes out as well on the bed as on top.
 4. **Bearings to buy:** a few 6704s for coupon 2, and, if a maker's page confirms its size, a 6705
    for a bigger hub. Nothing is bought until Omar says.
 5. **Rust and the look.** The bearing shows as a steel ring, 1.9 mm wide, on both faces. Chrome
