@@ -86,11 +86,16 @@ complexity check lists the 86 Python functions over 10 and stops any new one.
   one helper each for a part's kind and keys, its words and its numbers, run in the old order so a
   part broken two ways is refused for the same first reason, self-test unchanged and the same
   answer on all 225 parts of the 15 real side-view descriptions and the self-test's, each broken
-  key by key, kind by kind and two keys at once (747,350 cases, every refusal firing). 74 left.
+  key by key, kind by kind and two keys at once (747,350 cases, every refusal firing) (#942); the
+  crashes that proof found (a size or kind that is not a number or a word) became refusals in
+  #943. Then `.claude/skills/color-themes/scripts/themes.py::main` (19), its parser, `check` and
+  `suggest` each in a helper, self-test unchanged and the same exit code, output and errors on 97
+  command lines (help, check on every construction and `--all`, suggest with every helper and good
+  and bad colors, a made-up id) and the same listing pictures, apart from the hero pictures, which
+  differ between two runs of the same copy. 73 left.
   The `self_test` functions (`branch_inventory.py` 34, `theme_plates.py` 22, `site_graph.py` 21,
   `docs_gate.py` 20) are skipped: each is a list of test cases, so splitting it buys little. Next
-  are the two at 19: `color-themes/scripts/themes.py::main` and
-  `.claude/gates/catalog_models.py::run` (missed by the earlier "three at 19"). A
+  is `.claude/gates/catalog_models.py::run` (19). A
   cleanup skill comes back only if
   this proves a repeated manual task, and then as an extension of the built-in `simplify` skill.
 - **A post about the design**, which Omar asked for once he signed off: written with the
