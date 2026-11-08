@@ -17,11 +17,10 @@ logs, plates built or rebuilt, the hub's questions and comments, and the print r
 Items below still tagged "print session" or "records session" are both its; that split ended when
 the coaster-print session closed on 2026-11-02.
 
-**Send next, out of queue order: [toys-1](../../design/plates/toys-1.md).** Omar asked on
-2026-11-07 for a plate with the magic cube and the ping-pong ball, then added the fidget star, to
-print next. It is sliced and merged (#925): one bed, 5 h 40 min, 89 g, supports on for the whole
-plate. The plates queue ranks it 28th because it answers no coaster question. That ranking is not
-the order here. It needs Omar's yes, a color and a bed check: the dragon egg may still be on the bed.
+**Judge [toys-1](../../design/plates/toys-1.md) on the hub, then write its record.** The magic
+cube, the ping-pong ball and the fidget star printed in silk blue on 2026-11-07, in 6 h 14 min,
+and finished clean (#928). Its three questions wait on Omar's hands on the pieces; the print
+record and the Timeline's `printed` row follow his answers.
 
 1. **The kite fits split-10 dropped.** On Omar's word, split-10's iteration 4 left out
    KITE-G10 (gap 0.10 mm a face) and KITE-PIN20 and KITE-PIN15 (pin holes 0.20 and 0.15 mm wider
@@ -52,12 +51,6 @@ the order here. It needs Omar's yes, a color and a bed check: the dragon egg may
      Studio while the request topic is read. Until then, plates go out from Bambu Studio.
      Found by the minis-01 run, 2026-09-25.
 6. **Standard-size plate (P5.2)** — only after item 3 settles the CAL-CST numbers (board #6).
-7. **Bring master's split-flange coaster source up to bikar's.** bikar main's
-   `gBV_JTt3Kxk-split-flange-coaster.bkr` has the star-pin default (three 1.2 mm pins on a
-   triangle whenever there is a pin size) that master's `src/Coasters/` copy lacks. `make coasters`
-   copies bikar's file over it, so the live gallery already carries it. Commit that copy to master
-   with whatever else the star default needs. Plates session; found by the gallery deploy,
-   2026-11-04 (3d-models #877).
 
 ## Owner-gated
 
