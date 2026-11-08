@@ -153,9 +153,6 @@
   "tools/cookbook_render.py::main": [
    12
   ],
-  "tools/fit_gap.py::gcode_all_walls": [
-   15
-  ],
   "tools/move_doc.py::expand": [
    12
   ],
