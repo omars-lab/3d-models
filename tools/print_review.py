@@ -647,35 +647,68 @@ def bed_picture(plate, labels, names=True, zoom=False, groups=None, key=False):
     with zipfile.ZipFile(plate) as zf:
         solids = plate_objects(zf, with_z=True)
     objects = [(oid, [tuple(p[:2] for p in t) for t in tris]) for oid, tris in solids]
-    x0, y0, x1, y1, px = 0, 0, BED_MM, BED_MM, BED_PX
-    pts = [p for _, tris in objects for t in tris for p in t]
-    if zoom and pts:
-        x0 = max(0, min(p[0] for p in pts) - ZOOM_MARGIN)
-        y0 = max(0, min(p[1] for p in pts) - ZOOM_MARGIN)
-        x1 = min(BED_MM, max(p[0] for p in pts) + ZOOM_MARGIN)
-        y1 = min(BED_MM, max(p[1] for p in pts) + ZOOM_MARGIN)
-        px = ZOOM_PX / max(x1 - x0, y1 - y0)
+    span, px = _bed_span(objects, zoom)
+    x0, y0, x1, y1 = span
     w, h = round((x1 - x0) * px), round((y1 - y0) * px)
     img = Image.new("RGB", (w + (KEY_W if key else 0), h + CAPTION), (24, 24, 24))
     mask = Image.new("L", (w, h), 0)
-    d, m = ImageDraw.Draw(img), ImageDraw.Draw(mask)
+    d = ImageDraw.Draw(img)
+    _bed_grid(d, span, px, (w, h))
+    f = lambda p: ((p[0] - x0) * px, h - (p[1] - y0) * px)
+    font = ImageFont.load_default(size=26)
+    kinds = kind_order(labels, [oid for oid, _ in objects])
+    shades = BED_SHADES
+    if key:
+        palette = dict(zip(kinds, key_shades(len(kinds))))
+        shades = [palette[labels.get(oid, oid)] for oid, _ in objects]
+    named, owns = _paint_objects(d, ImageDraw.Draw(mask), f, solids, objects, labels, shades, (w, h))
+    rects, tags = _group_boxes(d, f, font, objects, groups)
+    taken = [tag for _, tag in tags]
+    if key:
+        return keyed(img, d, font, (w, h), objects, labels, kinds, shades, owns, tags, zoom, span)
+    lines = _place_labels(d, font, f, objects, named, owns, groups, rects, taken, mask, (w, h)) if names else []
+    _ink_boxes(d, font, tags, GROUP_INK)
+    _ink_boxes(d, font, [(name, box) for (name, _), box in zip(named if names else [], taken[len(tags):])],
+               (255, 255, 255))
+    bed_caption(d, font, w, h, zoom, span)
+    return img, named, taken, lines
+
+
+BED_SHADES = [(230, 180, 90), (120, 200, 230), (160, 220, 130), (230, 130, 160), (190, 160, 240),
+              (240, 230, 120), (250, 140, 90), (110, 230, 200), (200, 200, 200), (170, 120, 90)]
+
+
+def _bed_span(objects, zoom):
+    """The part of the bed a bed picture draws, (x0, y0, x1, y1) in mm, and its px per mm: the
+    whole bed, or with zoom the pieces and ZOOM_MARGIN mm round them, long side ZOOM_PX."""
+    pts = [p for _, tris in objects for t in tris for p in t]
+    if not (zoom and pts):
+        return (0, 0, BED_MM, BED_MM), BED_PX
+    x0 = max(0, min(p[0] for p in pts) - ZOOM_MARGIN)
+    y0 = max(0, min(p[1] for p in pts) - ZOOM_MARGIN)
+    x1 = min(BED_MM, max(p[0] for p in pts) + ZOOM_MARGIN)
+    y1 = min(BED_MM, max(p[1] for p in pts) + ZOOM_MARGIN)
+    return (x0, y0, x1, y1), ZOOM_PX / max(x1 - x0, y1 - y0)
+
+
+def _bed_grid(d, span, px, size):
+    """The bed's edge and a 32 mm grid, to read distances by eye."""
+    x0, y0, x1, y1 = span
+    w, h = size
     d.rectangle([0, 0, w - 1, h - 1], outline=(90, 90, 90), width=2)
-    for k in range(32, BED_MM, 32):  # a 32 mm grid, to read distances by eye
+    for k in range(32, BED_MM, 32):
         if x0 < k < x1:
             d.line([((k - x0) * px, 0), ((k - x0) * px, h)], fill=(40, 40, 40))
         if y0 < k < y1:
             d.line([(0, h - (k - y0) * px), (w, h - (k - y0) * px)], fill=(40, 40, 40))
-    f = lambda p: ((p[0] - x0) * px, h - (p[1] - y0) * px)
-    shades = [(230, 180, 90), (120, 200, 230), (160, 220, 130), (230, 130, 160), (190, 160, 240),
-              (240, 230, 120), (250, 140, 90), (110, 230, 200), (200, 200, 200), (170, 120, 90)]
-    font = ImageFont.load_default(size=26)
-    kinds = kind_order(labels, [oid for oid, _ in objects])
-    if key:
-        palette = dict(zip(kinds, key_shades(len(kinds))))
-        shades = [palette[labels.get(oid, oid)] for oid, _ in objects]
+
+
+def _paint_objects(d, m, f, solids, objects, labels, shades, size):
+    """Each object filled in its shade with its relief on top, and onto the mask of all objects;
+    returns each object's (label, centre in mm) and its own footprint mask."""
     named, owns = [], []
     for k, (oid, tris) in enumerate(objects):
-        own = Image.new("L", (w, h), 0)
+        own = Image.new("L", size, 0)
         o = ImageDraw.Draw(own)
         for t in tris:
             d.polygon([f(p) for p in t], fill=shades[k % len(shades)])
@@ -686,7 +719,12 @@ def bed_picture(plate, labels, names=True, zoom=False, groups=None, key=False):
         xs = [p[0] for t in tris for p in t] or [0]
         ys = [p[1] for t in tris for p in t] or [0]
         named.append((labels.get(oid, oid), ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2)))
-    taken, lines, tags = [], [], []
+    return named, owns
+
+
+def _group_boxes(d, f, font, objects, groups):
+    """A yellow box round each group's pieces, GROUP_PAD mm out; returns the box inside each
+    group's edge (a label stays in it) and each group's (name, tag box above it)."""
     blocks = {}
     for oid, tris in objects:
         if oid in groups:
@@ -694,33 +732,36 @@ def bed_picture(plate, labels, names=True, zoom=False, groups=None, key=False):
             for t in tris:
                 for x, y in t:
                     b[:] = [min(b[0], x), min(b[1], y), max(b[2], x), max(b[3], y)]
-    rects = {}
+    rects, tags = {}, []
     for g, (bx0, by0, bx1, by1) in blocks.items():
         (lx, ty), (rx, by) = f((bx0 - GROUP_PAD, by1 + GROUP_PAD)), f((bx1 + GROUP_PAD, by0 - GROUP_PAD))
         rects[g] = (lx + 3, ty + 3, rx - 3, by - 3)
         d.rectangle([lx, ty, rx, by], outline=GROUP_INK, width=3)
         tb = d.textbbox(((lx + rx) / 2, ty - 22), g, font=font, anchor="mm")
-        tag = (tb[0] - 6, tb[1] - 4, tb[2] + 6, tb[3] + 4)
-        taken.append(tag)
-        tags.append((g, tag))
-    if key:
-        return keyed(img, d, font, (w, h), objects, labels, kinds, shades, owns, tags, zoom, (x0, y0, x1, y1))
-    for (oid, _), (name, centre), own in zip(objects, named, owns) if names else []:
+        tags.append((g, (tb[0] - 6, tb[1] - 4, tb[2] + 6, tb[3] + 4)))
+    return rects, tags
+
+
+def _place_labels(d, font, f, objects, named, owns, groups, rects, taken, mask, size):
+    """Find each label's box (appended to `taken`) and draw the leader line to any box set off its
+    object; returns the leader lines."""
+    lines = []
+    for (oid, _), (name, centre), own in zip(objects, named, owns):
         at = f(centre)
-        (x, y), box = label_spot(d, font, name, at, taken, mask, (w, h), lines, own, rects.get(groups.get(oid)))
+        (x, y), box = label_spot(d, font, name, at, taken, mask, size, lines, own, rects.get(groups.get(oid)))
         taken.append(box)
         if (x, y) != at:
             lines.append((at, (x, y)))
             d.line([at, (x, y)], fill=(255, 255, 255), width=2)
             d.ellipse([at[0] - 4, at[1] - 4, at[0] + 4, at[1] + 4], fill=(255, 255, 255))
-    for g, box in tags:
-        d.rectangle(box, fill=GROUP_INK)
-        d.text(((box[0] + box[2]) / 2, (box[1] + box[3]) / 2), g, fill=(0, 0, 0), font=font, anchor="mm")
-    for (name, centre), box in zip(named if names else [], taken[len(tags):]):
-        d.rectangle(box, fill=(255, 255, 255))
-        d.text(((box[0] + box[2]) / 2, (box[1] + box[3]) / 2), name, fill=(0, 0, 0), font=font, anchor="mm")
-    bed_caption(d, font, w, h, zoom, (x0, y0, x1, y1))
-    return img, named, taken, lines
+    return lines
+
+
+def _ink_boxes(d, font, boxes, fill):
+    """Each (text, box) as a filled box with its text in black at the centre."""
+    for text, box in boxes:
+        d.rectangle(box, fill=fill)
+        d.text(((box[0] + box[2]) / 2, (box[1] + box[3]) / 2), text, fill=(0, 0, 0), font=font, anchor="mm")
 
 
 def bed_caption(d, font, w, h, zoom, span):

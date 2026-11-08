@@ -198,9 +198,6 @@
   "tools/piece_grams.py::piece_grams": [
    11
   ],
-  "tools/print_review.py::bed_picture": [
-   18
-  ],
   "tools/print_review.py::gcode_layer": [
    14
   ],
