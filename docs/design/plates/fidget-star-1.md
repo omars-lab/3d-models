@@ -1,8 +1,9 @@
 ---
 plate: fidget-star-1
+print_log: '[[print-logs/fidget-star-1|print log]]'
 recipe: fidget-star-1.yaml
 iteration: 1
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "Does the 8-point fidget star print on its own, with no supports, with rings that move freely?"
@@ -62,6 +63,14 @@ The slice: the star alone on the bed.
 |---|---|---|
 | FIDGET STAR | about 78.0 x 78.0 x 18.0 | 138.3, 128 |
 
+## The print
+
+The print as the chamber camera saw it: 21 pictures from 15:57 to 17:03 UTC, half a second each, the last held. Made by the monitor-print skill's `print_monitor.py --publish`; what the printer said is in the print log.
+
+![fidget-star-1 printing, as the chamber camera saw it](fidget-star-1-media/timelapse.webp)
+
+![fidget-star-1 finished, on the bed](fidget-star-1-media/finished.webp)
+
 ## Cost and risk
 
 One bed, 58 min, 29.34 g (local slice, 2026-11-08, X2D 0.20 mm Standard preset and Bambu PLA Basic, sliced for the Textured PEI plate; no supports, no raft, the automatic brim setting added none, and the slicer raised no warnings). On toys-1 the star shared the bed with the cube and the ball, 5 h 40 min and 89.48 g in all.
@@ -89,7 +98,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-11-08 | approved | Omar, in chat: "Send it in green" | iteration 1 @ e391cb8ec8 in #00AE42 | |
+| 2026-11-08 | approved | Omar, in chat: "Send it in green" | iteration 1 @ e391cb8ec8 in #00AE42 | sent 2026-11-08 |
 
 ## Timeline
 
@@ -97,3 +106,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-11-08 | proposed — at Omar's ask: the fidget star from toys-1 on a plate of its own | this page |
 | 2026-11-08 | sliced — one bed, 58 min, 29.34 g, no supports, no warnings | this page |
+| 2026-11-08 | sent — by `bambu print send`; spends the approval of 2026-11-08, iteration 1 @ e391cb8ec8 in #00AE42 | this page |
