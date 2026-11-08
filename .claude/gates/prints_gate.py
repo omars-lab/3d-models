@@ -309,43 +309,19 @@ def _missing(container: dict, keys) -> list[str]:
     return [k for k in keys if k not in container]
 
 
-def check_record(
-    rec: Path, seen_digests: dict[str, str], shipped: bool = True
-) -> tuple[list[str], int, int]:
-    """Findings for one record dir, plus (readings, photos) counted for R4.
-
-    `shipped` says whether this record lives in the shipped tree (docs/prints/) vs.
-    the gitignored staging area (.bambu/records/, what `bambu validate record` scans
-    by default). Only R14 depends on it: a pre-slice status is drift once *shipped*,
-    but is exactly what a fresh `--record` draft looks like in staging. Every other
-    rule is location-independent, so `shipped` defaults True (whole-tree callers).
-    """
-    name = rec.name
+def _check_header(name: str, data: dict) -> list[str]:
+    """The run name, R6's status vocabulary, R7's sheet, R9's feedback shape and the profile."""
     out: list[str] = []
-    index = rec / "index.md"
-    if not index.exists():
-        return [f"{name}: no index.md in the record directory"], 0, 0
-
-    data, err = parse_frontmatter(index.read_text(encoding="utf-8"))
-    if err:
-        return [f"{name}: {err}"], 0, 0
-
-    for k in _missing(data, REQUIRED_TOP):
-        out.append(f"{name}: frontmatter is missing required key '{k}'")
-    # Without the core keys the rest cannot be read; report what is present.
-    if out:
-        return out, 0, 0
-
     if not RUN_NAME.match(name):
         out.append(f"{name}: directory name is not <YYYY-MM-DD>-<slug>")
     if data.get("run") != name:
         out.append(f"{name}: run key '{data.get('run')}' does not match the directory name")
 
     # R6 — status is a member of the lifecycle vocabulary (design §3.1). Only
-    # membership here; the state->required-field consistency is R10-R14 below. Named
-    # `rec_status`, distinct from the `status` the R1 blob-resolve loop reuses below —
-    # they are two unrelated states and one name for both is exactly the bug D-052
-    # warns of. `status` is in REQUIRED_TOP, so it is present by the time we get here.
+    # membership here; the state->required-field consistency is R10-R14 in
+    # _check_freshness. Named `rec_status`, distinct from the `status` the R1
+    # blob-resolve loop uses — they are two unrelated states and one name for both is
+    # exactly the bug D-052 warns of. `status` is in REQUIRED_TOP, so it is present here.
     rec_status = data.get("status")
     if rec_status not in STATUS_VOCAB:
         out.append(f"{name}: R6 status '{rec_status}' is not one of {sorted(STATUS_VOCAB)}")
@@ -374,25 +350,53 @@ def check_record(
     else:
         for f in _missing(profile, PROFILE_FIELDS):
             out.append(f"{name}: profile field '{f}' is missing")
+    return out
 
+
+def _check_pin(name: str, data: dict) -> tuple[list[str], str | None]:
+    """pins.bikar_ref is present and (R16) on bikar main; returns the findings and the ref."""
     pins = data.get("pins") or {}
     bikar_ref = pins.get("bikar_ref") if isinstance(pins, dict) else None
     if not bikar_ref:
-        out.append(f"{name}: pins.bikar_ref is missing — geometry cannot be re-resolved")
-    else:
-        # R16 — the pin is a commit on bikar main, not a branch commit a squash replaces.
-        on_main = pin_on_main(str(bikar_ref))
-        if on_main == "skip":
-            out.append(f"__skip__{name}:bikar_ref")
-        elif on_main == "off-main":
-            out.append(f"{name}: R16 pins.bikar_ref {str(bikar_ref)[:12]} is not on bikar origin/main "
-                       "— pin the merge commit on main (fetch bikar first if it merged since)")
+        return [f"{name}: pins.bikar_ref is missing — geometry cannot be re-resolved"], None
+    # R16 — the pin is a commit on bikar main, not a branch commit a squash replaces.
+    on_main = pin_on_main(str(bikar_ref))
+    if on_main == "skip":
+        return [f"__skip__{name}:bikar_ref"], bikar_ref
+    if on_main == "off-main":
+        return [f"{name}: R16 pins.bikar_ref {str(bikar_ref)[:12]} is not on bikar origin/main "
+                "— pin the merge commit on main (fetch bikar first if it merged since)"], bikar_ref
+    return [], bikar_ref
 
-    # R1 — identity, per object, at the pinned commit.
-    objects = data.get("objects") or []
-    if not isinstance(objects, list) or not objects:
-        out.append(f"{name}: objects[] is empty — a record with no printed object")
-        objects = []
+
+def _check_object_source(rec: Path, name: str, entry: str, src, decl, bikar_ref) -> list[str]:
+    """R1 for one object: its source path is resolvable and its digest matches."""
+    if not isinstance(src, str) or not src.startswith(("bikar:", "3d-models:")):
+        return [f"{name}: {entry} source '{src}' is not a bikar: or 3d-models: path"]
+    if not (isinstance(decl, str) and SHA256_HEX.match(decl)):
+        return [f"{name}: {entry} source_sha256 is not a 64-hex digest"]
+    if src.startswith("3d-models:"):
+        status, why = resolve_local_source(rec.parents[2], src[len("3d-models:"):], decl)
+        if status == "skip":
+            return [f"__skip__{name}:{entry}"]
+        return [f"{name}: R1 {entry} {why}"] if status == "bad" else []
+    if not bikar_ref:
+        return []
+    status, real = resolve_blob_sha(bikar_ref, src[len("bikar:"):])
+    if status == "skip":
+        return [f"__skip__{name}:{entry}"]
+    if status == "missing":
+        return [f"{name}: R1 {entry} source {src[len('bikar:'):]} "
+                f"is not tracked in bikar at {bikar_ref[:12]}"]
+    if real != decl:
+        return [f"{name}: R1 {entry} source_sha256 {decl[:12]} "
+                f"does not equal the blob read at {bikar_ref[:12]} ({real[:12]})"]
+    return []
+
+
+def _check_objects(rec: Path, name: str, objects: list, bikar_ref) -> list[str]:
+    """R1 identity per object at the pinned commit, and R8's count."""
+    out: list[str] = []
     for i, obj in enumerate(objects):
         if not isinstance(obj, dict):
             out.append(f"{name}: objects[{i}] is not a mapping")
@@ -403,42 +407,19 @@ def check_record(
         # it, meaning 1); when present it is how many copies of this object the plate
         # carried, so it must be a plain int >= 1. bool is an int subclass in Python
         # and `count: true` is a mistake, not a count of 1 — exclude it explicitly.
-        entry_id = obj.get("entry", f"#{i}")
+        entry = obj.get("entry", f"#{i}")
         count = obj.get("count", 1)
         if isinstance(count, bool) or not isinstance(count, int) or count < 1:
-            out.append(f"{name}: R8 objects {entry_id} count {count!r} is not an integer >= 1")
-        src = obj.get("source", "")
-        decl = obj.get("source_sha256", "")
-        entry = obj.get("entry", f"#{i}")
-        if not isinstance(src, str) or not src.startswith(("bikar:", "3d-models:")):
-            out.append(f"{name}: {entry} source '{src}' is not a bikar: or 3d-models: path")
-            continue
-        if not (isinstance(decl, str) and SHA256_HEX.match(decl)):
-            out.append(f"{name}: {entry} source_sha256 is not a 64-hex digest")
-            continue
-        if src.startswith("3d-models:"):
-            status, why = resolve_local_source(rec.parents[2], src[len("3d-models:"):], decl)
-            if status == "skip":
-                out.append(f"__skip__{name}:{entry}")
-            elif status == "bad":
-                out.append(f"{name}: R1 {entry} {why}")
-            continue
-        if not bikar_ref:
-            continue
-        status, real = resolve_blob_sha(bikar_ref, src[len("bikar:"):])
-        if status == "skip":
-            out.append(f"__skip__{name}:{entry}")
-        elif status == "missing":
-            out.append(f"{name}: R1 {entry} source {src[len('bikar:'):]} "
-                       f"is not tracked in bikar at {bikar_ref[:12]}")
-        elif real != decl:
-            out.append(f"{name}: R1 {entry} source_sha256 {decl[:12]} "
-                       f"does not equal the blob read at {bikar_ref[:12]} ({real[:12]})")
+            out.append(f"{name}: R8 objects {entry} count {count!r} is not an integer >= 1")
+        out += _check_object_source(rec, name, entry, obj.get("source", ""),
+                                    obj.get("source_sha256", ""), bikar_ref)
+    return out
 
-    # R2 — photos: presence, digest, no strays, cross-record uniqueness.
-    photos = data.get("photos") or []
-    listed = set()
-    photo_dir = rec / "photos"
+
+def _check_photos(rec: Path, name: str, photos, seen_digests: dict[str, str]) -> tuple[list[str], set]:
+    """R2 — photos: presence, digest, no strays, cross-record uniqueness."""
+    out: list[str] = []
+    listed: set = set()
     for i, ph in enumerate(photos if isinstance(photos, list) else []):
         if not isinstance(ph, dict) or "file" not in ph or "sha256" not in ph:
             out.append(f"{name}: photos[{i}] needs both 'file' and 'sha256'")
@@ -458,17 +439,21 @@ def check_record(
                        f"— one JPEG cannot back two plates")
         else:
             seen_digests[got] = f"{name}/{rel}"
+    photo_dir = rec / "photos"
     if photo_dir.is_dir():
         for f in sorted(photo_dir.iterdir()):
             if f.is_file() and f"photos/{f.name}" not in listed:
                 out.append(f"{name}: R2 photos/{f.name} sits in photos/ "
                            f"but no photos[] entry names it")
+    return out, listed
 
-    # R5 — a reading that settles a real bet must state what it was tested against
-    # (`expected`) and how it landed (`verdict`). A reading with `settles: ~` is
-    # exempt: it moves no bet, so there is nothing to compare it against.
-    readings = data.get("readings") or []
-    for i, rd in enumerate(readings if isinstance(readings, list) else []):
+
+def _check_readings(name: str, readings: list) -> list[str]:
+    """R5 — a reading that settles a real bet must state what it was tested against
+    (`expected`) and how it landed (`verdict`). A reading with `settles: ~` is
+    exempt: it moves no bet, so there is nothing to compare it against."""
+    out: list[str] = []
+    for i, rd in enumerate(readings):
         if not isinstance(rd, dict):
             continue
         settles = rd.get("settles")
@@ -483,78 +468,132 @@ def check_record(
         if not (isinstance(vd, str) and vd in VERDICT_VOCAB):
             out.append(f"{name}: R5 reading {entry} settles {settles} but 'verdict' "
                        f"is not one of {sorted(VERDICT_VOCAB)}")
+    return out
 
-    # R10-R14 — freshness: the `status` must be backed by the evidence that state
-    # implies (§3.1 Validator, §6.3). R6 above checked membership; these check
-    # state->field consistency. Skipped when `status` is not a member — the R6 finding
-    # already fired and the state groups below would silently miss it otherwise.
-    if rec_status in STATUS_VOCAB:
-        readings_list = readings if isinstance(readings, list) else []
 
-        # R10 — a plate at or past `sliced` names the `.3mf` it sliced / came off
-        # (§3.1). Presence + `.3mf` suffix only; like R7's sheet the artifact may be
-        # large or gitignored, so the record must name it, not resolve it on disk.
-        if rec_status in POST_SLICE_STATES:
-            plate_3mf = data.get("plate_3mf")
-            if not (isinstance(plate_3mf, str) and plate_3mf.strip().endswith(".3mf")):
-                out.append(f"{name}: R10 status '{rec_status}' is at or past 'sliced' but "
-                           "'plate_3mf' does not name a .3mf (the plate it sliced/came off)")
+def _check_piece_verdicts(name: str, objects: list) -> list[str]:
+    """R15 — every printed piece carries its own verdict; notes, when present, are a
+    list of non-empty strings. Per object, not per plate (K6/D2)."""
+    out: list[str] = []
+    for i, obj in enumerate(objects):
+        if not isinstance(obj, dict):
+            continue
+        entry_id = obj.get("entry", f"#{i}")
+        verdict = obj.get("verdict")
+        if verdict not in PIECE_VERDICTS:
+            out.append(f"{name}: R15 objects {entry_id} verdict {verdict!r} is not one of "
+                       f"{', '.join(PIECE_VERDICTS)} — say what this piece taught")
+        notes = obj.get("notes", [])
+        if not (isinstance(notes, list)
+                and all(isinstance(n, str) and n.strip() for n in notes)):
+            out.append(f"{name}: R15 objects {entry_id} notes is not a list of "
+                       "non-empty strings")
+    return out
 
-        # R11 — a terminal-physical record carries a feedback block, present even if
-        # empty (§6.3 PASS for `printed`; the recovery loop, task #37, for `failed`).
-        # R9 checked it is a mapping when present; R11 requires it be present at all.
-        if rec_status in FEEDBACK_STATES and feedback is None:
+
+def _check_freshness(name: str, data: dict, objects: list, readings: list, shipped: bool) -> list[str]:
+    """R10-R15 — the `status` must be backed by the evidence that state implies
+    (§3.1 Validator, §6.3). R6 checked membership; these check state->field consistency.
+    Skipped when `status` is not a member — the R6 finding already fired and the state
+    groups below would silently miss it otherwise."""
+    rec_status = data.get("status")
+    if rec_status not in STATUS_VOCAB:
+        return []
+    out: list[str] = []
+
+    # R10 — a plate at or past `sliced` names the `.3mf` it sliced / came off
+    # (§3.1). Presence + `.3mf` suffix only; like R7's sheet the artifact may be
+    # large or gitignored, so the record must name it, not resolve it on disk.
+    if rec_status in POST_SLICE_STATES:
+        plate_3mf = data.get("plate_3mf")
+        if not (isinstance(plate_3mf, str) and plate_3mf.strip().endswith(".3mf")):
+            out.append(f"{name}: R10 status '{rec_status}' is at or past 'sliced' but "
+                       "'plate_3mf' does not name a .3mf (the plate it sliced/came off)")
+
+    # R11 — a terminal-physical record carries a feedback block, present even if
+    # empty (§6.3 PASS for `printed`; the recovery loop, task #37, for `failed`).
+    # R9 checked it is a mapping when present; R11 requires it be present at all.
+    if rec_status in FEEDBACK_STATES:
+        if data.get("feedback") is None:
             out.append(f"{name}: R11 status '{rec_status}' requires a 'feedback' block "
                        "(present, even if empty — §6.3), and none is set")
+        out += _check_piece_verdicts(name, objects)
 
-        # R15 — every printed piece carries its own verdict; notes, when present, are a
-        # list of non-empty strings. Per object, not per plate (K6/D2).
-        if rec_status in FEEDBACK_STATES:
-            for i, obj in enumerate(objects):
-                if not isinstance(obj, dict):
-                    continue
-                entry_id = obj.get("entry", f"#{i}")
-                verdict = obj.get("verdict")
-                if verdict not in PIECE_VERDICTS:
-                    out.append(f"{name}: R15 objects {entry_id} verdict {verdict!r} is not one of "
-                               f"{', '.join(PIECE_VERDICTS)} — say what this piece taught")
-                notes = obj.get("notes", [])
-                if not (isinstance(notes, list)
-                        and all(isinstance(n, str) and n.strip() for n in notes)):
-                    out.append(f"{name}: R15 objects {entry_id} notes is not a list of "
-                               "non-empty strings")
+    # R12 — a `measured` record carries at least one reading (§6.3 FAIL). Hard case
+    # (K6/D2): a `feedback` block does NOT discharge it, so this checks readings.
+    if rec_status == "measured" and not readings:
+        out.append(f"{name}: R12 status 'measured' but readings[] is empty "
+                   "— it claims a measurement while carrying none")
 
-        # R12 — a `measured` record carries at least one reading (§6.3 FAIL). Hard case
-        # (K6/D2): a `feedback` block does NOT discharge it, so this checks readings.
-        if rec_status == "measured" and not readings_list:
-            out.append(f"{name}: R12 status 'measured' but readings[] is empty "
-                       "— it claims a measurement while carrying none")
+    # R13 — a `propagated` record names a bet (§3.1 FAIL). Hard case (K6/D2): the
+    # aggregate "has readings" cannot discharge it — one reading must name a real
+    # CAL bet, not `~`.
+    if rec_status == "propagated" and not any(
+        isinstance(rd, dict) and isinstance(rd.get("settles"), str)
+        and CAL_ID.match(rd["settles"])
+        for rd in readings
+    ):
+        out.append(f"{name}: R13 status 'propagated' but no readings[].settles "
+                   "names a bet — it claims to have moved a constant while "
+                   "pointing at nothing")
 
-        # R13 — a `propagated` record names a bet (§3.1 FAIL). Hard case (K6/D2): the
-        # aggregate "has readings" cannot discharge it — one reading must name a real
-        # CAL bet, not `~`.
-        if rec_status == "propagated":
-            has_bet = any(
-                isinstance(rd, dict) and isinstance(rd.get("settles"), str)
-                and CAL_ID.match(rd["settles"])
-                for rd in readings_list
-            )
-            if not has_bet:
-                out.append(f"{name}: R13 status 'propagated' but no readings[].settles "
-                           "names a bet — it claims to have moved a constant while "
-                           "pointing at nothing")
+    # R14 — a shipped record (docs/prints/) must be reconciled past planning before
+    # it ships (§6.3, §3.2): the plan artifact is composed-not-stored, so a shipped
+    # `draft`/`planned` record is drift. Scoped to the shipped tree: the very same
+    # status is legitimate in the staging area (.bambu/records/), where a fresh
+    # `--record` draft is always pre-slice — firing R14 there would refuse the draft
+    # the scaffold's own closing line tells the operator to gate.
+    if shipped and rec_status in PRE_SHIP_STATES:
+        out.append(f"{name}: R14 status '{rec_status}' is pre-slice but the record is "
+                   "shipped under docs/prints/ — reconcile it past planning first")
+    return out
 
-        # R14 — a shipped record (docs/prints/) must be reconciled past planning before
-        # it ships (§6.3, §3.2): the plan artifact is composed-not-stored, so a shipped
-        # `draft`/`planned` record is drift. Scoped to the shipped tree: the very same
-        # status is legitimate in the staging area (.bambu/records/), where a fresh
-        # `--record` draft is always pre-slice — firing R14 there would refuse the draft
-        # the scaffold's own closing line tells the operator to gate.
-        if shipped and rec_status in PRE_SHIP_STATES:
-            out.append(f"{name}: R14 status '{rec_status}' is pre-slice but the record is "
-                       "shipped under docs/prints/ — reconcile it past planning first")
 
-    return out, (len(readings) if isinstance(readings, list) else 0), len(listed)
+def check_record(
+    rec: Path, seen_digests: dict[str, str], shipped: bool = True
+) -> tuple[list[str], int, int]:
+    """Findings for one record dir, plus (readings, photos) counted for R4.
+
+    `shipped` says whether this record lives in the shipped tree (docs/prints/) vs.
+    the gitignored staging area (.bambu/records/, what `bambu validate record` scans
+    by default). Only R14 depends on it: a pre-slice status is drift once *shipped*,
+    but is exactly what a fresh `--record` draft looks like in staging. Every other
+    rule is location-independent, so `shipped` defaults True (whole-tree callers).
+    Each rule group is its own helper above; the findings come out in rule order.
+    """
+    name = rec.name
+    index = rec / "index.md"
+    if not index.exists():
+        return [f"{name}: no index.md in the record directory"], 0, 0
+
+    data, err = parse_frontmatter(index.read_text(encoding="utf-8"))
+    if err:
+        return [f"{name}: {err}"], 0, 0
+
+    # Without the core keys the rest cannot be read; report what is present.
+    out = [f"{name}: frontmatter is missing required key '{k}'" for k in _missing(data, REQUIRED_TOP)]
+    if out:
+        return out, 0, 0
+
+    out += _check_header(name, data)
+    pin_findings, bikar_ref = _check_pin(name, data)
+    out += pin_findings
+
+    objects = data.get("objects") or []
+    if not isinstance(objects, list) or not objects:
+        out.append(f"{name}: objects[] is empty — a record with no printed object")
+        objects = []
+    out += _check_objects(rec, name, objects, bikar_ref)
+
+    photo_findings, listed = _check_photos(rec, name, data.get("photos") or [], seen_digests)
+    out += photo_findings
+
+    readings = data.get("readings") or []
+    readings_list = readings if isinstance(readings, list) else []
+    out += _check_readings(name, readings_list)
+    out += _check_freshness(name, data, objects, readings_list, shipped)
+
+    return out, len(readings_list), len(listed)
 
 
 def is_shipped_tree(prints: Path) -> bool:

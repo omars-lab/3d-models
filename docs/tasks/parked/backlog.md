@@ -45,10 +45,13 @@ complexity check lists the 86 Python functions over 10 and stops any new one.
   bikar sessions and judge against the design's PASS and FAIL lines. The claude-techniques session
   (social-presence-hub) runs a side-by-side test of the graph on real bikar tasks, on the same
   commit, once Omar OKs its plan; read its result beside the FAQ rerun rather than either alone.
-- **After the trial:** a script for links between repos (design question 3), and a cleanup skill
-  fed by the complexity list. The list is real work now: 86 functions, the worst
-  `prints_gate.py::check_record` at 57 and `tools/move_doc.py::rewrite_text` at 35. Shrink it with
-  `complexity_gate.py --update` after each split.
+- **After the trial:** a script for links between repos (design question 3).
+- **Shrinking the complexity list, by hand, a function a PR** (no skill: the design's §5 says
+  gate, not skill, and the gate is hook 55). `complexity_gate.py --update` after each split.
+  2026-11-07: `prints_gate.py::check_record` (57) split into one helper per rule, gate output on
+  the 101 staging records unchanged; the list went from 86 functions to 85. Next is
+  `tools/move_doc.py::rewrite_text` at 35. A cleanup skill comes back only if this proves a
+  repeated manual task, and then as an extension of the built-in `simplify` skill.
 - **A post about the design**, which Omar asked for once he signed off: written with the
   claude-techniques session, numbers and design only. A second post can follow with the trial's
   result.
