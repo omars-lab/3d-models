@@ -123,9 +123,6 @@
   ".claude/skills/maintain-vocabulary/scripts/vocabulary.py::plate_knobs": [
    12
   ],
-  ".claude/skills/maintain-vocabulary/scripts/vocabulary.py::problems": [
-   19
-  ],
   ".claude/skills/maintain-vocabulary/scripts/vocabulary.py::render": [
    13
   ],
