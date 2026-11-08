@@ -27,8 +27,11 @@ relayed by the other sessions, go into that record and the next prints:
   orb, not inside". toys-1 had supports on for the whole bed (`tools/bambu/presets/supports-0.20.json`),
   so the slicer filled the lattice too. Next time the ball prints, slice it with supports that
   stand only on the bed (Bambu Studio's "on build plate only", `support_on_build_plate_only`),
-  which cannot start inside the ball, and check the slice picture that none do. Not built yet:
-  he has not asked for another ball.
+  which cannot start inside the ball, and check the slice picture that none do. Built as
+  [ball-1](../../design/plates/ball-1.md): "on build plate only" alone still grew support into the
+  hollow, so the recipe adds a support blocker (a sphere inside the ball, placed by the plate tool)
+  and plain supports. The G-code check finds three ~1 mm nubs in lower windows, none in the
+  hollow. Waiting on his yes and color.
 - **The star on its own.** His words: "i want to create an individual plate with just the
   start", read as the star. Built as [fidget-star-1](../../design/plates/fidget-star-1.md), no
   supports, waiting on his yes and color.
