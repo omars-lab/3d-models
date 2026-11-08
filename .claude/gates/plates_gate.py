@@ -346,9 +346,9 @@ def appended_only(before: str, now: str) -> str | None:
     return None
 
 
-def check_print_logs(plates: Path, pages: list) -> list[str]:
-    """P10: the logs in `print-logs/`, the pages' links to them, and no log left in a page."""
-    out: list[str] = []
+def _page_log_links(plates: Path, pages: list, out: list[str]) -> set[str]:
+    """P10 on the pages: no '## Print log' left in one, and each print_log names its own log,
+    which exists. Returns the plates whose link holds."""
     linked: set[str] = set()
     for path, data, body, err in pages:
         if err:
@@ -366,29 +366,46 @@ def check_print_logs(plates: Path, pages: list) -> list[str]:
             out.append(f"{name}: P10 print_log names {LOGS}/{name}.md, which does not exist")
         else:
             linked.add(name)
+    return linked
+
+
+def _log_rows(shown: str, text: str, out: list[str]) -> None:
+    """P10 on one log's table: it reads, every event is a known one, and rows run in time order."""
+    rows, problem = print_log(text)
+    if problem:
+        out.append(f"{shown}: P10 {problem}")
+    for t, ev in rows:
+        if ev not in PRINT_EVENTS:
+            out.append(f"{shown}: P10 event '{ev}' at {t} is not one of {list(PRINT_EVENTS)}")
+    times_seen = [t for t, _ in rows]
+    if times_seen != sorted(times_seen):
+        out.append(f"{shown}: P10 rows are not in time order")
+
+
+def _one_log(log: Path, linked: set[str], out: list[str]) -> None:
+    """P10 on one log file: its plate, a page linking it, its rows, and only appends since master."""
+    name, shown = log.stem, f"{LOGS}/{log.name}"
+    text = log.read_text(encoding="utf-8")
+    data, err = parse_frontmatter(text)
+    if err or (data or {}).get("plate") != name:
+        out.append(f"{shown}: P10 its frontmatter's plate is not '{name}'")
+    if name not in linked:
+        out.append(f"{shown}: P10 no plate page links it — {name}.md needs "
+                   f"print_log: '{log_link(name)}'")
+    _log_rows(shown, text, out)
+    before = it._git(log, "show", f"{it.MASTER}:./{log.name}")
+    why = appended_only(before, text) if before is not None else None
+    if why:
+        out.append(f"{shown}: P10 the log is append-only and {why} against {it.MASTER}")
+
+
+def check_print_logs(plates: Path, pages: list) -> list[str]:
+    """P10: the logs in `print-logs/`, the pages' links to them, and no log left in a page."""
+    out: list[str] = []
+    linked = _page_log_links(plates, pages, out)
     logs = plates / LOGS
     for log in sorted(p for p in logs.glob("*.md") if not is_sidecar(p)):
-        name, shown = log.stem, f"{LOGS}/{log.name}"
-        text = log.read_text(encoding="utf-8")
-        data, err = parse_frontmatter(text)
-        if err or (data or {}).get("plate") != name:
-            out.append(f"{shown}: P10 its frontmatter's plate is not '{name}'")
-        if name not in linked:
-            out.append(f"{shown}: P10 no plate page links it — {name}.md needs "
-                       f"print_log: '{log_link(name)}'")
-        rows, problem = print_log(text)
-        if problem:
-            out.append(f"{shown}: P10 {problem}")
-        for t, ev in rows:
-            if ev not in PRINT_EVENTS:
-                out.append(f"{shown}: P10 event '{ev}' at {t} is not one of {list(PRINT_EVENTS)}")
-        times_seen = [t for t, _ in rows]
-        if times_seen != sorted(times_seen):
-            out.append(f"{shown}: P10 rows are not in time order")
-        before = it._git(log, "show", f"{it.MASTER}:./{log.name}")
-        why = appended_only(before, text) if before is not None else None
-        if why:
-            out.append(f"{shown}: P10 the log is append-only and {why} against {it.MASTER}")
+        _one_log(log, linked, out)
     on_master = it._git(plates / "README.md", "ls-tree", "--name-only", it.MASTER, f"{LOGS}/")
     for rel in (on_master or "").split():
         if rel.endswith(".md") and not (plates / rel).is_file():
