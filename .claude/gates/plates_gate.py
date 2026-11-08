@@ -505,43 +505,49 @@ def yes_lapsed(path: Path, row: dict) -> str | None:
     return None
 
 
-def check_approvals(name: str, data: dict, body: str) -> list[str]:
-    """P2: the table reads, its rows agree with each other and with the timeline's sends."""
-    out = [f"{name}: P2 `{k}` is in the frontmatter — approvals moved to the page's "
-           "## Approvals table (D-096)" for k in ("approved", "approved_on") if k in data]
-    rows, bad = approvals(body)
-    if bad:
-        return out + [f"{name}: P2 {bad} — `python3 {APPROVE_TOOL} {name} --table` "
-                      "writes an empty one"]
-    for i, r in enumerate(rows):
-        d, dec, spent = r["date"], r["decision"], r["spent"]
-        where = f"{name}: P2 Approvals row {i + 1} ({d})"
-        try:
-            dt.date.fromisoformat(d)
-        except ValueError:
-            out.append(f"{where}: the date is not YYYY-MM-DD")
-            continue
-        if dec not in DECISIONS:
-            out.append(f"{where}: decision {dec!r} is not one of {list(DECISIONS)}")
-            continue
-        if not r["by"]:
-            out.append(f"{where}: By is empty — say who decided, and how")
-        if dec in ("approved", "standing") and not it.COVERS.match(r["covers"]) and not (
-                d < TABLE_FROM and r["covers"] == "—"):
-            out.append(f"{where}: an {dec} row covers {r['covers']!r}, not "
-                       "`iteration N @ <commit>`")
-        if dec == "approved":
-            m = SPENT.match(spent)
-            if spent and not m:
-                out.append(f"{where}: Spent by {spent!r} is not empty, `sent <date>`, "
-                           "`replaced <date>` or `reset <date>`")
-            elif m and m.group(2) < d:
-                out.append(f"{where}: spent on {m.group(2)}, before it was given")
-            elif m and m.group(1) == "replaced" and not any(
-                    x["date"] == m.group(2) and x["decision"] in DECISIONS for x in rows[i + 1:]):
-                out.append(f"{where}: replaced on {m.group(2)}, but no later decision that day")
-        elif spent != "—":
-            out.append(f"{where}: a {dec} row is not spent, so Spent by is `—`, not {spent!r}")
+def _approval_spent(where: str, r: dict, rows: list[dict], i: int) -> list[str]:
+    """An approved row's Spent by: empty, or sent / replaced / reset on a day not before it."""
+    d, spent = r["date"], r["spent"]
+    m = SPENT.match(spent)
+    if spent and not m:
+        return [f"{where}: Spent by {spent!r} is not empty, `sent <date>`, "
+                "`replaced <date>` or `reset <date>`"]
+    if m and m.group(2) < d:
+        return [f"{where}: spent on {m.group(2)}, before it was given"]
+    if m and m.group(1) == "replaced" and not any(
+            x["date"] == m.group(2) and x["decision"] in DECISIONS for x in rows[i + 1:]):
+        return [f"{where}: replaced on {m.group(2)}, but no later decision that day"]
+    return []
+
+
+def _approval_row(name: str, rows: list[dict], i: int) -> list[str]:
+    """One row of the table on its own: date, decision, who, what it covers, Spent by."""
+    r = rows[i]
+    d, dec, spent = r["date"], r["decision"], r["spent"]
+    where = f"{name}: P2 Approvals row {i + 1} ({d})"
+    try:
+        dt.date.fromisoformat(d)
+    except ValueError:
+        return [f"{where}: the date is not YYYY-MM-DD"]
+    if dec not in DECISIONS:
+        return [f"{where}: decision {dec!r} is not one of {list(DECISIONS)}"]
+    out = []
+    if not r["by"]:
+        out.append(f"{where}: By is empty — say who decided, and how")
+    if dec in ("approved", "standing") and not it.COVERS.match(r["covers"]) and not (
+            d < TABLE_FROM and r["covers"] == "—"):
+        out.append(f"{where}: an {dec} row covers {r['covers']!r}, not "
+                   "`iteration N @ <commit>`")
+    if dec == "approved":
+        out += _approval_spent(where, r, rows, i)
+    elif spent != "—":
+        out.append(f"{where}: a {dec} row is not spent, so Spent by is `—`, not {spent!r}")
+    return out
+
+
+def _approvals_open(name: str, data: dict, rows: list[dict]) -> list[str]:
+    """The rows together: in date order, at most one open, and the stage agreeing with it."""
+    out = []
     if [r["date"] for r in rows] != sorted(r["date"] for r in rows):
         out.append(f"{name}: P2 Approvals rows are not in date order")
     live = [i for i, r in enumerate(rows) if r["decision"] == "approved" and not r["spent"]]
@@ -556,14 +562,24 @@ def check_approvals(name: str, data: dict, body: str) -> list[str]:
         out.append(f"{name}: P2 stage '{stage}' but "
                    + ("an approval is open — record the stage as approved"
                       if live else "no approval is open in the Approvals table"))
-    # Sends: each spent approval names a send, and each send since the table began spent one.
-    sent = [(d, rest) for d, ev, rest in timeline(body) if ev == "sent"]
-    standing_from = min((r["date"] for r in rows if r["decision"] == "standing"), default=None)
+    return out
+
+
+def _spent_by_day(rows: list[dict]) -> dict[str, int]:
     spent_on: dict[str, int] = {}
     for r in rows:
         m = SPENT.match(r["spent"]) if r["decision"] == "approved" else None
         if m and m.group(1) == "sent":
             spent_on[m.group(2)] = spent_on.get(m.group(2), 0) + 1
+    return spent_on
+
+
+def _approvals_sends(name: str, rows: list[dict], body: str) -> list[str]:
+    """Sends: each spent approval names a send, and each send since the table began spent one."""
+    out = []
+    sent = [(d, rest) for d, ev, rest in timeline(body) if ev == "sent"]
+    standing_from = min((r["date"] for r in rows if r["decision"] == "standing"), default=None)
+    spent_on = _spent_by_day(rows)
     for d, n in sorted(spent_on.items()):
         on_day = [rest for sd, rest in sent if sd == d and "standing approval" not in rest]
         if len(on_day) < n:
@@ -579,6 +595,19 @@ def check_approvals(name: str, data: dict, body: str) -> list[str]:
             out.append(f"{name}: P2 it went out on {d} with no approval spent on it — nothing "
                        "goes out unapproved (record the yes, then `plate_approve.py --sent`)")
     return out
+
+
+def check_approvals(name: str, data: dict, body: str) -> list[str]:
+    """P2: the table reads, its rows agree with each other and with the timeline's sends."""
+    out = [f"{name}: P2 `{k}` is in the frontmatter — approvals moved to the page's "
+           "## Approvals table (D-096)" for k in ("approved", "approved_on") if k in data]
+    rows, bad = approvals(body)
+    if bad:
+        return out + [f"{name}: P2 {bad} — `python3 {APPROVE_TOOL} {name} --table` "
+                      "writes an empty one"]
+    for i in range(len(rows)):
+        out += _approval_row(name, rows, i)
+    return out + _approvals_open(name, data, rows) + _approvals_sends(name, rows, body)
 
 
 # ---------------------------------------------------------------------------

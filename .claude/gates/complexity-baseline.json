@@ -42,9 +42,6 @@
   ".claude/gates/hook_parity.py::run": [
    17
   ],
-  ".claude/gates/plates_gate.py::check_approvals": [
-   23
-  ],
   ".claude/gates/plates_gate.py::check_ids": [
    12
   ],
