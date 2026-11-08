@@ -25,8 +25,8 @@ can follow and a person can check:
 
 Why it matters. Support inside a closed lattice ball cannot be pulled out without breaking struts,
 and what is left rattles or shows through the windows. Support that stands on the orb's own surface
-leaves scars on the face people look at. Support from the bed, outside, is the kind the toys-1 page
-already expects to come off by hand.
+leaves scars on the face people look at. Support from the bed, outside, touches only the outside of the bottom half, where a hand
+can reach it and pull it off.
 
 What the rule leaves us. Once nothing may be built inside, every surface of the top half that faces
 the hollow has to hold itself up while it prints. So the real question of this doc is: **can our
@@ -39,6 +39,33 @@ flowchart LR
   orb[The orb's own surface] -.->|not allowed: column standing on it| scar[Scar on the face]
   top[Top half, inside face] -->|must hold itself up| self[Self-supporting dome + short bridges]
 ```
+
+Who and what this touches. Omar sets the rule and judges the print; bikar renders the orb; the
+survey script measures it; Bambu Studio slices it; the plates session books the print on the X2D.
+
+```mermaid
+flowchart LR
+  omar([Omar]) -->|sets the rule, judges the print| doc[This design]
+  bikar[bikar render] -->|orb mesh + print-gate log| survey[orb_support_survey.py]
+  survey -->|widest top-half gap, inside paths| doc
+  doc -->|bed-only preset| studio[Bambu Studio]
+  studio -->|G-code, read for support moves| doc
+  doc -->|proposed top-cap piece| plates([Plates session])
+  plates -->|prints on| x2d[X2D printer]
+```
+
+Use cases it enables:
+
+```mermaid
+flowchart LR
+  omar([Omar]) --> u1((Print a whole orb with no support inside))
+  omar --> u2((Pick which orb is printable as is))
+  designer([Whoever designs the next orb]) --> u3((Check a new orb's windows before slicing))
+  plates([Plates session]) --> u4((Print the top-cap test piece))
+```
+
+**User-facing surface.** None new. Option A is a preset file in `tools/bambu/presets/`; option B
+would add a bikar keyword, option C a print-gate warning; the survey script is a command-line tool.
 
 *Legend:* solid arrows are what the rule allows; dashed are what it forbids. "Bridge"[^bridge] and
 "dome" are in the glossary.
@@ -62,13 +89,14 @@ The one number that explains why the ball works is the last gap: **no window in 
 wider than 3.8 mm.** Each window is a short bridge. And the solid part of a thick dome holds itself
 up: going up one 0.2 mm layer at latitude φ, the inside edge of the wall steps inward by about
 0.2·tan φ, while the wall is t / cos φ wide in plan, so each new layer sits on roughly
-1 − 0.2·sin φ / t of the one below. For the ball (t ≈ 1.9 mm) that is about 90% at every latitude.
+1 − 0.2·sin φ / t of the one below. For the ball (t ≈ 1.9 mm) that is 89% near the pole and more lower down.
 That is geometry, not a print result; whether the overhanging inside edge sags is
 [open question 2](#8-open-questions-for-omar).
 
 The 138 mm² "outside landing on the ball" is the underside of struts at the window edges, outside
-the inner radius. With supports from the bed only, the slicer drops those (a column there would
-stand on the ball), so they too must hold themselves up. An earlier research note quoted 57 mm² for
+the inner radius. With supports from the bed only, the slicer drops a straight column there (it would
+stand on the ball); a tree from the bed may still lean round to some of them from outside, so
+which of them hold themselves up is for a slice to show. An earlier research note quoted 57 mm² for
 "lands on the model"; that came from a different threshold and did not split inside from outside,
 so the two numbers do not contradict each other, they count different faces.
 
@@ -105,7 +133,8 @@ The full table, with strut widths and all four overhang counts, is in
 
 What it says, in plain words:
 
-- **Every one of our 17 orb sources has top-half windows far wider than the ball's.** The narrowest
+- **Every one of our 15 full orbs has top-half windows far wider than the ball's.** (The two
+  Donut-Hex pieces are discs, not balls; their widest "gap" is the empty part of the ring.) The narrowest
   widest-gap is Maclado-9 at 21.9 mm, almost six times the ball's 3.8 mm. Star-Orb's widest gap
   per ring runs 7–26 mm from the equator up to 75°, and only falls under 5 mm from 82.5° up.
 - **The ball's trick is not size alone.** Star-Orb at its smallest radius (82 mm wide) still has a
@@ -161,8 +190,8 @@ turned onto a face axis first, for bed contact.
 - **What it does not do.** Bed-only supports do not ban the hollow: a column from the bed can rise
   through a window in the bottom half into the inside. The survey finds that path for Star-Tetra-Orb,
   Maclado-9-Lattice and all the woven orbs, and finds none for Star-Orb.
-- **What it commits us to.** The top half prints with nothing under it, so A only works where D's gap
-  ceiling already holds.
+- **What it commits us to.** The inside of the top half prints with nothing under it, so A only works
+  where D's gap ceiling already holds.
 - **Sub-variant A′: support blockers.** Bambu Studio has a "Support Blocker" part type, a shape that
   bans support inside it. A sphere just inside the inner radius would ban support in the hollow
   outright, even where a window gives a path. Our `tools/bambu` does not write blockers today; it
@@ -189,7 +218,8 @@ reach.
   (F4–F6) are themselves still waiting on polygon offsetting, so C should share their timeline.
 - **What it verifies.** The first validator in §6, per orb, before any slice.
 - **What it does not do.** It cannot tell whether a bridge holds. That stays with the print.
-- **What it commits us to.** One more warning that every orb in the table would raise today.
+- **What it commits us to.** One more warning that most orbs in the table would raise today; Dodeca-Orb
+  and Maclado-9 would not (no mid-air starts above the equator, no inside path to the bed).
 
 ### D. A ceiling on the widest top-half gap
 
@@ -243,8 +273,13 @@ orientation, count the bikar mid-air starts (F3) above the equator, and the surv
 to bed" area. Then slice with the bed-only preset and read the G-code: every `;TYPE:Support` move
 must lie outside the inner radius from the centre (plus half a line width).
 
+This is stricter than the rule on purpose. An F3 start above the equator sits on the top edge of a
+window; a support reaching it from outside would fill the window and mark the face the rule
+protects, so the validator counts it as a failure.
+
 PASS: zero F3 starts above the equator, zero inside-drops-to-bed area, and no support move inside
-the inner radius in the G-code.
+the inner radius in the G-code. Dodeca-Orb and Maclado-9 pass the first two today; the G-code part is
+not yet run on any orb.
 
 FAIL: Star-Orb today: 10 of its 20 F3 starts are above the equator. Maclado-9-Lattice fails twice:
 8 of 15 starts above the equator, and 519 mm² of inside faces with a straight drop to the bed
@@ -267,10 +302,10 @@ so this tests one top cap, not a whole orb. Plates belong to the plates-and-feed
 1. **First, a slice, no print.** Slice Star-Orb and Maclado-9-Lattice whole with the bed-only preset
    and read the G-code per the first validator. This answers, at no cost in filament, whether the
    slicer's tree supports find a way into the hollow. Untested today.
-2. **Then one piece.** The top cap of Star-Orb above about 50°: about 40 mm across, its widest gap per ring
-   there 2–25 mm. It is cut flat and printed cut-face down, supports off, so its inside surface is
+2. **Then one piece.** The top cap of the default Star-Orb above 50° latitude: about 79 mm across and
+   14 mm tall, its widest gap per ring there 2–25 mm. It is cut flat and printed cut-face down, supports off, so its inside surface is
    printed exactly as it would be inside the whole orb. Beside it, as a control, the same cap from
-   Maclado-9 (gaps 1.5–22 mm), so one bed shows a narrow-window cap and a wide-window one.
+   Maclado-9 (same size, gaps 1.5–22 mm), so one bed shows a narrow-window cap and a wide-window one.
 3. **What it answers.** Whether the inside of the dome sags, and at what window width the window
    tops droop, measured on real windows, not a coupon.
 
