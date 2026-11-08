@@ -96,9 +96,6 @@
   ".claude/skills/consolidate-branches/scripts/branch_inventory.py::self_test": [
    34
   ],
-  ".claude/skills/draw-side-view/scripts/side_view.py::check_part": [
-   19
-  ],
   ".claude/skills/draw-side-view/scripts/side_view.py::read_spec": [
    12
   ],

@@ -82,11 +82,15 @@ complexity check lists the 86 Python functions over 10 and stops any new one.
   Then `.claude/skills/maintain-vocabulary/scripts/vocabulary.py::problems` (19), one helper each
   for a term's own fields, its links and its files, self-test unchanged and the same problems on
   the real vocabulary.yaml with each of its 19 terms broken field by field (1,149 cases, every
-  rule firing). 75 left.
+  rule firing) (#941). Then `.claude/skills/draw-side-view/scripts/side_view.py::check_part` (19),
+  one helper each for a part's kind and keys, its words and its numbers, run in the old order so a
+  part broken two ways is refused for the same first reason, self-test unchanged and the same
+  answer on all 225 parts of the 15 real side-view descriptions and the self-test's, each broken
+  key by key, kind by kind and two keys at once (747,350 cases, every refusal firing). 74 left.
   The `self_test` functions (`branch_inventory.py` 34, `theme_plates.py` 22, `site_graph.py` 21,
   `docs_gate.py` 20) are skipped: each is a list of test cases, so splitting it buys little. Next
-  are the two at 19: `draw-side-view/scripts/side_view.py::check_part` and
-  `color-themes/scripts/themes.py::main`. A
+  are the two at 19: `color-themes/scripts/themes.py::main` and
+  `.claude/gates/catalog_models.py::run` (missed by the earlier "three at 19"). A
   cleanup skill comes back only if
   this proves a repeated manual task, and then as an extension of the built-in `simplify` skill.
 - **A post about the design**, which Omar asked for once he signed off: written with the
