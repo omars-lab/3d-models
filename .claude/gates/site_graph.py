@@ -68,28 +68,18 @@ ROOT = Path(__file__).resolve().parents[2]
 GRAPH = ROOT / "docs/site-graph.json"
 
 
-def check(graph: dict, root: Path, quiet: bool = False) -> list[str]:
-    """Return a list of findings, each prefixed with its rule id."""
+def _publicly_reachable(node_id: str, nodes: dict, surfaces: dict) -> bool:
+    """True if some host serving this node's surface is declared public."""
+    n = nodes.get(node_id)
+    if not n:
+        return False
+    s = surfaces.get(n["surface"])
+    return bool(s) and any(h["exposure"] == "public" for h in s["hosts"])
+
+
+def _g0_declared(graph: dict, nodes: dict, surfaces: dict) -> list[str]:
+    """G0: the graph refers only to things it declares."""
     out: list[str] = []
-
-    surfaces = {s["id"]: s for s in graph["surfaces"]}
-    nodes = {n["id"]: n for n in graph["nodes"]}
-
-    # host -> exposure, across every surface
-    exposure: dict[str, str] = {}
-    for s in graph["surfaces"]:
-        for h in s["hosts"]:
-            exposure[h["host"]] = h["exposure"]
-
-    def publicly_reachable(node_id: str) -> bool:
-        """True if some host serving this node's surface is declared public."""
-        n = nodes.get(node_id)
-        if not n:
-            return False
-        s = surfaces.get(n["surface"])
-        return bool(s) and any(h["exposure"] == "public" for h in s["hosts"])
-
-    # ---- G0: the graph refers only to things it declares ------------------
     for n in graph["nodes"]:
         if n["surface"] not in surfaces:
             out.append(f"G0: node {n['id']} names undeclared surface {n['surface']!r}")
@@ -98,13 +88,17 @@ def check(graph: dict, root: Path, quiet: bool = False) -> list[str]:
             if e[end] not in nodes:
                 out.append(f"G0: edge {e['from']} -> {e['to']} ({e['at']}) "
                            f"names undeclared node {e[end]!r}")
+    return out
 
-    # ---- G1 GATED ---------------------------------------------------------
+
+def _g1_gated(graph: dict, exposure: dict, nodes: dict, surfaces: dict) -> list[str]:
+    """G1 GATED: a public page's edge through an Access host says why."""
+    out: list[str] = []
     for e in graph["edges"]:
         via = e.get("viaHost")
         if not via or exposure.get(via) != "access":
             continue
-        if not publicly_reachable(e["from"]):
+        if not _publicly_reachable(e["from"], nodes, surfaces):
             continue
         if not (e.get("gated") or {}).get("why"):
             out.append(
@@ -115,8 +109,12 @@ def check(graph: dict, root: Path, quiet: bool = False) -> list[str]:
                 f"If the door is intended, say so with a \"gated\": {{\"why\": [...]}} on "
                 f"this edge."
             )
+    return out
 
-    # ---- G2 HOST ----------------------------------------------------------
+
+def _g2_host(graph: dict, exposure: dict) -> list[str]:
+    """G2 HOST: every viaHost is a declared host."""
+    out: list[str] = []
     for e in graph["edges"]:
         via = e.get("viaHost")
         if via and via not in exposure:
@@ -125,57 +123,72 @@ def check(graph: dict, root: Path, quiet: bool = False) -> list[str]:
                 f"which no surface in this file declares. Either it is a typo, or a "
                 f"host we publish on is undeclared, or nothing serves it at all."
             )
+    return out
 
-    # ---- G3 ANCHOR --------------------------------------------------------
+
+def _anchor_finding(e: dict, root: Path) -> str | None:
+    """G3 for one edge in this repo: its file and line exist and hold the evidence."""
+    m = re.fullmatch(r"(.+):(\d+)", e["at"])
+    if not m:
+        return (f"G3: {e['from']} -> {e['to']} has an unparseable anchor {e['at']!r} "
+                f"(want 'path/to/file:LINE')")
+    path, lineno = root / m.group(1), int(m.group(2))
+    if not path.is_file():
+        return f"G3: {e['at']} — no such file in this repo"
+    lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+    if lineno > len(lines):
+        return f"G3: {e['at']} — file has only {len(lines)} lines"
+    ev = e.get("evidence")
+    if ev and ev not in lines[lineno - 1]:
+        return (f"G3: {e['at']} no longer contains {ev!r} — the edge moved or changed. "
+                f"Line reads: {lines[lineno - 1].strip()[:100]!r}")
+    return None
+
+
+def _g3_anchor(graph: dict, root: Path) -> tuple[list[str], int]:
+    """G3 ANCHOR: findings for this repo's anchors, and how many were in bikar."""
+    out: list[str] = []
     foreign = 0
     for e in graph["edges"]:
         if e.get("repo"):
             foreign += 1
             continue
-        m = re.fullmatch(r"(.+):(\d+)", e["at"])
-        if not m:
-            out.append(f"G3: {e['from']} -> {e['to']} has an unparseable anchor {e['at']!r} "
-                       f"(want 'path/to/file:LINE')")
-            continue
-        path, lineno = root / m.group(1), int(m.group(2))
-        if not path.is_file():
-            out.append(f"G3: {e['at']} — no such file in this repo")
-            continue
-        lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
-        if lineno > len(lines):
-            out.append(f"G3: {e['at']} — file has only {len(lines)} lines")
-            continue
-        ev = e.get("evidence")
-        if ev and ev not in lines[lineno - 1]:
-            out.append(
-                f"G3: {e['at']} no longer contains {ev!r} — the edge moved or changed. "
-                f"Line reads: {lines[lineno - 1].strip()[:100]!r}"
-            )
+        f = _anchor_finding(e, root)
+        if f:
+            out.append(f)
+    return out, foreign
 
-    # ---- G4 VENDOR --------------------------------------------------------
+
+def _g4_vendor(graph: dict, root: Path) -> list[str]:
+    """G4 VENDOR: Makefile:LAB_PAGES matches the vendored nodes, and ships."""
     mk = (root / "Makefile").read_text(encoding="utf-8")
     m = re.search(r"^LAB_PAGES\s*=\s*(.+)$", mk, re.M)
     if not m:
-        out.append("G4: no LAB_PAGES assignment in Makefile")
-    else:
-        declared = {n["file"] for n in graph["nodes"] if n.get("vendored")}
-        actual = set(m.group(1).split())
-        for f in sorted(actual - declared):
-            out.append(f"G4: Makefile:LAB_PAGES vendors {f} but docs/site-graph.json has no "
-                       f"node for it — a page ships onto the public gallery and the graph "
-                       f"does not know it exists.")
-        for f in sorted(declared - actual):
-            out.append(f"G4: docs/site-graph.json declares {f} as vendored but "
-                       f"Makefile:LAB_PAGES does not copy it — the graph describes a page "
-                       f"that never lands.")
-        if not re.search(r"^DEPLOY_PATHS\s*=.*\$\(LAB_PAGES\)", mk, re.M):
-            out.append("G4: DEPLOY_PATHS no longer ships $(LAB_PAGES); the vendored pages "
-                       "are built and then not deployed.")
+        return ["G4: no LAB_PAGES assignment in Makefile"]
+    out: list[str] = []
+    declared = {n["file"] for n in graph["nodes"] if n.get("vendored")}
+    actual = set(m.group(1).split())
+    for f in sorted(actual - declared):
+        out.append(f"G4: Makefile:LAB_PAGES vendors {f} but docs/site-graph.json has no "
+                   f"node for it — a page ships onto the public gallery and the graph "
+                   f"does not know it exists.")
+    for f in sorted(declared - actual):
+        out.append(f"G4: docs/site-graph.json declares {f} as vendored but "
+                   f"Makefile:LAB_PAGES does not copy it — the graph describes a page "
+                   f"that never lands.")
+    if not re.search(r"^DEPLOY_PATHS\s*=.*\$\(LAB_PAGES\)", mk, re.M):
+        out.append("G4: DEPLOY_PATHS no longer ships $(LAB_PAGES); the vendored pages "
+                   "are built and then not deployed.")
+    return out
 
-    # ---- G5 FRAGILE -------------------------------------------------------
-    # A surface with both public and access hosts is one Cloudflare setting away
-    # from having none public. Every edge riding one of its public hosts dies
-    # that day, silently.
+
+def _g5_fragile(graph: dict) -> list[str]:
+    """G5 FRAGILE: the checked-in list of edges that die behind Access is current.
+
+    A surface with both public and access hosts is one Cloudflare setting away
+    from having none public. Every edge riding one of its public hosts dies
+    that day, silently.
+    """
     at_risk = {
         h["host"]
         for s in graph["surfaces"]
@@ -189,15 +202,31 @@ def check(graph: dict, root: Path, quiet: bool = False) -> list[str]:
         if e.get("viaHost") in at_risk
     )
     listed = sorted(graph["fragileIfProtected"]["edges"])
-    if computed != listed:
-        out.append(
-            "G5: fragileIfProtected is out of date.\n"
-            + "".join(f"      + {x}\n" for x in computed if x not in listed)
-            + "".join(f"      - {x}\n" for x in listed if x not in computed)
-            + "      These edges break the day a public host goes behind Access. "
-              "No build fails and no test turns red, which is why the list is counted."
-        )
+    if computed == listed:
+        return []
+    return [
+        "G5: fragileIfProtected is out of date.\n"
+        + "".join(f"      + {x}\n" for x in computed if x not in listed)
+        + "".join(f"      - {x}\n" for x in listed if x not in computed)
+        + "      These edges break the day a public host goes behind Access. "
+          "No build fails and no test turns red, which is why the list is counted."
+    ]
 
+
+def check(graph: dict, root: Path, quiet: bool = False) -> list[str]:
+    """Return a list of findings, each prefixed with its rule id."""
+    surfaces = {s["id"]: s for s in graph["surfaces"]}
+    nodes = {n["id"]: n for n in graph["nodes"]}
+    # host -> exposure, across every surface
+    exposure = {h["host"]: h["exposure"] for s in graph["surfaces"] for h in s["hosts"]}
+
+    anchors, foreign = _g3_anchor(graph, root)
+    out = (_g0_declared(graph, nodes, surfaces)
+           + _g1_gated(graph, exposure, nodes, surfaces)
+           + _g2_host(graph, exposure)
+           + anchors
+           + _g4_vendor(graph, root)
+           + _g5_fragile(graph))
     if not quiet:
         print(f"  {len(graph['nodes'])} pages, {len(graph['edges'])} edges, "
               f"{foreign} anchor(s) in bikar not verifiable from here")
