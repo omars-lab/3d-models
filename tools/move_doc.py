@@ -649,13 +649,28 @@ def apply(root: Path, moves: list[Move], new_texts: dict[str, str]) -> list[str]
 
 
 def summary(report: Report, dry: bool) -> str:
-    out = []
+    out = _move_lines(report, dry) + _change_lines(report, dry) + _leftover_lines(report)
+    if USE_CASES in report.changes:
+        out.append("next: python3 .claude/skills/maintain-use-cases/validate.py --refresh "
+                   "(the use-case map changed), then make validate")
+    elif not dry:
+        out.append("next: make validate")
+    return "\n".join(out)
+
+
+def _move_lines(report: Report, dry: bool) -> list[str]:
+    """What moved (or would): a count by kind, then each move."""
     kinds = Counter(m.why for m in report.moves)
-    out.append(("would move" if dry else "moved") +
-               f": {kinds['asked']} note(s), {kinds['comments']} comment file(s), "
-               f"{kinds['pictures']} picture folder(s)")
+    out = [("would move" if dry else "moved") +
+           f": {kinds['asked']} note(s), {kinds['comments']} comment file(s), "
+           f"{kinds['pictures']} picture folder(s)"]
     for m in report.moves:
         out.append(f"  {m.old} -> {m.new}" + ("" if m.why == "asked" else f"   ({m.why})"))
+    return out
+
+
+def _change_lines(report: Report, dry: bool) -> list[str]:
+    """What was rewritten (or would be): a total, a line per kind of reference, files per area."""
     by = defaultdict(Counter)
     files_by = defaultdict(set)
     for rel, changes in report.changes.items():
@@ -666,13 +681,19 @@ def summary(report: Report, dry: bool) -> str:
               "wikilink": "path wikilinks", "path": "repo paths (docs/<old>)",
               "relative": "doc-relative backticked paths"}
     total = sum(len(c) for c in report.changes.values())
-    out.append(("would rewrite" if dry else "rewrote") +
-               f": {total} reference(s) in {len(report.changes)} file(s)")
+    out = [("would rewrite" if dry else "rewrote") +
+           f": {total} reference(s) in {len(report.changes)} file(s)"]
     for kind in ("link-in", "link-out", "wikilink", "path", "relative"):
         if by[kind]:
             parts = ", ".join(f"{a} {n}" for a, n in sorted(by[kind].items()))
             out.append(f"  {labels[kind]}: {sum(by[kind].values())}  ({parts})")
     out.append("  files per area: " + ", ".join(f"{a} {len(s)}" for a, s in sorted(files_by.items())))
+    return out
+
+
+def _leftover_lines(report: Report) -> list[str]:
+    """What was found and left alone: name-only mentions, unrewritten references, clashes, views, siblings."""
+    out = []
     if report.name_only:
         out.append(f"left alone: {report.name_only} mention(s) by file name only — a name still finds the note")
     groups = defaultdict(list)
@@ -691,12 +712,7 @@ def summary(report: Report, dry: bool) -> str:
         out.append(f"  references there: {len(report.sibling_refs)}")
         for s in report.sibling_refs:
             out.append(f"  {s}")
-    if USE_CASES in report.changes:
-        out.append("next: python3 .claude/skills/maintain-use-cases/validate.py --refresh "
-                   "(the use-case map changed), then make validate")
-    elif not dry:
-        out.append("next: make validate")
-    return "\n".join(out)
+    return out
 
 
 # --- self-test ------------------------------------------------------------------
