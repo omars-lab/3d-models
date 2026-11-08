@@ -49,9 +49,12 @@ complexity check lists the 86 Python functions over 10 and stops any new one.
 - **Shrinking the complexity list, by hand, a function a PR** (no skill: the design's §5 says
   gate, not skill, and the gate is hook 55). `complexity_gate.py --update` after each split.
   2026-11-07: `prints_gate.py::check_record` (57) split into one helper per rule, gate output on
-  the 101 staging records unchanged; the list went from 86 functions to 85. Next is
-  `tools/move_doc.py::rewrite_text` at 35. A cleanup skill comes back only if this proves a
-  repeated manual task, and then as an extension of the built-in `simplify` skill.
+  the 101 staging records unchanged (#929). Then `tools/move_doc.py::rewrite_text` (35), its five
+  nested link fixers made methods of a small class, self-test and a dry-run move report unchanged
+  (#930). Both done, 84 functions left. Next is `.claude/gates/plates_gate.py::check_page` at 33:
+  the worst one that runs on every commit. `branch_inventory.py::self_test` (34) scores higher
+  but is a list of test cases, so splitting it buys little. A cleanup skill comes back only if
+  this proves a repeated manual task, and then as an extension of the built-in `simplify` skill.
 - **A post about the design**, which Omar asked for once he signed off: written with the
   claude-techniques session, numbers and design only. A second post can follow with the trial's
   result.
