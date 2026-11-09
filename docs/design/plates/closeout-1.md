@@ -3,7 +3,7 @@ plate: closeout-1
 print_log: '[[print-logs/closeout-1|print log]]'
 recipe: closeout-1.yaml
 iteration: 5
-stage: sent
+stage: approved
 times_printed: 0
 runs: []
 answers: "One small plate for every flange-coaster question still open: which star face stays flat (against star-2's grid star), how many pins the middle takes, which kite gap fits the frame, and whether the flat star holds on star-2's pins."
@@ -144,6 +144,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|---|---|
 | 2026-11-05 | approved | Omar, in chat: "Approve, in green (Recommended)" (iteration 4) | iteration 4 @ 3a378a8c7d in #00AE42 | reset 2026-11-06 |
 | 2026-11-06 | approved | Omar, in chat: "Approve and send" (iteration 5) | iteration 5 @ 8c49cd7fa9 in #00AE42 | sent 2026-11-06 |
+| 2026-11-09 | approved | Omar, in chat: "Reprint as is, green" (the kids lost the first print's pieces) | iteration 5 @ 8c49cd7fa9 in #00AE42 | |
 
 ## Timeline
 
