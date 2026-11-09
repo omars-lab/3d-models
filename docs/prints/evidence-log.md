@@ -50,8 +50,7 @@ Plates printed and finished but not judged yet. Until they are, what they test i
   - Row 3: halves that close flat and hold without rocking. MIDDLE-STOCK has a centre pin and six round it, MIDDLE-PINS5 a centre pin and four.
   - Row 4: which kites go in without forcing and do not rattle. Both copies should agree.
   - Row 5: a brim kite whose bottom edge is straighter and whose corners are sharper than its plain twin, with no lip left from the brim, and whether it still fits the pocket like its twin.
-- [dragon-egg-1 — one small dragon egg, in silk blue](../design/plates/dragon-egg-1.md): 0 of 1 questions answered. Still open:
-  - Row 1: 1. Take the egg off the bed. 2. Turn it in your hand and look at the scale tips, most of all on the lower half. Do the scales come out clean, or do some tips droop or string? Clean, rough tips, or failed
+- [dragon-egg-1 — one small dragon egg, in silk blue](../design/plates/dragon-egg-1.md): 1 of 1 questions answered. Still open:
 - [fidget-star-1 — the 8-point fidget star on a plate of its own](../design/plates/fidget-star-1.md): 0 of 1 questions answered. Still open:
   - Row 1: rings that turn freely, rings that turn only after a firm twist, or rings that stay stuck; and whether they move more easily than toys-1's star.
 - [toys-1 — a magic cube, an airless ping-pong ball and an 8-point fidget star](../design/plates/toys-1.md): 0 of 3 questions answered. Still open:
