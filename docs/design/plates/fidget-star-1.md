@@ -85,6 +85,14 @@ on.
 |---|---|---|---|
 | FIDGET STAR (no carved id; the only piece on the bed) | ![The green star on the bed when the print finished, seen from the chamber camera: nested rings on top with gaps between them](fidget-star-1-media/finished.webp) This checks whether the star's rings turn, which is the whole point of a fidget toy. The star prints in one piece, with its rings already nested and a thin gap between each, so a ring that is fused to its neighbour cannot move. toys-1 printed the same star with supports turned on for the whole plate, and supports between the rings are the first thing that could weld them; this star printed with no supports, so it shows whether that matters. Good is rings that turn, maybe after one firm twist to break them loose; bad is rings that will not move however you twist. **Do:** 1. Take the star off the bed. 2. Hold the outer ring in one hand. 3. Twist the middle with the other hand. 4. Push each point up and down. 5. If you still have toys-1's star, do steps 2 to 4 with it too. **Look for:** rings that turn freely, rings that turn only after a firm twist, or rings that stay stuck; and whether they move more easily than toys-1's star. | Free or a little stiff at first: a fidget toy printed in one piece often needs a twist to break the parts loose, and with no supports nothing sits between the rings | Free: print more stars like this, with no supports. Stiff: print more stars like this, with no supports. Stuck: the gaps between the rings are too tight for our profile; look at the maker's settings or a finer layer |
 
+## Judged
+
+Omar's answers to the rows of After the print, word for word, one row each, oldest first. They are written by the review-print skill's `after_print.py answer` (the hub's Judge a print page calls it); the newest answer to a row is the one that counts. A session turns them into the print record with review-print.
+
+| Row | Answer | His words | Date |
+|---|---|---|---|
+| 1 | Free | — | 2026-11-09 |
+
 ## Your call
 
 - [ ] **Approve as it stands** — one fidget star, one color picked at the send, no supports
