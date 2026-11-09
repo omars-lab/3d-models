@@ -71,7 +71,13 @@ the Monitor tool. It prints one line per event, never his words:
 | `ev=answers_sent pr=<n> url=<url>` | The PR is open | Merge it like any PR, then review-print writes the print record from the `## Judged` table ("When a print comes back") |
 | `ev=answers_not_sent reason=<why>` | Nothing was pushed; the answers stay saved | Fix the reason (a refused answer, changes left in the hub's 3d-models copy), then ask him to press Send now |
 
-Never edit the `## Judged` table by hand: it is his record.
+Below the questions, the page has a box for the plate as a whole: a general note, or **Ask
+for a reprint** when pieces were lost or broke (Omar, 2026-11-08). These go in the same send,
+into the plate page's `## On the whole plate` table, and never count as answering a question.
+When a send carries a `reprint asked` line, tell Omar what the reprint would be and ask for its
+yes; the request itself is not the approval.
+
+Never edit the `## Judged` or `## On the whole plate` tables by hand: they are his record.
 
 ## When Omar asks to see what he owes
 

@@ -19,6 +19,10 @@
     python3 .claude/skills/review-print/scripts/after_print.py measure
                                     every page's rows through the parser; prints each cell it cannot
                                     read fully, exits 1 if there is one
+    python3 .claude/skills/review-print/scripts/after_print.py plate <plate> note|reprint -n "<his words>"
+                                    one line about the whole plate into the page's `## On the whole
+                                    plate` table: a general note, or a reprint he asks for (pieces
+                                    lost or broken), word for word
     python3 .claude/skills/review-print/scripts/after_print.py --self-test
 
 Why this exists (Omar, 2026-10-22): judging from a chat question gives no picture and no piece
@@ -59,6 +63,13 @@ JUDGED_INTRO = ("Omar's answers to the rows of After the print, word for word, o
                 "oldest first. They are written by the review-print skill's `after_print.py "
                 "answer` (the hub's Judge a print page calls it); the newest answer to a row is "
                 "the one that counts. A session turns them into the print record with review-print.")
+WHOLE_KINDS = {"note": "note", "reprint": "reprint asked"}
+WHOLE_HEAD = "| Kind | His words | Date |"
+WHOLE = re.compile(r"^## On the whole plate\b.*?$(.*?)(?=^## |\Z)", re.MULTILINE | re.DOTALL)
+WHOLE_INTRO = ("What Omar said about the plate as a whole on the hub's Judge a print page, word for "
+               "word, oldest first: a general note, or a reprint he asked for. They are written by the "
+               "review-print skill's `after_print.py plate`. A reprint asked is a request, not an "
+               "approval: the reprint still needs its own yes before it is sent (D-093).")
 TICK = re.compile(r"`([^`]+)`")
 OWNER = re.compile(r"\b([a-z][a-z0-9]*(?:-[a-z0-9]+)+)'s\s*$")
 DO_LOOK = re.compile(r"\*\*Do:\*\*\s*(.*?)\s*\*\*Look for:\*\*\s*(.*)$", re.DOTALL)
@@ -405,6 +416,50 @@ def answer(plate: str, row: int, said: str, words: str, date: str, plates: Path)
     return line
 
 
+def whole_plate(body: str) -> list[dict]:
+    m = WHOLE.search(body)
+    if not m:
+        return []
+    lines = pg.table_lines(m.group(1))
+    if not lines or lines[0].strip() != WHOLE_HEAD:
+        return []
+    kinds = {v: k for k, v in WHOLE_KINDS.items()}
+    out = []
+    for ln in lines[2:]:
+        c = [uncell(x.strip()) for x in PIPE.split(ln.strip()[1:-1])]
+        if len(c) == 3 and c[0] in kinds:
+            out.append({"kind": kinds[c[0]], "words": c[1], "date": c[2]})
+    return out
+
+
+def plate_line(plate: str, kind: str, words: str, date: str, plates: Path) -> str:
+    """One line about the whole plate, not tied to a row (Omar, 2026-11-08: "there should be
+    ability to give general feedback in hub"; "a re-printing option on the judge page - if for
+    some reason we lost pieces / need to reprint")."""
+    page, text, data, body = read_page(plate, plates)
+    if kind not in WHOLE_KINDS:
+        raise Refused(f"the kinds are {sorted(WHOLE_KINDS)}, not {kind!r}")
+    if not words.strip():
+        raise Refused(f"a {kind} needs his words: pass them with -n")
+    line = f"| {WHOLE_KINDS[kind]} | {cell(words)} | {date} |"
+    m = WHOLE.search(body)
+    if m and pg.table_lines(m.group(1)):
+        lines = m.group(1).split("\n")
+        last = max(i for i, ln in enumerate(lines) if ln.strip().startswith("|"))
+        lines.insert(last + 1, line)
+        new_body = body[:m.start(1)] + "\n".join(lines) + body[m.end(1):]
+    else:
+        section = f"## On the whole plate\n\n{WHOLE_INTRO}\n\n{WHOLE_HEAD}\n|---|---|---|\n{line}\n\n"
+        # after Judged when the page has it, else after After the print, else at the end
+        after = JUDGED.search(body) or pg.AFTER.search(body)
+        new_body = body[:after.end()] + section + body[after.end():] if after else \
+            body.rstrip("\n") + "\n\n" + section
+        if m:  # an empty heading left by hand: replace it
+            new_body = new_body.replace(m.group(0), "", 1)
+    page.write_text(text[:len(text) - len(body)] + new_body, encoding="utf-8")
+    return line
+
+
 # ---------------------------------------------------------------------------
 # the queue the page lists
 # ---------------------------------------------------------------------------
@@ -474,7 +529,8 @@ def questions(plate: str, plates: Path, build: Path, prints: Path) -> dict:
     bed =bed_shown(data.get("pictures") or [])
     return {"plate": plate, "title": pg.title_of(body), "stage": data.get("stage"),
             "bed_picture": str((plates / bed).relative_to(ROOT)) if bed else None,
-            "rows": rows, "answers": judged(body), "notes": problems}
+            "rows": rows, "answers": judged(body), "whole_plate": whole_plate(body),
+            "notes": problems}
 
 
 def measure(plates: Path, quiet: bool = False) -> int:
@@ -593,6 +649,26 @@ def self_test() -> int:
         check("the gate still reads the questions", len(pg.after_print(body)[0]), 1)
         check("stage untouched", "stage: sent" in text, True)
 
+        # the whole plate: a note and a reprint asked, after Judged, rows untouched
+        for kind, words in (("redo", "two lost"), ("note", " ")):
+            try:
+                plate_line("demo-1", kind, words, "2026-11-08", plates)
+                fails.append(f"FAIL: a {kind!r} with {words!r} was written")
+            except Refused:
+                pass
+        plate_line("demo-1", "note", "nice | overall", "2026-11-08", plates)
+        plate_line("demo-1", "reprint", "lost `A`\noff the desk", "2026-11-09", plates)
+        text = page.read_text(encoding="utf-8")
+        body = text[text.find("\n---", 4) + 4:]
+        check("whole plate kept in order", whole_plate(body),
+              [{"kind": "note", "words": "nice | overall", "date": "2026-11-08"},
+               {"kind": "reprint", "words": "lost `A` off the desk", "date": "2026-11-09"}])
+        check("whole plate comes after Judged",
+              body.find("## Judged") < body.find("## On the whole plate") < body.find("## Timeline"), True)
+        check("Judged rows unchanged by it", len(judged(body)), 3)
+        check("the gate still reads the questions", len(pg.after_print(body)[0]), 1)
+        check("FAIL: a page with no such section has none", whole_plate(head + after + tail), [])
+
     # the picture shown when no piece has its own: the first layer (supports drawn) wins over the bed
     check("first layer over bed", bed_shown(["x-media/bed.png", "x-media/first-layer.png"]),
           "x-media/first-layer.png")
@@ -636,10 +712,57 @@ def refresh_evidence_log() -> None:
         print(said)
 
 
-def main(argv: list[str]) -> int:
+def run_questions(args) -> int:
+    out = questions(args.plate, pg.PLATES, Path(args.build_dir), pg.PRINTS)
+    if args.json:
+        print(json.dumps(out, ensure_ascii=False))
+        return 0
+    for r in out["rows"]:
+        print(f"{r['row']}. {r['pieces']}\n   {r['look_for']}")
+        for o in r["outcomes"]:
+            print(f"   - {o['answer']}: {o['changes']}")
+    for n in out["notes"]:
+        print("note:", n)
+    return 0
+
+
+def run_answer(args) -> int:
+    print(answer(args.plate, args.row, args.answer, args.note, args.date, pg.PLATES))
+    refresh_evidence_log()
+    return 0
+
+
+def run_plate(args) -> int:
+    print(plate_line(args.plate, args.kind, args.note, args.date, pg.PLATES))
+    return 0
+
+
+def run_waiting(args) -> int:
+    out = waiting(pg.PLATES, pg.PRINTS)
+    print(json.dumps(out, ensure_ascii=False) if args.json else
+          "\n".join(f"{w['plate']}: {w['answered']} of {w['rows']} answered" for w in out))
+    return 0
+
+
+def run_pieces(args) -> int:
+    for path in tiles(args.plate, pg.PLATES, Path(args.build_dir)):
+        print("wrote", path.relative_to(ROOT))
+    return 0
+
+
+def run_measure(args) -> int:
+    return measure(pg.PLATES, args.quiet)
+
+
+RUNS = {"questions": run_questions, "answer": run_answer, "plate": run_plate,
+        "waiting": run_waiting, "pieces": run_pieces, "measure": run_measure}
+
+
+def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--self-test", action="store_true")
     sub = ap.add_subparsers(dest="cmd")
+    today = datetime.date.today().isoformat()
     q = sub.add_parser("questions")
     q.add_argument("plate")
     q.add_argument("--json", action="store_true")
@@ -649,7 +772,12 @@ def main(argv: list[str]) -> int:
     a.add_argument("row", type=int)
     a.add_argument("answer")
     a.add_argument("-n", "--note", default="")
-    a.add_argument("--date", default=datetime.date.today().isoformat())
+    a.add_argument("--date", default=today)
+    wp = sub.add_parser("plate")
+    wp.add_argument("plate")
+    wp.add_argument("kind", choices=sorted(WHOLE_KINDS))
+    wp.add_argument("-n", "--note", default="")
+    wp.add_argument("--date", default=today)
     w = sub.add_parser("waiting")
     w.add_argument("--json", action="store_true")
     p = sub.add_parser("pieces")
@@ -657,42 +785,23 @@ def main(argv: list[str]) -> int:
     p.add_argument("--build-dir", default=str(ROOT / "build" / "plates"))
     m = sub.add_parser("measure")
     m.add_argument("--quiet", action="store_true", help="the tally only, not each fallback")
+    return ap
+
+
+def main(argv: list[str]) -> int:
+    ap = parser()
     args = ap.parse_args(argv)
     if args.self_test:
         return self_test()
+    run = RUNS.get(args.cmd)
+    if not run:
+        ap.print_help()
+        return 2
     try:
-        if args.cmd == "questions":
-            out = questions(args.plate, pg.PLATES, Path(args.build_dir), pg.PRINTS)
-            if args.json:
-                print(json.dumps(out, ensure_ascii=False))
-            else:
-                for r in out["rows"]:
-                    print(f"{r['row']}. {r['pieces']}\n   {r['look_for']}")
-                    for o in r["outcomes"]:
-                        print(f"   - {o['answer']}: {o['changes']}")
-                for n in out["notes"]:
-                    print("note:", n)
-            return 0
-        if args.cmd == "answer":
-            print(answer(args.plate, args.row, args.answer, args.note, args.date, pg.PLATES))
-            refresh_evidence_log()
-            return 0
-        if args.cmd == "waiting":
-            out = waiting(pg.PLATES, pg.PRINTS)
-            print(json.dumps(out, ensure_ascii=False) if args.json else
-                  "\n".join(f"{w['plate']}: {w['answered']} of {w['rows']} answered" for w in out))
-            return 0
-        if args.cmd == "pieces":
-            for path in tiles(args.plate, pg.PLATES, Path(args.build_dir)):
-                print("wrote", path.relative_to(ROOT))
-            return 0
-        if args.cmd == "measure":
-            return measure(pg.PLATES, args.quiet)
+        return run(args)
     except Refused as e:
         print(f"refused: {e}", file=sys.stderr)
         return 2
-    ap.print_help()
-    return 2
 
 
 if __name__ == "__main__":
