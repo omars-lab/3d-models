@@ -44,12 +44,6 @@ Calibration bets a print record names: a number we print by before a print has s
 
 Plates printed and finished but not judged yet. Until they are, what they test is still a guess, and the longer they wait the more a later plate may replace them.
 
-- [closeout-1 — one plate to close the flange coaster's open questions](../design/plates/closeout-1.md): 0 of 5 questions answered. Still open:
-  - Row 1: a face that is flat out to its points, with no curve at the edges, and whether any of the four is flatter than STAR-GRID.
-  - Row 2: halves that close flat and do not turn, where STAR-STOCK can turn round its one pin; and a bottom as clean as STAR-STOCK's.
-  - Row 3: halves that close flat and hold without rocking. MIDDLE-STOCK has a centre pin and six round it, MIDDLE-PINS5 a centre pin and four.
-  - Row 4: which kites go in without forcing and do not rattle. Both copies should agree.
-  - Row 5: a brim kite whose bottom edge is straighter and whose corners are sharper than its plain twin, with no lip left from the brim, and whether it still fits the pocket like its twin.
 - [toys-1 — a magic cube, an airless ping-pong ball and an 8-point fidget star](../design/plates/toys-1.md): 0 of 3 questions answered. Still open:
   - Row 1: 1. Take the cube off the bed. 2. If it has moving parts, try to move them. Does it come out clean and, if it is meant to move, does it move? Clean, rough, or stuck
   - Row 2: 1. Take the ball off the bed. 2. Pull off any support, inside and out, and look at its bottom, where it stood. 3. Squeeze it gently. Did it print round all the way up, did the supports come out, and does it bounce? Clean, supports stuck inside, rough, or failed
