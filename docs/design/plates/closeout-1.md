@@ -119,6 +119,14 @@ The print as the chamber camera saw it: 21 pictures from 17:20 to 18:04 UTC, hal
 
 ![closeout-1 finished, on the bed](closeout-1-media/finished.webp)
 
+## The second print
+
+The second print of this plate, on 2026-11-09, as the chamber camera saw it: 13 pictures from 18:23 to 19:07 UTC, half a second each, the last held. Made by the monitor-print skill's `print_monitor.py --publish`; what the printer said is in the print log.
+
+![closeout-1 printing, as the chamber camera saw it](closeout-1-media/timelapse-2.webp)
+
+![closeout-1 finished, on the bed](closeout-1-media/finished-2.webp)
+
 ## Cost and risk
 
 **About 38 minutes and 8 g of PLA** (the slice: 38 min 5 s, 7.57 g). One bed, one color, no
