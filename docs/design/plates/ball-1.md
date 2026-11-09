@@ -3,9 +3,9 @@ plate: ball-1
 print_log: '[[print-logs/ball-1|print log]]'
 recipe: ball-1.yaml
 iteration: 2
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-11-09-ball-1]
 answers: "Does the airless ping-pong ball print with supports only from the bed, none inside it?"
 kind: new
 maturity: experiment
@@ -141,3 +141,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-11-08 | proposed — the ping-pong ball from toys-1 alone, supports only from the bed | this page |
 | 2026-11-08 | sliced — one bed, 1 h 5 min, 10.08 g, a support blocker in the ball, plain supports, no warnings | this page |
 | 2026-11-08 | sent — by `bambu print send`; spends the approval of 2026-11-08, iteration 2 @ b893fce4f4 in #00AE42 | this page |
+| 2026-11-09 | printed — all 201 layers, 00:23 to 01:36 UTC in green; judged on the hub: "Ball good." Next: print the ball like this again, with the blocker and the bed-only supports | [the record](../../prints/2026-11-09-ball-1/index.md) |
