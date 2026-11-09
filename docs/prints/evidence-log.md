@@ -44,6 +44,8 @@ Calibration bets a print record names: a number we print by before a print has s
 
 Plates printed and finished but not judged yet. Until they are, what they test is still a guess, and the longer they wait the more a later plate may replace them.
 
+- [ball-1 — the ping-pong ball alone, supports only from the bed](../design/plates/ball-1.md): 0 of 1 questions answered. Still open:
+  - Row 1: a clear hollow or one with support in it; how many windows still hold a nub and whether they pick out; whether it bounces.
 - [closeout-1 — one plate to close the flange coaster's open questions](../design/plates/closeout-1.md): 0 of 5 questions answered. Still open:
   - Row 1: a face that is flat out to its points, with no curve at the edges, and whether any of the four is flatter than STAR-GRID.
   - Row 2: halves that close flat and do not turn, where STAR-STOCK can turn round its one pin; and a bottom as clean as STAR-STOCK's.

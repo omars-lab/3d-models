@@ -1,8 +1,9 @@
 ---
 plate: ball-1
+print_log: '[[print-logs/ball-1|print log]]'
 recipe: ball-1.yaml
 iteration: 2
-stage: approved
+stage: sent
 times_printed: 0
 runs: []
 answers: "Does the airless ping-pong ball print with supports only from the bed, none inside it?"
@@ -87,6 +88,14 @@ So the check script says FAIL at a 17.8 mm radius, and it is honest: a few nubs 
 windows. I did not shrink the radius to make it pass. Those nubs come off with the outside support,
 or need a pick.
 
+## The print
+
+The print as the chamber camera saw it: 17 pictures from 00:23 to 01:36 UTC, half a second each, the last held. Made by the monitor-print skill's `print_monitor.py --publish`; what the printer said is in the print log.
+
+![ball-1 printing, as the chamber camera saw it](ball-1-media/timelapse.webp)
+
+![ball-1 finished, on the bed](ball-1-media/finished.webp)
+
 ## Cost and risk
 
 One bed, 1 h 5 min, 10.08 g (local slice, 2026-11-08, X2D 0.20 mm Standard preset with supports on
@@ -115,7 +124,7 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 
 | Date | Decision | By | Covers | Spent by |
 |---|---|---|---|---|
-| 2026-11-08 | approved | Omar, in chat: "Send it in green" | iteration 2 @ b893fce4f4 in #00AE42 | |
+| 2026-11-08 | approved | Omar, in chat: "Send it in green" | iteration 2 @ b893fce4f4 in #00AE42 | sent 2026-11-08 |
 
 ## Timeline
 
@@ -123,3 +132,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 |---|---|---|
 | 2026-11-08 | proposed — the ping-pong ball from toys-1 alone, supports only from the bed | this page |
 | 2026-11-08 | sliced — one bed, 1 h 5 min, 10.08 g, a support blocker in the ball, plain supports, no warnings | this page |
+| 2026-11-08 | sent — by `bambu print send`; spends the approval of 2026-11-08, iteration 2 @ b893fce4f4 in #00AE42 | this page |
