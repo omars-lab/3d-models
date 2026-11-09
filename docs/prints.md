@@ -19,6 +19,8 @@ The reader is deliberately plain markdown at this rung (S6). The gallery-facing
 One line per print, written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` from each record's `feedback.lesson`.
 
 - A support blocker inside the ball's hollow, with supports only from the bed, gave a ball Omar called good; toys-1's ball had support grown inside it. 0.4 mm nozzle, 0.20 mm layers, Bambu PLA Basic. ([2026-11-09-ball-1](prints/2026-11-09-ball-1/index.md))
+- The 8-point fidget star's nested rings turned freely when printed with no supports; toys-1 printed it with supports on for the whole plate. 0.4 mm nozzle, 0.20 mm layers, Bambu PLA Basic. ([2026-11-08-fidget-star-1](prints/2026-11-08-fidget-star-1/index.md))
+- The Mini Twisted Dragon Egg printed clean standing up with no supports, though the slicer warned about scale tips starting in the air. 0.4 mm nozzle, 0.20 mm layers, Bambu PLA Silk. ([2026-11-07-dragon-egg-1](prints/2026-11-07-dragon-egg-1/index.md))
 - On the flange coaster's hexagon piece, the rail at hexfit-1's 0.01 mm a side, 4 mm wide and 0.8 mm tall, stayed flat; a taller rail, a wider rail and pins in its place did no better. hexfit-1's rocking pieces were the 0.15 mm ones, so the loose fit was the rock. 0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers. ([2026-11-05-hexfit-2](prints/2026-11-05-hexfit-2/index.md))
 - Star-3 was closed with no piece judged and no comment from Omar. Both its questions, whether the flat star holds on star-2's three pins and whether its bottom is clean, moved to closeout-1's FLAT-TRI. Closed unjudged on Omar's say-so on 2026-11-06 ("Close all four"). ([2026-11-03-star-3](prints/2026-11-03-star-3/index.md))
 - Three pins on a triangle round the sloped star's middle: 1.2 mm pins held best, and 0.8 mm pins snapped and let the halves turn. Bottom dots under grid supports came out as clean as star-1's. 0.4 mm nozzle, 0.42 mm outer and 0.45 mm inner wall lines, 0.20 mm layers. ([2026-11-02-star-2](prints/2026-11-02-star-2/index.md))
@@ -78,6 +80,32 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 - **Photos of the print:** none. Rendered pictures from the plate page: [bed](design/plates/ball-1-media/bed.png), [layer-8mm](design/plates/ball-1-media/layer-8mm.png), [window-nub](design/plates/ball-1-media/window-nub.png)
 
 ![render, not a photo: bed](design/plates/ball-1-media/bed.png)
+
+### [2026-11-08-fidget-star-1](prints/2026-11-08-fidget-star-1/index.md)
+
+- **Plate:** [fidget-star-1](design/plates/fidget-star-1.md) — the 8-point fidget star on a plate of its own
+- **Lesson:** The 8-point fidget star's nested rings turned freely when printed with no supports; toys-1 printed it with supports on for the whole plate. 0.4 mm nozzle, 0.20 mm layers, Bambu PLA Basic.
+- **Nozzle:** 0.4 mm, left nozzle, type not recorded
+- **Pieces:** 1 (1 keep)
+- **What happened:** Omar: Free.
+- **Why:** With supports off, nothing is printed in the gaps between the rings, so they stay apart.
+- **What it changed:** Print more stars like this, with no supports.
+- **Photos of the print:** none. Rendered pictures from the plate page: [bed](design/plates/fidget-star-1-media/bed.png)
+
+![render, not a photo: bed](design/plates/fidget-star-1-media/bed.png)
+
+### [2026-11-07-dragon-egg-1](prints/2026-11-07-dragon-egg-1/index.md)
+
+- **Plate:** [dragon-egg-1](design/plates/dragon-egg-1.md) — one small dragon egg, in silk blue
+- **Lesson:** The Mini Twisted Dragon Egg printed clean standing up with no supports, though the slicer warned about scale tips starting in the air. 0.4 mm nozzle, 0.20 mm layers, Bambu PLA Silk.
+- **Nozzle:** 0.4 mm, left nozzle, type not recorded
+- **Pieces:** 1 (1 keep)
+- **What happened:** Omar: Clean.
+- **Why:** The scale tips overhang little enough to bridge from the layer below; the slicer's warning counts any tip that starts in the air.
+- **What it changed:** Print more eggs as they are: the same file, standing up, no supports.
+- **Photos of the print:** none. Rendered pictures from the plate page: [bed](design/plates/dragon-egg-1-media/bed.png)
+
+![render, not a photo: bed](design/plates/dragon-egg-1-media/bed.png)
 
 ### [2026-11-05-hexfit-2](prints/2026-11-05-hexfit-2/index.md)
 
@@ -488,7 +516,7 @@ Written by `python3 .claude/skills/review-print/scripts/prints_page.py --write` 
 
 ![photo: all five pieces, the pegs pair pushed together at the top](prints/2026-09-26-minis-03/photos/plate-overview.jpg)
 
-33 records; 0 measured with a tool, so no bet has moved yet.
+35 records; 0 measured with a tool, so no bet has moved yet.
 
 <!-- records:end -->
 

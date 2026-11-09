@@ -3,9 +3,9 @@ plate: fidget-star-1
 print_log: '[[print-logs/fidget-star-1|print log]]'
 recipe: fidget-star-1.yaml
 iteration: 1
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-11-08-fidget-star-1]
 answers: "Does the 8-point fidget star print on its own, with no supports, with rings that move freely?"
 kind: new
 maturity: experiment
@@ -115,3 +115,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-11-08 | proposed — at Omar's ask: the fidget star from toys-1 on a plate of its own | this page |
 | 2026-11-08 | sliced — one bed, 58 min, 29.34 g, no supports, no warnings | this page |
 | 2026-11-08 | sent — by `bambu print send`; spends the approval of 2026-11-08, iteration 1 @ e391cb8ec8 in #00AE42 | this page |
+| 2026-11-09 | printed — all 90 layers, 15:57 to 17:03 UTC on 2026-11-08 in green; judged on the hub: Free. Next: print more stars like this, with no supports | [the record](../../prints/2026-11-08-fidget-star-1/index.md) |
