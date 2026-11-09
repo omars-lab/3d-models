@@ -104,9 +104,14 @@ complexity check lists the 86 Python functions over 10 and stops any new one.
   copy absent, the same, a row changed, rows added, and a log master has gone from disk.
   68 left. The `self_test` functions (`branch_inventory.py` 34, `theme_plates.py` 22,
   `site_graph.py` 21, `docs_gate.py` 20, `plates_gate.py` 19, `validate.py` 18) are skipped: each
-  is a list of test cases, so splitting it buys little. Next are the two at 17:
-  `.claude/skills/pattern-catalog/scripts/catalog.py::build` and
-  `.claude/skills/simulate-buyers/scripts/buyers.py::sweep_problems`. A
+  is a list of test cases, so splitting it buys little. On 2026-11-08 the list held 53, and
+  the two once named next, `catalog.py::build` and `buyers.py::sweep_problems`, were already off
+  it (`build` came under 10 in #976). The highest left outside the self-tests are at 14:
+  `.claude/gates/docs_gate.py::outline_verdict`,
+  `.claude/skills/print-model/scripts/layer_extrusion.py::measure`,
+  `.claude/skills/review-print/scripts/prints_page.py::render` and
+  `tools/print_review.py::gcode_layer`; read `.claude/gates/complexity-baseline.json` before
+  picking, not this line. A
   cleanup skill comes back only if
   this proves a repeated manual task, and then as an extension of the built-in `simplify` skill.
 - **A post about the design**, which Omar asked for once he signed off: written with the
