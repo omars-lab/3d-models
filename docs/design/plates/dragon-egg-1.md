@@ -84,6 +84,14 @@ and nothing else. The X2D's own spaghetti check is on.
 |---|---|---|---|
 | DRAGON EGG (no carved id; the only piece on the bed) | 1. Take the egg off the bed. 2. Turn it in your hand and look at the scale tips, most of all on the lower half. Do the scales come out clean, or do some tips droop or string? Clean, rough tips, or failed | Clean, or a few rough tips low down: the maker prints it with no supports, and the warning points at scale tips starting in the air | Clean: print more eggs as they are. Rough tips: try the maker's own file, which raised fewer warnings in September. Failed: no more eggs until we look at supports |
 
+## Judged
+
+Omar's answers to the rows of After the print, word for word, one row each, oldest first. They are written by the review-print skill's `after_print.py answer` (the hub's Judge a print page calls it); the newest answer to a row is the one that counts. A session turns them into the print record with review-print.
+
+| Row | Answer | His words | Date |
+|---|---|---|---|
+| 1 | Clean | — | 2026-11-09 |
+
 ## Your call
 
 - [ ] **Approve as it stands** — one dragon egg, silk blue, no supports
