@@ -3,9 +3,9 @@ plate: dragon-egg-1
 print_log: '[[print-logs/dragon-egg-1|print log]]'
 recipe: dragon-egg-1.yaml
 iteration: 2
-stage: sent
-times_printed: 0
-runs: []
+stage: printed
+times_printed: 1
+runs: [2026-11-07-dragon-egg-1]
 answers: "Does the Mini Twisted Dragon Egg print clean standing up with no supports, in silk blue, on the X2D?"
 kind: new
 maturity: experiment
@@ -114,3 +114,4 @@ Every yes or hold Omar gives this plate, one row each, oldest first (D-096). A t
 | 2026-11-06 | proposed — at Omar's ask: one small dragon egg | this page |
 | 2026-11-06 | sliced — local slice fits one bed, 1 h 14 min, 15.60 g, one by-design slicer warning signed off by Omar | this page |
 | 2026-11-06 | sent — by `bambu print send`; spends the approval of 2026-11-06, iteration 2 @ d811f0eb94 in #0047BB | this page |
+| 2026-11-09 | printed — all 178 layers, 02:58 to 04:21 UTC on 2026-11-07 in silk blue; judged on the hub: Clean. Next: print more eggs as they are, standing up, no supports | [the record](../../prints/2026-11-07-dragon-egg-1/index.md) |
