@@ -111,6 +111,14 @@ of 10 g, not a printer risk. The X2D's own spaghetti check is on.
 |---|---|---|---|
 | PING-PONG BALL (no carved id; the only piece on the bed) | This checks whether the ball came out hollow, with only the outside held up. The slice keeps support out of the hollow, but a few small nubs touch the shell's windows near the bottom. **Do:** 1. Take the ball off the bed with its supports. 2. Pull the supports off the outside. 3. Hold the ball up to a light and look through the windows into the middle. 4. Look at the windows in the lower half for small bits of support. 5. Bounce it once on a table. **Look for:** a clear hollow or one with support in it; how many windows still hold a nub and whether they pick out; whether it bounces. | A clear hollow, with a few nubs in the lower windows that come off with the support or with a pick | Clear and nubs come out: print it like this again. Clear but nubs stuck: try a slightly larger blocker or a finer support gap. Support in the hollow: the blocker did not work in print; look again before another ball |
 
+## Judged
+
+Omar's answers to the rows of After the print, word for word, one row each, oldest first. They are written by the review-print skill's `after_print.py answer` (the hub's Judge a print page calls it); the newest answer to a row is the one that counts. A session turns them into the print record with review-print.
+
+| Row | Answer | His words | Date |
+|---|---|---|---|
+| 1 | in my words | Ball good. | 2026-11-08 |
+
 ## Your call
 
 - [ ] **Approve as it stands** — one ball, one color picked at the send, supports from the bed only, none in the hollow, and the three small support nubs in the lower windows (4.7 mm of line, shown in the close-up above) left as they are
