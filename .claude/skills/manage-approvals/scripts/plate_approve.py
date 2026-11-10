@@ -532,6 +532,8 @@ def self_test() -> int:
               f"stale={stale} wrote={wrote} {after} stdout={out.getvalue()!r}")
         check(not refresh_queue(bare, plates, quad),
               "a page outside the plates folder leaves the queue alone", str(bare))
+        check(not refresh_evidence_log(m9, plates),
+              "a fixture page leaves the repo's evidence log alone", str(m9))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     print("self-test: " + ("PASS" if not fails else f"FAIL ({fails})"))
@@ -555,6 +557,29 @@ def refresh_queue(page: Path, plates: Path = pg.PLATES, paths: tuple | None = No
         return True
     print("plate_approve: the plate queue was not rewritten; see above", file=sys.stderr)
     return False
+
+
+def refresh_evidence_log(page: Path, plates: Path = pg.PLATES) -> bool:
+    """Rewrite the print evidence log after a page change, so hook 56 is not left failing.
+
+    A send moves a page to `stage: sent`, which puts a plate whose log already says finished
+    back on the log's list of plates printed and not judged (closeout-1's reprint, 2026-11-09);
+    an approval or a hold can take one off it. Before this, both closeout-1 commits stopped on
+    hook 56 until `evidence_log.py --write` was run by hand. Only a page in the repo's own
+    plates folder: the log is drawn from the whole repo, so a fixture page has none. Like the
+    queue, a failure is said on stderr, not raised: the page change still stands."""
+    if plates.resolve() != pg.PLATES.resolve() or page.resolve().parent != plates.resolve():
+        return False
+    sys.path.insert(0, str(ROOT / ".claude" / "skills" / "review-print" / "scripts"))
+    try:
+        import evidence_log  # it reads the plates gate too, so not at the top
+        said = evidence_log.refresh()
+    except Exception as e:  # noqa: BLE001 — a log that cannot be drawn must not undo the page
+        print(f"plate_approve: the evidence log was not rewritten: {e}", file=sys.stderr)
+        return False
+    if said:
+        print(said, file=sys.stderr)
+    return True
 
 
 def apply_flags(page: Path, a: argparse.Namespace) -> str | None:
@@ -603,6 +628,7 @@ def main(argv: list[str]) -> int:
         if said is not None:
             print(said)
             refresh_queue(page)
+            refresh_evidence_log(page)
             return 0
     except Refused as e:
         print(f"plate_approve: {page.stem}: {e}", file=sys.stderr)
