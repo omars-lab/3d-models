@@ -1,0 +1,43 @@
+# cables-1 — a cable holder and a row of cable clips, for Omar's desk
+#
+# Omar, 2026-11-10: something thin to press USB-C cables into, a loop a cable pushes into,
+# not a winder or spool. Omar picked two MakerWorld models ("want a plat wit hthese")
+# and downloaded them the same day. One of each, as the makers set them up:
+#
+#   CABLE HOLDER  x1   scale 1   34.0 x 16.75 x 15.0 mm, 3 slots, flat on its long base
+#   CABLE CLIPS   x1   scale 1   79.2 x 5.6 x 5.0 mm, a row of 13 small clips
+#
+# The holder is the Universal Cable Holder by VC_design (makerworld.com/en/models/1003508), the
+# 3-slot file, stuck to the desk edge with double-sided tape. The clips are
+# makerworld.com/en/models/1733675. Each mesh was taken out of the maker's own project file
+# with the maker's placement, so it lies on the bed the way they print it. The clips' bare STL
+# in the download lies on its side; the project turns it a quarter turn. Neither maker uses
+# supports; both slice at 0.20 mm with 2 walls and 15% infill, which is our standard profile.
+#
+# The files stay out of git: this repo is public and the models are someone else's. They sit in
+# the gitignored imports folder (.bambu/imports, a link to Omar's iCloud folder
+# CloudDesktop/data/3d-models/imports, a README row each) and the recipe holds each to its sha256.
+#
+# One color, picked at the send. Until then the plate slices on PLA Basic.
+#
+# Validate (no hardware; slicing is local):
+#   bambu slice compose docs/design/plates/cables-1.yaml --dry-run
+
+bed: x2d
+profile:
+  settings: "Bambu Lab X2D 0.4 nozzle;0.20mm Standard @BBL X2D"
+  filament: "Bambu PLA Basic @BBL X2D 0.4 nozzle"
+
+id_code: CB1
+
+items:
+  - stl:     .bambu/imports/universal-cable-holder-3-slots.stl # UniversalCableHolder_3_slots.3mf as downloaded, its one mesh
+    sha256:   f12765d4e3618aaf6faefdd2b914f6ab344fd62c6c34251891737f8355d60ab9
+    count:    1
+    label:    CABLE HOLDER
+    no_id:    "a desk piece, not an experiment, and one of two pieces that look nothing alike; an outside mesh, so nothing is cut into it"
+  - stl:     .bambu/imports/cable-clips-all.stl # CableClipsAll.3mf as downloaded, turned as the maker turns it
+    sha256:   40fcb002457271cc2bf0a7c8e635e1efd409e4605ec66e3071b4e984c756b89f
+    count:    1
+    label:    CABLE CLIPS
+    no_id:    "a desk piece, not an experiment, and one of two pieces that look nothing alike; an outside mesh, so nothing is cut into it"
