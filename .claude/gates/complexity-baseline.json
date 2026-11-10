@@ -123,9 +123,6 @@
   ".claude/skills/print-model/scripts/layer_extrusion.py::measure": [
    14
   ],
-  ".claude/skills/review-print/scripts/after_print.py::main": [
-   13
-  ],
   ".claude/skills/review-print/scripts/prints_page.py::render": [
    14
   ],
