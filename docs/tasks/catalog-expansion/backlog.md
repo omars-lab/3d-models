@@ -36,11 +36,14 @@ goes to the plates-and-feedback session. Nothing in it may risk the printer.
    - re-vendor the coaster and look at it (it is near-solid now: **do not print it**);
    - re-run O1 and O2.
 
-   What O1 still cannot compare (parabolas, hyperbolas) is youtube's to add. Arcs and their
-   `*_host` circles are compared on youtube branch `coaster-n_I` (2026-10-06); once it merges,
-   re-run O1 on this one and on `gBV_JTt3Kxk`, which has ten scaffold arcs; its last O1 skipped or
-   counted as extra 47 objects. Also youtube's: `naqsh_score.py` treats `ggb_score.py`'s FAIL exit
-   (2) as a crash. That patch is in the same note.
+   What O1 still cannot compare (parabolas, hyperbolas) is youtube's to add. The arc re-run is
+   done: on 2026-11-10, on youtube main, this one went from 25 compared and 15 failed to 28 and 9
+   (the two parabolas, the hyperbola, and the six built on the wrong `R`), `NtnlGMTElBk` went
+   from FAIL 124/20 to PASS 134/0, and `gBV_JTt3Kxk` stayed PASS 144/0 with all 47 of its
+   skipped or extra objects accounted for
+   ([the 2026-11-10 O1 reruns](../../research/ledger-oracle-runs-2026-11-10.md)). Also youtube's:
+   `naqsh_score.py` treats `ggb_score.py`'s FAIL exit (2) as a crash. That patch is in the same
+   note.
 2. **Screened queue, 2026-09-27.** Two independent screens and a checker's consolidation:
    [the consolidated screen](../../research/candidate-screen-2026-09-27.md) is the one to act
    on. 10 GO, all from creators other than Sarah Brewer. Coaster fit was judged from
