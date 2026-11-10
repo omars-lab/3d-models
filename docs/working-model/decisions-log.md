@@ -6978,3 +6978,37 @@ graphify's source but never ran it; Omar chose not to run a second researcher fi
 
 **What would reverse it:** the trial's FAIL line in §6 of the design, or Omar wanting the graph
 across all five repos before the trial ends.
+
+### The side-by-side test, 2026-11-10: it does not pass
+
+The claude-techniques session ran the side-by-side test the backlog promised, as the
+code-map-team-vs-solo experiment in social-presence-hub (its hub PR #194, merged at bf72b5b; the
+full write-up is that experiment's results.md, a private repo). The setup:
+
+- The map was graphify 0.9.102, tried on two real bikar tasks: P, the coaster half pins, and W,
+  the coaster pin rings.
+- There were four setups: one agent or a team, each with or without the map.
+- Each setup ran twice on each task, all on claude-opus-5-5 at medium effort, for $34.33 in all.
+
+What it found:
+
+- **The map did not cut searches for code names.** Runs with the map averaged 13.75 searches,
+  against 14.4 without (rank test p = 0.90). The pass rule wanted a drop of about a third. The
+  map questions (4.8 a run for one agent, 7.5 for a team) came on top of the searches, not in
+  place of them.
+- **Map runs were about 10 to 15% cheaper and a little faster.** The blind reviewer scored them
+  a little lower in all four setups.
+- **The team cost about twice as much and took about 1.5 times as long as one agent,** with no
+  better scores. Nothing showed the team gaining more from the map.
+- **Task W's pass counts say nothing about the setups.** 7 of its 8 runs failed one check,
+  because the task text and bikar's held-back test disagree on where "wall" goes in the studs
+  line. On task P every run passed.
+- **Both held-back tests were loosened** from the real PRs' versions, which checked exact
+  wording. results.md notes this at the top.
+
+With two runs a setup, these are directions, not proof. They match the second FAIL case in §6
+of the design: sessions query the graph, yet their code-name searches stay level, so its answers
+were not good enough to stop the grep. The trial's own measure, the FAQ tool rerun over bikar
+sessions, is still due when the trial ends on 2026-11-20. The backlog says to read the two
+together. Whether to stop early and remove graphify from bikar (§6 says how) is Omar's call. So
+is whether to drop the script for links between repos (question 3), which waits on this result.

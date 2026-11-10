@@ -29,6 +29,11 @@ complexity check lists the 86 Python functions over 10 and stops any new one.
   bikar sessions and judge against the design's PASS and FAIL lines. The claude-techniques session
   (social-presence-hub) runs a side-by-side test of the graph on real bikar tasks, on the same
   commit, once Omar OKs its plan; read its result beside the FAQ rerun rather than either alone.
+  **That test came back 2026-11-10 and does not pass:** searches for code names were not cut
+  (13.75 a run with the map, 14.4 without), and map questions came on top of the searches. It
+  fits the second FAIL case of the design's §6; details under
+  [D-129](../../working-model/decisions-log.md). The FAQ rerun on 2026-11-20 is still owed.
+  Stopping early and removing graphify is Omar's call.
 - **After the trial:** a script for links between repos (design question 3).
 - **Shrinking the complexity list, by hand, a function a PR** (no skill: the design's §5 says
   gate, not skill, and the gate is hook 55). `complexity_gate.py --update` after each split.
