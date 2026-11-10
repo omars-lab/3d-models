@@ -35,7 +35,7 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 | [Navy to ice](#navy-to-ice) | 3.0 | 5 | Dark Blue, Marine Blue, Sky Blue, Ice Blue |
 | [Pink heart](#pink-heart) | 2.5 | 3 | nothing |
 | [Sakura to plum](#sakura-to-plum) | 2.5 | 5 | Sakura Pink, Lilac Purple, Plum, Ivory White |
-| [All Bambu Green](#all-bambu-green) | 2.2 | 1 | nothing |
+| [Leaf green](#leaf-green) | 2.2 | 1 | nothing |
 | [Pink and green rings](#pink-and-green-rings) | 1.7 | 3 | nothing |
 | [All four trays](#all-four-trays) | 1.5 | 4 | nothing |
 
@@ -535,11 +535,11 @@ The gBV minimal coaster is a ten-fold star: a strap network (the frame) with 41 
 | Gift buyer | 3 | Lovely for someone who likes pink, a risk for anyone else. |
 | Café owner buying sets | 2 | Four to buy, five plates, and a white frame; suits one kind of café. |
 
-## All Bambu Green
+## Leaf green
 
-*The plate as it went out on 2026-10-04, one color for everything.*
+*One bright leaf green for the frame and every piece; the simplest of the set, its pattern traced only by the fine lines between the pieces.*
 
-![gBV in the All Bambu Green theme](gbv/all-green.svg)
+![gBV in the Leaf green theme](gbv/all-green.svg)
 
 | Group | Color | |
 |---|---|---|

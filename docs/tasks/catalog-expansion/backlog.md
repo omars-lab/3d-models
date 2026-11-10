@@ -435,6 +435,11 @@ goes to the plates-and-feedback session. Nothing in it may risk the printer.
     shopper sees it. Handed here by the storefront session on 2026-11-03 (its CS-9 "R fix"
     note is item 1 above, the nmEjCTzMbDg hold). Low priority: nothing printed or listed
     rests on it.
+    **Drafted 2026-11-10, waiting on Omar's word:** renamed "Leaf green", with the mood "One
+    bright leaf green for the frame and every piece; the simplest of the set, its pattern
+    traced only by the fine lines between the pieces." The theme's id stays `all-green`, so
+    its picture and its persona review stand (a review is for the coloring, not the name).
+    The name is Omar's taste call, since shoppers read it; he can take it or change a word.
 
 9. **The 13 cup-band coasters have no picture in the pattern catalog; waits on Omar's cup
     pick (store-launch call 1-08).** Every catalog sync warns "no Coaster Lab picture for

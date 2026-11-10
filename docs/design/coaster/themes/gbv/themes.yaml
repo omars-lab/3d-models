@@ -33,8 +33,8 @@ groups:
 
 themes:
   - id: all-green
-    name: All Bambu Green
-    mood: The plate as it went out on 2026-10-04, one color for everything.
+    name: Leaf green
+    mood: One bright leaf green for the frame and every piece; the simplest of the set, its pattern traced only by the fine lines between the pieces.
     made_by: suggest --helper one-color
     colors: { frame: green, middle: green, kite: green, hex: green, star: green, outer: green }
 
