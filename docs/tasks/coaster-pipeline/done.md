@@ -2,6 +2,7 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-11-10 — The lopsided bigger kites (Omar on split-08: "the bigger kites are still not eymetric") come off the backlog: Omar closed that question with no photo on 2026-11-06, when he closed split-07 (3d-models #915), and the backlog still listed it as open. As drawn the pieces are mirror-symmetric. It comes back only if the next whole coaster shows lopsided kites, and then the sliced walls get read against the drawing (`tools/fit_gap.py walls`)
 - 2026-11-07 — master's split-flange coaster source now matches bikar main's: three 1.2 mm star pins on a triangle by default whenever there is a pin size. Only the two star-pin lines changed, and the 90 mm standard STL renders byte for byte as committed, since star pins show only on halved pieces (3d-models #931)
 - 2026-11-07 — toys-1 (magic cube, ping-pong ball, fidget star) sent in silk blue on Omar's yes and printed to the finish in 6 h 14 min, with its log, timelapse and last picture. Judging it waits on Omar (3d-models #925, #926, #928)
 - 2026-11-06 — split-10's open questions, with split-07's, star-1's and star-3's, went onto one small plate, closeout-1, instead of a next split-10 plate; split-10 and the others were closed as replaced by it, and closeout-1 was approved, sent and printed in green. Judging it waits on Omar (3d-models #895, #904, #906, #909, #915)

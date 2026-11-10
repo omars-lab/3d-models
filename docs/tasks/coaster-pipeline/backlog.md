@@ -31,10 +31,13 @@ relayed by the other sessions, go into that record and the next prints:
   [ball-1](../../design/plates/ball-1.md): "on build plate only" alone still grew support into the
   hollow, so the recipe adds a support blocker (a sphere inside the ball, placed by the plate tool)
   and plain supports. The G-code check finds three ~1 mm nubs in lower windows, none in the
-  hollow. Waiting on his yes and color.
+  hollow. Printed and judged: "Ball good." ([its record](../../prints/2026-11-09-ball-1/index.md), #983),
+  so the ball prints this way from now on.
 - **The star on its own.** His words: "i want to create an individual plate with just the
   start", read as the star. Built as [fidget-star-1](../../design/plates/fidget-star-1.md), no
-  supports, waiting on his yes and color.
+  supports. Printed and judged: its rings turned freely
+  ([its record](../../prints/2026-11-08-fidget-star-1/index.md), #987), so more stars print with
+  no supports.
 
 1. **The kite fits split-10 dropped.** On Omar's word, split-10's iteration 4 left out
    KITE-G10 (gap 0.10 mm a face) and KITE-PIN20 and KITE-PIN15 (pin holes 0.20 and 0.15 mm wider
@@ -43,19 +46,15 @@ relayed by the other sessions, go into that record and the next prints:
    over) says whether 0.08 is snug: G10 brackets the gap from the other side, and the pin holes
    settle whether loose kites are loose in the hole or between the halves. Found by split-10
    iteration 4, 2026-10-27.
-2. **The bigger kites print lopsided.** Omar, 2026-10-25, on split-08's pieces: "but the bigger
-   kites are still not eymetric". As drawn they are mirror-symmetric, so the difference comes in the
-   slice or the print. Needs a photo with the lopsided side marked (split-07's page asks for it),
-   then a look at the sliced walls of one bigger kite (`tools/fit_gap.py walls`) against the drawing.
-3. **Turn a finished print into data** — waits on Omar printing minis-01, or a
+2. **Turn a finished print into data** — waits on Omar printing minis-01, or a
    `bambu print capture` showing up. Then follow the `print-model` skill's compare loop:
    record in `docs/prints/<date>-minis-01/`, settle the CAL-CST bets it measures, update the
    counts in §1 of the register below. Record what was measured, not what was
    expected. (P4.3. minis-01's first print left no answer, 3d-models #629.)
-4. **Keep [minis-01](../../design/plates/minis-01.yaml) ready to send.** Re-compose after any coaster
+3. **Keep [minis-01](../../design/plates/minis-01.yaml) ready to send.** Re-compose after any coaster
    change; slice, preflight and filament-sync against the live AMS trays; check each item's
    bikar pin against bikar main. Stops at the send.
-5. **Tooling that blocks this plate** — fix only friction that stops minis-01. General tooling
+4. **Tooling that blocks this plate** — fix only friction that stops minis-01. General tooling
    goes in the [print-infrastructure backlog](../print-infrastructure/backlog.md), new designs
    in the [catalog backlog](../catalog-expansion/backlog.md).
    - **Check the send payload against one Bambu Studio send.** `bed_type`, `md5`, and the tray
@@ -64,7 +63,7 @@ relayed by the other sessions, go into that record and the next prints:
      printer config on this machine (`bambu setup doctor` says it is missing) and one send from
      Studio while the request topic is read. Until then, plates go out from Bambu Studio.
      Found by the minis-01 run, 2026-09-25.
-6. **Standard-size plate (P5.2)** — only after item 3 settles the CAL-CST numbers (board #6).
+5. **Standard-size plate (P5.2)** — only after item 2 settles the CAL-CST numbers (board #6).
 
 ## Owner-gated
 
