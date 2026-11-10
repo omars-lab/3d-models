@@ -436,6 +436,19 @@ goes to the plates-and-feedback session. Nothing in it may risk the printer.
     note is item 1 above, the nmEjCTzMbDg hold). Low priority: nothing printed or listed
     rests on it.
 
+9. **The 13 cup-band coasters have no picture in the pattern catalog; waits on Omar's cup
+    pick (store-launch call 1-08).** Every catalog sync warns "no Coaster Lab picture for
+    `<id>-cup-band.bkr`" for 0ke_GpoBa-s, 7apC5Q9QS-8, 88q-u2eWZqg, GimTvN9hw4U, NtnlGMTElBk,
+    bknVRSMcLj0, gBV_JTt3Kxk, jlTmt_279M4, lEfWSogWscs, n3IidKfXE1I, rDuxHF3xMOc,
+    sDO9fpu76v8 and tA8eSdVx_EQ. The catalog copies each picture from bikar main: it looks
+    the coaster up in the Lab's coaster list (`coaster-scripts.ts`) and takes that entry's
+    thumbnail from `coaster-thumbs/`, both in bikar's `packages/lab/src/`. On 2026-11-10
+    neither had any cup band. The fix is one bikar PR, the 13 added to the Lab's list with a
+    rendered thumbnail each, then a catalog sync here. It waits on 1-08 because the list is
+    what Lab visitors see, so adding them would show cup patterns before Omar picks the
+    store's. No second picture path in the catalog script: one path for pictures is the
+    rule. Agreed with the manager session on 2026-11-10.
+
 ## Handed to the video loop
 
 GO candidates not yet reconstructed go to the youtube repo's ladder, not here. Name the id
