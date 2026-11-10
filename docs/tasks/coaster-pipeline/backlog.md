@@ -39,6 +39,16 @@ relayed by the other sessions, go into that record and the next prints:
   ([its record](../../prints/2026-11-08-fidget-star-1/index.md), #987), so more stars print with
   no supports.
 
+**A cable-holder plate, waiting on Omar's download.** On 2026-11-10 Omar asked for "a plat wit
+hthese": two MakerWorld models for keeping USB-C cables tidy on his desk. One is the
+[Universal Cable Holder](https://makerworld.com/en/models/1003508-universal-cable-holder), a
+4-slot block taped to the desk edge, about 43 × 12 × 13 mm and 4–5 g. The other is the
+[Cable clips](https://makerworld.com/en/models/1733675-cable-clips), about 12 minutes to print.
+MakerWorld downloads need his login, so he downloads both into the iCloud imports folder. They
+stay out of git and get a README row each there. Then the plate's recipe names them as `stl:`
+items pinned by sha256. Slice it, look at the bed picture, then the plate page for his yes, the
+send, and the watch. These are for his desk, not an experiment, so no carved ids.
+
 1. **The kite fits split-10 dropped.** On Omar's word, split-10's iteration 4 left out
    KITE-G10 (gap 0.10 mm a face) and KITE-PIN20 and KITE-PIN15 (pin holes 0.20 and 0.15 mm wider
    than the pin), keeping only stock and gap 0.08. Put them on the next kite plate once
