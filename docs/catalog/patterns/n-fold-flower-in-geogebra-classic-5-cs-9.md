@@ -36,7 +36,7 @@ From the [constructions ledger](../../constructions/ledger.md).
 
 0 of the three checks pass and 2 fail; the ledger's notes say why.
 
-- every labelled point and line: 25 compared, 15 failed (FAIL);
+- every labelled point and line: 28 compared, 9 failed (FAIL);
 - the drawn lines: recall 0.9176, precision 0.2589 (FAIL);
 - the solid coverage: none by design: no solid to compare (see notes).
 

@@ -41,9 +41,9 @@ No picture yet: Coaster Lab has no thumbnail for this file.
 
 From the [constructions ledger](../../constructions/ledger.md).
 
-1 of the three checks pass and 1 fail; the ledger's notes say why.
+2 of the three checks were run, and they pass:
 
-- every labelled point and line: 124 compared, 20 failed (FAIL);
+- every labelled point and line: 134 compared, none failed (PASS);
 - the drawn lines: recall 0.9999, precision 1.0 (PASS);
 - the solid coverage: not run.
 

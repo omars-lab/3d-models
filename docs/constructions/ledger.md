@@ -129,7 +129,7 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 | `A9fefFurD_s` | Broug's ten-point star from one circle | done | — | — | — | — | — | — | — |
 | `GimTvN9hw4U` | Simple 20-step Six-Fold Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/GimTvN9hw4U.bkr` | PASS 23/0 | PASS 1.000/1.000 | PASS 1.000 | `src/Coasters/GimTvN9hw4U-coaster-standard.stl` | CS-1 | — |
 | `M60LJNNslHU` | Dual Slider m,n-fold Division of the Circle (Sarah Brewer) | done | no piece by design | — | — | — | no piece by design | — | — |
-| `NtnlGMTElBk` | The Mustansiriya ten-fold interlaced star | done | `bikar/patterns/Constructions/NtnlGMTElBk.bkr` | FAIL 124/20 | PASS 0.9999/1.0 | — | `src/Coasters/NtnlGMTElBk-minimal-coaster-standard.stl` | CS-15 | — |
+| `NtnlGMTElBk` | The Mustansiriya ten-fold interlaced star | done | `bikar/patterns/Constructions/NtnlGMTElBk.bkr` | PASS 134/0 | PASS 0.9999/1.0 | — | `src/Coasters/NtnlGMTElBk-minimal-coaster-standard.stl` | CS-15 | — |
 | `Y6kS1MvnKoc` | A Mamluk Qur'an page from seven ten-point stars | done | — | — | — | — | — | — | — |
 | `ZXKYNvqtFKs` | Rings of Tangent Circles (Sarah Brewer) | done | — | — | — | — | — | — | — |
 | `_U6G8QSfWnk` | Sutton's fivefold rectangle and its traced quarter | done | — | — | — | — | — | — | — |
@@ -142,7 +142,7 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 | `lEfWSogWscs` | Pattern from the Tomb of Itimad ad-Daula (Sarah Brewer) | done | `bikar/patterns/Constructions/lEfWSogWscs.bkr` | PASS 49/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/lEfWSogWscs-coaster-standard.stl` | CS-7 | — |
 | `n3IidKfXE1I` | Variable-angled 12-6-4 Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/n3IidKfXE1I.bkr` | PASS 64/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/n3IidKfXE1I-coaster-standard.stl` | CS-10 | — |
 | `n_ICgwOr6qs` | A ten-petal blossom from one compass setting | done | `bikar/patterns/Constructions/n_ICgwOr6qs.bkr` | PASS 34/0 | PASS 1.0/1.0 | none by design: no solid to compare (see notes) | `src/Coasters/n_ICgwOr6qs-minimal-coaster-standard.stl` | CS-18 | — |
-| `nmEjCTzMbDg` | n-fold Flower in GeoGebra Classic 5 (Sarah Brewer) | done | `bikar/patterns/Constructions/nmEjCTzMbDg.bkr` | FAIL 25/15 | FAIL 0.9176/0.2589 | none by design: no solid to compare (see notes) | `src/Coasters/nmEjCTzMbDg-coaster-standard.stl` | CS-9 | — |
+| `nmEjCTzMbDg` | n-fold Flower in GeoGebra Classic 5 (Sarah Brewer) | done | `bikar/patterns/Constructions/nmEjCTzMbDg.bkr` | FAIL 28/9 | FAIL 0.9176/0.2589 | none by design: no solid to compare (see notes) | `src/Coasters/nmEjCTzMbDg-coaster-standard.stl` | CS-9 | — |
 | `rDuxHF3xMOc` | 8-fold Star Rosette with Sequences (Sarah Brewer) | done | `bikar/patterns/Constructions/rDuxHF3xMOc.bkr` | PASS 41/0 | FAIL 0.8381/1.0 | PASS 1.000 | `src/Coasters/rDuxHF3xMOc-coaster-standard.stl` | CS-8 | — |
 | `sDO9fpu76v8` | Pattern from the Royal Alcazar (Sarah Brewer) | done | `bikar/patterns/Constructions/sDO9fpu76v8.bkr` | PASS 84/0 | PASS 0.996/0.9972 | PASS 1.000 | `src/Coasters/sDO9fpu76v8-coaster-standard.stl` | CS-11 | — |
 | `tA8eSdVx_EQ` | 5-minute 7-fold Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/tA8eSdVx_EQ.bkr` | PASS 28/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/tA8eSdVx_EQ-coaster-standard.stl` | CS-6 | — |
@@ -177,6 +177,13 @@ The FAILs were worked through the same day, in
   - the other is in the youtube source: `R = Intersect(t, m, 2)` picks the other
     root in bikar. The fix is proposed there.
 
+  O1 was re-run on 2026-11-10 on youtube main (7deb8ab), which compares arcs now:
+  `FAIL: 28 compared, 9 failed, 35 skipped/extra`, the row's cell since then. The
+  three arcs pass and their host circles are no longer reported. The nine left are
+  the two parabolas and the hyperbola, which O1 still cannot compare, and the
+  wrong `R` itself with the five objects built from it (`c_1`, `d_1`, `D`, `T`, `a`);
+  [the 2026-11-10 O1 reruns](../research/ledger-oracle-runs-2026-11-10.md).
+
   **Do not print this coaster.** Until the youtube fix lands, it is built on the
   wrong `R` and renders near-solid.
 - **`rDuxHF3xMOc`** O2: **by design**. The GeoGebra export keeps the tile's four
@@ -197,14 +204,22 @@ at their imports on 2026-09-30, on the youtube branches named in each bikar PR
   2026-11-03, during the blossom import, against bikar's `gBV_JTt3Kxk.bkr`: it
   reads `PASS: 144 compared, 0 failed, 47 skipped/extra`, the row's cell since
   then. The arcs compare since youtube 224a346 ("O1 checks arcs", on main at
-  the pin). O2 was not re-run.
+  the pin). O2 was not re-run. A re-run on 2026-11-10 (youtube main 7deb8ab)
+  printed the same line, and the 47 are all accounted for: 36 polygon sides
+  GeoGebra adds on its own, 3 repeat patterns and 8 copies the importer makes
+  for the `wlow` repeat. None is a comparison O1 is missing; the list is in
+  [the 2026-11-10 O1 reruns](../research/ledger-oracle-runs-2026-11-10.md).
 - **`jlTmt_279M4`** O1 `PASS: 86 compared, 0 failed, 75 skipped/extra` — on
   youtube branch `o1-polyline-ray` (9a92134), which teaches the comparator
-  polyline and ray rows and is not on youtube main yet; O2
+  polyline and ray rows and was not on youtube main then; O2
   `O2 PASS: edge-SSIM 0.9458 (min 0.7), recall 1.0 precision 1.0 (min 0.98), phash 16 (advisory)`.
+  Re-run on youtube main (7deb8ab) on 2026-11-10, O1 printed the same line.
 - **`NtnlGMTElBk`** O1 `FAIL: 124 compared, 20 failed, 12 skipped/extra` — the
   same arc gap, ten arcs and their ten host circles; O2
   `O2 PASS: edge-SSIM 0.9066 (min 0.7), recall 0.9999 precision 1.0 (min 0.98)`.
+  O1 was re-run on 2026-11-10 on youtube main (7deb8ab), which compares arcs now:
+  `PASS: 134 compared, 0 failed, 12 skipped/extra`, the row's cell since then. All
+  ten arcs pass; the 12 are the star's ten sides and 2 repeat patterns.
 - **O3 is `—` on all three**: none of the three reconstructions has a `.ggb`
   export to build a reference from, so the oracle was not run, not skipped by
   design.
