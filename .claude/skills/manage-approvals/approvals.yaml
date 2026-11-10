@@ -19,6 +19,8 @@ bedface-4:
   - {iteration: 3, recipe: '43da531610fd', date: '2026-10-12'}
 bedface-5:
   - {iteration: 1, recipe: '0c49ccb110c4', date: '2026-10-14'}
+cables-1:
+  - {iteration: 1, recipe: 'b5ce75176485', date: '2026-11-10'}
 cedar-stencil-1:
   - {iteration: 1, recipe: 'a492931c461a', date: '2026-10-30'}
   - {iteration: 2, recipe: '9dff338c14b1', date: '2026-10-30'}
