@@ -435,6 +435,13 @@ goes to the plates-and-feedback session. Nothing in it may risk the printer.
     shopper sees it. Handed here by the storefront session on 2026-11-03 (its CS-9 "R fix"
     note is item 1 above, the nmEjCTzMbDg hold). Low priority: nothing printed or listed
     rests on it.
+    **Renamed 2026-11-10 to "Emerald green"**, the store name Omar already picked on
+    2026-10-11 (call 8, in the storefront repo's naming file, docs/naming/names.yaml), so the theme has one
+    name in both repos. The mood is now "One bright emerald green for the frame and every
+    piece; the simplest of the set, its pattern traced only by the fine lines between the
+    pieces." The theme's id stays `all-green`, so its picture and its persona review stand
+    (a review is for the coloring, not the name). The store's own shopper copy is a separate
+    field the storefront writes later.
 
 9. **The 13 cup-band coasters have no picture in the pattern catalog; waits on Omar's cup
     pick (store-launch call 1-08).** Every catalog sync warns "no Coaster Lab picture for
