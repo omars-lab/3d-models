@@ -148,7 +148,7 @@ module disc() {
 }
 
 // ---- The first test piece: straight runs, each a separate bar with a carved id ----
-// Ids skip B, D, M, N and O, which read alike at this size.
+// Ids skip B, D, I, M, N and O, which read alike at this size (I reads as 1).
 bar_len = 40;
 tag_w   = 7;            // the id tab beside each bar
 function bar_w(wall, twin) = twin ? 2 * groove_w(d) + 3 * wall : groove_w(d) + 2 * wall;

@@ -46,7 +46,8 @@ the OpenSCAD[^openscad] preview colors the cut faces orange, and at this angle o
 top exit's orange shows.*
 
 Stacking needs nothing extra. The flat underside of the disc above lies on the tops of the channel
-walls of the disc below, so it closes every channel, and a stacked cable cannot lift out at all. A
+walls of the disc below, so it closes every channel, and a stacked cable cannot lift out at all
+(for discs of the same diameter; see [How the discs stack](#how-the-discs-stack)). A
 low stacking ring[^ring] round the top edge sits in a chamfer[^chamfer] on the bottom edge of the
 disc above, so the pile stays lined up. In this doc "the rim" means only the disc's solid outer
 wall, which the exits cut through.
@@ -121,7 +122,7 @@ millimetre, then spring back over it.
 ![A labeled cut through one channel, and two discs set one on the other at the rim](cable-spiral-media/cut-and-stack.png)
 
 *Left: one channel cut across, to scale, with each size the table below gives. Right: two discs at
-the outer edge, drawn apart so both show and not to scale; it leaves out the lower channel's lip.
+the outer edge, drawn apart so both show and not to scale; it leaves out the lower channel's lip[^lip].
 This drawing tool draws only boxes, so the cable and the sloped faces are drawn square, and the square
 cable's top corners seem to touch the lip. A round cable does not: the next picture shows the
 channel's true shape, and the grip picture further down shows round cables in it. The ring and the
@@ -192,12 +193,13 @@ flowchart LR
   flat and leave a thin sliver of rim; turning out first crosses it steeply and ends the rim in a
   square cut. The exit is cut the full channel width with no lip, so the cable near the plug lifts
   out freely.
-- **The rim** outside the last turn is 2 mm, a guess.
+- **The rim** outside the last turn is at least 2 mm, a guess. The spiral is off-centre, so the rim
+  is that thin only at one point and about 5 mm at the sides.
 
 **Disc size against cable length**, from the model for d = 4: 1 m of cable needs a disc 96.7 mm
 across. The research note's table says about 92 mm. The difference is that the note measured to the
 middle of the outermost channel and added the rim, while the model adds half a channel width too.
-The model's figure is the one that prints. A 2 m cable needs a disc about 130 mm across.
+The model's figure is the one that prints. A 2 m cable needs a disc about 128.5 mm across.
 
 ### How the discs stack
 
@@ -210,11 +212,17 @@ the pile lined up. The right half of the labeled cut above shows both.
   disc above, 0.2 mm short of filling it, so it never holds the disc above off the channel walls.
   0.2 mm is Prusa's stated accuracy for its own printers; on the X2D it is only a starting guess.
 - **No bridges[^bridge] anywhere.** The underside is flat.
+- **Only discs of the same diameter line up.** The diameter depends on both the cable size and the
+  length: 87.3 mm for 1 m at d = 3.2, 96.7 mm at d = 4, 100.2 mm at d = 4.3, and about 128.5 mm
+  for 2 m at d = 4. In a mixed pile the ring meets no chamfer, and a smaller disc set on a larger one
+  leaves the larger disc's outer turns open, held by their lips alone. So stack like with like, or
+  put the largest disc at the bottom and accept that the smaller ones above can slide.
 
 ## One disc per cable size
 
-**A disc holds cables from about 6% thinner than the size it was drawn for to about 0.4 mm
-thicker, so three disc sizes cover the USB-C cables we found.** A cable in the channel is never
+**A disc holds cables from about 6% thinner than the size it was drawn for to up to 0.4 mm
+thicker (less for the smallest disc, see the table), so three disc sizes cover the USB-C cables we
+found.** A cable in the channel is never
 squeezed while it rests: it has room to move sideways and to lift until it meets the lip tips. What
 changes with its size is how much room, and how hard it is to press in.
 
@@ -229,10 +237,11 @@ model's `grip` part, which also prints these numbers.*
 
 - **Easy press, more play: from about 0.94 × d up to d.** The lower end is where the mouth, 0.80 × d,
   is 0.85 of the cable: the top of the 0.70 to 0.85 band, so a thinner cable is outside even the
-  snippet's range. The cable has 0.4 to 0.64 mm of room sideways and can lift 1.4 to 1.7 mm before
-  the tips stop it, so it can move about in its channel; it cannot come out.
-- **Firm press, little play: from d up to d + 0.4.** The wider cable fills more of the channel: no
-  room sideways at d + 0.4 and 0.9 mm of lift. The lip's sloped underside still clears it as it
+  snippet's range. For d = 4 the cable has 0.4 to 0.64 mm of room sideways and can lift 1.4 to
+  1.7 mm before the tips stop it, so it can move about in its channel; it cannot come out. (At d the
+  lift is 0.3 × d + 0.2 for any size: 1.16 mm for the 3.2 disc, 1.49 mm for the 4.3.)
+- **Firm press, little play: from d up to d + 0.4.** The wider cable fills more of the channel: for
+  d = 4, no room sideways at d + 0.4 and 0.9 mm of lift. The lip's sloped underside still clears it as it
   lies on the floor (a round cable lying there touches the slope only once it is about 1.3 × d
   across, wider than the channel), so it is not squeezed at rest. Pressing it past the mouth bends
   each wall further: 0.6 mm at d + 0.4 against 0.4 mm at d.
@@ -253,14 +262,24 @@ reaches the 4% top of the band (the beam sum, as above):
 
 Three sizes cover the USB-C cables we found figures for, with no gap, from 3.0 mm (Apple 1 m, one
 user's measurement on Apple's community forum, not Apple's figure) to 4.7 mm (Anker's stated size).
-Anker's 4.7 mm cable sits at the very top of the 4.3 disc's range; a thicker cable needs a larger d. Earbud wire, about
+**They cover it only just.** The exact lower end of the easy range is 0.8 / 0.85 = 0.941 × d, so the
+3.2 disc starts at 3.01 and Apple's 3.0 mm cable sits on its edge. The 3.2 disc's firm range reaches
+4% stretch at 3.48, exactly where the 3.7 disc's easy range starts, so those two meet with no margin.
+The 3.7 and 4.3 ranges overlap from 4.05 to 4.1, and Anker's 4.7 mm cable sits at the very top of
+the 4.3 disc's range; a thicker cable needs a larger d. All of this assumes the 0.80 mouth: if the
+test piece picks 0.75 or 0.85, recompute the sizes. Earbud wire, about
 2 mm from a snippet, would need its own size. **Omar's own cables need measuring with calipers
 before any disc is printed.**
 
 ## Alternatives and the decision
 
-Two researchers answered the same question without reading each other, and a checker re-opened the
-sources and settled the differences. The table weighs the three real choices.
+**We picked the folded cable path with both plugs at the edge, the flat-underside stack lined up by
+the stacking ring, and the full-height disc; the thin disc goes on the test piece beside it.** The
+table weighs the three real choices. Letters in it are the test parts described under
+[The first test piece](#the-first-test-piece): K is the curved bar, L and P the two small stacking
+discs, C the middle-mouth bar, and G and H the thin bars. The 20-press test is the last step of the
+check after printing. Two researchers answered the question without reading each other, and a
+checker re-opened the sources and settled the differences.
 
 | Choice | Picked | Rejected | What the rejected one would buy | Why it lost | What could block the pick this month | What each verifies |
 |---|---|---|---|---|---|---|
@@ -275,11 +294,14 @@ harder, and a narrower range of cables.** In numbers: its lip tip drops from 1.1
 widest point, so the cable still cannot lift out past them. The wall bends harder because the same
 0.4 mm push acts on a shorter strip. And because the tips sit so low, a round cable lying on the floor
 touches them once it is more than about d + 0.15 across (4.15 mm for d = 4); a d-size cable clears
-the lip's underside by only about 0.12 mm. So the thin version holds about 0.94 × d to d + 0.15
+the lip tips by only about 0.13 mm. So the thin version holds about 0.94 × d to d + 0.15
 without pressing on the cable at rest, not the full-height disc's 0.94 × d to d + 0.4. Past d + 0.15
 the tips would press all the time, which the channel width is chosen to avoid because PLA creeps.
+The stretch narrows it further: with the 0.8 wall (G) the stretch passes 4% at about 3.97 mm, just
+below d, and reaches 4.9% at 4.15. So the 0.94 × d to d + 0.15 range holds only for the one-line wall
+(H); with G, only cables thinner than d stay inside the band.
 
-**Decided: the fold, the rim-ring stack, and tip high as the first disc, with the thin version on the
+**Decided: the fold, the stacking-ring stack, and tip high as the first disc, with the thin version on the
 test piece beside it.** Thin enough is part of the ask, so if G or H grips as well as C, the disc
 moves to the thin version. Ownership is ours either way: there is no third-party part in it.
 
@@ -322,8 +344,9 @@ session[^plates] to lay out and send.
 ## Open questions
 
 1. **What does Omar's own cable measure?** Everything scales from d; it is set to 4.0 until then.
-2. **Will the stacking ring print?** It is a triangle 0.4 mm wide at its base, so its top layer is
-   about 0.2 mm wide, narrower than one line (about 0.45 mm). The slicer may leave it out. Slice
+2. **Will the stacking ring print?** It is a triangle 0.4 mm wide at its base and 0.4 mm tall, so it
+   prints as two layers about 0.3 mm and 0.1 mm wide, both narrower than one line (about 0.45 mm).
+   The slicer may leave out the whole ring, not just its top. Slice
    the test piece and look at L before printing; if it vanishes, widen the ring and the chamfer together.
 3. **Is 2.5 × d tight enough for the S-bend, or too tight for a stiff braided cable?** K answers
    this for one cable.
