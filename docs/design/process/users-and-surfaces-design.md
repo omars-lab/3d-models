@@ -7,7 +7,7 @@ produced-by: Claude (Opus 5.5). The 2026-10-08 draft came from a read of this re
 
 # Who uses what, and one app for designing and printing
 
-This doc says, for the whole coaster business, who the users are, which page or tool each one
+This doc says, for the whole 3D-printed coaster business, who the users are, which page or tool each one
 uses, and what each one can and cannot do there. Since 2026-11-11 it also says how the pages for
 designing patterns and printing them become **one application**: one address, one top bar, one
 list of everything waiting on Omar (the owner, who designs, sells and prints), and a button for
@@ -41,7 +41,7 @@ The second question is about **how the pages hang together**. A survey of every 
   public gallery[^gallery], the docs vault's[^vault] README, bikar[^bikar]'s Studio[^studio] landing page
   and the Lab's own index page do not link to each other.
 - **Designing and printing live in two codebases with two looks.** The pattern editor and the
-  Coaster, Orb and Lego Labs[^labs] are in bikar. Plates, judging a print, the printed gallery and the
+  Coaster, Orb and Lego Labs[^labs] are in bikar. Plates, judging a print[^judge], the printed gallery and the
   print vocabulary are in the Print Hub repo.
 - **Omar answers in two tools and three places.** He judges a print with buttons on the Print
   Hub. He says yes to a plate[^plate] by ticking a box on its page in Obsidian. He answers design
@@ -119,7 +119,7 @@ A buyer wants four gBV coasters[^gbv] in the Ice to navy theme[^theme], with a g
    minutes and the filament[^spool]. *(The planning command is built. The order pages and the store pull
    are not. Where the order pages live is [call 3](#call-3-where-do-the-order-pages-go).)*
 3. **Claude session, back office.** It ranks the order's plates beside the experiments waiting,
-   writes each plate's page, and asks Omar for a yes on each one. *(Built for experiment plates.
+   writes each plate's page, and asks Omar for a yes on each one. *(Built for experiment plates[^grade].
    Today Omar ticks a box in Obsidian; decided: he presses Yes on the plate's row in the Waiting
    list.)*
 4. **Print operator, workshop.** Omar puts the plate on the bed[^bed] and loads the spools. The session
@@ -249,7 +249,7 @@ already shipped, so it is in the map now as UC35.
 
 | # | Journey | Pages, in order | Where the answer is kept | Today |
 |---|---|---|---|---|
-| 1 | Draw a pattern | Home → pattern editor | the pattern store | Built, in bikar's Studio |
+| 1 | Draw a pattern | Home → pattern editor | the pattern store[^store] | Built, in bikar's Studio |
 | 2 | Work a pattern back from a photo | sessions | the sessions folder | Built, in bikar's Studio |
 | 3 | Design a coaster | Coaster Lab | the share link | Built; not on the Studio site |
 | 4 | Explore an orb or a brick mosaic | Orb Lab, Lego Lab, breakdown | the link | Built |
@@ -293,7 +293,7 @@ flowchart LR
 | Look at designs and past prints | Gallery | Built |
 | Buy a color theme from a product page | Shopify store | Decided, store closed |
 | Design a custom coloring and add it to the cart | Coaster Lab in the store's product page | Decided, not built |
-| Send a share link for a quote or a large order | By message to the owner, then a Shopify draft order | Planned ([call 1](#call-1-once-the-store-opens-can-a-customer-still-order-by-sending-a-link)) |
+| Send a share link for a quote or a large order | By message to the owner, then a Shopify draft order[^draft] | Planned ([call 1](#call-1-once-the-store-opens-can-a-customer-still-order-by-sending-a-link)) |
 | Get order, shipped and tracking emails | Shopify | Decided, store closed |
 
 None of these change with the one app: the customer never sees it.
@@ -344,7 +344,7 @@ flowchart LR
 |---|---|---|
 | See the printer's state and the list of past prints | Print Hub today; Print in the app, decided | Built |
 | Put a plate on the bed and load the spools | At the printer | Built |
-| Pick the plate's color at the send | The send, by the session, on the operator's word | The send is built. "Always at the send" was decided 2026-10-08; a single-color plate can still carry its color in its recipe |
+| Pick the plate's color at the send | The send, by the session, on the operator's word | The send is built. "Always at the send" was decided 2026-10-08; a single-color plate can still carry its color in its recipe[^recipe] |
 | Resume, stop, pause or swap a print | At the printer, or on his word in chat | Built, and his alone |
 | Judge the pieces: keep, adjust or drop, with a note, and a comment on any numbered piece in the bed picture | The Print Hub's judge page today (comments per piece: a Print Hub change opened 2026-11-11); the judge page in the app, decided | Built |
 | Answer a plate's after-print questions, one at a time | The judge page, which shows each question beside the pieces it asks about | Built since 2026-10-22 (re-checked 2026-11-11: the judge-page skill opens them) |
@@ -370,7 +370,7 @@ This is the print loop, in the order a plate moves through it, plus the work aro
 | Rank the plates waiting and keep each plate's page current | [prioritize-prints](../../../.claude/skills/prioritize-prints/SKILL.md) | Built |
 | Put open calls on a page with pictures and tick boxes, and read the ticks back | [request-feedback](../../../.claude/skills/request-feedback/SKILL.md) | Built. Decided: the same pages, answered from the app |
 | Record a yes or hold Omar gave; reset it when the recipe changes | [manage-approvals](../../../.claude/skills/manage-approvals/SKILL.md) | Built. Decided: the button runs the same script |
-| Check the yes, slice, check the printer is idle, look at the bed photo, set the two plate switches, send | [send-plate](../../../.claude/skills/send-plate/SKILL.md) | Built |
+| Check the yes, slice it[^slicing], check the printer is idle, look at the bed photo, set the two plate switches, send | [send-plate](../../../.claude/skills/send-plate/SKILL.md) | Built |
 | Match a design's colors to the loaded spools at print time | send-plate, with a read-only printer service | Decided 2026-10-08, not built |
 | Watch the print, a picture every 10 minutes, report a pause or a stall | [monitor-print](../../../.claude/skills/monitor-print/SKILL.md) | Built |
 | Get a finished plate ready to judge and give Omar the link | [judge-page](../../../.claude/skills/judge-page/SKILL.md) | Built |
@@ -414,7 +414,7 @@ works.
 | Design questions | Obsidian pages in [feedback-requests](../../working-model/feedback-requests/) | A new page under Design |
 | The video study pages, the checking pages | The youtube repo and qiyas | Not moved: Learn ↗ and Check ↗ in the top bar, each with a link back |
 
-**The Waiting list** is one part of the page, used on Home and as the pill in the top bar. Its
+**The Waiting list** is one part of the page, used on Home and as the count in the top bar. Its
 rows: plates to judge, plates waiting for a yes, open design questions, and comments where a
 session asked Omar something. Each row opens a page with the buttons, or carries them itself.
 
@@ -516,7 +516,7 @@ one question on it; AnswerPR is the pull request[^pr] an answer opens.
 
 | Type | New, changed or reused | Why |
 |---|---|---|
-| Waiting row | New | One shape for every kind of waiting item, so the list and the pill share it |
+| Waiting row | New | One shape for every kind of waiting item, so the list and the count in the top bar share it |
 | Plate page, Approvals row | Reused (D-093, D-096, D-097) | The button writes the same row the script writes today |
 | Plate page, Judged table | Reused | The judge page already writes it |
 | Question page, call | Changed | One fixed shape (`## Call N: …`, tick lines, a notes line, `status:`) so the app and Obsidian read the same thing |
@@ -531,17 +531,17 @@ network. The public sites never get the print pages. In detail:
 
 | Where | Pages | Pattern store | Print data |
 |---|---|---|---|
-| This Mac, always on | bikar's build | the same file-backed handlers bikar's dev server uses | forwarded to the Print Hub server |
-| This Mac, while developing | bikar's dev server | the same handlers | forwarded to the Print Hub server |
+| This Mac, always on | bikar's built pages | files on this Mac, read by the same server code bikar uses while developing | passed on to the Print Hub server |
+| This Mac, while developing | bikar's development server | the same files and code | passed on to the Print Hub server |
 | Phone, on the private network | the always-on address, shared to the private network | same | same |
-| bikar's Cloudflare site, behind the team login | Cloudflare Pages | Cloudflare Functions over Supabase | not reachable: the print pages say so and name the address that works |
+| bikar's hosted site, behind the team login | bikar's web host (Cloudflare) | the host's server code over bikar's online database | not reachable: the print pages say so and name the address that works |
 | The public gallery | only the Lab pages this repo's build copies in | none | none, and a test fails the build if a print page or a private address leaks in |
 
-**Why bikar serves the app and not the Print Hub** (re-checked 2026-11-11): bikar's editor asks
-the pattern store for its list when it opens. When that fails it keeps the built-in starter
-patterns and says nothing on the page, and a failed save is only a console warning. A plain copy of
-the pages served by the Print Hub would have no pattern store, so the editor would look as if it
-works and lose every save. ([research, "Checked by hand" item 2](../../research/one-app-page-survey-2026-11-11.md#checked-by-hand-afterwards-2026-11-11).)
+**Why bikar serves the app and not the Print Hub:** served from the Print Hub, the pattern editor
+would look as if it works and silently lose every save. The reason (re-checked 2026-11-11): the
+editor asks the pattern store for its list when it opens. When that fails it keeps the built-in
+starter patterns and says nothing on the page, and a failed save is only a console warning. The
+Print Hub has no pattern store to give it. ([research, "Checked by hand" item 2](../../research/one-app-page-survey-2026-11-11.md#checked-by-hand-afterwards-2026-11-11).)
 
 ### 9.2 How one yes travels
 
@@ -560,7 +560,7 @@ sequenceDiagram
   O->>A: press "Yes, print it" on a plate
   A->>O: name the plate, its version and color, ask for a second press
   O->>A: press again
-  A->>S: POST the yes, with the version Omar saw
+  A->>S: send the yes, with the version Omar saw
   S->>S: refuse if the plate page changed since
   S->>G: record the yes, signed "Omar, button in the app"
   G->>R: Approvals row on the plate page
@@ -786,7 +786,7 @@ It names who uses what, and the shape of the one app. How each part works is in 
     plates waiting for a yes, design questions, comments asking him something), at the top of the
     app's Home page and counted in the top bar.
 [^lab]: **Coaster Lab** — the web page, built in bikar, where a coaster is designed: pick a
-    pattern, turn its knobs, color its pieces, and see it in 3D. It runs entirely in the browser.
+    pattern, change its settings (size, spacing, thickness, called knobs), color its pieces, and see it in 3D. It runs entirely in the browser.
 [^sharelink]: **share link** — the Coaster Lab's address for one design: the pattern, every knob
     changed from its default, and the colors. It never carries the printer choice.
 [^hub]: **Print Hub** — the 3d-model-hub repo: a small server on Omar's own computer, reached only
@@ -808,6 +808,18 @@ It names who uses what, and the shape of the one app. How each part works is in 
 [^x2d]: **X2D** — the Bambu Lab printer these coasters print on. Bambu Lab makes it, and its own
     build plates are called Bambu plates.
 [^bed]: **bed** — the flat plate inside the printer that pieces are printed onto.
+[^judge]: **judging a print** — after a plate prints, Omar looks at each piece and marks it keep,
+    adjust or drop, with a note; the verdicts are saved to the plate's page.
+[^slicing]: **slicing** — turning a 3D shape into the layer-by-layer instructions the printer
+    follows; done just before a send.
+[^store]: **pattern store** — where the pattern editor saves and lists patterns; on this Mac, files
+    read by server code that only bikar runs.
+[^recipe]: **recipe** — a plate's settings file: which pieces, where on the bed, which print
+    settings and color. Editing it resets the yes.
+[^grade]: **experiment, repeatable, production** — how proven a plate is: a one-off test, a plate
+    that has printed well more than once, or one kept as it is for selling.
+[^draft]: **draft order** — an order the owner writes up in Shopify (the store's platform) and
+    sends the buyer to pay; used for quotes.
 [^spool]: **filament, spool, tray** — filament is the plastic thread the printer melts; it comes
     wound on a spool; the printer holds several spools in trays, one color each.
 [^studiopages]: **the Studio's other pattern pages** — tools for drawing, splitting and checking a
