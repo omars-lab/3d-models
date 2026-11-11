@@ -44,7 +44,7 @@ The second question is about **how the pages hang together**. A survey of every 
   Coaster, Orb and Lego Labs[^labs] are in bikar. Plates, judging a print[^judge], the printed gallery and the
   print vocabulary are in the Print Hub repo.
 - **Omar answers in two tools and three places.** He judges a print with buttons on the Print
-  Hub. He says yes to a plate[^plate] by ticking a box on its page in Obsidian. He answers design
+  Hub. He says yes to a plate[^plate] by ticking a box on its page in Obsidian (the note-taking app the docs vault opens in). He answers design
   questions on other Obsidian pages. 28 plates waited for that yes on 2026-11-11 (how
   they were counted: [Appendix A](#appendix-a-what-was-read)), and the Print Hub could only tell
   him to go elsewhere to give it.
@@ -473,32 +473,38 @@ gives it a button.
 ```mermaid
 classDiagram
   class WaitingRow {
+    <<new>>
     kind: judge | yes | question | comment
     title
     link
     buttons
   }
   class PlatePage {
+    <<reused>>
     recipe
     ApprovalsTable
     JudgedTable
   }
   class ApprovalRow {
+    <<reused>>
     iteration
     color
     by
     when
   }
   class QuestionPage {
+    <<changed>>
     status: open | closed
     calls
   }
   class Call {
+    <<changed>>
     heading "## Call N"
     tickLines
     notes
   }
   class AnswerPR {
+    <<reused>>
     branch
     files
   }
@@ -512,15 +518,17 @@ classDiagram
 
 **In the diagram:** WaitingRow is one row of the Waiting list[^waiting]; PlatePage is a plate's[^plate]
 page; ApprovalRow is one yes for one send; QuestionPage is a page of design questions, and a Call is
-one question on it; AnswerPR is the pull request[^pr] an answer opens.
+one question on it; AnswerPR is the pull request[^pr] an answer opens. The tag on each box says
+whether it is new, changed or reused as it is.
 
-| Type | New, changed or reused | Why |
+| Type in the diagram | New, changed or reused | Why |
 |---|---|---|
-| Waiting row | New | One shape for every kind of waiting item, so the list and the count in the top bar share it |
-| Plate page, Approvals row | Reused (D-093, D-096, D-097) | The button writes the same row the script writes today |
-| Plate page, Judged table | Reused | The judge page already writes it |
-| Question page, call | Changed | One fixed shape (`## Call N: …`, tick lines, a notes line, `status:`) so the app and Obsidian read the same thing |
-| Answer pull request | Reused | Judging already saves this way |
+| WaitingRow | New | One shape for every kind of waiting item, so the list and the count in the top bar share it |
+| PlatePage (its JudgedTable field included) | Reused | The judge page already writes the Judged table; nothing about the page changes |
+| ApprovalRow | Reused (D-093, D-096, D-097) | The button writes the same row the script writes today |
+| QuestionPage | Changed | Gains an open or closed status, so the app can list only the open ones |
+| Call | Changed | One fixed shape for every question, so the app and Obsidian read the same thing (exact shape in Appendix B, slice 5) |
+| AnswerPR | Reused | Judging already saves this way |
 
 ## 9. How it works
 
@@ -900,7 +908,7 @@ through its plan file. Nothing here sends anything to the printer.
 | 2 | The always-on app; Judge and Waiting move | bikar, Print Hub, 3d-models | bikar: a served mode with the dev handlers and the forward to the Print Hub server on 4717 (dev stays on 7120; the always-on port comes from the launcher's free-port pair; today's judge page is on 8768), a launch agent, the judge page and the Waiting list. Print Hub: routes move under `/api/print/`; old page addresses redirect. Every caller changes in the same slice (the judge-page skill and script, maintain-vocabulary, the Print Hub's Makefile, its `hub.yaml` health check, which calls `/api/plates` today and must call the moved address, the page-comments settings) | The Print Hub's judge page and its Waiting box | A browser test against recorded replies from a real plate; a dry run with saving off; then Omar's next real judging followed to its pull request |
 | 3 | The other Print pages | bikar, Print Hub | Printer, plates, one plate, printed plates, print words | The Print Hub's whole page folder | A no-boot test per page; old comment threads still show; 1280 and 390 px |
 | 4 | Yes and Hold buttons | Print Hub, 3d-models, bikar | The server runs the existing `plate_approve.py <plate> --approved --by "Omar, button in the app, <time>"` (and `--color` where needed) and opens a pull request. The guards in §4. send-plate, manage-approvals and prioritize-prints change in the same slice | The tick path: the "Your call" boxes on plate pages and the code that reads them in `plates_gate.py` and `plate_approve.py`, after checking every other file that names it | Both scripts' self-tests; the send gate's tests; a real Hold on a real plate |
-| 5 | Design questions in the app | 3d-models, Print Hub, bikar | A new tool that lists open questions and writes an answer; question pages get one fixed shape; the request-feedback skill and its template; the CLAUDE.md line about pages "looked at in Obsidian" | The "open in Obsidian" steps | One real answer end to end on the spinner coaster page |
+| 5 | Design questions in the app | 3d-models, Print Hub, bikar | A new tool that lists open questions and writes an answer; question pages get one fixed shape (`## Call N: …` headings, tick lines, a notes line, and `status:` open or closed in the front matter); the request-feedback skill and its template; the CLAUDE.md line about pages "looked at in Obsidian" | The "open in Obsidian" steps | One real answer end to end on the spinner coaster page |
 | 6 | Launcher cards, back links | bikar, Print Hub, youtube, qiyas | Each repo's own `hub.yaml`; a link back from Learn and Check | Held for Omar's word: any card added or removed | The launcher's own check, per repo |
 
 **Who does what.** The monitor-print-watcher session writes slices 0a, 0b and 1. Each later slice
