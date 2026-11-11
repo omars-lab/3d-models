@@ -1,5 +1,11 @@
 # Plan: First-print campaign — turning the X2D into settled calibration data
 
+> Moved here from `.claude/plans/` on 2026-11-11, when the old plan files were sorted. The plan
+> itself is finished (the X2D target, the bench sheet and slicing shipped as bikar #190 and
+> 3d-models #180 and #185). It stays as the guide-print skill's reference for the five-step
+> propagate (Phase D) and the per-coupon expectation tables. The plates still to print live in the
+> [coaster-pipeline backlog](../../../docs/tasks/coaster-pipeline/backlog.md), not here.
+
 > Supersedes this file's prior contents (the `setup-bambu-x2d` skill + `tools/bambu` CLI + blog
 > build plan, fully executed: merged as #177 / #179 / blog #227, and recoverable from git history).
 > That plan built the *capability*; this plan spends it.
@@ -90,7 +96,7 @@ Each its own branch → PR (PR-flow for all repos; stage by name; no `git add -A
    to its written expectation (the record schema has no `expected`/`verdict` field; `prints_gate.py` only
    *counts* readings). The repo precedent is explicit — `docs/design/process/dsl-extension-skill-evaluation.md` and
    `docs/design/process/issue-register-evaluation.md` both concluded *"no new skill, a gate instead"* — so:
-   - **Extend `prototype/SKILL.md`** (already "the other half of the `calibrate` handoff") to script the two
+   - **Extend `.claude/skills/prototype/SKILL.md`** (already "the other half of the `calibrate` handoff") to script the two
      seams: (a) a per-coupon **photograph checklist** (what to shoot — the fit pairs, the fan underside, the
      four warp corners, the tower bases/elephant's foot), and (b) a **compare step** that reads each reading
      against the bench-sheet expectation and records a verdict, using §2's three-outcome vocabulary

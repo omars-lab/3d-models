@@ -4793,7 +4793,7 @@ plane-clipped path (a) as a second mode.
 ### Context
 
 A physical Bambu X2D now exists on the LAN, and the first-print campaign
-([`.claude/plans/binary-tickling-kay.md`](../../.claude/plans/binary-tickling-kay.md))
+([`first-print-campaign.md`](../../.claude/skills/guide-print/first-print-campaign.md), a plan file when this was written)
 cannot record a reading against "the X2D" until the machine exists in bikar's menu.
 That menu is `bikar:packages/knobs/src/machines.ts` `MACHINES` — ten `PrintTarget`
 entries, none the X2D, all single-nozzle. The schema is

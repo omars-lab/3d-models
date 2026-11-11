@@ -101,6 +101,21 @@ The backlogs stay where they are; this file points at them:
     Catalog-expansion has been parked since 2026-10-06 by Omar's call; import only what he asks for,
     which today means the round 3 pick.
 13. **Plate-packing skill**, print-infrastructure item 1. Waits until a second plate needs packing.
+14. **One application for designing and printing** (Omar, 2026-11-11). The approved plan moves the
+    Print Hub's pages into bikar beside the editor and labs, with every answer given in the app.
+    Step 0a (two broken links) is done in 3d-models #1017 and hub #37. Step 0b, the design doc,
+    is being written in worktree `~/Workspace/git/3d-models-design`, branch `one-app-design`,
+    into `docs/design/process/users-and-surfaces-design.md`. Step 1 (one page list, one top bar)
+    follows in bikar. The launcher repo (`~/Workspace/git/hubs`) is not to be touched.
+
+### Open pull requests from this session
+
+- Print Hub #36: comment on each numbered piece in a plate's bed picture on the judge page.
+  After it merges, run `make agent-install` in the hub repo so the page on port 8768 shows it.
+- Print Hub #37: plate links point at `docs/design/plates/`.
+- 3d-models #1017: the judge-page skill and its script use comment port 8768, not 8766.
+- The plan sort (this PR): the 13 old files in `.claude/plans/` are gone; one moved into the
+  guide-print skill. Each is listed in a done list and kept in git history at 266f32ce.
 
 ## Things to know
 

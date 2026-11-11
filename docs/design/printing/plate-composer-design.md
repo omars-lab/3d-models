@@ -10,8 +10,7 @@ decisions:
 
 *Status: DRAFT, DESIGN ONLY — NOT BUILT. Every path this doc gives for a new subverb,
 flag, or file is a **target**, not a shipped file. This is task #12 P4.1 of
-[`.claude/plans/coaster-border-continuation.md`](../../../.claude/plans/coaster-border-continuation.md)
-§4. It specifies the composer that
+the coaster-border plan §4 (retired 2026-11-11, in git history at commit 266f32ce). It specifies the composer that
 [`../../constructions/geogebra-construction-import-design.md`](../../constructions/geogebra-construction-import-design.md) §9
 summarizes and defers to "the plate doc" — this one. Its key decision is
 [D-072](../../working-model/decisions-log.md); the decisions-log entry is written at integration, not here.

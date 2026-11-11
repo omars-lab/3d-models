@@ -68,7 +68,7 @@ queue has grown by screened sources, each with a written GO or NO-GO.
 - Never download or republish a video or model without its license in the provenance.
 - Never dispatch a print.
 
-Plans: [`iterative-dazzling-finch.md`](../plans/iterative-dazzling-finch.md) (P3.x, P5.1),
+Plans: the finished GeoGebra-to-coaster plan (P3.x, P5.1; in git history at commit 266f32ce),
 and the construction-migration memory
 [`remaining-migrations-gated-on-list-literal-fix`](../memory/remaining-migrations-gated-on-list-literal-fix.md)
 for the tricks the migrations have used.
