@@ -93,6 +93,18 @@ Start prompts for a new session of each kind are in `.claude/prompts/`.
 item 1 on the catalog-expansion backlog and unblocks the store's S4.3. Alongside it, Omar's cup picks
 unblock the first real product files in the store.
 
+**The manager's own open items** (in order):
+
+1. **CS-9 merge.** When the bikar PR from `fix-nmEj-root-nearest-s` is open and CLEAN, merge it.
+   Then take 3d-models #1014 out of draft and merge it. Push and PR are monitor-print-watcher's job
+   (its plan, item 9, step 1); the commits are also at bikar's `refs/snapshots/2026-11-11/fix-nmEj-root-nearest-s`.
+2. **Tell coffee-house-manager-session that CS-9 merged.** The store's S4.3 waits on it
+   (store `build-later.md`).
+3. **Delete `manager-table-owners` and `session-start-prompts`.** Both are merged. Delete them
+   with `-d` once the manager worktree is detached at origin/master.
+4. **Sort the 13 old plan files.** These are files in `.claude/plans/` that no session owns. The
+   job is monitor-print-watcher's (its item 14); check that it gets done.
+
 **What slowed this run:** a worker's last commit missed a merge (storefront #502) because the push had
 not finished, so re-check the head right before merging. Two PRs edited the same table (#500, #501),
 so merge plan-wide rewrites first. Full pre-push test runs take about 15 minutes in bikar, so a
