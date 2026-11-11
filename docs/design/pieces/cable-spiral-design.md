@@ -25,7 +25,7 @@ one off with the cable still in place. It should not unwind when the disc is tip
 
 - **It is our own design, not a download.** We can size it to each cable we own, and it could be
   sold in the store[^store] beside the coasters if it works.
-- **It is cheap to find out.** The test piece is a few short bars of channel, about 15 to 20 g of plastic (a rough estimate; the slicer will say),
+- **It is cheap to find out.** The test piece is a few short bars of channel, about 15 to 20 g of plastic (a rough estimate; the slicer[^slicer] will say),
   and it answers the grip question before anyone prints a whole disc.
 - **If we get the grip wrong, it fails in a way you notice.** Too loose and the cable falls out when
   the disc tips. Too tight and the channel's thin walls crack after a few weeks of daily use.
@@ -98,7 +98,7 @@ flowchart LR
 ## The user-facing surface
 
 **No app, page or button.** This is a printed object and one OpenSCAD file,
-`src/CableSpiral/cable-spiral.scad`. The whole interface is one setting and two commands:
+`src/CableSpiral/cable-spiral.scad`. The whole interface is two settings, d and `cable_length`, and two commands:
 
 ```
 openscad -D 'part="disc"'   -D d=4.0 -o disc.stl   src/CableSpiral/cable-spiral.scad
@@ -112,7 +112,7 @@ openscad -D 'part="coupon"' -D d=4.0 -o coupon.stl src/CableSpiral/cable-spiral.
 
 This is one small file in one repo, with no other program or package involved, so there is no
 diagram of components or data. The file has eight parts: `disc` (the product), `coupon` (the first
-test piece), and `plan`, `zones`, `section`, `grip`, `bend` and `sizes`, which draw the flat
+test piece), and `plan`, `zones`, `section`, `grip`, `bend` and `sizes`, which draw the
 pictures in this doc.
 
 ## How it works
@@ -150,7 +150,7 @@ last column are the published print guides listed under [Sources](#sources)[^sou
 | Part | Rule | d = 4 | Where it comes from |
 |---|---|---|---|
 | Channel width | d + 0.4 | 4.4 | A guess to test. 0.2 mm a side is the low end of Sovol's 0.20 to 0.40 mm starting gap for mating parts, so the walls do not press on the cable all the time; PLA[^pla] creeps under a steady load. |
-| Mouth[^mouth] | 0.80 × d | 3.2 | Inside the 0.70 to 0.85 band, a little above its middle (0.775), seen only in a search snippet[^snippet] for one clip design. That clip flexes along its layers[^layer] and ours bends across them, so the band carries over only as the range to test. The test piece tries 0.75, 0.80 and 0.85. |
+| Mouth[^mouth] | 0.80 × d | 3.2 | Inside the 0.70 to 0.85 band (the mouth's width as a fraction of the cable's thickness), a little above its middle (0.775), seen only in a search snippet[^snippet] for one clip design. That clip flexes along its layers[^layer] and ours bends across them, so the band carries over only as the range to test. The test piece tries 0.75, 0.80 and 0.85. |
 | Lip[^lip] reach, each side | (width − mouth) / 2 | 0.6 | Arithmetic. |
 | Lip underside | 45° slope, starting at height d | 0.6 tall | 45° prints with no support[^support] (Hubs and Prusa). Starting at height d means a cable lying on the floor never touches it. |
 | Lip tip height | d + reach | 4.6 | Arithmetic. |
@@ -198,9 +198,11 @@ can bend. Gray: both walls bend, as on the test bars.*
 
 **In the picture:** S-bend[^sbend]; spiral arm[^arm]; rim[^rim]; exit notch[^exit].
 
-If the cable does not squash, one wall alone has to move the whole d − mouth, 0.8 mm for a 4 mm
-cable. By the same rough beam sum that is about 4.5% stretch at d = 4 and 5.5% at d = 3.2, over the
-4% limit. So the press there is harder than on any test bar, and may not go at all. This is
+On the half turns where only one wall bends, that wall alone has to move the whole d − mouth, 0.8 mm
+for a 4 mm cable, if the cable does not squash. By the same rough beam sum that is about 4.5% stretch
+at d = 4 and 5.5% at d = 3.2, over the 4% limit. In the S-bend neither wall can move, so no stretch
+figure applies: the cable itself has to squash by 0.8 mm, a fifth of its thickness, to pass the
+mouth. So the press in both places is harder than on any test bar, and may not go at all. This is
 [open question 1](#open-questions); the test piece checks it on K, a curved bar with solid on one side, and on P, a small disc whose
 channel has solid on both sides.
 
@@ -341,7 +343,7 @@ checker re-opened the sources and settled the differences.
 |---|---|---|---|---|---|---|
 | **Cable path** | Fold at the middle: S-bend plus two spirals, both plugs at the rim | One spiral from the centre out | A smaller centre, slightly more cable per disc | The inner plug sits in the middle. A plug head is about 6.3 mm thick, as thick as the disc, so it cannot sit inside a stack. No variant keeps one spiral and gets the plug out: a plug pocket needs a thicker disc. | The S-bend's 2.5 × d radius is a guess; a stiff braided cable may not lie in it. K on the test piece checks one cable. | The fold is checked by K and by the first disc; the single spiral is not tested. |
 | **Stacking** | Flat underside closes the channels below; the stacking ring lines them up | A 10 mm stub on top and a pocket underneath, at the centre | A stronger lock against sliding | Mainly, the stub sits exactly where the S-bend has to go, so it cannot be combined with both plugs at the rim. Also, the pocket's roof (10.4 mm, the stub plus a gap) would print as a bridge: within the 30 mm Bambu gives as the most it will span, but over the 5 mm Hubs gives for a roof with no sag. A better version of the same idea was also looked for and found: a stacking ring at the edge keeps the lining-up and leaves the centre free for the S-bend. | The 0.4 mm ring may be too thin for the slicer to print ([open question 3](#open-questions)). Slicing L and P shows it before any print. | L and P on the test piece test the stacking ring; the stub is not tested. |
-| **Thickness** | Tip high[^tiphigh], 1.3 × d + 1.0 (6.2 mm) | Tip low[^tiplow], d + 1.0 (5.0 mm) | 0.3 × d thinner (1.2 mm for a 4 mm cable), the "thin" in the ask | A shorter wall bends harder: about 4.2% stretch with a 0.8 wall, over the 4% limit. A 0.45 single-line wall brings it back to 2.3% but is about a sixth as stiff, so it may not grip. Its lip tips also press on any cable a little over d (below). | Where both walls bend, little: 2.3% at d = 4. But in the S-bend and on the first and last half turn of each arm a wall has solid behind it, which gives 4.5%, over the limit, and the press may not go at all ([open question 1](#open-questions)); K and P test it before any disc is printed. The thin version could crack at the wall's foot; G, H and the 20-press test show it. | Both go on the test piece (C against G, H), so the print decides, not the arithmetic. |
+| **Thickness** | Tip high[^tiphigh], 1.3 × d + 1.0 (6.2 mm) | Tip low[^tiplow], d + 1.0 (5.0 mm) | 0.3 × d thinner (1.2 mm for a 4 mm cable), the "thin" in the ask | A shorter wall bends harder: about 4.2% stretch with a 0.8 wall, over the 4% limit. A 0.45 single-line wall brings it back to 2.3% but is about a sixth as stiff, so it may not grip. Its lip tips also press on any cable a little over d (below). | Where both walls bend, little: 2.3% at d = 4. But on the first and last half turn of each arm one wall has solid behind it and has to move the whole 0.8 mm, about 4.5% stretch, over the limit. In the S-bend neither wall can move, so the cable itself must squash 0.8 mm to pass the mouth, and the press may not go at all ([open question 1](#open-questions)); K and P test it before any disc is printed. The thin version could crack at the wall's foot; G, H and the 20-press test show it. | Both go on the test piece (C against G, H), so the print decides, not the arithmetic. |
 
 **The thin version lowers the lip so the disc is 0.3 × d thinner (1.2 mm for a 4 mm cable); the cost is a shorter wall that bends
 harder, and a narrower range of cables.** In numbers: its lip tip drops from 1.1 × d + 0.2 to
@@ -397,7 +399,7 @@ the curved bar K; and the two stacking discs L and P.*
    fit), then look at the foot of each wall for a crack or a white stress mark.
 
 **For L and P:** first press a length of cable into P's channel with a thumb, and note if it would
-not go in; this is the only part where neither wall bends, as in the S-bend. Then set L on P. Does it sit flat, does the cable
+not go in; neither wall bends there, as in the S-bend. P is the one pressed; L has the same channel but is kept clean to set on top. Then set L on P. Does it sit flat, does the cable
 stay put, and does L slide when pushed sideways?
 
 The test piece can share a bed with the [cables-1](../plates/cables-1.md) holder and clips, so one
@@ -417,6 +419,8 @@ session[^plates] to lay out and send.
    prints as two layers about 0.3 mm and 0.1 mm wide, both narrower than one line (about 0.45 mm).
    The slicer may leave out the whole ring, not just its top. Slice
    the test piece and look at L before printing; if it vanishes, widen the ring and the chamfer together.
+   This holds as drawn at d = 4 (6.2 mm thick). The other sizes come out 5.16, 5.81 and 6.59 mm, not
+   whole 0.2 mm layers, so their top layer and ring slice a little differently; slice each before printing it.
 4. **Is 2.5 × d tight enough for the S-bend, or too tight for a stiff braided cable?** K answers
    this for one cable.
 5. **Does the grip last?** PLA creeps; a month in a drawer may loosen it. PETG[^petg] is the usual
@@ -437,8 +441,8 @@ session[^plates] to lay out and send.
     them, and judges the test piece.
 [^model]: **the model** — the OpenSCAD file that draws the disc and the test piece. See
     OpenSCAD above.
-[^d]: **d** — the cable's thickness (outside diameter) in mm, measured with calipers. The one
-    setting of the model.
+[^d]: **d** — the cable's thickness (outside diameter) in mm, measured with calipers. One of the
+    model's two settings; the other is the cable's length.
 [^stl]: **STL** — the common file format for a 3D shape, the input a slicer reads.
 [^slicer]: **slicer** — the program that turns a 3D shape into the layer-by-layer moves a 3D
     printer makes. Here, Bambu Studio.
@@ -532,7 +536,7 @@ session[^plates] to lay out and send.
   path drops repeated points before it is drawn.
 - `-D 'only="K"'` with the coupon part renders one test piece on its own, which is how a render
   error is traced to one piece.
-- Pictures: `part="plan"`, `"zones"`, `"section"`, `"grip"`, `"bend"` and `"sizes"` draw the six flat views above
+- Pictures: `part="plan"`, `"zones"`, `"section"`, `"grip"`, `"bend"` and `"sizes"` draw six of the pictures above
   (`zones` in preview, not `--render`, so its colors show; `bend` and `sizes` also print their numbers);
   `grip` also prints each cable's side room, lift and how far its top sits above the disc's face. The section's cable
   circles are drawn d across, sitting on the channel floor. The labeled cut is
