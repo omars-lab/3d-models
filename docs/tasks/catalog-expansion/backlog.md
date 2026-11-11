@@ -28,18 +28,16 @@ found no source on what the X2D does while paused. **No plate and no print until
 to that doc**; then the first test piece (a small pocket coupon, the first with no steel in it)
 goes to the plates-and-feedback session. Nothing in it may risk the printer.
 
-1. **`nmEjCTzMbDg`: R fixed, two small steps left.** youtube had fixed
+1. **`nmEjCTzMbDg`: R fixed, nothing left here.** youtube had fixed
    `R = Intersect(t, m, 2)` to `Intersect(t, m, S)` on 2026-09-29 (d72fc2a); bikar's copy was
    imported two days before that. On 2026-11-11 bikar re-imported from the fixed file (branch
    `fix-nmEj-root-nearest-s`), and this repo re-vendored the coaster: the flower now fills the
    disc instead of sitting small in a solid one. O1 is down to the three conics
    (`FAIL: 34 compared, 3 failed`), O2 passes (edge-SSIM 0.9796)
    ([the 11-11 correction](../../research/ledger-oracle-runs-2026-11-10.md#correction-2026-11-11-youtube-had-made-the-patch)).
-   Left:
-   - after the bikar PR merges, run `catalog.py sync` so the catalog picture (copied from
-     bikar main's Lab thumbnail) shows the new coaster;
-   - a print review of the new coaster before anyone prints it: the spokes crowd together at
-     the centre. **Do not print it until then.**
+   bikar #371 and 3d-models #1014 merged it; #1024 redrew the catalog picture and recorded the
+   print review (print-worthy; the spokes' tips fill in round a solid centre about 12 mm across,
+   which changes only the look). Putting it on a plate is the plates session's and Omar's.
 
    What O1 still cannot compare (parabolas, hyperbolas) is youtube's to add. Also youtube's:
    `naqsh_score.py` treats `ggb_score.py`'s FAIL exit (2) as a crash. That patch is in the

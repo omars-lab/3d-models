@@ -110,12 +110,10 @@ The backlogs stay where they are; this file points at them:
       the old O2 cell's 0.2589 was precision, not edge-SSIM. A later bikar push from a fresh
       shell needs the same PATH or the Docker steps go unverified:
       `env PATH="$HOME/.nvm/versions/node/v22.22.3/bin:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin" THREED_MODELS_DIR=<a 3d-models worktree at master> git -C ~/Workspace/git/bikar-else push`.
-   2. After the bikar merge, run `python3 .claude/skills/pattern-catalog/scripts/catalog.py sync`
-      so `docs/catalog/media/nmEjCTzMbDg/nmEjCTzMbDg-plain.png` takes bikar main's new Lab
-      thumbnail; commit it in its own PR.
-   3. A print review (`review-print` skill) of the new coaster before anyone prints it: the
-      spokes crowd at the centre. Do not print it until then.
-   4. To redo any comparison: O1 is `make -C ~/Workspace/git/youtube naqsh-coords
+   2. Done in #1024: the catalog picture redrawn from bikar main, and the print review
+      (print-worthy; the spokes' tips fill in round a solid centre about 12 mm across, which
+      changes only the look). A plate for it is the plates session's and Omar's.
+   3. To redo any comparison: O1 is `make -C ~/Workspace/git/youtube naqsh-coords
       ID=nmEjCTzMbDg NAQSH=<bkr> OUT=<scratch>/o1 BIKAR_DIR=<bikar worktree>`, O2 is
       `make -C ~/Workspace/git/youtube naqsh-score ID=nmEjCTzMbDg NAQSH=<bkr>`. In a fresh bikar
       worktree, build every package (`npm ci`, then root `npm run build`), not only core and the
