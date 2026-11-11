@@ -104,9 +104,12 @@ The backlogs stay where they are; this file points at them:
 14. **One application for designing and printing** (Omar, 2026-11-11). The approved plan moves the
     Print Hub's pages into bikar beside the editor and labs, with every answer given in the app.
     Step 0a (two broken links) is done in 3d-models #1017 and hub #37. Step 0b, the design doc,
-    is being written in worktree `~/Workspace/git/3d-models-design`, branch `one-app-design`,
-    into `docs/design/process/users-and-surfaces-design.md`. Step 1 (one page list, one top bar)
-    follows in bikar. The launcher repo (`~/Workspace/git/hubs`) is not to be touched.
+    is written and scored 13 of 13 for readability: `docs/design/process/users-and-surfaces-design.md`,
+    D-130, use case UC35, in 3d-models #1019 (worktree `~/Workspace/git/3d-models-design`), waiting
+    on the manager to merge. Step 1 (one page list, one top bar, Coaster Lab and print history
+    added) is next, in bikar, and starts once #1019 merges. Slices 2 to 5 change pages the
+    plates-and-feedback session uses daily, so that session hears through its plan file first.
+    The launcher repo (`~/Workspace/git/hubs`) is not to be touched.
 
 ### Open pull requests from this session
 
