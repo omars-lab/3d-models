@@ -314,7 +314,35 @@ module sizes() {
     }
 }
 
+// "bend": one wall cut across, for the tall disc and the thin one, side by side. The wall is held at
+// the floor; the cable pushes its top sideways by (d - mouth) / 2 at the lip tip. Gray: the wall at
+// rest. Orange: bent, with the push drawn 3x larger so it shows. The label gives the height and the
+// stretch at the wall's foot (the beam sum, 1.5 x wall x push / height^2).
+module bend() {
+    push = (d - mouth_k * d) / 2;
+    hs = [["tall disc (tip high)", 1.1 * d + 0.2], ["thin disc (tip low)", 0.8 * d + 0.2]];
+    for (i = [0:1]) let(L = hs[i][1], x0 = i * 14, s = 1.5 * wall_t * push / (L * L) * 100) translate([x0, 0]) {
+        color("dimgray") translate([-3, -0.8]) square([6 + wall_t, 0.8]);                // the floor
+        color("lightgray") square([wall_t, L]);
+        // a cantilever with a load at its tip: sideways shift at height z is push (3 L z^2 - z^3) / (2 L^3)
+        color("orange") polygon(concat(
+            [for (z = [0:L / 20:L + 1e-6]) [3 * push * (3 * L * z * z - z * z * z) / (2 * L * L * L), z]],
+            [for (z = [L:-L / 20:-1e-6]) [wall_t + 3 * push * (3 * L * z * z - z * z * z) / (2 * L * L * L), z]]));
+        color("black") {
+            translate([wall_t + 3 * push + 2.4, L]) rotate(180) arrow(1.8);           // the push
+            translate([-1.2, 0]) square([0.1, L]);                                        // height mark
+            translate([-1.5, L / 2]) rotate(90) text(str(round(L * 10) / 10), size = 0.6, halign = "center");
+            translate([wall_t + 3.2, L + 0.6]) text(str("push ", round(push * 10) / 10), size = 0.6);
+            translate([wall_t / 2, -2]) text(str("stretch ", round(s * 10) / 10, "% at the foot"), size = 0.6, halign = "center");
+            translate([wall_t / 2, L + 2]) text(hs[i][0], size = 0.7, halign = "center");
+        }
+        echo(str("CABLE-SPIRAL bend: ", hs[i][0], " height ", L, " push ", push, " stretch ", s));
+    }
+}
+module arrow(len) { square([len, 0.12]); translate([0, 0.06]) polygon([[0, 0], [0.5, 0.3], [0.5, -0.3]]); }
+
 if (part == "disc") disc();
+else if (part == "bend") bend();
 else if (part == "zones") zones();
 else if (part == "sizes") sizes();
 else if (part == "coupon") coupon();

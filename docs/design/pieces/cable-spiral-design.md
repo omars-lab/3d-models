@@ -25,7 +25,7 @@ one off with the cable still in place. It should not unwind when the disc is tip
 
 - **It is our own design, not a download.** We can size it to each cable we own, and it could be
   sold in the store[^store] beside the coasters if it works.
-- **It is cheap to find out.** The test piece is a few short bars of channel, a few grams of plastic,
+- **It is cheap to find out.** The test piece is a few short bars of channel, about 15 to 20 g of plastic (a rough estimate; the slicer will say),
   and it answers the grip question before anyone prints a whole disc.
 - **If we get the grip wrong, it fails in a way you notice.** Too loose and the cable falls out when
   the disc tips. Too tight and the channel's thin walls crack after a few weeks of daily use.
@@ -51,7 +51,8 @@ Stacking needs no lid or clip. The flat underside of the disc above lies on the 
 walls of the disc below, so it closes every channel, and a stacked cable cannot lift out at all
 (for discs of the same diameter; see [How the discs stack](#how-the-discs-stack)). A
 low stacking ring[^ring] round the top edge sits in a chamfer[^chamfer] on the bottom edge of the
-disc above, so the pile stays lined up.
+disc above, so the pile stays roughly lined up; a firm sideways push can ride the disc above up and
+over the 0.4 mm ring.
 
 ## Context: who uses it and what it touches
 
@@ -68,7 +69,8 @@ flowchart LR
 **In the diagram:** Omar[^omar]; the model[^model]; d[^d]; STL[^stl]; slicer[^slicer]; X2D
 printer[^x2d]; checked research note[^research].
 
-The only input that matters is d, the cable's thickness. Everything else follows from it.
+Two settings: d, the cable's thickness, and the cable's length. d sets the channel; the length sets
+how wide the disc grows.
 
 ## Use cases
 
@@ -89,7 +91,7 @@ flowchart LR
   each disc so its exits miss the ones below. A plug head is about 6.3 mm thick, thicker than a disc
   for a small cable, so plugs from neighbouring discs would hit if lined up.
 - **Omar takes one cable off the pile** and unwinds it by pulling the plugs.
-- **Omar prints a disc sized to a measured cable.** One setting, d.
+- **Omar prints a disc sized to a measured cable.** Two settings, d and the length.
 - **Omar judges the test piece** by the ids carved into it (see
   [the first test piece](#the-first-test-piece)).
 
@@ -109,8 +111,9 @@ openscad -D 'part="coupon"' -D d=4.0 -o coupon.stl src/CableSpiral/cable-spiral.
 ## The pieces and where they live
 
 This is one small file in one repo, with no other program or package involved, so there is no
-diagram of components or data. The file has five parts: `disc` (the product), `coupon` (the first
-test piece), and `plan`, `section` and `grip`, which draw the flat pictures in this doc.
+diagram of components or data. The file has eight parts: `disc` (the product), `coupon` (the first
+test piece), and `plan`, `zones`, `section`, `grip`, `bend` and `sizes`, which draw the flat
+pictures in this doc.
 
 ## How it works
 
@@ -167,8 +170,17 @@ a lone strip when it is one long wall, so **the figure ranks options; it does no
 survives daily use.** This doc uses the top of that band, 4%, as the limit. By its low end, 2%, every
 disc is already over at its own size (2.1 to 2.8%; the three sizes are under [One disc per cable size](#one-disc-per-cable-size)), so the ranges below are the generous reading.
 
+![One wall cut across, for the tall disc and the thin one: held at the floor, pushed sideways 0.4 mm at the top, with the stretch at its foot](cable-spiral-media/bend.png)
+
+*One wall, for d = 4. The cable pushes the wall's top sideways at the lip tip; the stretch is worst
+at the wall's foot and grows as the height shrinks, so the thin disc's shorter wall bends harder for
+the same push. Gray: the wall at rest. Orange: bent, with the push drawn three times larger so it
+shows. Heights are from the channel floor to the lip tip.*
+
+**In the picture:** lip[^lip]; beam sum[^beam]; stretch[^stretch]; tip high[^tiphigh]; tip low[^tiplow].
+
 **Those figures hold only where both walls can bend.** On the test bars every wall has open air
-behind it: each id tab stands 1 mm clear of its bar and joins it only at floor height. On the
+behind it: each bar's carved id[^id] sits on a small tab that stands 1 mm clear of its bar and joins it only at floor height. On the
 disc, three places do not:
 
 - **The S-bend:** solid plastic on its inner side all the way, and on its outer side except for the
@@ -244,7 +256,7 @@ the pile lined up. The right half of the labeled cut above shows both.
   0.2 mm is Prusa's stated accuracy for its own printers; on the X2D it is only a starting guess.
 - **No bridges[^bridge] anywhere.** The underside is flat.
 - **Only discs of the same diameter line up.** The diameter depends on both the cable size and the
-  length: 87.3 mm for 1 m at d = 3.2, 96.7 mm at d = 4, 100.2 mm at d = 4.3, and about 128.5 mm
+  length: 87.3 mm for 1 m at d = 3.2, 93.2 mm at d = 3.7, 96.7 mm at d = 4, 100.2 mm at d = 4.3, and about 128.5 mm
   for 2 m at d = 4. In a mixed pile the ring meets no chamfer. A smaller disc set on a larger one
   leaves the larger disc's outer turns open, held by their lips alone. A larger disc set on a
   smaller one is worse: it rests on the smaller disc's ring, 0.4 mm above its walls. The cables still cannot lift out,
@@ -296,7 +308,8 @@ reaches 4% (the beam sum, as above):
 Three sizes cover the USB-C cables we found figures for from 3.01 to 4.7 mm with no gap. The thinnest,
 Apple's 3.0 mm (1 m, one
 user's measurement on Apple's community forum, not Apple's figure), falls 0.01 mm below the
-smallest disc's range, well inside caliper error; the thickest is Anker's 4.7 mm (its stated size).
+smallest disc's range, well inside caliper error; the thickest is Anker's 4.7 mm (its stated size). Between them sit StarTech's 4.0 mm and
+ChargerLAB's 4.6 mm figures (sources in the appendix).
 **They cover it only just.** The exact lower end of the easy range is 0.8 / 0.85 = 0.941 × d, so the
 3.2 disc starts at 3.01: Apple's 3.0 mm cable sits 0.01 mm below it, and Apple's 3.5 mm cable only 0.02 mm inside the 3.7 disc's range, so both depend on the mouth test. The 3.2 disc's firm range reaches
 4% stretch at 3.48, exactly where the 3.7 disc's easy range starts, so those two meet with no margin.
@@ -519,7 +532,8 @@ session[^plates] to lay out and send.
   path drops repeated points before it is drawn.
 - `-D 'only="K"'` with the coupon part renders one test piece on its own, which is how a render
   error is traced to one piece.
-- Pictures: `part="plan"`, `part="section"` and `part="grip"` draw the three flat views above;
+- Pictures: `part="plan"`, `"zones"`, `"section"`, `"grip"`, `"bend"` and `"sizes"` draw the six flat views above
+  (`zones` in preview, not `--render`, so its colors show; `bend` and `sizes` also print their numbers);
   `grip` also prints each cable's side room, lift and how far its top sits above the disc's face. The section's cable
   circles are drawn d across, sitting on the channel floor. The labeled cut is
   `cable-spiral-media/cut-and-stack.side.yaml`, drawn by the draw-side-view skill.
