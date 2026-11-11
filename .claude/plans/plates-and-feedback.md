@@ -28,7 +28,7 @@ he asks for (toys, cable holders) go in between.
 4. **Watch.** Skill `monitor-print`: the script in the background, a watcher agent, then
    `--publish` puts the timelapse on the page.
 5. **Judge.** Skill `judge-page`: Omar answers on the hub. Give him the link with comments on,
-   `http://127.0.0.1:8766/judge.html#<plate>/1`. Never the bare `:4717` address: it has no
+   `http://127.0.0.1:8768/judge.html#<plate>/1` (`open_questions.py <plate> --link` prints it). Never the bare `:4717` address: it has no
    comments, and he asked why on 2026-11-09. The hub opens an `After-print answers: <plate>` PR.
 6. **Record.** Skill `review-print` writes `docs/prints/<date>-<plate>/` from the `## Judged`
    table.
@@ -63,8 +63,8 @@ spinner, orb and fidget-toy work; only the calls that pick a plate are here. Hig
 - **Question:** closeout-1 rows 2 to 5 (4 questions, row 4 is the kite fit) and toys-1 rows 1
   to 3 (3 questions, row 1 is how the star's rings came out).
 - **Options:** the answer buttons on each row; "not judged yet" is one of them.
-- **Where:** `http://127.0.0.1:8766/judge.html#closeout-1/2` and
-  `http://127.0.0.1:8766/judge.html#toys-1/1`.
+- **Where:** `http://127.0.0.1:8768/judge.html#closeout-1/2` and
+  `http://127.0.0.1:8768/judge.html#toys-1/1`.
 - **Unblocks:** both print records. closeout-1 row 4 decides whether the three kite fits split-10
   dropped (KITE-G10, KITE-PIN20, KITE-PIN15) need a plate. toys-1 row 1 is also question 1 of the
   fidget toys (F below): its answer sets the smallest ring gap on the first toy plate.
