@@ -16,6 +16,11 @@ pass runs; the backlog says *what* is next; the done list says what shipped.
 | [`consolidation.md`](consolidation.md) | Merge PRs, clean up branches, worktrees and stashes, and lose nothing | all six repos | [backlog](../../docs/tasks/consolidation/backlog.md) | [done](../../docs/tasks/consolidation/done.md) |
 | — | Work no loop owns | — | [parked](../../docs/tasks/parked/backlog.md) | [done](../../docs/tasks/parked/done.md) |
 
+**Starting a session cold:** each standing session has a paste-in start prompt in
+[`.claude/prompts/`](../prompts/) ([plates-and-feedback](../prompts/plates-and-feedback.md),
+[monitor-print-watcher](../prompts/monitor-print-watcher.md), [the manager](../prompts/manage-sessions.md)).
+It points at that session's plan in `.claude/plans/`; the loop prompts here say how each loop runs.
+
 ## Which session runs which loop
 
 Two sessions share this repo. Omar split the work between them on 2026-11-03 so the printing
