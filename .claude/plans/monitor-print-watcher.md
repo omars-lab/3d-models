@@ -107,7 +107,8 @@ The backlogs stay where they are; this file points at them:
     is written and scored 13 of 13 for readability: `docs/design/process/users-and-surfaces-design.md`,
     D-130, use case UC35, in 3d-models #1019 (worktree `~/Workspace/git/3d-models-design`), waiting
     on the manager to merge. Step 1 (one page list, one top bar, Coaster Lab and print history
-    added) is next, in bikar, and starts once #1019 merges. Slices 2 to 5 change pages the
+    added) is next, in bikar, started 2026-11-11; its paired 3d-models change (`LAB_PAGES`, the map
+    pointer) branches off master after #1019 merges, since both edit the use-case map. Slices 2 to 5 change pages the
     plates-and-feedback session uses daily, so that session hears through its plan file first.
     The launcher repo (`~/Workspace/git/hubs`) is not to be touched.
 
