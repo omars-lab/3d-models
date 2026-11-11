@@ -37,8 +37,8 @@ The send itself stays Omar's.
 - **Skills**: `print-model` (plan a print), `guide-print` (run one at the bench), `bambu`
   (day-to-day CLI), `find-model` (outside models). Coaster Lab in bikar sets each design's
   knobs and colors.
-- **Plans**: the phase map, P4.x, is in [`iterative-dazzling-finch.md`](../plans/iterative-dazzling-finch.md).
-  The printer side, gates R1 to R5, is in [`binary-tickling-kay.md`](../plans/binary-tickling-kay.md).
+- **Plans**: the old phase map (P4.x) is finished and in git history at commit 266f32ce. The
+  printer side, gates R1 to R5, is in [`first-print-campaign.md`](../skills/guide-print/first-print-campaign.md).
 
 ## Each pass of the loop
 

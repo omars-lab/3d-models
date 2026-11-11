@@ -68,7 +68,16 @@ The backlogs stay where they are; this file points at them:
    the bed-contact floor, strut width, woven orbs). Not on any backlog yet. Its first step, a
    slice with no print then one top-cap test piece, would be a plate, so it goes to
    plates-and-feedback once Omar answers. Survey script: `uv run tools/orb_support_survey.py --self-test`.
-6. **Fidget toys from our patterns.** Design
+6. **Cable spiral** (Omar, 2026-11-11: an open-topped disc to wrap a cable round, thin and
+   stackable). Model `src/CableSpiral/cable-spiral.scad` and design
+   [cable-spiral-design.md](../../docs/design/pieces/cable-spiral-design.md), in 3d-models #1023
+   (draft; taking it out of draft was refused here, so that is Omar's or the manager's). The
+   research is #1020, #1021 and the checker's #1022. The design doc passed the readability review
+   13 of 13 on round 11. Waits on Omar: his cables measured with calipers (the model is set to
+   4 mm), then the design fork in open question 1 (walls that cannot bend in the S-bend and on the
+   first and last half turn of each spiral arm) after test strips K and P print. The test-piece plate goes to
+   plates-and-feedback; never sent from here.
+7. **Fidget toys from our patterns.** Design
    [fidget-toys-from-patterns.md](../../docs/design/pieces/fidget-toys-from-patterns.md) (#948);
    its §9 holds five questions (how the toys-1 star came out, size, sliding or turning, which
    pattern, mixing). Not on any backlog yet. The toys-1 and fidget-star-1 prints are recorded in
@@ -77,30 +86,55 @@ The backlogs stay where they are; this file points at them:
 
 ### Waiting on another session or a date
 
-7. **Code map trial (graphify on bikar, D-129).** Parked backlog, "Code graph trial". Runs to
+8. **Code map trial (graphify on bikar, D-129).** Parked backlog, "Code graph trial". Runs to
    2026-11-20. The side-by-side test came back 2026-11-10 and does not pass (#993). Still owed on
    2026-11-20: rerun the FAQ tool over bikar sessions and judge it against the design's PASS and
    FAIL lines ([code-graph.md](../../docs/design/process/code-graph.md) §6). Stopping early and
    removing graphify is Omar's call.
-8. **A post about the code map**, written with the social session (claude-techniques, in
+9. **A post about the code map**, written with the social session (claude-techniques, in
    social-presence-hub). Numbers and design only; don't copy employer content from that repo.
-9. **`nmEjCTzMbDg` still fails two render checks**, catalog-expansion item 1. Waits on youtube
+10. **`nmEjCTzMbDg` still fails two render checks**, catalog-expansion item 1. Waits on youtube
    taking the `Intersect(t, m, S)` patch. youtube is read-only from here.
 
 ### Can be done without anyone
 
-10. **Gallery freshness.** `make validate-gallery` said on 2026-11-10: 2 unpublished changes, both
+11. **Gallery freshness.** `make validate-gallery` said on 2026-11-10: 2 unpublished changes, both
     print records on the prints page (ball-1, dragon-egg-1, fidget-star-1), inside the 7-day
     window. Past 7 days it warns; then ask Omar in chat for a deploy, and follow the last deploy
     line in the [consolidation done list](../../docs/tasks/consolidation/done.md) (restore the
     build folder from gh-pages, `make coasters`, `make deploy`, check the live site).
-11. **Shrinking the complexity list**, parked backlog, one function a PR; 52 over 10 on 2026-11-11 by the commit hook (the backlog line's "68 left" is older). The `self_test`
+12. **Shrinking the complexity list**, parked backlog, one function a PR; 52 over 10 on 2026-11-11 by the commit hook (the backlog line's "68 left" is older). The `self_test`
     functions are skipped on purpose. Read `.claude/gates/complexity-baseline.json` before picking.
     Low value for customers; do it only between higher items.
-12. **16 youtube reconstructions not yet imported here** (the SessionStart line lists them).
+13. **16 youtube reconstructions not yet imported here** (the SessionStart line lists them).
     Catalog-expansion has been parked since 2026-10-06 by Omar's call; import only what he asks for,
     which today means the round 3 pick.
-13. **Plate-packing skill**, print-infrastructure item 1. Waits until a second plate needs packing.
+14. **Plate-packing skill**, print-infrastructure item 1. Waits until a second plate needs packing.
+15. **One application for designing and printing** (Omar, 2026-11-11). The approved plan moves the
+    Print Hub's pages into bikar beside the editor and labs, with every answer given in the app.
+    Step 0a (two broken links) is done in 3d-models #1017 and hub #37. Step 0b, the design doc,
+    is written and scored 13 of 13 for readability: `docs/design/process/users-and-surfaces-design.md`,
+    D-130, use case UC35, in 3d-models #1019 (worktree `~/Workspace/git/3d-models-design`), waiting
+    on the manager to merge. Step 1 (one page list, one top bar, Coaster Lab and print history
+    added) is next, in bikar. As of 2026-11-11 no bikar branch exists for it yet: it was set aside for
+    the cable spiral, and this session's only bikar worktree (`bikar-else`) holds open bikar PR
+    #371, with the worktree budget full. Start it on a fresh branch in `bikar-else` once #371
+    merges. Its paired 3d-models change (`LAB_PAGES`, the map
+    pointer) branches off master after #1019 merges, since both edit the use-case map. Slices 2 to 5 change pages the
+    plates-and-feedback session uses daily, so that session hears through its plan file first.
+    The launcher repo (`~/Workspace/git/hubs`) is not to be touched.
+
+### Open pull requests from this session
+
+- Print Hub #36: comment on each numbered piece in a plate's bed picture on the judge page.
+  After it merges, run `make agent-install` in the hub repo so the page on port 8768 shows it.
+- Print Hub #37: plate links point at `docs/design/plates/`.
+- 3d-models #1017: the judge-page skill and its script use comment port 8768, not 8766.
+- 3d-models #1019: the one-application design doc (step 0b above).
+- 3d-models #1020, #1021, #1022: the cable spiral research (two passes and the checker).
+- 3d-models #1023: the cable spiral model and design doc (item 6).
+- The plan sort (this PR): the 13 old files in `.claude/plans/` are gone; one moved into the
+  guide-print skill. Each is listed in a done list and kept in git history at 266f32ce.
 
 ## Things to know
 

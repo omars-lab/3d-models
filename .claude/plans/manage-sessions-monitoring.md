@@ -72,7 +72,7 @@ no work lost. Where each one stopped:
 | Decision | Owner after the answer | Where it lives |
 |---|---|---|
 | cables-1: yes and a color, given in the plates session's own tab | plates-and-feedback | [plates-and-feedback.md](plates-and-feedback.md), open item 1 |
-| Judge closeout-1 and toys-1 on the hub (`http://127.0.0.1:8766/judge.html#closeout-1/2`, `#toys-1/1`) | plates-and-feedback | same plan, item 2 |
+| Judge closeout-1 and toys-1 on the hub (`http://127.0.0.1:8768/judge.html#closeout-1/2`, `#toys-1/1`) | plates-and-feedback | same plan, item 2 |
 | Plate calls A to I | plates-and-feedback | same plan, "Plate decisions waiting on Omar" |
 | The next coaster: tick one on the round 3 page | monitor-print-watcher imports it (its plan, item 1) | `docs/working-model/feedback-requests/2026-11-05-next-coaster-round-3.md`; also plates-and-feedback's call D |
 | The 18 overtaken questions and the split-10 leftovers | plates-and-feedback (call C) | `docs/working-model/feedback-requests/2026-11-05-which-questions.md` |

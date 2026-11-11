@@ -222,9 +222,9 @@ tasks Snapshot 4 listed as still-open all closed here (`#8` cross-repo ledger bl
 `#71`), and the D-052 cascade added `#81`–`#85` on the same sequence. So Snapshot 4's
 and Snapshot 5's shared ids (`#8`, `#49`, `#67`, `#71`) are the *same* tasks, closed
 here. Still open on the board at this prune: **`#81`** — make the orb breakdown pages
-teach flat→sphere construction, the full plan beyond the T9 gate (spec:
-`.claude/plans/sunny-booping-crescent.md`; new-session brief:
-`.claude/plans/breakdown-pages-kickoff.md`).
+teach flat→sphere construction, the full plan beyond the T9 gate (spec: the plan
+sunny-booping-crescent; new-session brief: breakdown-pages-kickoff; both shipped and were
+retired 2026-11-11, in git history at 266f32ce).
 
 ### Prints tab (S-series, bench/bet-gated, closed at the bench)
 - #67 — Prints tab S2: print Plate 1 and fill the first run record at the bench
