@@ -74,8 +74,9 @@ no work lost. Where each one stopped:
 | cables-1: yes and a color, given in the plates session's own tab | plates-and-feedback | [plates-and-feedback.md](plates-and-feedback.md), open item 1 |
 | Judge closeout-1 and toys-1 on the hub (`http://127.0.0.1:8766/judge.html#closeout-1/2`, `#toys-1/1`) | plates-and-feedback | same plan, item 2 |
 | Plate calls A to I | plates-and-feedback | same plan, "Plate decisions waiting on Omar" |
-| The next coaster: tick one on the round 3 page | whoever imports it | `docs/working-model/feedback-requests/2026-11-05-next-coaster-round-3.md` |
-| Which questions page, and the spinner coaster's five choices | monitor-print-watcher | `2026-11-05-which-questions.md`, `2026-11-08-spinner-coaster-choices.md` in the same folder |
+| The next coaster: tick one on the round 3 page | monitor-print-watcher imports it (its plan, item 1) | `docs/working-model/feedback-requests/2026-11-05-next-coaster-round-3.md`; also plates-and-feedback's call D |
+| The 18 overtaken questions and the split-10 leftovers | plates-and-feedback (call C) | `docs/working-model/feedback-requests/2026-11-05-which-questions.md` |
+| The spinner coaster's five choices | monitor-print-watcher (its plan, item 2) | `docs/working-model/feedback-requests/2026-11-08-spinner-coaster-choices.md`; also plates-and-feedback's call E |
 | Whole-orb and fidget-toy design questions | monitor-print-watcher | [monitor-print-watcher.md](monitor-print-watcher.md) |
 | Store cup patterns, round 1: keep, hold or drop 11 patterns (gBV next, then n3I or sDO) | store sessions | store `omars-calls.md`, `logo-and-cup-mark.md` item 1 |
 | Store round 24 lip color: espresso, crema or golden crema (round 25 waits on it) | store sessions | store `logo-and-cup-mark.md` items 2 and 3 |
