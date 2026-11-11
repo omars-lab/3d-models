@@ -89,21 +89,18 @@ The backlogs stay where they are; this file points at them:
    social-presence-hub). Numbers and design only; don't copy employer content from that repo.
 9. **`nmEjCTzMbDg` (CS-9): R fixed 2026-11-11**, catalog-expansion item 1. youtube had already
    made the fix (d72fc2a, 2026-09-29); bikar's copy was stale and is re-imported on bikar branch
-   `fix-nmEj-root-nearest-s` (commits c4dcccc6 and 07030dcf; its PR is named in the done line
-   once open). The 3d-models half is written and in the same PR as this plan (branch
+   `fix-nmEj-root-nearest-s` (commits c4dcccc6 and 07030dcf; bikar PR #371, opened 2026-11-11).
+   The 3d-models half is written and in the same PR as this plan (branch
    `cs9-nmej-root-fix`): the re-vendored `src/Coasters/nmEjCTzMbDg-coaster.bkr` and its
    `-standard.stl` (rendered with the bikar branch's CLI, mesh check passed, 162,492 triangles),
    ledger row 145 (`FAIL 34/3 | PASS 1.0/1.0`) and its note, backlog item 1, and the correction
    section at the end of `docs/research/ledger-oracle-runs-2026-11-10.md`. Left, in order:
-   1. **Push the bikar branch first: it is not on GitHub.** Commits c4dcccc6 and 07030dcf sit
-      only in `~/Workspace/git/bikar-else` on branch `fix-nmEj-root-nearest-s`. The 2026-11-11
-      push was refused only because its PATH left out `/usr/local/bin`, so the 8 Docker steps were
-      NOT VERIFIED; all 42 other checks passed. Omar chose to close the session rather than wait
-      for a retry. Start Docker, then run (about 25 minutes):
-      `env PATH="$HOME/.nvm/versions/node/v22.22.3/bin:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin" THREED_MODELS_DIR=<a 3d-models worktree at master> git -C ~/Workspace/git/bikar-else push -u origin fix-nmEj-root-nearest-s`.
-      Then open the bikar PR (the old O2 cell's 0.2589 was precision, not edge-SSIM, whatever
-      the commit message says), put its number in 3d-models #1014, and take #1014 out of draft.
-      The manager merges bikar first, then #1014.
+   1. **Waiting on the manager to merge: bikar PR #371 first, then 3d-models #1014.** The bikar
+      branch was pushed on 2026-11-11 with `/usr/local/bin` on PATH, so the full pre-push run
+      verified all 50 steps, the Docker ones included. #371's text corrects the commit message:
+      the old O2 cell's 0.2589 was precision, not edge-SSIM. A later bikar push from a fresh
+      shell needs the same PATH or the Docker steps go unverified:
+      `env PATH="$HOME/.nvm/versions/node/v22.22.3/bin:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin" THREED_MODELS_DIR=<a 3d-models worktree at master> git -C ~/Workspace/git/bikar-else push`.
    2. After the bikar merge, run `python3 .claude/skills/pattern-catalog/scripts/catalog.py sync`
       so `docs/catalog/media/nmEjCTzMbDg/nmEjCTzMbDg-plain.png` takes bikar main's new Lab
       thumbnail; commit it in its own PR.
