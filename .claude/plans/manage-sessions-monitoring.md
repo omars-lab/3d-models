@@ -48,42 +48,46 @@ as an index of them. 3d-models keeps one plan per session and one done list per 
   the hub writes Omar's answers), `3d-models-work`, `3d-models-master-ro`, and the store's
   `origin/feat/cup-bare-picture` branch.
 
-## Open now (2026-11-10)
+## Open now (wound down 2026-11-11)
 
-**Tidy-up Omar asked for on Nov 11 (approvals log, last two lines):**
+Omar asked on 2026-11-11 for every session to wind down, with branches and worktrees consolidated and
+no work lost. Where each one stopped:
 
-- 3d-models done lists and both 3d-models plans are merged (#1003, #1004). Memory notes are merged
-  (#1005-#1007).
-- Old 3d-models branches: done. All eight squash-merged branches were checked by content, saved
-  under `refs/snapshots/2026-11-10/` and deleted with `-D` on Omar's yes. Local branches left:
-  master, gh-pages, next-work (monitor-print-watcher's, in `3d-models-else`) and manager-plan
-  (this file's, in `3d-models-manager`). `3d-models-plate-notes` is plates-and-feedback's second
-  folder, now on master.
-- Store: the area plans are merged (storefront #500, d731138, 2026-11-11). All 63 old open items
-  were accounted for: 53 carried over, 7 finished went to done.md, and the rest were narrowed or
-  became headings. merge-pr-467-and-pr-470 now cleans up branches in the store and hub repos
-  (3d-model-hub, 3d-model-hub-work) the same way, keeps `origin/feat/cup-bare-picture`, and
-  removes its worktree. It was also asked whether a commit landed after c913cd4, which was the
-  merged head.
+- **plates-and-feedback:** stopped. Its plan starts cold (cables-1 steps, the hub answers watcher
+  command `make -s -C ~/Workspace/git/3d-model-hub watch-answers`, plate calls A to I). Its spare
+  worktree `3d-models-plate-notes` was clean and is removed; a new session makes a fresh one off
+  origin/master.
+- **monitor-print-watcher:** winding down. CS-9 is committed on bikar `fix-nmEj-root-nearest-s` and on
+  3d-models `cs9-nmej-root-fix` (in `3d-models-else`); both PRs were being pushed. If either PR is not
+  on GitHub when you start, look at those two branches first. Its plan holds CS-9's remaining steps
+  and the note that 13 old plan files still need sorting. `next-work` is deleted.
+- **real-shoppers-store-launch:** stopped, hub server and watchers off (restart steps:
+  the store's `logo-and-cup-mark.md`, "Run the hub and its two watchers first"). All its work is merged.
+- **merge-pr-467-and-pr-470:** Jost done line merged (storefront #503, 3f689d0). It was to delete the
+  four leftover store branches on Omar's yes (approvals log, last line). Check `git branch` in the
+  store: only main should be left, plus `origin/feat/cup-bare-picture`, which is kept on purpose.
 
-**Waiting on Omar** (each in plain words in the session plan that owns it):
+**Decisions waiting on Omar** (each one also sits in the plan that owns it):
 
-- cables-1: a yes in the plates-and-feedback tab, and a color.
-- Judge closeout-1 and toys-1 on the hub (the :8766 links in plates-and-feedback's plan).
-- The next coaster: a tick on the round 3 page
-  (`docs/working-model/feedback-requests/2026-11-05-next-coaster-round-3.md`). Sixteen finished
-  youtube videos wait on that pick.
-- The spinner coaster's five choices, the whole-orb and fidget-toy design questions, and whether
-  to stop the graphify code-map trial early (monitor-print-watcher's plan).
-- Store: cup picks (gBV first, then n3I or sDO, then the round 24 lip color), the Jost font
-  download (answered yes on Nov 10; the rebuild is the store session's), the other blank policy
-  answers, the three Knowledge Base answers, removing the old naqshop app from the dev store, and
-  deleting the stray naqshop-dev app in the EarlBear organization. The FAQ care line is OKed for
-  the next live release he approves.
-- Plate calls A to I: listed in [plates-and-feedback.md](plates-and-feedback.md).
+| Decision | Owner after the answer | Where it lives |
+|---|---|---|
+| cables-1: yes and a color, given in the plates session's own tab | plates-and-feedback | [plates-and-feedback.md](plates-and-feedback.md), open item 1 |
+| Judge closeout-1 and toys-1 on the hub (`http://127.0.0.1:8766/judge.html#closeout-1/2`, `#toys-1/1`) | plates-and-feedback | same plan, item 2 |
+| Plate calls A to I | plates-and-feedback | same plan, "Plate decisions waiting on Omar" |
+| The next coaster: tick one on the round 3 page | whoever imports it | `docs/working-model/feedback-requests/2026-11-05-next-coaster-round-3.md` |
+| Which questions page, and the spinner coaster's five choices | monitor-print-watcher | `2026-11-05-which-questions.md`, `2026-11-08-spinner-coaster-choices.md` in the same folder |
+| Whole-orb and fidget-toy design questions | monitor-print-watcher | [monitor-print-watcher.md](monitor-print-watcher.md) |
+| Store cup patterns, round 1: keep, hold or drop 11 patterns (gBV next, then n3I or sDO) | store sessions | store `omars-calls.md`, `logo-and-cup-mark.md` item 1 |
+| Store round 24 lip color: espresso, crema or golden crema (round 25 waits on it) | store sessions | store `logo-and-cup-mark.md` items 2 and 3 |
+| Store "Choose a pattern" cards: which pair picture | store sessions | store `logo-and-cup-mark.md` item 5 |
+| Store: the other blank policy answers and the three Knowledge Base answers | store sessions | store `omars-calls.md` |
+| Store: remove the old naqshop app from the dev store, and delete the stray naqshop-dev app in EarlBear | Omar's hands | store `omars-calls.md` |
 
-**Next for customers:** CS-9, the nmEjCTzMbDg re-import (monitor-print-watcher; a bikar PR, then
-a 3d-models PR). It is item 1 on the catalog-expansion backlog and unblocks the store's S4.3.
-Alongside it: Omar's cup picks. They unblock the first real product files, and with them
-the store's one-buy-button-per-pattern item ("Before opening"). That item can't start before then,
-because every product file today is a test fixture. real-shoppers-store-launch owns both.
+**Next for customers:** finish CS-9, the nmEjCTzMbDg re-import (monitor-print-watcher's plan). It is
+item 1 on the catalog-expansion backlog and unblocks the store's S4.3. Alongside it, Omar's cup picks
+unblock the first real product files in the store.
+
+**What slowed this run:** a worker's last commit missed a merge (storefront #502) because the push had
+not finished, so re-check the head right before merging. Two PRs edited the same table (#500, #501),
+so merge plan-wide rewrites first. Full pre-push test runs take about 15 minutes in bikar, so a
+wind-down needs that much lead time.
