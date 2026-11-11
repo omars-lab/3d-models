@@ -73,8 +73,8 @@ The backlogs stay where they are; this file points at them:
    The questions that decide what gets printed are entry G in [plates-and-feedback's list of plate decisions](plates-and-feedback.md#plate-decisions-waiting-on-omar-from-every-session); the design side stays here.
 6. **Cable spiral** (Omar, 2026-11-11: an open-topped disc to wrap a cable round, thin and
    stackable). Model `src/CableSpiral/cable-spiral.scad` and design
-   [cable-spiral-design.md](../../docs/design/pieces/cable-spiral-design.md), in 3d-models #1023
-   (Omar authorized merging on 2026-11-11). The research is #1020, #1021 and the checker's
+   [cable-spiral-design.md](../../docs/design/pieces/cable-spiral-design.md), merged in
+   3d-models #1023. The research is #1020, #1021 and the checker's
    #1022, all merged. The design doc passed the readability review
    13 of 13 on round 11. Waits on Omar: his cables measured with calipers (the model is set to
    4 mm), then the design fork in open question 1 (walls that cannot bend in the S-bend and on the
@@ -150,12 +150,11 @@ The backlogs stay where they are; this file points at them:
 
 ### Open pull requests from this session
 
-Omar authorized merging on 2026-11-11. Merged that day: 3d-models #1017 to #1022 (the judging
-port, the plan sort, the one-application design, the cable spiral research), Print Hub #36 and #37
-(the hub checkout was fast-forwarded and `make agent-install` run), and bikar #371. Still to merge:
-
-- 3d-models #1014: the `nmEjCTzMbDg` coaster re-vendored on the fixed R (this PR).
-- 3d-models #1023: the cable spiral model and design doc (item 6).
+Omar authorized merging on 2026-11-11. Merged that day: 3d-models #1017 to #1023 (the judging
+port, the plan sort, the one-application design, the cable spiral research and the cable spiral
+itself), Print Hub #36 and #37 (the hub checkout was fast-forwarded and `make agent-install` run),
+and bikar #371. Still to merge: 3d-models #1014, the `nmEjCTzMbDg` coaster re-vendored on the
+fixed R (this PR).
 
 ## Things to know
 
