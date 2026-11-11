@@ -1,7 +1,7 @@
 ---
 date: 2026-11-11
 produced-by: research pass A (Claude subagent)
-feeds: docs/design/products/cable-spiral-design.md (not yet written)
+feeds: docs/design/pieces/cable-spiral-design.md (PR #1023)
 ---
 
 # Recommendation A: a flat disc with a spiral groove you press the cable into
