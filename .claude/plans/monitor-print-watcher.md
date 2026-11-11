@@ -94,7 +94,7 @@ The backlogs stay where they are; this file points at them:
     window. Past 7 days it warns; then ask Omar in chat for a deploy, and follow the last deploy
     line in the [consolidation done list](../../docs/tasks/consolidation/done.md) (restore the
     build folder from gh-pages, `make coasters`, `make deploy`, check the live site).
-11. **Shrinking the complexity list**, parked backlog, one function a PR, 68 left. The `self_test`
+11. **Shrinking the complexity list**, parked backlog, one function a PR; 52 over 10 on 2026-11-11 by the commit hook (the backlog line's "68 left" is older). The `self_test`
     functions are skipped on purpose. Read `.claude/gates/complexity-baseline.json` before picking.
     Low value for customers; do it only between higher items.
 12. **16 youtube reconstructions not yet imported here** (the SessionStart line lists them).
