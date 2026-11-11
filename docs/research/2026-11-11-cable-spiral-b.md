@@ -152,3 +152,20 @@ closed box, so all are far thicker than a single layer of cable.
 | Small tall prints | Print two at once so each layer cools | Printables 1410373 | fetched (API text) |
 
 The Bambu wiki page on wall and surface settings returned HTTP 402 and was not read.
+
+## Also seen, not used above
+
+Kept so the record is whole. All are **snippets** unless marked.
+
+- MakerWorld 3063346, a cable clip: keep the clip's gap angle at 150° or less.
+  <https://makerworld.com/en/models/3063346>
+- Nite Ize CordWrap / Curvyman product reviews: flat cords do not fit its clasps.
+- Silicone cable wraps, product reviews: "not hard enough" to hold their shape.
+- MakerWorld 806568, a spiral cable sleeve tool. <https://makerworld.com/en/models/806568>
+- MakerWorld 1195362 and 1977251, cable winders. <https://makerworld.com/en/models/1195362>,
+  <https://makerworld.com/en/models/1977251>
+- Printables 1251652, a remix of a spiral cable holder; 1583187, a 20 mm clamp with a slim spiral
+  for 6 to 8 mm cable. <https://www.printables.com/model/1251652>,
+  <https://www.printables.com/model/1583187> (fetched, API search summary only)
+- Printables 55627, a print-in-place cable puck. <https://www.printables.com/model/55627>
+  (fetched, API search summary only)
