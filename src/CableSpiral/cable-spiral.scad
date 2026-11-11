@@ -185,7 +185,8 @@ module curved_run(id) {
     }
 }
 module stack_coupon(id) {
-    // a small disc with the rim ring, the bottom chamfer and one straight groove across
+    // a small disc with the rim ring, the bottom chamfer and one straight groove across, so a
+    // length of cable can lie in the lower coupon while the upper one is set on it
     r = 15; w = groove_w(d); T = disc_t(d, mouth_k, false);
     difference() {
         union() {
@@ -208,11 +209,11 @@ module coupon() {
         ["F", 0.80, false, false, wall_t, false],  // no lip: the control
         ["G", 0.80, true,  true, wall_t, false],   // thin: tip low, 0.8 wall
         ["H", 0.80, true,  true, 0.45, false],     // thin: tip low, one-line wall
-        ["J", 0.80, false, true, 1.2, true],       // 1.2 wall shared with a neighbour groove
+        ["J", 0.80, false, true, wall_t, true],    // two grooves sharing one wall, as on the disc
     ];
     for (i = [0:len(rows) - 1]) let(r = rows[i]) if (only == "" || only == r[0])
         translate([0, _ys(rows, i), 0]) bar(r[0], r[1], r[2], r[3], r[4], r[5]);
-    y0 = _ys(rows, len(rows) - 1) + bar_w(1.2, true) / 2 + tag_w + 5 + rho + groove_w(d) / 2 + wall_t;
+    y0 = _ys(rows, len(rows) - 1) + bar_w(wall_t, true) / 2 + tag_w + 5 + rho + groove_w(d) / 2 + wall_t;
     if (only == "" || only == "K") translate([rho + 3, y0, 0]) curved_run("K");
     if (only == "" || only == "L") translate([2 * rho + 26, y0 - 4, 0]) stack_coupon("L");
     if (only == "" || only == "P") translate([2 * rho + 60, y0 - 4, 0]) stack_coupon("P");
@@ -229,7 +230,7 @@ module section() {
     rows = [["A", 0.75, false, true, wall_t, false], ["C", 0.80, false, true, wall_t, false],
             ["E", 0.85, false, true, wall_t, false], ["F", 0.80, false, false, wall_t, false],
             ["G", 0.80, true,  true, wall_t, false], ["H", 0.80, true,  true, 0.45, false],
-            ["J", 0.80, false, true, 1.2, true]];
+            ["J", 0.80, false, true, wall_t, true]];
     w = groove_w(d);
     for (i = [0:len(rows) - 1]) let(r = rows[i], x0 = i * (w + 2 * wall_t + 4) + (i == 6 ? 4 : 0))
         translate([x0, 0]) {

@@ -1,0 +1,44 @@
+# Cable spiral, labeled cuts for d = 4 mm. Drawn by the draw-side-view skill:
+#   python3 .claude/skills/draw-side-view/scripts/side_view.py draw <this file>
+# Sizes from docs/design/pieces/cable-spiral-design.md "How the cable is held". The tool draws
+# boxes only, so the lip's 45° underside and the lead-in's slope are drawn square here; the true
+# shapes are in section.png.
+title: "Cable spiral: one channel, and two discs stacked (d = 4 mm)"
+panels:
+  - title: "1. One channel, cut across, to scale"
+    width: 12
+    scale: [30, 30]
+    parts:
+      - {kind: half, side: lower, box: [3, 0, 6, 0.8], first: bottom, label: "floor 0.8", label_at: [8, 0.4]}
+      - {kind: half, side: lower, box: [3, 0.8, 0.8, 5.4], both: true, label: "wall 0.8", label_at: [3.4, 3.5], label_side: left}
+      - {kind: lip, side: lower, box: [3.8, 4.8, 0.6, 0.6], both: true, last: top, label: "lip (0.6 reach)", label_at: [7.9, 5.1]}
+      - {kind: piece, box: [4, 0.8, 4, 4], label: "cable (drawn square)", label_at: [7, 2.6]}
+      - {kind: dim, from: [3.8, 1.8], to: [8.2, 1.8], text: "channel 4.4", place: below}
+      - {kind: dim, from: [4.4, 5.8], to: [7.6, 5.8], text: "mouth 3.2", place: above}
+      - {kind: dim, from: [2.2, 0], to: [2.2, 6.2], text: "6.2 thick", place: left}
+      - {kind: dim, from: [10.6, 5.4], to: [10.6, 6.2], text: "lead-in 0.8"}
+      - {kind: dim, from: [10.6, 0.8], to: [10.6, 4.8], text: "d = 4"}
+      - {kind: bed, line: [0, 0, 12]}
+    notes:
+      - "The lip starts at height d (4.8 above the bed, counting the floor), so a cable lying on the
+        floor does not touch it. Pressing the cable down bends each wall 0.4 mm out at the top, until it
+        slips past the 3.2 mouth."
+      - "Drawn square: the lip's underside is really a 45° slope and the lead-in a 30° slope that
+        widens the mouth back toward 4.4 at the top face. section.png shows the true shapes."
+
+  - title: "2. Two discs stacked, at the outer edge (not to scale)"
+    width: 14
+    parts:
+      - {kind: half, side: lower, box: [0, 0, 12, 6.2], first: bottom, label: "lower disc", label_at: [1.5, 3], label_side: left}
+      - {kind: pocket, box: [3, 0.8, 4.4, 5.4], label: "a channel", label_at: [6.6, 5.5]}
+      - {kind: piece, box: [3.2, 0.8, 4, 4], label: "cable", label_at: [5.2, 2.8]}
+      - {kind: stud, side: lower, box: [11.6, 6.2, 0.4, 0.4], toward: up, label: "rim ring 0.4", label_at: [11.8, 6.4]}
+      - {kind: half, side: upper, box: [0, 6.6, 12, 6.2], label: "upper disc", label_at: [1.5, 9.5], label_side: left}
+      - {kind: socket, box: [11.4, 6.6, 0.6, 0.6], label: "bottom chamfer 0.6", label_at: [11.7, 7]}
+      - {kind: arrow, from: [6, 11.5], to: [6, 7.2], text: "set down"}
+      - {kind: bed, line: [0, 0, 14]}
+    notes:
+      - "Drawn apart so both parts show. Set down, the upper disc's flat underside rests on the tops of
+        the lower disc's walls and closes every channel, so the cable cannot lift out. The ring (0.4
+        tall) tucks into the chamfer (0.6 tall) and stops 0.2 short, so it never props the disc up."
+      - "The ring is really a triangle with a 45° inner face; the chamfer is a 45° bevel."
