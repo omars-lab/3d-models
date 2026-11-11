@@ -239,7 +239,7 @@ flowchart LR
   cable near the plug lifts
   out freely.
 - **The rim** outside the last turn is at least 2 mm, a guess. The spiral's radius grows as it winds,
-  so the rim is 2 mm thin only just before each of the two exits, about 4.6 mm a quarter turn from each exit, and up to 7 mm just past one.
+  so the rim is 2 mm thin only just before each of the two exits, about 4.6 mm a quarter turn from each exit, and up to 7.2 mm just past one.
 
 **Disc size against cable length**, from the model for d = 4: 1 m of cable needs a disc 96.7 mm
 across. The research note's table says about 92 mm. The difference is that the note measured to the
@@ -352,8 +352,7 @@ harder, and a narrower range of cables.** In numbers: its lip tip drops from 1.1
 widest point, so the cable still cannot lift out past them. The wall bends harder because the same
 0.4 mm push acts on a shorter strip. And because the tips sit so low, a round cable lying on the floor
 touches them once it is more than about d + 0.15 across (4.15 mm for d = 4); a d-size cable clears
-the lip tips by only about 0.13 mm (the shortest distance; straight up from the tip it is 0.2 mm, the
-figure the model's comment uses). So the thin version holds about 0.94 × d to d + 0.15
+the lip tips by only about 0.13 mm (the shortest distance; straight up from the tip it is 0.2 mm). So the thin version holds about 0.94 × d to d + 0.15
 without pressing on the cable at rest, not the full-height disc's 0.94 × d to d + 0.4. Past d + 0.15
 the tips would press all the time, which the channel width is chosen to avoid because PLA creeps.
 The stretch narrows it further: with the 0.8 wall (G) the stretch passes 4% at about 3.97 mm, just
@@ -467,8 +466,8 @@ session[^plates] to lay out and send.
     widest point; a 5.0 mm disc for a 4 mm cable.
 [^arm]: **spiral arm** — one of the two channels that wind outward from the S-bend, one for each
     half of the cable. A *turn* (or lap) is one full circuit of an arm round the centre.
-[^id]: **carved id** — a letter cut into the top of each test part, so a question after the print
-    can name the part exactly.
+[^id]: **carved id** — a letter cut into each test part (on a tab beside the bar for A to J,
+    on the top face for K, L and P), so a question after the print can name the part exactly.
 [^sources]: **Sovol, Fictiv, Hubs, Prusa, Bambu** — a printer maker (Sovol), two manufacturing
     services that publish design guides (Fictiv, Hubs), and two more printer makers (Prusa, and
     Bambu Lab, who make our X2D). Each published a guide or data sheet that a number here comes

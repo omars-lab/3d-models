@@ -33,3 +33,6 @@ folded: no
 - Naming the grip ranges ("snug", "loose") before computing the room each leaves: the third review
   found them the wrong way round. The model's `grip` part now prints side room and lift per cable,
   so the names come from numbers.
+- `.claude/skills/review-design` loop on a part design: eleven rounds to pass, and four of the fails
+  were C8 (a concept explained in words with no picture) or a claim about where a wall bends. Draw a
+  picture per mechanism and a zones view of the shape before the first review, not after.
