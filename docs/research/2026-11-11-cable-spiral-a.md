@@ -17,8 +17,8 @@ number that rests on one is flagged. Printables, 3dgo.app and the MakerWorld sea
 a bot check for this pass, so every Printables model below is a snippet. MakerWorld model pages
 opened in a browser three times out of six.
 
-**What was surveyed.** 10 pages fetched, 2 downloaded meshes measured by us, and 21 pages seen
-only as snippets. Every claim of "none" below is about that set, not about the whole web.
+**What was surveyed.** 10 pages fetched, 2 downloaded meshes measured by us, and 20 sources (22
+links) seen only as snippets. Every claim of "none" below is about that set, not about the whole web.
 
 ## 1. What shapes match "top-open cable spiral"
 
@@ -26,14 +26,16 @@ only as snippets. Every claim of "none" below is about that set, not about the w
 
 | Shape | Examples | How the cable is held | Thin? | Stacks? |
 |---|---|---|---|---|
-| **A. Flat disc, open-topped spiral groove.** The cable is laid or pressed down into a groove cut into the top face, spiralling in from the rim, like a record groove. | None of the surveyed pages shows this shape. | (Not seen.) | Yes: about one cable diameter plus a floor. | Like coasters. |
+| **A. Flat disc, open-topped spiral groove.** The cable is laid or pressed down into a groove cut into the top face, spiralling in from the rim, like a record groove. | None of the surveyed pages whose shape I could see. fokerman's organizer (row C) was not seen and may be one. | (Not seen.) | Yes: about one cable diameter plus a floor. | Like coasters. |
 | **B. Flat spool or winder.** The cable winds around a core between two flanges, and the end tucks into a slot. | Stackable Cable Winder, MakerWorld 2426343 (**fetched**). Cable winder Pro, MakerWorld 2079227 (**fetched**). Next Gen USB winder, Printables 1037051 (**snippet**). Advanced Stackable winder, Printables 629654 (**snippet**). Easy cable winder, MakerWorld 1509676 (**snippet**). Cable Roll, Thangs 1089730 (**snippet**). | Wound turns press on each other, and a slot or twist lid holds the end. | No: 20 to 80 mm tall. | Yes, several by design. |
 | **C. Spiral cable organizer.** A small spiral body that a few cables are fed into. | fokerman's "Spiral cable organizer", Printables 302991 and 1430486 (**snippet** only). | The snippet says it holds "at least 2 cables", and three if loaded "thickest first". | Unknown. | Unknown. |
 | **D. Spiral wrap or sleeve.** A helix wrapped along a cable run, to bundle or protect it. | Spiral cable wrap, 2 to 20 mm, Printables 1075969 (**snippet**). Parametric spiral wrap, Printables 1499648 (**snippet**). Spiral sleeve tool, MakerWorld 806568 (**snippet**). | Wraps around the cable. | Yes. | No: this is a different job, not a holder. |
 | **E. Press-in clip.** A C-shaped clip or slot the cable is pushed past a narrow mouth into. | The two parts already on `cables-1`, measured below. Parametric One-Piece Snap Cable Clip, MakerWorld 3436380 (**fetched**). | A narrow mouth the cable snaps past. | Yes. | Not a spiral. |
 
-**What I did not find.** None of the 10 fetched pages, and none of the 21 snippets listed under Sources, shows
-shape A: a flat disc with a spiral channel open on top that the cable is pressed into. Searches for
+**What I did not find.** None of the 10 fetched pages, and none of the snippets whose shape I could
+make out, shows shape A: a flat disc with a spiral channel open on top that the cable is pressed
+into. One exception is unknown: fokerman's "Spiral cable organizer" is the closest name match in the
+survey, and I never saw its shape, so it may be shape A. Searches for
 "top open" cable spiral, spiral cable clip, and spiral groove disc returned nothing that matched.
 This could mean the shape is uncommon, or only that my searches missed it. Printables was unreadable
 in this pass, and its search was never tried directly.
@@ -44,7 +46,7 @@ in this pass, and its search was never tried directly.
 - **"Stays in place"** is something A can do for every turn by pressing the cable past a narrow
   mouth, as shape E does. A spool holds only the end, and the turns stay because they are wound
   tight.
-- **"Thin"** rules out every spool surveyed: the shortest is about 20 mm (the Next Gen 80 x 20
+- **"Thin"** rules out every spool whose height I saw: the shortest is about 20 mm (the Next Gen 80 x 20
   version, **snippet**) and Cable winder Pro is 82 mm tall (**fetched**). A disc with a groove
   is about one cable diameter plus a floor.
 - **"Wrap a cable around"** fits B better than A, because in A you lay the cable in rather than
@@ -131,6 +133,9 @@ but its rendering was garbled in the fetch.
   = **2.25%**.
 - That sits at the bottom of the 2 to 4% band (Fictiv, halved) and well under the 7.5% break value.
 - At 0.5 mm of movement it is 3.75%, the top of the band.
+- With the recommendation's own wall, 0.9 mm thick and 4.1 mm tall, a 0.3 mm movement gives
+  1.5 × 0.9 × 0.3 / 16.8 = **2.4%**, still in the lower half of the band. The strain climbs fast
+  as the wall gets shorter: at 3.5 mm tall it would be 3.3%.
 
 **Two reasons the formula may be wrong for a spiral.**
 
@@ -179,8 +184,8 @@ recommendation as a guess to test.
 
 | Trap | What the source says | Source |
 |---|---|---|
-| Overhang, a part of a layer that hangs out past the layer below | Max overhang angle 55° for PLA Basic | Bambu PLA Basic data sheet, **fetched** |
-| | The 45° rule is the usual safe start; PLA with strong cooling often reaches 55 to 60° | blogs and vendor guides (3dprinterly, jlc3dp, all3dp), **snippet**, which they themselves call estimates |
+| Overhang, a part of a layer that hangs out past the layer below | Max overhang angle 55° for PLA Basic. The sheet does not say whether the angle is measured from upright or from flat. Read as from upright, a 45° slope is safe. Read as from flat, only slopes within 35° of upright are, and a 45° slope is not | Bambu PLA Basic data sheet, **fetched** |
+| | The 45° rule is the usual safe start; PLA with strong cooling often reaches 55 to 60° | blogs and vendor guides (3dprinterly, jlc3dp), **snippet**, which they themselves call estimates |
 | Bridging, a line printed across open air between two supports | Max bridging length 30 mm for PLA Basic | Bambu PLA Basic data sheet, **fetched** |
 | | Other guides give anything from 10 to 50 mm | blogs, **snippet** |
 | Walls thinner than two lines | In PrusaSlicer's Arachne wall generator, which varies line width to fit a thin wall, "Features thinner than this value will not be printed"; anything above that is widened to a minimum line width | Prusa help, Arachne perimeter generator, **fetched**; no default value was on the page |
