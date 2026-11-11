@@ -34,10 +34,10 @@ The pattern's straps raised on a full slab.
 
 From the [constructions ledger](../../constructions/ledger.md).
 
-0 of the three checks pass and 2 fail; the ledger's notes say why.
+1 of the three checks pass and 1 fail; the ledger's notes say why.
 
-- every labelled point and line: 28 compared, 9 failed (FAIL);
-- the drawn lines: recall 0.9176, precision 0.2589 (FAIL);
+- every labelled point and line: 34 compared, 3 failed (FAIL);
+- the drawn lines: recall 1.0, precision 1.0 (PASS);
 - the solid coverage: none by design: no solid to compare (see notes).
 
 ## Coaster styles and plates

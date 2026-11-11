@@ -63,7 +63,7 @@ circles are no longer reported, which is the six fewer. The nine left:
   (4.482), `T` (8.965) and `a` (2.773, a length). `R = Intersect(t, m, 2)` picks the other of the
   two crossings in bikar; the rest are built from `R`. The youtube patch, `Intersect(t, m, S)`,
   is proposed in [the 2026-09-27 FAILs note](ledger-oracle-fails-2026-09-27.md) and has not been
-  made.
+  made. *(Wrong: see [the correction below](#correction-2026-11-11-youtube-had-made-the-patch).)*
 
 ## NtnlGMTElBk
 
@@ -76,3 +76,19 @@ patterns (`pinks`, `ring`).
 Same numbers as at its import. The comparator rows it needed (polyline and ray) are on youtube
 main now, so the run no longer depends on the `o1-polyline-ray` branch. The 75 are 4 polylines
 drawn by the pattern layer, 12 repeat patterns and 59 conjugates the lowering makes.
+
+## Correction, 2026-11-11: youtube had made the patch
+
+The line above saying the youtube patch "has not been made" was wrong. youtube took it on
+2026-09-29 (d72fc2a): its construction file reads `R = Intersect(t, m, S)`. What was stale was
+bikar's copy, imported on 2026-09-27 from the file before the fix, and the run above compared
+that stale `.bkr`.
+
+bikar re-imported the construction from youtube's fixed file on 2026-11-11 (branch
+`fix-nmEj-root-nearest-s`; R is now `intersect t m pick nearest S`). Re-run the same way, on
+youtube main 7deb8ab against that `.bkr`:
+
+- O1: `FAIL: 34 compared, 3 failed, 35 skipped/extra`. The three are `d` and `q` ("no comparison
+  for GeoGebra type 'parabola'") and `t` ("… 'hyperbola'"). `R`, `c_1`, `d_1`, `D`, `T` and `a`
+  all PASS now.
+- O2: `O2 PASS: edge-SSIM 0.9796 (min 0.7), recall 1.0 precision 1.0 (min 0.98), phash 32 (advisory)`.

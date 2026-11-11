@@ -44,3 +44,12 @@ bikar's pre-push runs `make local.ci-strict`, which probes `docker info` and fai
 ## The main bikar checkout is too old to slice split-07/09 (2026-10-27)
 
 `~/Workspace/git/bikar` sat at 7d5990a and is another session's: never fast-forward it. It rejects the split flange coaster's `stud` params ("Unknown param override 'stud'"). Slice split-07 or split-09 with `BIKAR_DIR` pointing at a bikar clone at 112d257 or newer, including any re-slice at send time.
+
+## The Lab's thumbnail script hangs in a fresh worktree (2026-11-11)
+
+`npm run coaster-thumbnails -- --only <id>` timed out on every coaster ("no result within 120 s"),
+even ones that had worked before, in a fresh bikar worktree where only core and the CLI were built.
+The Lab page also imports `@naqshcoffee/bikar-knobs` and `@naqshcoffee/qiyas-schema`; with their
+`dist/` missing the page never stamps its result, and no error says why. Build those two packages
+too (`npm run build -w @naqshcoffee/bikar-knobs -w @naqshcoffee/qiyas-schema`, or the root
+`npm run build`) before rendering thumbnails.
