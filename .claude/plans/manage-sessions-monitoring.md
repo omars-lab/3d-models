@@ -59,10 +59,12 @@ as an index of them. 3d-models keeps one plan per session and one done list per 
   master, gh-pages, next-work (monitor-print-watcher's, in `3d-models-else`) and manager-plan
   (this file's, in `3d-models-manager`). `3d-models-plate-notes` is plates-and-feedback's second
   folder, now on master.
-- Store: merge-pr-467-and-pr-470 is writing one pull request with open.md, done.md and every area
-  plan. It folds in and deletes `.claude/plans/real-shoppers-store-launch.md`. After it merges,
-  the same session cleans up branches in the store and hub repos (3d-model-hub, 3d-model-hub-work)
-  the same way.
+- Store: the area plans are merged (storefront #500, d731138, 2026-11-11). All 63 old open items
+  were accounted for: 53 carried over, 7 finished went to done.md, and the rest were narrowed or
+  became headings. merge-pr-467-and-pr-470 now cleans up branches in the store and hub repos
+  (3d-model-hub, 3d-model-hub-work) the same way, keeps `origin/feat/cup-bare-picture`, and
+  removes its worktree. It was also asked whether a commit landed after c913cd4, which was the
+  merged head.
 
 **Waiting on Omar** (each in plain words in the session plan that owns it):
 
@@ -74,9 +76,14 @@ as an index of them. 3d-models keeps one plan per session and one done list per 
 - The spinner coaster's five choices, the whole-orb and fidget-toy design questions, and whether
   to stop the graphify code-map trial early (monitor-print-watcher's plan).
 - Store: cup picks (gBV first, then n3I or sDO, then the round 24 lip color), the Jost font
-  download, the other blank policy answers, the three Knowledge Base answers, removing the old
-  naqshop app from the dev store, and OKing the new FAQ coaster-care line before the live store.
+  download (answered yes on Nov 10; the rebuild is the store session's), the other blank policy
+  answers, the three Knowledge Base answers, removing the old naqshop app from the dev store, and
+  deleting the stray naqshop-dev app in the EarlBear organization. The FAQ care line is OKed for
+  the next live release he approves.
+- Plate calls A to I: listed in [plates-and-feedback.md](plates-and-feedback.md).
 
-**Next for customers:** Omar's cup picks. They unblock the first real product files, and with them
+**Next for customers:** CS-9, the nmEjCTzMbDg re-import (monitor-print-watcher; a bikar PR, then
+a 3d-models PR). It is item 1 on the catalog-expansion backlog and unblocks the store's S4.3.
+Alongside it: Omar's cup picks. They unblock the first real product files, and with them
 the store's one-buy-button-per-pattern item ("Before opening"). That item can't start before then,
 because every product file today is a test fixture. real-shoppers-store-launch owns both.
