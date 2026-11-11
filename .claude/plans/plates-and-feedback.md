@@ -27,9 +27,9 @@ he asks for (toys, cable holders) go in between.
    `env PATH=/Users/omareid/.nvm/versions/node/v22.22.3/bin:/opt/homebrew/bin:/usr/bin:/bin`.
 4. **Watch.** Skill `monitor-print`: the script in the background, a watcher agent, then
    `--publish` puts the timelapse on the page.
-5. **Judge.** Skill `judge-page`: Omar answers on the hub at
-   `http://127.0.0.1:4717/judge.html#<plate>/1`. The hub opens an `After-print answers: <plate>`
-   PR.
+5. **Judge.** Skill `judge-page`: Omar answers on the hub. Give him the link with comments on,
+   `http://127.0.0.1:8766/judge.html#<plate>/1`. Never the bare `:4717` address: it has no
+   comments, and he asked why on 2026-11-09. The hub opens an `After-print answers: <plate>` PR.
 6. **Record.** Skill `review-print` writes `docs/prints/<date>-<plate>/` from the `## Judged`
    table.
 
