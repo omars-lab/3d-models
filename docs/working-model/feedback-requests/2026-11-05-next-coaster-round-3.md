@@ -95,7 +95,7 @@ Sell: credit.
 Why my pick: it has the top total and the same score as 2, and its rebuild is better than 2's.
 If you would rather build something ready today, 3 or 4 can start at once.
 
-**Your answer — make this first:**
+**Your answer — make this first:** ^gss2v2
 
 - [ ] 1. Alhambra door tile
 - [ ] 2. Sultan Barsbay tile
