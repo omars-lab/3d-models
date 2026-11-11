@@ -34,7 +34,8 @@ $fn      = 96;
 function groove_w(d)       = d + gap;
 function lip_reach(d, mk)  = (groove_w(d) - mk * d) / 2;
 // "tip high": the lip underside starts at height d, so a cable on the floor never touches it.
-// "tip low":  the lowest the tip can sit and still clear a cable on the floor by 0.2 mm.
+// "tip low":  the lowest the tip can sit and still clear a cable on the floor by 0.2 mm, measured
+//             straight up at the tip (the shortest distance to the round cable is about 0.13 mm).
 function tip_h(d, mk, low) = low ? 0.8 * d + 0.2 : d + lip_reach(d, mk);
 function lead_h(d)         = 0.2 * d;
 function disc_t(d, mk, low)= floor_t + tip_h(d, mk, low) + lead_h(d);
@@ -195,6 +196,9 @@ module stack_coupon(id) {
             translate([0, 0, T]) rotate_extrude() polygon([[r - ring_h, 0], [r, 0], [r, ring_h]]);
         }
         rotate_extrude() polygon([[r - chamfer, -0.01], [r + 1, -0.01], [r + 1, chamfer + 1]]);
+        // the groove cuts through the ring at both ends too, as the disc's exits do, so the ring
+        // never spans the groove in mid-air
+        translate([-r - 1, -w / 2, T - 0.01]) cube([2 * r + 2, w, ring_h + 0.02]);
         translate([0, w / 2 + 4.5, T - 0.6]) linear_extrude(1)
             text(id, size = 4, halign = "center", valign = "center", font = "Liberation Sans:style=Bold");
     }
