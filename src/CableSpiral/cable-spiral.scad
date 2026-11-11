@@ -273,7 +273,50 @@ module grip() {
         }
 }
 
+// "zones": the plan from above, with the channel colored by how many of its walls can bend.
+// Red: the S-bend, solid on both sides. Orange: the first half turn of each arm (solid centre on
+// one side) and the last half turn (rim on one side). Gray: both walls bend, as on the test bars.
+// Render in preview (not --render) so the colors show.
+module zones() {
+    half = ceil(len(arm_pts) * PI / th_max);           // points in half a turn
+    first = [for (i = [0:half]) arm_pts[i]];
+    last  = [for (i = [len(arm_pts) - 1 - half:len(arm_pts) - 1]) arm_pts[i]];
+    color("lightgray") linear_extrude(1) plan();
+    color("silver") translate([0, 0, 0.5]) linear_extrude(0.4) intersection() { circle(R_disc); stroke(fold_path, groove_w(d) / 2); }
+    for (s = [1, -1]) scale([s, s, 1]) translate([0, 0, 1]) {
+        color("red") linear_extrude(0.2) stroke(s_half, groove_w(d) / 2);
+        color("orange") linear_extrude(0.2) { stroke(first, groove_w(d) / 2); stroke(last, groove_w(d) / 2); }
+    }
+}
+
+// "sizes": which cable sizes each disc takes, on a number line from 3.0 to 4.8 mm. Light: easy press
+// (0.941 d to d). Dark: firm press (d up to d + 0.4, or where the wall stretch reaches 4%, the
+// beam sum with both walls bending). Ticks: the cables the design doc names.
+function firm_end(dd) = min(dd + gap, 0.04 * pow(1.1 * dd + 0.2, 2) * 2 / (1.5 * wall_t) + mouth_k * dd);
+module sizes() {
+    k = 60;                                             // drawing units per mm of cable
+    function x(D) = (D - 3.0) * k;
+    discs = [3.2, 3.7, 4.3];
+    for (i = [0:2]) let(dd = discs[i], y = -i * 9, lo = dd * mouth_k / 0.85) {
+        color("lightskyblue") translate([x(lo), y]) square([x(dd) - x(lo), 6]);
+        color("steelblue") translate([x(dd), y]) square([x(firm_end(dd)) - x(dd), 6]);
+        color("black") translate([-4, y + 1.5]) text(str(dd, " disc"), size = 3, halign = "right");
+        echo(str("CABLE-SPIRAL sizes: ", dd, " disc ", lo, " to ", dd, " to ", firm_end(dd)));
+    }
+    cables = [[3.0, "Apple 3.0"], [3.5, "Apple 3.5"], [4.0, "StarTech 4.0"], [4.6, "ChargerLAB 4.6"], [4.7, "Anker 4.7"]];
+    for (c = cables) color("black") {
+        translate([x(c[0]) - 0.2, -22]) square([0.4, 34]);
+        translate([x(c[0]), 14 + (c[0] == 4.7 ? 5 : 0)]) text(c[1], size = 2.6, halign = "center");
+    }
+    color("black") for (t = [3.0:0.2:4.81]) {
+        translate([x(t) - 0.1, -26]) square([0.2, 3]);
+        translate([x(t), -31]) text(str(t, " mm"), size = 2.4, halign = "center");
+    }
+}
+
 if (part == "disc") disc();
+else if (part == "zones") zones();
+else if (part == "sizes") sizes();
 else if (part == "coupon") coupon();
 else if (part == "plan") plan();
 else if (part == "section") section();
