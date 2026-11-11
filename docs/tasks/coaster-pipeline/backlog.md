@@ -54,6 +54,17 @@ minutes and 4.67 g. They are for his desk, not an experiment, so no carved ids. 
 Omar's yes in green, given in chat in the session that sends it. A yes passed on by another
 session is not one. Then record it, check the bed, send, and watch.
 
+**Lay out a plate for the cable spiral's test piece, once Omar has measured his cables.** The
+model is `src/CableSpiral/cable-spiral.scad` (`part="coupon"`) and the
+[design doc](../../design/pieces/cable-spiral-design.md) is in 3d-models #1023. The test piece is
+ten small parts, about 18 g, each with its carved id: bars A, C and E (three mouth widths), F (no
+lip), G and H (the thinner disc), J (two channels sharing a wall), K (the tightest curve, solid on
+one side) and stacking discs L and P. K and P answer the doc's open question 1: whether the cable
+presses in where a wall cannot bend. First comes Omar's caliper reading of his cables' thickness,
+since the model is set to 4 mm until then; render with `-D d=<his size>`. Then the after-print
+questions are the doc's "After the print, for each bar A to J and the curve K" and "For L and P" steps, a short procedure each. Cables-1
+could share the bed if both wait at once.
+
 1. **The kite fits split-10 dropped.** On Omar's word, split-10's iteration 4 left out
    KITE-G10 (gap 0.10 mm a face) and KITE-PIN20 and KITE-PIN15 (pin holes 0.20 and 0.15 mm wider
    than the pin), keeping only stock and gap 0.08. Put them on the next kite plate once
