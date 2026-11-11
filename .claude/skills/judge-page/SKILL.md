@@ -48,10 +48,11 @@ sent together to the plate page's `## Judged` table, through one PR the hub open
 
    Something wrong: fix it in 3d-models (the page) or in the hub (the page's code), and look
    again. Never tell him a plate is ready from the curl alone.
-6. **Tell him** in two lines: the link `http://127.0.0.1:4717/judge.html#<plate>/1` and how many
-   questions there are. When page comments are on in the hub, the same page at
-   `http://127.0.0.1:8766/judge.html` takes comments (press C), and those are answered with
-   `development-manager:answer-page-comments`.
+6. **Tell him** in two lines: the link and how many questions there are. Get the link from
+   `python3 .claude/skills/judge-page/scripts/open_questions.py <plate> --link`: it is the page
+   with comments on (press C; port 8768, read from the hub's settings), and it starts the
+   comments server when it is down. Never hand him the bare `:4717` address, which has no
+   comments. Comments are answered with `development-manager:answer-page-comments`.
 
 ## After he answers
 
@@ -94,7 +95,7 @@ same table through the same parser. This skill's own script only opens the page.
 
 | Script | What it does | When to reach for it | Command |
 |---|---|---|---|
-| `.claude/skills/judge-page/scripts/open_questions.py` | Lists the plates on the hub with unanswered rows, starts the comments server if needed, opens the first open row | Omar asks to open the hub or see what he still owes; `--list` to only list | `python3 .claude/skills/judge-page/scripts/open_questions.py [<plate>] [--list]` |
+| `.claude/skills/judge-page/scripts/open_questions.py` | Lists the plates on the hub with unanswered rows, starts the comments server if needed, opens the first open row | Omar asks to open the hub or see what he still owes; `--list` to only list; `--link` to print the link for step 6 and open nothing | `python3 .claude/skills/judge-page/scripts/open_questions.py [<plate>] [--list\|--link]` |
 | `review-print/scripts/after_print.py waiting` | Lists the plates sent, finished on the printer and not yet recorded, with how many rows are answered | Step 1 | `python3 .claude/skills/review-print/scripts/after_print.py waiting` |
 | `review-print/scripts/after_print.py measure` | Flags any After-the-print cell the parser cannot read; exit 1 when one is found | Step 2 | `python3 .claude/skills/review-print/scripts/after_print.py measure` |
 | `review-print/scripts/after_print.py questions` | The rows exactly as the hub sees them | Step 2, to read a row as the page will | `python3 .claude/skills/review-print/scripts/after_print.py questions <plate> --json` |

@@ -1,7 +1,7 @@
 # `tools/bambu` — Bambu X2D CLI
 
 Contextualized CLI companion to the `setup-bambu-x2d` skill (built in a later phase — see
-[`.claude/plans/binary-tickling-kay.md`](../../.claude/plans/binary-tickling-kay.md)). It encodes
+[`first-print-campaign.md`](../../.claude/skills/guide-print/first-print-campaign.md)). It encodes
 *how we print* — our verbs over the community transport — so a call site stays a single,
 allow-listable command instead of hand-assembled MCP pokes.
 

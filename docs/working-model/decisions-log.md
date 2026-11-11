@@ -4793,7 +4793,7 @@ plane-clipped path (a) as a second mode.
 ### Context
 
 A physical Bambu X2D now exists on the LAN, and the first-print campaign
-([`.claude/plans/binary-tickling-kay.md`](../../.claude/plans/binary-tickling-kay.md))
+([`first-print-campaign.md`](../../.claude/skills/guide-print/first-print-campaign.md), a plan file when this was written)
 cannot record a reading against "the X2D" until the machine exists in bikar's menu.
 That menu is `bikar:packages/knobs/src/machines.ts` `MACHINES` — ten `PrintTarget`
 entries, none the X2D, all single-nozzle. The schema is
@@ -7012,3 +7012,40 @@ were not good enough to stop the grep. The trial's own measure, the FAQ tool rer
 sessions, is still due when the trial ends on 2026-11-20. The backlog says to read the two
 together. Whether to stop early and remove graphify from bikar (§6 says how) is Omar's call. So
 is whether to drop the script for links between repos (question 3), which waits on this result.
+
+## D-130 — One app for designing and printing: pages in bikar, every answer given in the app
+
+Omar, 2026-11-11, in chat, after a survey of every page found five front pages that do not link
+to each other ([research](../research/one-app-page-survey-2026-11-11.md)). His words: the pages
+feel like "a disconnected system of pages"; he wants them consolidated "into a single
+application". The design is
+[users-and-surfaces-design.md](../design/process/users-and-surfaces-design.md).
+
+### The options on the table
+
+Three questions, asked together:
+
+- **Where the pages live:** all in bikar, the Print Hub keeping only its server (the pick); pages
+  served from the Print Hub; a shared shell around both apps; links only.
+- **Where answers are given:** every answer in the app, saved by pull request into the same pages
+  (the pick); judging in the app, yeses and design questions still in Obsidian.
+- **What joins now:** Design and Print, with Learn (youtube) and Check (qiyas) as links (the pick);
+  all four at once.
+
+Omar also said the launcher that lists every repo's pages is left alone: "i don't want to mess wit
+hthe global hub right now with all our uis regardless of domain".
+
+### What was picked
+
+Pages in bikar, every answer in the app, Design and Print now. bikar's Studio becomes the one app,
+with one top bar and a Waiting list on its home page. The Print Hub's pages move into it; its
+server stays. The Yes button runs the same `plate_approve.py` that records a yes today, so D-093,
+D-096 and D-097 stand. This reverses bikar's 2026-08-07 call to keep the Lab's own index page,
+replaces the Print Hub's never-built plan for a Yes button on the hub, and leaves where the order
+pages go (D-112) open as call 3 of the design. Serving the pages from the Print Hub was ruled out
+on a fact checked by hand: bikar's editor loses every save without its pattern store, and says
+nothing on the page. Seven calls stay open in §12 of the design; none blocks the first slice.
+
+**What would reverse it:** the first slices showing that one codebase slows the print pages down
+more than the joined Waiting list saves Omar, or Omar choosing a shared shell across all his
+projects once he takes up the launcher again.

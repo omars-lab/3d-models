@@ -2,6 +2,7 @@
 
 Newest first: date, what shipped, PR. Open work: [`backlog.md`](backlog.md).
 
+- 2026-11-11 — Three finished plan files removed (in git history at 266f32ce): lego-tooling (the Lego Lab, LDraw export and studio fixes, bikar #134, #150; opening the LDraw file in a viewer stays on this backlog); sleepy-yawning-bubble, which by then held the four bikar studio fixes (pattern list, landing catalog, 404 page, deploy check), complete since 2026-08-01; and the Islamic orb plan sprightly-jingling-milner, M0 to M4 shipped, with the first printed orb as Plate 4 in the coaster-pipeline backlog
 - 2026-11-08 — Pattern catalog step 5: a note for each of the 76 files in bikar's seven library families (stars, rosettes, tiled, weave, orbs, lego, coupons) in `docs/catalog/library/`, with their file header, knobs and a picture; `catalog.py render-library` draws the 69 pictures (1.1 MB, about 16 kB each) and redraws one only when its file changes; the catalog page lists them by family. Step 6 is optional (3d-models #976)
 - 2026-11-06 — The code graph trial on bikar started (D-129 step 3): a test build showed exported constants are in the graph and static class fields are not (3d-models #905), the graph built from bikar main `21420bc3` and kept out of git, and a CLAUDE.md line pointing sessions at it (bikar #370). Ends 2026-11-20
 - 2026-11-06 — A complexity check on the repo's Python (D-129 step 2): no function may grow past 10 (ruff C901, pinned through uvx), the 86 already over it listed in `.claude/gates/complexity-baseline.json`, a list that only shrinks; hook `55-complexity` and `make validate-complexity` (3d-models #902)
@@ -52,9 +53,9 @@ tasks Snapshot 4 listed as still-open all closed here (`#8` cross-repo ledger bl
 `#71`), and the D-052 cascade added `#81`–`#85` on the same sequence. So Snapshot 4's
 and Snapshot 5's shared ids (`#8`, `#49`, `#67`, `#71`) are the *same* tasks, closed
 here. Still open on the board at this prune: **`#81`** — make the orb breakdown pages
-teach flat→sphere construction, the full plan beyond the T9 gate (spec:
-`.claude/plans/sunny-booping-crescent.md`; new-session brief:
-`.claude/plans/breakdown-pages-kickoff.md`).
+teach flat→sphere construction, the full plan beyond the T9 gate (spec: the plan
+sunny-booping-crescent; new-session brief: breakdown-pages-kickoff; both shipped and were
+retired 2026-11-11, in git history at 266f32ce).
 
 ### D-052 base-face-honesty cascade (four repos: sacred-patterns → bikar → qiyas → 3d-models)
 - #82 — Cascade step 2, bikar producer half: gt-emitter conditional `orb_base_face` (face-kind only) + GT_SCHEMA_VERSION 1.29 (bikar squash 09390b8, all 5 CI checks green, composites unmoved)

@@ -10,11 +10,11 @@ session paces itself. Written 2026-09-25, after 3d-models #306.
 **Every GeoGebra construction in the youtube corpus becomes a coaster that has actually been
 printed on the X2D, many at a time, through a process that repeats for each new construction.**
 
-That is the umbrella plan, [`iterative-dazzling-finch.md`](../plans/iterative-dazzling-finch.md)
-(architecture, decisions, phase map). Its continuation,
-[`coaster-border-continuation.md`](../plans/coaster-border-continuation.md), holds the task
-detail. The printer side is [`binary-tickling-kay.md`](../plans/binary-tickling-kay.md)
-(first-print campaign: nothing has ever been measured, and printing is Omar's call).
+The umbrella plan for it (GeoGebra → naqsh → coaster, decisions D-056 to D-071) and its
+continuation are finished and were removed on 2026-11-11; both are in git history at commit
+266f32ce. The open work is the [backlog](../../docs/tasks/coaster-pipeline/backlog.md). The
+printer side is [`first-print-campaign.md`](../skills/guide-print/first-print-campaign.md)
+(the five-step propagate and the coupon expectation tables; printing is Omar's call).
 
 Where it stands (verified against `origin/master` and bikar `origin/main` on 2026-09-25):
 

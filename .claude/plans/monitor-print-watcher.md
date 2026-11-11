@@ -31,7 +31,8 @@ The backlogs stay where they are; this file points at them:
 - Work in your own worktree off `origin/master`, never in the shared checkout
   `~/Workspace/git/3d-models` (fast-forward it only). Stage files by name, run
   `git branch --show-current` before each commit, `make validate` before each PR.
-- PRs go to `omars-lab/3d-models`. The manager session merges them (`gh pr merge` is refused here).
+- PRs go to `omars-lab/3d-models`. The manager session merges them, unless Omar authorizes this
+  session in chat, as he did on 2026-11-11.
 - Every print send needs Omar's own yes. Never send printer commands from this session; plates
   belong to plates-and-feedback.
 - A gallery deploy, or any other public change, needs Omar's yes in this session's chat.
@@ -70,7 +71,16 @@ The backlogs stay where they are; this file points at them:
    slice with no print then one top-cap test piece, would be a plate, so it goes to
    plates-and-feedback once Omar answers. Survey script: `uv run tools/orb_support_survey.py --self-test`.
    The questions that decide what gets printed are entry G in [plates-and-feedback's list of plate decisions](plates-and-feedback.md#plate-decisions-waiting-on-omar-from-every-session); the design side stays here.
-6. **Fidget toys from our patterns.** Design
+6. **Cable spiral** (Omar, 2026-11-11: an open-topped disc to wrap a cable round, thin and
+   stackable). Model `src/CableSpiral/cable-spiral.scad` and design
+   [cable-spiral-design.md](../../docs/design/pieces/cable-spiral-design.md), in 3d-models #1023
+   (Omar authorized merging on 2026-11-11). The research is #1020, #1021 and the checker's
+   #1022, all merged. The design doc passed the readability review
+   13 of 13 on round 11. Waits on Omar: his cables measured with calipers (the model is set to
+   4 mm), then the design fork in open question 1 (walls that cannot bend in the S-bend and on the
+   first and last half turn of each spiral arm) after test strips K and P print. The test-piece plate goes to
+   plates-and-feedback (a line in its backlog says what to lay out); never sent from here.
+7. **Fidget toys from our patterns.** Design
    [fidget-toys-from-patterns.md](../../docs/design/pieces/fidget-toys-from-patterns.md) (#948);
    its §9 holds five questions (how the toys-1 star came out, size, sliding or turning, which
    pattern, mixing). Not on any backlog yet. The toys-1 and fidget-star-1 prints are recorded in
@@ -80,22 +90,21 @@ The backlogs stay where they are; this file points at them:
 
 ### Waiting on another session or a date
 
-7. **Code map trial (graphify on bikar, D-129).** Parked backlog, "Code graph trial". Runs to
+8. **Code map trial (graphify on bikar, D-129).** Parked backlog, "Code graph trial". Runs to
    2026-11-20. The side-by-side test came back 2026-11-10 and does not pass (#993). Still owed on
    2026-11-20: rerun the FAQ tool over bikar sessions and judge it against the design's PASS and
    FAIL lines ([code-graph.md](../../docs/design/process/code-graph.md) §6). Omar said on
    2026-11-11 to let it run to that planned end (approvals log, #1009), so no early stop.
-8. **A post about the code map**, written with the social session (claude-techniques, in
+9. **A post about the code map**, written with the social session (claude-techniques, in
    social-presence-hub). Numbers and design only; don't copy employer content from that repo.
-9. **`nmEjCTzMbDg` (CS-9): R fixed 2026-11-11**, catalog-expansion item 1. youtube had already
-   made the fix (d72fc2a, 2026-09-29); bikar's copy was stale and is re-imported on bikar branch
-   `fix-nmEj-root-nearest-s` (commits c4dcccc6 and 07030dcf; bikar PR #371, opened 2026-11-11).
-   The 3d-models half is written and in the same PR as this plan (branch
+10. **`nmEjCTzMbDg` (CS-9): R fixed 2026-11-11**, catalog-expansion item 1. youtube had already
+   made the fix (d72fc2a, 2026-09-29); bikar's copy was stale and was re-imported in bikar PR
+   #371, merged 2026-11-11. The 3d-models half is 3d-models #1014 (branch
    `cs9-nmej-root-fix`): the re-vendored `src/Coasters/nmEjCTzMbDg-coaster.bkr` and its
    `-standard.stl` (rendered with the bikar branch's CLI, mesh check passed, 162,492 triangles),
    ledger row 145 (`FAIL 34/3 | PASS 1.0/1.0`) and its note, backlog item 1, and the correction
    section at the end of `docs/research/ledger-oracle-runs-2026-11-10.md`. Left, in order:
-   1. **Waiting on the manager to merge: bikar PR #371 first, then 3d-models #1014.** The bikar
+   1. **bikar #371 merged; 3d-models #1014 merges next.** The bikar
       branch was pushed on 2026-11-11 with `/usr/local/bin` on PATH, so the full pre-push run
       verified all 50 steps, the Docker ones included. #371's text corrects the commit message:
       the old O2 cell's 0.2589 was precision, not edge-SSIM. A later bikar push from a fresh
@@ -115,27 +124,38 @@ The backlogs stay where they are; this file points at them:
 
 ### Can be done without anyone
 
-14. **The 13 old plan files in this folder still need sorting** (manager's ask, 2026-11-11):
-    authorized-2026-11-03, binary-tickling-kay, breakdown-pages-kickoff, cheerful-mixing-tiger,
-    ci-spend, coaster-border-continuation, glowing-popping-pinwheel, iterative-dazzling-finch,
-    lego-tooling, nmej-conic-arc-support, sleepy-yawning-bubble, sprightly-jingling-milner and
-    sunny-booping-crescent. For each: finished means a done line and delete it; still open means
-    fold it into this plan or plates-and-feedback's (ask that session about plate ones); dead means
-    say why and delete it. One PR. Before deleting, `git grep` the file name and fix the links.
-
-
-10. **Gallery freshness.** `make validate-gallery` said on 2026-11-10: 2 unpublished changes, both
+11. **Gallery freshness.** `make validate-gallery` said on 2026-11-10: 2 unpublished changes, both
     print records on the prints page (ball-1, dragon-egg-1, fidget-star-1), inside the 7-day
     window. Past 7 days it warns; then ask Omar in chat for a deploy, and follow the last deploy
     line in the [consolidation done list](../../docs/tasks/consolidation/done.md) (restore the
     build folder from gh-pages, `make coasters`, `make deploy`, check the live site).
-11. **Shrinking the complexity list**, parked backlog, one function a PR; 52 over 10 on 2026-11-11 by the commit hook (the backlog line's "68 left" is older). The `self_test`
+12. **Shrinking the complexity list**, parked backlog, one function a PR; 52 over 10 on 2026-11-11 by the commit hook (the backlog line's "68 left" is older). The `self_test`
     functions are skipped on purpose. Read `.claude/gates/complexity-baseline.json` before picking.
     Low value for customers; do it only between higher items.
-12. **16 youtube reconstructions not yet imported here** (the SessionStart line lists them).
+13. **16 youtube reconstructions not yet imported here** (the SessionStart line lists them).
     Catalog-expansion has been parked since 2026-10-06 by Omar's call; import only what he asks for,
     which today means the round 3 pick.
-13. **Plate-packing skill**, print-infrastructure item 1. Waits until a second plate needs packing.
+14. **Plate-packing skill**, print-infrastructure item 1. Waits until a second plate needs packing.
+15. **One application for designing and printing** (Omar, 2026-11-11). The approved plan moves the
+    Print Hub's pages into bikar beside the editor and labs, with every answer given in the app.
+    Step 0a (two broken links) is done in 3d-models #1017 and hub #37, both merged. Step 0b, the
+    design doc, scored 13 of 13 for readability: `docs/design/process/users-and-surfaces-design.md`,
+    D-130, use case UC35, merged in 3d-models #1019. Step 1 (one page list, one top bar, Coaster
+    Lab and print history added) is next, in bikar. As of 2026-11-11 no bikar branch exists for it
+    yet: it was set aside for the cable spiral. Start it on a fresh branch off bikar main in
+    `bikar-else` (free now that #371 has merged). Its paired 3d-models change (`LAB_PAGES`, the map
+    pointer) branches off master. Slices 2 to 5 change pages the
+    plates-and-feedback session uses daily, so that session hears through its plan file first.
+    The launcher repo (`~/Workspace/git/hubs`) is not to be touched.
+
+### Open pull requests from this session
+
+Omar authorized merging on 2026-11-11. Merged that day: 3d-models #1017 to #1022 (the judging
+port, the plan sort, the one-application design, the cable spiral research), Print Hub #36 and #37
+(the hub checkout was fast-forwarded and `make agent-install` run), and bikar #371. Still to merge:
+
+- 3d-models #1014: the `nmEjCTzMbDg` coaster re-vendored on the fixed R (this PR).
+- 3d-models #1023: the cable spiral model and design doc (item 6).
 
 ## Things to know
 

@@ -3,8 +3,8 @@
 // Command groups (the help IS the docs): setup, status, slice, print, validate, plates, order. Status rides our
 // own first-party MQTT backend (D-055); slicing shells to the BambuStudio CLI; the remaining
 // control/camera verbs still route through the griches MCP until they are ported. See
-// .claude/skills/setup-bambu-x2d/SKILL.md for when/why and .claude/plans/binary-tickling-kay.md
-// for the build sequencing.
+// .claude/skills/setup-bambu-x2d/SKILL.md for when/why and
+// .claude/skills/guide-print/first-print-campaign.md for the build sequencing.
 
 import { Command } from "commander";
 import { writeFileSync } from "node:fs";

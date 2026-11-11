@@ -215,4 +215,4 @@ smooth slice on P0101 only when the bed verdict names the plate it saw
   and **keep dispatch confirm-before-send**. On Plate 1 this is doubly load-bearing: MC-6 towers print
   on **bare plate, no brim, by design** (that IS the adhesion test), so first-layer watching is the
   measurement, not just caution.
-- Full sequencing and the build-vs-buy reasoning: [`.claude/plans/binary-tickling-kay.md`](../../plans/binary-tickling-kay.md).
+- Full sequencing and the build-vs-buy reasoning: [`first-print-campaign.md`](../guide-print/first-print-campaign.md).

@@ -189,4 +189,4 @@ honesty carried into the design.
   (day-to-day usage)
 - Decisions: dual-nozzle representation [D-053](../../working-model/decisions-log.md), transport choice
   [D-054](../../working-model/decisions-log.md)
-- Campaign: [`../../../.claude/plans/binary-tickling-kay.md`](../../../.claude/plans/binary-tickling-kay.md)
+- Campaign: [`first-print-campaign.md`](../../../.claude/skills/guide-print/first-print-campaign.md)
