@@ -91,7 +91,7 @@
 <text data-label="1" x="1206.16" y="320.3" font-size="12" fill="#222222" text-anchor="start">bottom chamfer 0.6</text>
 <circle data-label-dot="1" cx="1071.32" cy="337.9" r="2.6" fill="#222222"/>
 <polyline points="1071.32,337.9 1192.16,337.9 1202.16,337.9" fill="none" stroke="#666666" stroke-width="0.9"/>
-<text data-label="1" x="1206.16" y="341.9" font-size="12" fill="#222222" text-anchor="start">rim ring 0.4</text>
+<text data-label="1" x="1206.16" y="341.9" font-size="12" fill="#222222" text-anchor="start">stacking ring 0.4</text>
 <circle data-label-dot="1" cx="977.72" cy="370.3" r="2.6" fill="#222222"/>
 <polyline points="977.72,370.3 1192.16,370.3 1202.16,370.3" fill="none" stroke="#666666" stroke-width="0.9"/>
 <text data-label="1" x="1206.16" y="374.3" font-size="12" fill="#222222" text-anchor="start">a channel</text>
@@ -100,8 +100,8 @@
 <text data-label="1" x="1206.16" y="471.5" font-size="12" fill="#222222" text-anchor="start">cable</text>
 <text x="755.32" y="607.9" font-size="12" fill="#444444">Drawn apart so both parts show. Set down, the upper disc's flat underside rests on the</text>
 <text x="755.32" y="624.9" font-size="12" fill="#444444">tops of the lower disc's walls and closes every channel, so the cable cannot lift out.</text>
-<text x="755.32" y="641.9" font-size="12" fill="#444444">The ring (0.4 tall) tucks into the chamfer (0.6 tall) and stops 0.2 short, so it never</text>
-<text x="755.32" y="658.9" font-size="12" fill="#444444">props the disc up.</text>
+<text x="755.32" y="641.9" font-size="12" fill="#444444">The stacking ring (0.4 tall) tucks into the chamfer (0.6 tall) and stops 0.2 short, so it</text>
+<text x="755.32" y="658.9" font-size="12" fill="#444444">never props the disc up.</text>
 <text x="755.32" y="675.9" font-size="12" fill="#444444">The ring is really a triangle with a 45° inner face; the chamfer is a 45° bevel.</text>
 </g>
 </svg>

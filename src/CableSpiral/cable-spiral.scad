@@ -1,7 +1,7 @@
 // Cable spiral: a thin disc with an open spiral groove on top. Fold a cable at its middle, lay the
 // fold in the S-bend at the centre, and press the two halves down into the two side-by-side
 // spirals. Both plugs leave at the rim. The flat underside of the next disc closes the grooves of
-// the disc below, and a low ring at the rim keeps the stack lined up.
+// the disc below, and a stacking ring on the top edge keeps the pile lined up.
 //
 // Design: docs/design/pieces/cable-spiral-design.md. Numbers: the checked research note on PR #1022
 // (docs/research/2026-11-11-cable-spiral-consolidated.md). Every size below is a starting value
@@ -10,7 +10,8 @@
 // Render:  openscad -D 'part="disc"'   -D d=4.0 -o disc.stl   cable-spiral.scad
 //          openscad -D 'part="coupon"' -D d=4.0 -o coupon.stl cable-spiral.scad
 // The one setting that matters is d, the cable's diameter measured with calipers.
-// Three sizes cover 3.0-5.0 mm USB-C cables: d = 3.2, 3.9 and 4.6.
+// Three sizes cover 3.0-4.7 mm USB-C cables with no gap and the wall stretch under 4%:
+// d = 3.2, 3.7 and 4.3 (design doc, "One disc per cable size").
 
 part = "disc";          // "disc" or "coupon" (the first test piece)
 d = 4.0;                // cable diameter, mm
@@ -185,7 +186,7 @@ module curved_run(id) {
     }
 }
 module stack_coupon(id) {
-    // a small disc with the rim ring, the bottom chamfer and one straight groove across, so a
+    // a small disc with the stacking ring, the bottom chamfer and one straight groove across, so a
     // length of cable can lie in the lower coupon while the upper one is set on it
     r = 15; w = groove_w(d); T = disc_t(d, mouth_k, false);
     difference() {
@@ -243,7 +244,28 @@ module section() {
         }
 }
 
+// "grip": one full-height groove cut three times, with a round cable of 0.94 d, d and d + 0.4 in
+// each. The filled circle lies on the floor; the outline is the same cable lifted until it meets
+// the lip tips. The label gives the cable's size, its side play and how far it can lift.
+module grip() {
+    w = groove_w(d); m2 = mouth_k * d / 2; tip = floor_t + tip_h(d, mouth_k, false);
+    sizes = [0.94 * d, d, d + gap];
+    for (i = [0:2]) let(D = sizes[i], r = D / 2, x0 = i * (w + 2 * wall_t + 7),
+                        c_up = tip - sqrt(r * r - m2 * m2), lift = c_up - (floor_t + r))
+        translate([x0, 0]) {
+            rotate(90) projection(cut = true) rotate([0, 90, 0]) translate([-bar_len / 2, 0, 0])
+                bar("C", mouth_k, false, true, wall_t, false);
+            translate([0, floor_t + r]) color("orange") circle(r);
+            translate([0, c_up]) color("orange") difference() { circle(r); circle(r - 0.12); }
+            echo(str("CABLE-SPIRAL grip: D=", D, " side play ", w - D, " lift ", lift,
+                     " top above disc ", c_up + r - disc_t(d, mouth_k, false)));
+            translate([0, disc_t(d, mouth_k, false) + 3.2]) text(str(round(D * 100) / 100, " mm"), size = 1.3, halign = "center");
+            translate([0, disc_t(d, mouth_k, false) + 1.4]) text(str("side ", round((w - D) * 100) / 100, ", lift ", round(lift * 10) / 10), size = 1.0, halign = "center");
+        }
+}
+
 if (part == "disc") disc();
 else if (part == "coupon") coupon();
 else if (part == "plan") plan();
 else if (part == "section") section();
+else if (part == "grip") grip();

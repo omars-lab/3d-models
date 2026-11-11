@@ -34,13 +34,13 @@ panels:
       - {kind: half, side: lower, box: [0, 0, 12, 6.2], first: bottom, label: "lower disc", label_at: [1.5, 3], label_side: left}
       - {kind: pocket, box: [3, 0.8, 4.4, 5.4], label: "a channel", label_at: [6.6, 5.5]}
       - {kind: piece, box: [3.2, 0.8, 4, 4], label: "cable", label_at: [5.2, 2.8]}
-      - {kind: stud, side: lower, box: [11.6, 6.2, 0.4, 0.4], toward: up, label: "rim ring 0.4", label_at: [11.8, 6.4]}
+      - {kind: stud, side: lower, box: [11.6, 6.2, 0.4, 0.4], toward: up, label: "stacking ring 0.4", label_at: [11.8, 6.4]}
       - {kind: half, side: upper, box: [0, 6.6, 12, 6.2], label: "upper disc", label_at: [1.5, 9.5], label_side: left}
       - {kind: socket, box: [11.4, 6.6, 0.6, 0.6], label: "bottom chamfer 0.6", label_at: [11.7, 7]}
       - {kind: arrow, from: [6, 11.5], to: [6, 7.2], text: "set down"}
       - {kind: bed, line: [0, 0, 14]}
     notes:
       - "Drawn apart so both parts show. Set down, the upper disc's flat underside rests on the tops of
-        the lower disc's walls and closes every channel, so the cable cannot lift out. The ring (0.4
+        the lower disc's walls and closes every channel, so the cable cannot lift out. The stacking ring (0.4
         tall) tucks into the chamfer (0.6 tall) and stops 0.2 short, so it never props the disc up."
       - "The ring is really a triangle with a 45° inner face; the chamfer is a 45° bevel."

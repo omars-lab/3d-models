@@ -26,3 +26,6 @@ folded: no
   the lip presses on any cable over d, but a round cable clears the 45° underside up to about 1.3 d.
   The second readability review caught it by doing the round-cable sum; check fits against the round
   shape, never the drawing's box.
+- Naming the grip ranges ("snug", "loose") before computing the room each leaves: the third review
+  found them the wrong way round. The model's `grip` part now prints side room and lift per cable,
+  so the names come from numbers.
