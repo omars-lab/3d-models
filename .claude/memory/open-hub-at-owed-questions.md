@@ -18,3 +18,5 @@ answer questions abouit"), and while I did it by hand he said "this shoudl be pa
 
 **How to apply:** use the script, never rebuild the address by hand; if it misses a case, fix the
 script. Related: [[print-feedback-on-hub-page]].
+
+**Every judging link to Omar is the :8766 one** (`http://127.0.0.1:8766/judge.html#<plate>/<row>`), never :4717. :4717 is the bare hub with no comments. :8766 is the comments server: it runs the same live hub and adds comments. On 2026-11-09 Omar asked "why is comment mode not enabled?" after I gave him the :4717 link. The server had been up since Nov 6.
