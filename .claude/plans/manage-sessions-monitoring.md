@@ -54,10 +54,11 @@ as an index of them. 3d-models keeps one plan per session and one done list per 
 
 - 3d-models done lists and both 3d-models plans are merged (#1003, #1004). Memory notes are merged
   (#1005-#1007).
-- Old 3d-models branches: monitor-print-watcher deleted its three. plates-and-feedback is deleting
-  cables-1, close-four-old-plates, split-rewrite-text, tidy-plates-and-feedback and
-  memory-hub-judging. memory-hub-judging is checked out in the `3d-models-plate-notes` worktree,
-  which has to be removed first.
+- Old 3d-models branches: done. All eight squash-merged branches were checked by content, saved
+  under `refs/snapshots/2026-11-10/` and deleted with `-D` on Omar's yes. Local branches left:
+  master, gh-pages, next-work (monitor-print-watcher's, in `3d-models-else`) and manager-plan
+  (this file's, in `3d-models-manager`). `3d-models-plate-notes` is plates-and-feedback's second
+  folder, now on master.
 - Store: merge-pr-467-and-pr-470 is writing one pull request with open.md, done.md and every area
   plan. It folds in and deletes `.claude/plans/real-shoppers-store-launch.md`. After it merges,
   the same session cleans up branches in the store and hub repos (3d-model-hub, 3d-model-hub-work)
