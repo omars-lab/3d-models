@@ -1,7 +1,7 @@
 ---
 date: 2026-11-11
 produced-by: "checker pass (Claude subagent), consolidating #1020 and #1021"
-feeds: docs/design/products/cable-spiral-design.md (not yet written)
+feeds: docs/design/pieces/cable-spiral-design.md (PR #1023)
 ---
 
 # Cable spiral: the checked, consolidated research
