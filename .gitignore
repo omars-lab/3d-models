@@ -61,3 +61,6 @@ tools/bambu/node_modules/
 # the constructions ledger's `coaster` cell names). The 40 mm mini is a
 # regenerable size variant — validated on every build, not carried in git.
 src/Coasters/*-mini.stl
+
+# The gh tool keeps its own state here (device id); not our work.
+.local/
