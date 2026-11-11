@@ -28,22 +28,22 @@ found no source on what the X2D does while paused. **No plate and no print until
 to that doc**; then the first test piece (a small pocket coupon, the first with no steel in it)
 goes to the plates-and-feedback session. Nothing in it may risk the printer.
 
-1. **`nmEjCTzMbDg` still FAILs O1 and O2, and waits on youtube.** Causes found on
-   2026-09-27 ([the FAILs note](../../research/ledger-oracle-fails-2026-09-27.md)). The
-   youtube source's `R = Intersect(t, m, 2)` picks the other root in bikar. The patch,
-   `Intersect(t, m, S)`, is proposed there and has not been made. Once youtube takes it:
-   - regenerate the bikar fixture and goldens;
-   - re-vendor the coaster and look at it (it is near-solid now: **do not print it**);
-   - re-run O1 and O2.
+1. **`nmEjCTzMbDg`: R fixed, two small steps left.** youtube had fixed
+   `R = Intersect(t, m, 2)` to `Intersect(t, m, S)` on 2026-09-29 (d72fc2a); bikar's copy was
+   imported two days before that. On 2026-11-11 bikar re-imported from the fixed file (branch
+   `fix-nmEj-root-nearest-s`), and this repo re-vendored the coaster: the flower now fills the
+   disc instead of sitting small in a solid one. O1 is down to the three conics
+   (`FAIL: 34 compared, 3 failed`), O2 passes (edge-SSIM 0.9796)
+   ([the 11-11 correction](../../research/ledger-oracle-runs-2026-11-10.md#correction-2026-11-11-youtube-had-made-the-patch)).
+   Left:
+   - after the bikar PR merges, run `catalog.py sync` so the catalog picture (copied from
+     bikar main's Lab thumbnail) shows the new coaster;
+   - a print review of the new coaster before anyone prints it: the spokes crowd together at
+     the centre. **Do not print it until then.**
 
-   What O1 still cannot compare (parabolas, hyperbolas) is youtube's to add. The arc re-run is
-   done: on 2026-11-10, on youtube main, this one went from 25 compared and 15 failed to 28 and 9
-   (the two parabolas, the hyperbola, and the six built on the wrong `R`), `NtnlGMTElBk` went
-   from FAIL 124/20 to PASS 134/0, and `gBV_JTt3Kxk` stayed PASS 144/0 with all 47 of its
-   skipped or extra objects accounted for
-   ([the 2026-11-10 O1 reruns](../../research/ledger-oracle-runs-2026-11-10.md)). Also youtube's:
-   `naqsh_score.py` treats `ggb_score.py`'s FAIL exit (2) as a crash. That patch is in the same
-   note.
+   What O1 still cannot compare (parabolas, hyperbolas) is youtube's to add. Also youtube's:
+   `naqsh_score.py` treats `ggb_score.py`'s FAIL exit (2) as a crash. That patch is in the
+   [2026-11-10 note](../../research/ledger-oracle-runs-2026-11-10.md).
 2. **Screened queue, 2026-09-27.** Two independent screens and a checker's consolidation:
    [the consolidated screen](../../research/candidate-screen-2026-09-27.md) is the one to act
    on. 10 GO, all from creators other than Sarah Brewer. Coaster fit was judged from

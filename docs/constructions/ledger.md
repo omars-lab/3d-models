@@ -142,7 +142,7 @@ O1 `PASS: 79 compared, 0 failed, 140 skipped/extra`; O2
 | `lEfWSogWscs` | Pattern from the Tomb of Itimad ad-Daula (Sarah Brewer) | done | `bikar/patterns/Constructions/lEfWSogWscs.bkr` | PASS 49/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/lEfWSogWscs-coaster-standard.stl` | CS-7 | — |
 | `n3IidKfXE1I` | Variable-angled 12-6-4 Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/n3IidKfXE1I.bkr` | PASS 64/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/n3IidKfXE1I-coaster-standard.stl` | CS-10 | — |
 | `n_ICgwOr6qs` | A ten-petal blossom from one compass setting | done | `bikar/patterns/Constructions/n_ICgwOr6qs.bkr` | PASS 34/0 | PASS 1.0/1.0 | none by design: no solid to compare (see notes) | `src/Coasters/n_ICgwOr6qs-minimal-coaster-standard.stl` | CS-18 | — |
-| `nmEjCTzMbDg` | n-fold Flower in GeoGebra Classic 5 (Sarah Brewer) | done | `bikar/patterns/Constructions/nmEjCTzMbDg.bkr` | FAIL 28/9 | FAIL 0.9176/0.2589 | none by design: no solid to compare (see notes) | `src/Coasters/nmEjCTzMbDg-coaster-standard.stl` | CS-9 | — |
+| `nmEjCTzMbDg` | n-fold Flower in GeoGebra Classic 5 (Sarah Brewer) | done | `bikar/patterns/Constructions/nmEjCTzMbDg.bkr` | FAIL 34/3 | PASS 1.0/1.0 | none by design: no solid to compare (see notes) | `src/Coasters/nmEjCTzMbDg-coaster-standard.stl` | CS-9 | — |
 | `rDuxHF3xMOc` | 8-fold Star Rosette with Sequences (Sarah Brewer) | done | `bikar/patterns/Constructions/rDuxHF3xMOc.bkr` | PASS 41/0 | FAIL 0.8381/1.0 | PASS 1.000 | `src/Coasters/rDuxHF3xMOc-coaster-standard.stl` | CS-8 | — |
 | `sDO9fpu76v8` | Pattern from the Royal Alcazar (Sarah Brewer) | done | `bikar/patterns/Constructions/sDO9fpu76v8.bkr` | PASS 84/0 | PASS 0.996/0.9972 | PASS 1.000 | `src/Coasters/sDO9fpu76v8-coaster-standard.stl` | CS-11 | — |
 | `tA8eSdVx_EQ` | 5-minute 7-fold Star Rosette (Sarah Brewer) | done | `bikar/patterns/Constructions/tA8eSdVx_EQ.bkr` | PASS 28/0 | PASS 1.0/1.0 | PASS 1.000 | `src/Coasters/tA8eSdVx_EQ-coaster-standard.stl` | CS-6 | — |
@@ -172,20 +172,23 @@ The FAILs were worked through the same day, in
   re-imported coaster leaves off the finished tile `l1` and draws the 12-fold
   rosette only, because the whole field was near-solid at 90 mm. The O2 cell no
   longer needs the scorer fix, but the youtube scorer bug is still open.
-- **`nmEjCTzMbDg`**: the FAILs stay. Two causes:
-  - one was a bikar bug, now fixed: the rim circles drew only half their outline;
-  - the other is in the youtube source: `R = Intersect(t, m, 2)` picks the other
-    root in bikar. The fix is proposed there.
+- **`nmEjCTzMbDg`**: O2 passes and O1 fails only on shapes it cannot compare yet.
+  Two causes had kept both failing:
+  - a bikar bug, fixed earlier: the rim circles drew only half their outline;
+  - a stale import: bikar's `.bkr` came from youtube's file before youtube fixed
+    `R = Intersect(t, m, 2)` to `Intersect(t, m, S)` on 2026-09-29 (d72fc2a). The
+    index picked the far crossing, so `R` and the five objects built from it
+    (`c_1`, `d_1`, `D`, `T`, `a`) were wrong.
 
-  O1 was re-run on 2026-11-10 on youtube main (7deb8ab), which compares arcs now:
-  `FAIL: 28 compared, 9 failed, 35 skipped/extra`, the row's cell since then. The
-  three arcs pass and their host circles are no longer reported. The nine left are
-  the two parabolas and the hyperbola, which O1 still cannot compare, and the
-  wrong `R` itself with the five objects built from it (`c_1`, `d_1`, `D`, `T`, `a`);
-  [the 2026-11-10 O1 reruns](../research/ledger-oracle-runs-2026-11-10.md).
+  bikar re-imported from the fixed file on 2026-11-11 (R is now
+  `intersect t m pick nearest S`). On youtube main (7deb8ab) O1 reads
+  `FAIL: 34 compared, 3 failed, 35 skipped/extra`: the three are the two parabolas and the hyperbola, which O1 still
+  cannot compare. O2 reads
+  `O2 PASS: edge-SSIM 0.9796 (min 0.7), recall 1.0 precision 1.0 (min 0.98), phash 32 (advisory)`;
+  [the 2026-11-10 O1 reruns and their 11-11 correction](../research/ledger-oracle-runs-2026-11-10.md#correction-2026-11-11-youtube-had-made-the-patch).
 
-  **Do not print this coaster.** Until the youtube fix lands, it is built on the
-  wrong `R` and renders near-solid.
+  **Do not print this coaster yet.** It was near-solid when built on the wrong `R`;
+  the re-vendored one has not been through a print review.
 - **`rDuxHF3xMOc`** O2: **by design**. The GeoGebra export keeps the tile's four
   full-width bounding lines visible, because the video shows them. The coaster
   draws the tile only. The FAIL stays. With those four lines hidden, recall is 1.0.
