@@ -74,8 +74,8 @@ The backlogs stay where they are; this file points at them:
    (draft; taking it out of draft was refused here, so that is Omar's or the manager's). The
    research is #1020, #1021 and the checker's #1022. The design doc passed the readability review
    13 of 13 on round 11. Waits on Omar: his cables measured with calipers (the model is set to
-   4 mm), then the design fork in open question 1 (walls that cannot bend in the S-bend and the
-   outer half turns) after test strips K and P print. The test-piece plate goes to
+   4 mm), then the design fork in open question 1 (walls that cannot bend in the S-bend and on the
+   first and last half turn of each spiral arm) after test strips K and P print. The test-piece plate goes to
    plates-and-feedback; never sent from here.
 7. **Fidget toys from our patterns.** Design
    [fidget-toys-from-patterns.md](../../docs/design/pieces/fidget-toys-from-patterns.md) (#948);
@@ -116,7 +116,10 @@ The backlogs stay where they are; this file points at them:
     is written and scored 13 of 13 for readability: `docs/design/process/users-and-surfaces-design.md`,
     D-130, use case UC35, in 3d-models #1019 (worktree `~/Workspace/git/3d-models-design`), waiting
     on the manager to merge. Step 1 (one page list, one top bar, Coaster Lab and print history
-    added) is next, in bikar, started 2026-11-11; its paired 3d-models change (`LAB_PAGES`, the map
+    added) is next, in bikar. As of 2026-11-11 no bikar branch exists for it yet: it was set aside for
+    the cable spiral, and this session's only bikar worktree (`bikar-else`) holds open bikar PR
+    #371, with the worktree budget full. Start it on a fresh branch in `bikar-else` once #371
+    merges. Its paired 3d-models change (`LAB_PAGES`, the map
     pointer) branches off master after #1019 merges, since both edit the use-case map. Slices 2 to 5 change pages the
     plates-and-feedback session uses daily, so that session hears through its plan file first.
     The launcher repo (`~/Workspace/git/hubs`) is not to be touched.
