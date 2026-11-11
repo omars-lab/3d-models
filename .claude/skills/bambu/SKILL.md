@@ -110,7 +110,7 @@ Regression guard: [`scripts/slice-smoke.sh`](scripts/slice-smoke.sh) slices a gi
   [`bets.md`](../calibrate/bets.md)). Nothing has been printed yet — **21 bets, 0 measured** — so
   `print list` is honestly empty and Plate 1 (the machine card) is the keystone.
 - **The whole campaign** — what to print, in what order, and why — is
-  [`.claude/plans/binary-tickling-kay.md`](../../plans/binary-tickling-kay.md); the master backlog is
+  [`first-print-campaign.md`](../guide-print/first-print-campaign.md); the master backlog is
   [print register](../../../docs/tasks/coaster-pipeline/backlog.md).
 
 ## One-command discipline

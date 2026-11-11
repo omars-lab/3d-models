@@ -33,8 +33,9 @@ is always a fine answer.
 
 Write the ownership table before spawning anything. Each piece names the files it
 owns, and no file appears twice. A plan section is the right home for it — see
-`.claude/plans/coaster-border-continuation.md` for the worked example (§2b: agents
-A/B/C/D with a file-ownership table). If two pieces want the same file, the split
+the coaster-border plan for the worked example (§2b: agents A/B/C/D with a
+file-ownership table; the plan was retired 2026-11-11 and is read with
+`git show 266f32ce:.claude/plans/coaster-border-continuation.md`). If two pieces want the same file, the split
 is wrong; fix it before delegating, not after.
 
 Give each subagent:

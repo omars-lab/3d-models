@@ -225,7 +225,7 @@ shoot-these coupons ringed, plus a printable contact sheet) — it is embedded i
 A refuting reading is a **success**, not a broken coupon — several coupons are built to fail at both
 ends, and *every rung passing or every rung failing is a valid result* (it tells you which way to
 move). For every measurement, the five-step propagate in
-[`.claude/plans/binary-tickling-kay.md`](../../plans/binary-tickling-kay.md) (Phase D) must all
+[`first-print-campaign.md`](first-print-campaign.md) (Phase D) must all
 happen or the bet stays open: flip the constant *and* its `Calibrated<T>` status together (naming
 machine/material/nozzle/profile/date/coupon); pull the entry out of bikar's calibration baseline;
 regenerate `bets.md` via the registry (never hand-edit); close the design doc's `[CAL-…]` entry with
@@ -253,4 +253,4 @@ the measured value; flip the catalog Status and date the iteration row. `validat
   itself; never ask the owner to watch it, and never hold a print for it (D-092).
 - **A refuting reading is a result.** Never delete a reading that contradicts the design.
 - Full campaign sequencing and the per-coupon expectation tables:
-  [`.claude/plans/binary-tickling-kay.md`](../../plans/binary-tickling-kay.md).
+  [`first-print-campaign.md`](first-print-campaign.md).
