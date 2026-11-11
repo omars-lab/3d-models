@@ -242,9 +242,11 @@ w + t = **d + 1.2** of radius.
 | 4.0 | 92 mm | 124 mm | 0.69 m |
 | 4.7 | 100 mm | 133 mm | 0.55 m |
 
-**B's disc size was too small.** B's table used a 12 mm centre, but its own S-bend half-loops, 10
-to 12 mm across, need a 20 to 24 mm centre. Redone with B's own pitch of 5.4 mm, 1 m of 4 mm cable
-needs a 96 to 100 mm disc, not B's 90 mm. A's 0.8 m on an 80 mm disc is right for its own layout,
+**B's disc size was too small.** B's table used a 12 mm centre radius, but its own S-bend
+half-loops, "about 10 to 12 mm in radius", need a centre radius of 20 to 24 mm. Redone with B's own
+pitch of 5.4 mm and the same sum as the table above (counting the cable in the S-bend), 1 m of 4 mm
+cable needs a disc about 94 to 97 mm across, not B's 90 mm. With the S-bend left out, as B's sum
+does, it is 96 to 100 mm. A's 0.8 m on an 80 mm disc is right for its own layout,
 a single spiral from a 14 mm centre. That layout leaves the inner plug in the middle.
 
 **Suggested: one size for 1 m cables, about 90 to 100 mm across**, which is about the size of a
@@ -259,9 +261,14 @@ MakerWorld 3056379 ("the plugs exposed after storage").
 - A plug head is 6.3 mm thick and 12.15 mm wide (Anker, re-opened). That is as thick as the 6.2 mm
   disc for a 4 mm cable, so it cannot sit in the middle of a stack. This settles A's open question
   against a centre exit.
-- B said a plug pocket "would need a disc about twice as thick". That does not follow. A pocket only
-  needs the disc to be a little thicker than the plug, about 7 mm. It is still not worth it, because
-  the plugs at the rim stay outside the stack anyway.
+- B said a plug pocket "would need a disc about twice as thick" as its 6.8 mm disc. That does not
+  follow for B's disc. A pocket needs the plug plus a floor, about 7.2 mm, only a little thicker. For
+  a thin disc made for a 3 mm cable (4.0 to 4.9 mm), the same pocket is 1.5 to 1.8 times the
+  thickness. Either way it is not worth it, because the plugs at the rim stay outside the stack.
+- **Stagger the notches in a stack.** For cables under about 4 mm the disc is thinner than the
+  6.3 mm plug, so plugs hanging from two neighbouring discs would hit each other if their notches
+  lined up. The rim ring is round, so each disc can be turned. Turn each one so its notches miss the
+  ones on the disc below.
 
 ### 3.7 How discs stack and stay lined up
 
@@ -354,9 +361,9 @@ share the bed, so one print answers both: how the bought designs grip the same c
 4. **A's mouth ratio comparison.** The cables-1 clip's 0.62 is mouth over bore, not mouth over
    cable, so it is not like for like with A's own 0.83.
 5. **B's disc size.** Its capacity sum used a 12 mm centre that its own S-bend cannot fit in. 1 m of
-   4 mm cable needs about 96 to 100 mm, not 90.
-6. **B's plug pocket "about twice as thick".** A pocket needs about 7 mm, only a little over the
-   6.4 mm plug.
+   4 mm cable needs about 94 to 97 mm, not 90.
+6. **B's plug pocket "about twice as thick".** Against B's own 6.8 mm disc, a pocket needs only
+   about 7.2 mm. It is 1.5 to 1.8 times as thick only for the thinnest discs.
 7. **B's "45° is inside what all three sources allow".** It is inside Hubs and Prusa. Bambu's sheet
    gives no convention, so it does not confirm 45°.
 8. **B's lead-in.** At 0.5 mm it is just short of the 0.8 mm a lifted 4 mm cable needs, so on the top
