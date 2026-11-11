@@ -84,6 +84,11 @@ no work lost. Where each one stopped:
 | Store: the other blank policy answers and the three Knowledge Base answers | store sessions | store `omars-calls.md` |
 | Store: remove the old naqshop app from the dev store, and delete the stray naqshop-dev app in EarlBear | Omar's hands | store `omars-calls.md` |
 
+The store rows above were checked against the store's plans on origin/main by
+coffee-house-manager-session on 2026-11-11 (all there). That session owns them now; tell it when CS-9 merges.
+
+Start prompts for a new session of each kind are in `.claude/prompts/`.
+
 **Next for customers:** finish CS-9, the nmEjCTzMbDg re-import (monitor-print-watcher's plan). It is
 item 1 on the catalog-expansion backlog and unblocks the store's S4.3. Alongside it, Omar's cup picks
 unblock the first real product files in the store.
