@@ -147,30 +147,33 @@ last column are the published print guides listed under [Sources](#sources)[^sou
 | Part | Rule | d = 4 | Where it comes from |
 |---|---|---|---|
 | Channel width | d + 0.4 | 4.4 | A guess to test. 0.2 mm a side is the low end of Sovol's 0.20 to 0.40 mm starting gap for mating parts, so the walls do not press on the cable all the time; PLA[^pla] creeps under a steady load. |
-| Mouth[^mouth] | 0.80 × d | 3.2 | The middle of a 0.70 to 0.85 band seen only in a search snippet[^snippet] for one clip design. That clip flexes along its layers[^layer] and ours bends across them, so the band carries over only as the range to test. The test piece tries 0.75, 0.80 and 0.85. |
+| Mouth[^mouth] | 0.80 × d | 3.2 | Inside the 0.70 to 0.85 band, a little above its middle (0.775), seen only in a search snippet[^snippet] for one clip design. That clip flexes along its layers[^layer] and ours bends across them, so the band carries over only as the range to test. The test piece tries 0.75, 0.80 and 0.85. |
 | Lip[^lip] reach, each side | (width − mouth) / 2 | 0.6 | Arithmetic. |
 | Lip underside | 45° slope, starting at height d | 0.6 tall | 45° prints with no support[^support] (Hubs and Prusa). Starting at height d means a cable lying on the floor never touches it. |
 | Lip tip height | d + reach | 4.6 | Arithmetic. |
 | Lead-in[^leadin] above the tip | 0.2 × d tall, 30° from upright | 0.8 | The height is geometry: a cable of size d lifted up against the lip tips has its top 0.2 × d above them, exactly level with the disc's top face. A thinner cable lifts a little further (0.09 mm above the face at 0.94 × d), so in a stack the disc above simply holds it that much lower; nothing is forced. The 30° is a guess inside Sovol's 25° to 35° range, which Sovol gives as a starting value for a snap-fit[^snapfit] arm and does not say whether it is measured from upright or from flat. The two readings give very different slopes, so this transfers only as a value to test. |
 | Floor | 0.8 (four layers) | 0.8 | A guess to test. |
-| Wall between turns | 0.8 (two lines[^line]) | 0.8 | A guess to test. One line, about 0.45, is the least that prints (Prusa's line width). |
+| Wall between turns of the spiral | 0.8 (two lines[^line]) | 0.8 | A guess to test. One line, about 0.45, is the least that prints (Prusa's line width). |
 | **Disc thickness** | floor + tip + lead-in = **1.3 × d + 1.0** | **6.2** | Arithmetic. The reach is (d + 0.4 − 0.8 d) / 2 = 0.1 d + 0.2, so the tip is 1.1 d + 0.2, and 0.8 + (1.1 d + 0.2) + 0.2 d = 1.3 d + 1.0. For d = 4: 0.8 + 4.6 + 0.8. |
 
 **How hard the wall bends.** Pressing a cable in bends each wall outward a little. The estimate below
-says that bend is within what PLA can take, but it is a rough estimate, and only a print can confirm
+says that bend is within the top of what PLA can take, but it is a rough estimate, and only a print can confirm
 it. The arithmetic: the cable pushes the top of each wall sideways by (d − mouth)/2, 0.4 mm for a
 4 mm cable. Treating the wall as a single bending strip (a beam sum[^beam]) puts the stretch[^stretch]
 at the wall's foot at about 2.3%. Fictiv's snap-fit guide allows PLA 4 to 8%, halved for a part that
 bends across its layers, so 2 to 4%; Bambu's data sheet gives 7.5% as the point where PLA breaks
 across layers. Neither source says where its 4 to 8% comes from, and the beam sum treats the wall as
 a lone strip when it is one long wall, so **the figure ranks options; it does not promise the wall
-survives daily use.**
+survives daily use.** This doc uses the top of that band, 4%, as the limit. By its low end, 2%, every
+disc is already over at its own size (2.1 to 2.8%), so the ranges below are the generous reading.
 
 **Those figures hold only where both walls can bend.** On the test bars every wall has open air
 behind it: each id tab stands 1 mm clear of its bar and joins it only at floor height. On the
 disc, three places do not:
 
-- **The S-bend:** solid plastic on both sides of the channel, so neither wall bends. The cable has to
+- **The S-bend:** solid plastic on its inner side all the way, and on its outer side except for the
+  last few millimetres at each end, where one wall separates it from the next arm. So neither wall
+  bends over most of it, and the cable has to
   squeeze through the 3.2 mm mouth.
 - **The first half turn of each spiral arm[^arm]** (the two channels winding out from the centre),
   beside the solid centre, and **the outermost turn**, beside the
@@ -244,8 +247,8 @@ the pile lined up. The right half of the labeled cut above shows both.
 ## One disc per cable size
 
 **A disc holds cables from about 6% thinner than the size it was drawn for to up to 0.4 mm
-thicker (less for the smallest disc, see the table), so three disc sizes cover the USB-C cables we
-found.** A cable in the channel is never
+thicker (less for the smallest disc, see the table), so three disc sizes cover the USB-C cables we found from 3.01 to 4.7 mm.** A
+cable in the channel is never
 squeezed while it rests: it has room to move sideways and to lift until it meets the lip tips. What
 changes with its size is how much room, and how hard it is to press in.
 
@@ -279,12 +282,14 @@ reaches the 2 to 4% stretch limit (the beam sum, as above):
 
 | Drawn for (d) | Easy press, more play | Firm press, little play | Stretch at d | Stretch at the firm end | Disc thickness |
 |---|---|---|---|---|---|
-| 3.2 | 3.0 to 3.2 | 3.2 to 3.48 (4.5% at 3.6, over the limit) | 2.8% | 4% | 5.2 |
-| 3.7 | 3.5 to 3.7 | 3.7 to 4.1 | 2.4% | 3.8% | 5.8 |
+| 3.2 | 3.01 to 3.2 | 3.2 to 3.48 (4.5% at 3.6, over the limit) | 2.8% | 4% | 5.2 |
+| 3.7 | 3.48 to 3.7 | 3.7 to 4.1 | 2.4% | 3.8% | 5.8 |
 | 4.3 | 4.05 to 4.3 | 4.3 to 4.7 | 2.1% | 3.1% | 6.6 |
 
-Three sizes cover the USB-C cables we found figures for, with no gap, from 3.0 mm, just below the smallest disc's range (Apple 1 m, one
-user's measurement on Apple's community forum, not Apple's figure) to 4.7 mm (Anker's stated size).
+Three sizes cover the USB-C cables we found figures for from 3.01 to 4.7 mm with no gap. The thinnest,
+Apple's 3.0 mm (1 m, one
+user's measurement on Apple's community forum, not Apple's figure), falls 0.01 mm below the
+smallest disc's range, well inside caliper error; the thickest is Anker's 4.7 mm (its stated size).
 **They cover it only just.** The exact lower end of the easy range is 0.8 / 0.85 = 0.941 × d, so the
 3.2 disc starts at 3.01: Apple's 3.0 mm cable sits 0.01 mm below it, and Apple's 3.5 mm cable only 0.02 mm inside the 3.7 disc's range, so both depend on the mouth test. The 3.2 disc's firm range reaches
 4% stretch at 3.48, exactly where the 3.7 disc's easy range starts, so those two meet with no margin.
@@ -351,7 +356,7 @@ the curved bar K; and the two stacking discs L and P.*
 | F | No lip at all | The control: does any lip matter |
 | G | Thin version, tip low, 0.8 wall | Can the disc be 0.3 × d thinner (1.2 mm at d = 4) |
 | H | Thin version, tip low, 0.45 wall (one line) | Does a softer wall fix the thin version's stretch, and still grip |
-| J | Two channels sharing one 0.8 wall, as on the disc | A wall with a cable on both sides |
+| J | Two channels sharing one 0.8 wall, as on the disc | A wall with a cable on both sides: press one cable in, then the second beside it, and note if the second is harder (on the disc the inner turn is already full when the next is pressed in) |
 | K | A half-loop at the S-bend radius, solid on its inner side | The tightest curve: does the cable sit in it, and does it press in where only one wall bends |
 | L, P | Two small discs, 30 mm across, with the stacking ring, the chamfer and one straight channel across, solid on both sides | Does the cable press in where neither wall bends, as in the S-bend; does one disc sit flat on the other and stay lined up, with a length of cable lying in the lower one's channel |
 
@@ -479,7 +484,7 @@ session[^plates] to lay out and send.
   chamfer bed edges); StarTech (4.0 mm cable); Apple Community (3.0 and 3.5 mm, one user's
   measurement); Anker (4.7 mm cable, 6.3 mm plug head); ChargerLAB (4.6 mm).
 - **Prior art.** All three pages that might show a design like this answered with a bot check and
-  were not read. A search summary for MakerWorld 3056379 describes a disc with an S-shaped slot and
+  were not read. A search summary for MakerWorld (Bambu Lab's site for sharing printable models) 3056379 describes a disc with an S-shaped slot and
   both plugs left outside, which matches this layout; it may be closed on top. None of the roughly
   40 sources the two passes read shows an open-topped channel disc that stacks. That is a claim
   about those sources, not about the web.

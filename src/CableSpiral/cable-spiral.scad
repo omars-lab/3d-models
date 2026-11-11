@@ -10,7 +10,7 @@
 // Render:  openscad -D 'part="disc"'   -D d=4.0 -o disc.stl   cable-spiral.scad
 //          openscad -D 'part="coupon"' -D d=4.0 -o coupon.stl cable-spiral.scad
 // The one setting that matters is d, the cable's diameter measured with calipers.
-// Three sizes cover 3.0-4.7 mm USB-C cables with no gap, just to the edges, and the wall stretch
+// Three sizes cover 3.01-4.7 mm USB-C cables with no gap, just to the edges, and the wall stretch
 // under 4% where both walls can bend: d = 3.2, 3.7 and 4.3 (design doc, "One disc per cable size").
 // In the S-bend, and beside the centre and the rim, a wall has solid behind it and cannot bend;
 // the design doc's open question 1.

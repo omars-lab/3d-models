@@ -15,6 +15,10 @@ folded: no
 - The worktree budget hook (9) blocked a temporary worktree for a one-line fix on another branch;
   switching my own worktree after committing is the way.
 
+- `src/CableSpiral/cable-spiral.scad` `bar()`: the id tab was joined full height to one wall, so on a
+  quarter of each bar that wall could not bend, which is the very thing the bar tests. An id tab on
+  a test part should touch only what the test does not measure (here, the floor).
+
 ## Worth copying
 - Two researchers, then a checker, then the doc: the checker's note caught that the research's disc
   size (92 mm) left out half a channel width; the model printed 96.7 mm.
