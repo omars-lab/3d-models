@@ -3,6 +3,9 @@
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
 - 2026-11-09 — The hub's judging page shows the plate named in its address right away, instead of a blank page until the slower list of waiting plates comes back; switching plates quickly by the address now always ends on the last one picked. Checked in a browser at 1280 and 390 px, and on the comments link Omar had found empty (3d-model-hub #34)
+- 2026-11-09 — The hub's judging page lists the plates waiting on Omar under "Pending feedback" and the judged ones under "Completed", with a bar above each question to ask for a reprint (3d-model-hub #33)
+- 2026-11-09 — Plate pages take a note on the whole plate and a reprint request, and the hub's judging page has a box for each; an answers send now waits out slow commit hooks instead of failing (3d-models #981, 3d-model-hub #32)
+- 2026-11-07 — The judging page reads a question with no Do / Look for split, and a `;` inside brackets no longer splits a question's pieces line; found on the dragon egg (3d-models #922, #923, 3d-model-hub #30)
 - 2026-11-09 — Approving or sending a plate rewrites the print evidence log on its own, so those commits no longer stop at the hook until someone refreshes the log by hand (3d-models #991)
 - 2026-11-05 — Filament grams per piece and per after-print question, read from each slice's G-code: `print_review.py grams`, a `grams` field per piece in `bed.json`, and a `grams` figure per question in `after_print.py questions`. Checked on star-3, star-1 and split-10 (3d-models #883)
 - 2026-11-04 — The hub's plates page fits a phone: below 600 px each plate shows as a small card with its stage, grade, prints, last print and open questions as label and value, so nothing sits off-screen behind a sideways scroll. Checked in a browser at 390 px on the plates and judging pages, and at 1200 px where the table is as before (3d-model-hub #22)
