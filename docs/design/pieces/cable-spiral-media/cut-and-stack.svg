@@ -1,20 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1346.64" height="729.4" viewBox="0 0 1346.64 729.4" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="1346.64" height="712.9" viewBox="0 0 1346.64 712.9" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
 <title>Cable spiral: one channel, and two discs stacked (d = 4 mm)</title>
 <rect width="100%" height="100%" fill="#f8f7f4"/>
 <text x="20" y="37" font-size="17" font-weight="bold" fill="#222222">Cable spiral: one channel, and two discs stacked (d = 4 mm)</text>
-<text x="20" y="53.5" font-size="12.5" fill="#555555">Cut through, side view. Dark gray: lower half of the coaster. Light gray: upper half. Gold: the piece. White: air. Solid blue: printed on the bed (first layer). Orange dashed: printed last (top</text>
-<text x="20" y="70" font-size="12.5" fill="#555555">surface). Not to scale.</text>
+<text x="20" y="53.5" font-size="12.5" fill="#555555">Dark gray: the lower disc. Light gray: the upper disc. Gold: the cable. Blue line: the first layer on the bed. Panel 1 is to scale; panel 2 is not.</text>
 <g data-panel="1. One channel, cut across, to scale">
-<text x="20" y="106" font-size="14" font-weight="bold" fill="#222222">1. One channel, cut across, to scale</text>
-<g transform="translate(110.88,129)">
+<text x="20" y="89.5" font-size="14" font-weight="bold" fill="#222222">1. One channel, cut across, to scale</text>
+<g transform="translate(110.88,112.5)">
 <polygon data-kind="half" points="90,186 270,186 270,162 90,162" fill="#8e8a83"/>
 <line data-mark="first" x1="90" y1="186" x2="270" y2="186" stroke="#2f6fd8" stroke-width="4"/>
 <polygon data-kind="half" points="90,162 114,162 114,0 90,0" fill="#8e8a83"/>
 <polygon data-kind="half" points="246,162 270,162 270,0 246,0" fill="#8e8a83"/>
 <polygon data-kind="lip" points="114,42 132,42 132,24 114,24" fill="#8e8a83"/>
-<line data-mark="last" x1="114" y1="24" x2="132" y2="24" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
 <polygon data-kind="lip" points="228,42 246,42 246,24 228,24" fill="#8e8a83"/>
-<line data-mark="last" x1="228" y1="24" x2="246" y2="24" stroke="#e27a2a" stroke-width="4" stroke-dasharray="6 4"/>
 <polygon data-kind="piece" points="120,162 240,162 240,42 120,42" fill="#dcaa33"/>
 <g data-kind="dim" stroke="#666666" stroke-width="1">
 <line x1="114" y1="132" x2="246" y2="132"/>
@@ -49,27 +46,27 @@
 <rect data-kind="bed" x="-6" y="190" width="372" height="5" fill="#cfcbc3"/>
 <text x="370" y="196" font-size="12" fill="#444444">print bed</text>
 </g>
-<circle data-label-dot="1" cx="368.88" cy="210" r="2.6" fill="#222222"/>
-<polyline points="368.88,210 90.88,210 80.88,210" fill="none" stroke="#666666" stroke-width="0.9"/>
-<text data-label="1" x="76.88" y="214" font-size="12" fill="#222222" text-anchor="end">wall 0.8</text>
-<circle data-label-dot="1" cx="233.88" cy="162" r="2.6" fill="#222222"/>
-<polyline points="233.88,162 552.12,162 562.12,162" fill="none" stroke="#666666" stroke-width="0.9"/>
-<text data-label="1" x="566.12" y="166" font-size="12" fill="#222222" text-anchor="start">lip (0.6 reach)</text>
-<circle data-label-dot="1" cx="320.88" cy="237" r="2.6" fill="#222222"/>
-<polyline points="320.88,237 552.12,237 562.12,237" fill="none" stroke="#666666" stroke-width="0.9"/>
-<text data-label="1" x="566.12" y="241" font-size="12" fill="#222222" text-anchor="start">cable (drawn square)</text>
-<circle data-label-dot="1" cx="350.88" cy="303" r="2.6" fill="#222222"/>
-<polyline points="350.88,303 552.12,303 562.12,303" fill="none" stroke="#666666" stroke-width="0.9"/>
-<text data-label="1" x="566.12" y="307" font-size="12" fill="#222222" text-anchor="start">floor 0.8</text>
-<text x="20" y="354.6" font-size="12" fill="#444444">The lip starts at height d (4.8 above the bed, counting the floor), so a cable lying on the floor does not</text>
-<text x="20" y="371.6" font-size="12" fill="#444444">touch it. Pressing the cable down bends each wall 0.4 mm out at the top, until it slips past the 3.2</text>
-<text x="20" y="388.6" font-size="12" fill="#444444">mouth.</text>
-<text x="20" y="405.6" font-size="12" fill="#444444">Drawn square: the lip's underside is really a 45° slope and the lead-in a 30° slope that widens the mouth</text>
-<text x="20" y="422.6" font-size="12" fill="#444444">back toward 4.4 at the top face. section.png shows the true shapes.</text>
+<circle data-label-dot="1" cx="368.88" cy="193.5" r="2.6" fill="#222222"/>
+<polyline points="368.88,193.5 90.88,193.5 80.88,193.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="76.88" y="197.5" font-size="12" fill="#222222" text-anchor="end">wall 0.8</text>
+<circle data-label-dot="1" cx="233.88" cy="145.5" r="2.6" fill="#222222"/>
+<polyline points="233.88,145.5 552.12,145.5 562.12,145.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="566.12" y="149.5" font-size="12" fill="#222222" text-anchor="start">lip (0.6 reach)</text>
+<circle data-label-dot="1" cx="320.88" cy="220.5" r="2.6" fill="#222222"/>
+<polyline points="320.88,220.5 552.12,220.5 562.12,220.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="566.12" y="224.5" font-size="12" fill="#222222" text-anchor="start">cable (drawn square)</text>
+<circle data-label-dot="1" cx="350.88" cy="286.5" r="2.6" fill="#222222"/>
+<polyline points="350.88,286.5 552.12,286.5 562.12,286.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="566.12" y="290.5" font-size="12" fill="#222222" text-anchor="start">floor 0.8</text>
+<text x="20" y="338.1" font-size="12" fill="#444444">The lip starts at height d (4.8 above the bed, counting the floor). A round cable lying on the floor</text>
+<text x="20" y="355.1" font-size="12" fill="#444444">clears it with room to spare. Pressing the cable down bends each wall 0.4 mm out at the top, until it</text>
+<text x="20" y="372.1" font-size="12" fill="#444444">slips past the 3.2 mouth.</text>
+<text x="20" y="389.1" font-size="12" fill="#444444">Drawn square: the cable is really round, the lip's underside a 45° slope, and the lead-in a 30° slope that</text>
+<text x="20" y="406.1" font-size="12" fill="#444444">widens the mouth back toward 4.4 at the top face. The next picture in the doc shows the true shapes.</text>
 </g>
 <g data-panel="2. Two discs stacked, at the outer edge (not to scale)">
-<text x="755.32" y="106" font-size="14" font-weight="bold" fill="#222222">2. Two discs stacked, at the outer edge (not to scale)</text>
-<g transform="translate(858.92,124)">
+<text x="755.32" y="89.5" font-size="14" font-weight="bold" fill="#222222">2. Two discs stacked, at the outer edge (not to scale)</text>
+<g transform="translate(858.92,107.5)">
 <polygon data-kind="half" points="0,460.8 216,460.8 216,237.6 0,237.6" fill="#8e8a83"/>
 <line data-mark="first" x1="0" y1="460.8" x2="216" y2="460.8" stroke="#2f6fd8" stroke-width="4"/>
 <polygon data-kind="pocket" points="54,432 133.2,432 133.2,237.6 54,237.6" fill="#ffffff"/>
@@ -83,28 +80,28 @@
 <rect data-kind="bed" x="-6" y="464.8" width="264" height="5" fill="#cfcbc3"/>
 <text x="262" y="470.8" font-size="12" fill="#444444">print bed</text>
 </g>
-<circle data-label-dot="1" cx="885.92" cy="242.8" r="2.6" fill="#222222"/>
-<polyline points="885.92,242.8 838.92,242.8 828.92,242.8" fill="none" stroke="#666666" stroke-width="0.9"/>
-<text data-label="1" x="824.92" y="246.8" font-size="12" fill="#222222" text-anchor="end">upper disc</text>
-<circle data-label-dot="1" cx="885.92" cy="476.8" r="2.6" fill="#222222"/>
-<polyline points="885.92,476.8 838.92,476.8 828.92,476.8" fill="none" stroke="#666666" stroke-width="0.9"/>
-<text data-label="1" x="824.92" y="480.8" font-size="12" fill="#222222" text-anchor="end">lower disc</text>
-<circle data-label-dot="1" cx="1069.52" cy="332.8" r="2.6" fill="#222222"/>
-<polyline points="1069.52,332.8 1192.16,332.8 1202.16,332.8" fill="none" stroke="#666666" stroke-width="0.9"/>
-<text data-label="1" x="1206.16" y="336.8" font-size="12" fill="#222222" text-anchor="start">bottom chamfer 0.6</text>
-<circle data-label-dot="1" cx="1071.32" cy="354.4" r="2.6" fill="#222222"/>
-<polyline points="1071.32,354.4 1192.16,354.4 1202.16,354.4" fill="none" stroke="#666666" stroke-width="0.9"/>
-<text data-label="1" x="1206.16" y="358.4" font-size="12" fill="#222222" text-anchor="start">rim ring 0.4</text>
-<circle data-label-dot="1" cx="977.72" cy="386.8" r="2.6" fill="#222222"/>
-<polyline points="977.72,386.8 1192.16,386.8 1202.16,386.8" fill="none" stroke="#666666" stroke-width="0.9"/>
-<text data-label="1" x="1206.16" y="390.8" font-size="12" fill="#222222" text-anchor="start">a channel</text>
-<circle data-label-dot="1" cx="952.52" cy="484" r="2.6" fill="#222222"/>
-<polyline points="952.52,484 1192.16,484 1202.16,484" fill="none" stroke="#666666" stroke-width="0.9"/>
-<text data-label="1" x="1206.16" y="488" font-size="12" fill="#222222" text-anchor="start">cable</text>
-<text x="755.32" y="624.4" font-size="12" fill="#444444">Drawn apart so both parts show. Set down, the upper disc's flat underside rests on the</text>
-<text x="755.32" y="641.4" font-size="12" fill="#444444">tops of the lower disc's walls and closes every channel, so the cable cannot lift out.</text>
-<text x="755.32" y="658.4" font-size="12" fill="#444444">The ring (0.4 tall) tucks into the chamfer (0.6 tall) and stops 0.2 short, so it never</text>
-<text x="755.32" y="675.4" font-size="12" fill="#444444">props the disc up.</text>
-<text x="755.32" y="692.4" font-size="12" fill="#444444">The ring is really a triangle with a 45° inner face; the chamfer is a 45° bevel.</text>
+<circle data-label-dot="1" cx="885.92" cy="226.3" r="2.6" fill="#222222"/>
+<polyline points="885.92,226.3 838.92,226.3 828.92,226.3" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="824.92" y="230.3" font-size="12" fill="#222222" text-anchor="end">upper disc</text>
+<circle data-label-dot="1" cx="885.92" cy="460.3" r="2.6" fill="#222222"/>
+<polyline points="885.92,460.3 838.92,460.3 828.92,460.3" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="824.92" y="464.3" font-size="12" fill="#222222" text-anchor="end">lower disc</text>
+<circle data-label-dot="1" cx="1069.52" cy="316.3" r="2.6" fill="#222222"/>
+<polyline points="1069.52,316.3 1192.16,316.3 1202.16,316.3" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1206.16" y="320.3" font-size="12" fill="#222222" text-anchor="start">bottom chamfer 0.6</text>
+<circle data-label-dot="1" cx="1071.32" cy="337.9" r="2.6" fill="#222222"/>
+<polyline points="1071.32,337.9 1192.16,337.9 1202.16,337.9" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1206.16" y="341.9" font-size="12" fill="#222222" text-anchor="start">rim ring 0.4</text>
+<circle data-label-dot="1" cx="977.72" cy="370.3" r="2.6" fill="#222222"/>
+<polyline points="977.72,370.3 1192.16,370.3 1202.16,370.3" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1206.16" y="374.3" font-size="12" fill="#222222" text-anchor="start">a channel</text>
+<circle data-label-dot="1" cx="952.52" cy="467.5" r="2.6" fill="#222222"/>
+<polyline points="952.52,467.5 1192.16,467.5 1202.16,467.5" fill="none" stroke="#666666" stroke-width="0.9"/>
+<text data-label="1" x="1206.16" y="471.5" font-size="12" fill="#222222" text-anchor="start">cable</text>
+<text x="755.32" y="607.9" font-size="12" fill="#444444">Drawn apart so both parts show. Set down, the upper disc's flat underside rests on the</text>
+<text x="755.32" y="624.9" font-size="12" fill="#444444">tops of the lower disc's walls and closes every channel, so the cable cannot lift out.</text>
+<text x="755.32" y="641.9" font-size="12" fill="#444444">The ring (0.4 tall) tucks into the chamfer (0.6 tall) and stops 0.2 short, so it never</text>
+<text x="755.32" y="658.9" font-size="12" fill="#444444">props the disc up.</text>
+<text x="755.32" y="675.9" font-size="12" fill="#444444">The ring is really a triangle with a 45° inner face; the chamfer is a 45° bevel.</text>
 </g>
 </svg>

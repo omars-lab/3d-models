@@ -4,6 +4,7 @@
 # boxes only, so the lip's 45° underside and the lead-in's slope are drawn square here; the true
 # shapes are in section.png.
 title: "Cable spiral: one channel, and two discs stacked (d = 4 mm)"
+legend: "Dark gray: the lower disc. Light gray: the upper disc. Gold: the cable. Blue line: the first layer on the bed. Panel 1 is to scale; panel 2 is not."
 panels:
   - title: "1. One channel, cut across, to scale"
     width: 12
@@ -11,7 +12,7 @@ panels:
     parts:
       - {kind: half, side: lower, box: [3, 0, 6, 0.8], first: bottom, label: "floor 0.8", label_at: [8, 0.4]}
       - {kind: half, side: lower, box: [3, 0.8, 0.8, 5.4], both: true, label: "wall 0.8", label_at: [3.4, 3.5], label_side: left}
-      - {kind: lip, side: lower, box: [3.8, 4.8, 0.6, 0.6], both: true, last: top, label: "lip (0.6 reach)", label_at: [7.9, 5.1]}
+      - {kind: lip, side: lower, box: [3.8, 4.8, 0.6, 0.6], both: true, label: "lip (0.6 reach)", label_at: [7.9, 5.1]}
       - {kind: piece, box: [4, 0.8, 4, 4], label: "cable (drawn square)", label_at: [7, 2.6]}
       - {kind: dim, from: [3.8, 1.8], to: [8.2, 1.8], text: "channel 4.4", place: below}
       - {kind: dim, from: [4.4, 5.8], to: [7.6, 5.8], text: "mouth 3.2", place: above}
@@ -20,11 +21,12 @@ panels:
       - {kind: dim, from: [10.6, 0.8], to: [10.6, 4.8], text: "d = 4"}
       - {kind: bed, line: [0, 0, 12]}
     notes:
-      - "The lip starts at height d (4.8 above the bed, counting the floor), so a cable lying on the
-        floor does not touch it. Pressing the cable down bends each wall 0.4 mm out at the top, until it
-        slips past the 3.2 mouth."
-      - "Drawn square: the lip's underside is really a 45° slope and the lead-in a 30° slope that
-        widens the mouth back toward 4.4 at the top face. section.png shows the true shapes."
+      - "The lip starts at height d (4.8 above the bed, counting the floor). A round cable lying on
+        the floor clears it with room to spare. Pressing the cable down bends each wall 0.4 mm out at
+        the top, until it slips past the 3.2 mouth."
+      - "Drawn square: the cable is really round, the lip's underside a 45° slope, and the lead-in a
+        30° slope that widens the mouth back toward 4.4 at the top face. The next picture in the doc
+        shows the true shapes."
 
   - title: "2. Two discs stacked, at the outer edge (not to scale)"
     width: 14

@@ -7,13 +7,13 @@ pull it out. Discs stack, so a drawer of cables becomes a neat pile.**
 **Status:** design, 2026-11-11. Nothing here has been printed. Every number is a starting value for
 the first test print, marked "a guess to test" or traced to its source, not a settled one.
 
-**The ask** (Omar, 2026-11-11): "i want to create our own top open cable spral that I can wrap a
+**The ask** (Omar[^omar], 2026-11-11): "i want to create our own top open cable spral that I can wrap a
 cable around and it can stay in palce, thin, stackable".
 
 ## The problem
 
 Loose charging cables tangle. Anyone who keeps a drawer of phone and laptop cables pulls out one and
-gets three. Today we have nothing of our own for this. Two bought designs wait on the
+gets three. Today we have nothing of our own for this. Two downloaded designs wait on the
 [cables-1](../plates/cables-1.md) plate[^plate], which has not been printed: a holder and some clips.
 Neither holds a whole cable flat and neither stacks.
 
@@ -25,7 +25,7 @@ one off with the cable still in place. It should not unwind when the disc is tip
 
 - **It is our own design, not a download.** We can size it to each cable we own, and it could be
   sold in the store[^store] beside the coasters if it works.
-- **It is cheap to find out.** The test piece is small strips of channel, a few grams of plastic,
+- **It is cheap to find out.** The test piece is a few short bars of channel, a few grams of plastic,
   and it answers the grip question before anyone prints a whole disc.
 - **If we get the grip wrong, it fails in a way you notice.** Too loose and the cable falls out when
   the disc tips. Too tight and the channel's thin walls crack after a few weeks of daily use.
@@ -41,7 +41,7 @@ The two halves run outward side by side, so **both plugs come out at the edge**,
 
 *The disc for a 4 mm cable, 96.7 mm across and 6.2 mm thick. It holds 1.0 m of cable. The two exits
 are where the channel leaves through the rim, one at the bottom of the picture and one at the top;
-the preview colors the cut faces orange, and at this angle only a sliver of the top exit's orange
+the OpenSCAD preview colors the cut faces orange, and at this angle only a sliver of the top exit's orange
 shows.*
 
 Stacking needs nothing extra. The flat underside of the disc above lies on the tops of the channel
@@ -119,8 +119,11 @@ millimetre, then spring back over it.
 ![A labeled cut through one channel, and two discs set one on the other at the rim](cable-spiral-media/cut-and-stack.png)
 
 *Left: one channel cut across, to scale, with each size the table below gives. Right: two discs at
-the outer edge, drawn apart so both show. This drawing tool draws only boxes, so the sloped faces
-are drawn square; the cut below shows their true shape.*
+the outer edge, drawn apart so both show. This drawing tool draws only boxes, so the cable and the
+sloped faces are drawn square. The next picture shows the channel's true shape; the ring and the
+chamfer are 45° bevels.*
+
+**In the picture:** mouth[^mouth], lip[^lip], lead-in[^leadin], chamfer[^chamfer].
 
 ![A cut across each test bar, with an orange circle for a 4 mm cable on each channel floor](cable-spiral-media/section.png)
 
@@ -134,13 +137,13 @@ last column are the published print guides listed under [Sources](#sources)[^sou
 | Part | Rule | d = 4 | Where it comes from |
 |---|---|---|---|
 | Channel width | d + 0.4 | 4.4 | A guess to test. 0.2 mm a side is the low end of Sovol's 0.20 to 0.40 mm starting gap for mating parts, so the walls do not press on the cable all the time; PLA[^pla] creeps under a steady load. |
-| Mouth[^mouth] | 0.80 × d | 3.2 | The middle of a 0.70 to 0.85 band seen only in a search snippet for one clip design. That clip flexes along its layers and ours bends across them, so the band carries over only as the range to test. The test piece tries 0.75, 0.80 and 0.85. |
+| Mouth[^mouth] | 0.80 × d | 3.2 | The middle of a 0.70 to 0.85 band seen only in a search snippet[^snippet] for one clip design. That clip flexes along its layers[^layer] and ours bends across them, so the band carries over only as the range to test. The test piece tries 0.75, 0.80 and 0.85. |
 | Lip[^lip] reach, each side | (width − mouth) / 2 | 0.6 | Arithmetic. |
-| Lip underside | 45° slope, starting at height d | 0.6 tall | 45° prints with no support (Hubs and Prusa). Starting at height d means a cable of size d lying on the floor never touches it. |
+| Lip underside | 45° slope, starting at height d | 0.6 tall | 45° prints with no support[^support] (Hubs and Prusa). Starting at height d means a cable lying on the floor never touches it. |
 | Lip tip height | d + reach | 4.6 | Arithmetic. |
-| Lead-in[^leadin] above the tip | 0.2 × d tall, 30° from upright | 0.8 | The height is geometry: a cable lifted up against the lip tips has its top 0.2 × d above them, so the disc above still closes over it. The 30° is a guess inside Sovol's 25° to 35° range, which Sovol gives as a starting value for a snap-fit arm and does not say whether it is measured from upright or from flat. The two readings give very different slopes, so this transfers only as a value to test. |
+| Lead-in[^leadin] above the tip | 0.2 × d tall, 30° from upright | 0.8 | The height is geometry: a cable lifted up against the lip tips has its top 0.2 × d above them, so the disc above still closes over it. The 30° is a guess inside Sovol's 25° to 35° range, which Sovol gives as a starting value for a snap-fit[^snapfit] arm and does not say whether it is measured from upright or from flat. The two readings give very different slopes, so this transfers only as a value to test. |
 | Floor | 0.8 (four layers) | 0.8 | A guess to test. |
-| Wall between turns | 0.8 (two lines) | 0.8 | A guess to test. One line, about 0.45, is the least that prints (Prusa's line width). |
+| Wall between turns | 0.8 (two lines[^line]) | 0.8 | A guess to test. One line, about 0.45, is the least that prints (Prusa's line width). |
 | **Disc thickness** | floor + tip + lead-in = **1.3 × d + 1.0** | **6.2** | Arithmetic. The reach is (d + 0.4 − 0.8 d) / 2 = 0.1 d + 0.2, so the tip is 1.1 d + 0.2, and 0.8 + (1.1 d + 0.2) + 0.2 d = 1.3 d + 1.0. For d = 4: 0.8 + 4.6 + 0.8. |
 
 **How hard the wall bends.** Pressing a cable in bends each wall outward a little. The estimate below
@@ -155,6 +158,9 @@ survives daily use.**
 
 ### The path the cable takes
 
+The cable is folded in half: the fold sits in an S at the centre, and the two halves spiral outward
+side by side to two exits in the rim.
+
 ![The channel layout from above: an S-bend at the centre, two spirals interleaved, both ending in an exit through the rim](cable-spiral-media/plan.png)
 
 *The channel layout from above. The fold sits in the S at the centre, the two halves run outward
@@ -166,12 +172,12 @@ flowchart LR
   s --> armB["spiral arm 2"] --> exitB["exit notch"] --> plugB["plug 2, outside the rim"]
 ```
 
-**In the diagram:** S-bend[^sbend]; exit notch[^exit].
+**In the diagram:** S-bend[^sbend]; spiral arm[^arm]; exit notch[^exit].
 
 - **The S-bend** is two half-loops of radius 2.5 × d (10 mm for a 4 mm cable). That radius is a
   guess: no source we found gives how tightly a USB-C cable can bend.
-- **The two arms** start at twice that radius and wind outward. Each turn adds d + 1.2 of radius
-  (channel plus wall), shared between the two arms.
+- **The two arms** start at twice that radius and wind outward. One lap of an arm moves it
+  2 × (d + 1.2) outward, because the other arm's channel and wall (d + 1.2) sit in between.
 - **The exits.** At the end of each arm the channel turns outward 60° round a curve no tighter than
   the S-bend, then runs straight off the disc. Leaving along the spiral would cross the rim almost
   flat and leave a thin sliver of rim; turning out first crosses it steeply and ends the rim in a
@@ -186,7 +192,8 @@ The model's figure is the one that prints. A 2 m cable needs a disc about 130 mm
 
 ### How the discs stack
 
-The right half of the labeled cut above shows this.
+Each disc's flat underside is the lid for the disc below, and a low ring on the top edge keeps the
+pile lined up. The right half of the labeled cut above shows both.
 
 - **The bottom edge** has a 0.6 mm 45° chamfer. Hubs and Prusa both advise a chamfer, not a rounded
   edge, where a part meets the bed.
@@ -197,20 +204,22 @@ The right half of the labeled cut above shows this.
 
 ## One disc per cable size
 
-A channel drawn for size d holds two ranges of cable differently:
+**A disc grips only cables within about 6% of the size it was drawn for, so three disc sizes cover
+the USB-C cables we found.** A channel drawn for size d holds two ranges of cable differently:
 
-- **A clean grip from about 0.94 × d up to d.** The lower end is where the mouth, 0.80 × d, is 0.85
+- **A snug grip from about 0.94 × d up to d.** The lower end is where the mouth, 0.80 × d, is 0.85
   of the cable: the top of the 0.70 to 0.85 band, so a thinner cable is outside even the snippet's
-  range. Up to d, the cable lies on the floor, the walls do not press on it and the lip does not
-  touch it.
-- **A fit with pressure from d up to d + 0.4.** The cable still fits the channel's width, but it
-  rises into the lip's sloped underside, so the lip presses on it all the time. That may hold well
-  at first and loosen as PLA creeps.
+  range. The cable lies on the floor with little room to rattle, and the walls and lip do not touch
+  it until it lifts against the lip tips.
+- **A loose fit from d up to d + 0.4.** The cable still fits between the walls and lies under the lip
+  without touching it: the lip's sloped underside clears a round cable on the floor until the cable
+  is about 1.3 × d across, wider than the channel. It is held only once it lifts against the tips, so
+  it may rattle. Its wider body is harder to press past the mouth, so the walls bend further.
 
 Both ranges rest on the snippet-only 0.70 to 0.85 band, so they are guesses until the test piece
 shows them.
 
-| Drawn for (d) | Clean grip | Fits, lip presses | Disc thickness |
+| Drawn for (d) | Snug grip | Fits, loose under the lip | Disc thickness |
 |---|---|---|---|
 | 3.2 | 3.0 to 3.2 | 3.2 to 3.6 | 5.2 |
 | 3.9 | 3.7 to 3.9 | 3.9 to 4.3 | 6.1 |
@@ -229,13 +238,13 @@ sources and settled the differences. The table weighs the three real choices.
 | Choice | Picked | Rejected | What the rejected one would buy | Why it lost | What each verifies |
 |---|---|---|---|---|---|
 | **Cable path** | Fold at the middle: S-bend plus two spirals, both plugs at the rim | One spiral from the centre out | A smaller centre, slightly more cable per disc | The inner plug sits in the middle. A plug head is about 6.3 mm thick, as thick as the disc, so it cannot sit inside a stack. No variant keeps one spiral and gets the plug out: a plug pocket needs a thicker disc. | Both are checked only by the test print; the S-bend radius is a guess either way. |
-| **Stacking** | Flat underside closes the channels below; a rim ring lines them up | A 10 mm stub on top and a pocket underneath, at the centre | A stronger lock against sliding | Mainly, the stub sits exactly where the S-bend has to go, so it cannot be combined with both plugs at the rim. Also, the pocket's roof (10.4 mm, the stub plus a gap) would print as a bridge: within the 30 mm Bambu gives as the most it will span, but over the 5 mm Hubs gives for a roof with no sag. The dominating variant, a ring at the rim, keeps the lining-up and frees the centre. | Coupons L and P test the ring. |
-| **Thickness** | Tip high, 1.3 × d + 1.0 (6.2 mm) | Tip low, d + 1.0 (5.0 mm) | 1.2 mm thinner, the "thin" in the ask | A shorter wall bends harder: about 4.2% stretch with a 0.8 wall, over the 2 to 4% band. A 0.45 single-line wall brings it back to 2.3% but is about a sixth as stiff, so it may not grip. | Both go on the test piece (G, H), so the print decides, not the arithmetic. |
+| **Stacking** | Flat underside closes the channels below; a rim ring lines them up | A 10 mm stub on top and a pocket underneath, at the centre | A stronger lock against sliding | Mainly, the stub sits exactly where the S-bend has to go, so it cannot be combined with both plugs at the rim. Also, the pocket's roof (10.4 mm, the stub plus a gap) would print as a bridge: within the 30 mm Bambu gives as the most it will span, but over the 5 mm Hubs gives for a roof with no sag. The dominating variant, a ring at the rim, keeps the lining-up and frees the centre. | The test piece's L and P test the ring. |
+| **Thickness** | Tip high[^tiphigh], 1.3 × d + 1.0 (6.2 mm) | Tip low[^tiplow], d + 1.0 (5.0 mm) | 1.2 mm thinner, the "thin" in the ask | A shorter wall bends harder: about 4.2% stretch with a 0.8 wall, over the 2 to 4% band. A 0.45 single-line wall brings it back to 2.3% but is about a sixth as stiff, so it may not grip. | Both go on the test piece (G, H), so the print decides, not the arithmetic. |
 
 **The thin version, in numbers.** Its lip tip drops from 1.1 × d + 0.2 to 0.8 × d + 0.2 (3.4 mm for a 4 mm
-cable), so the disc is floor + tip + lead-in = 0.8 + 0.8 d + 0.2 + 0.2 d = d + 1.0. The lip then sits
-below the top of the cable and presses on its upper side, above its widest point, so it still holds
-it; that pressing is what makes the shorter wall bend harder.
+cable), so the disc is floor + tip + lead-in = 0.8 + 0.8 d + 0.2 + 0.2 d = d + 1.0. The lip tips then
+sit below the top of the cable but above its widest point, so the cable still cannot lift out past
+them. The shorter wall bends harder because the same 0.4 mm push acts on a shorter strip.
 
 **Decided: the fold, the rim-ring stack, and tip high as the first disc, with the thin version on the
 test piece beside it.** Thin enough is part of the ask, so if G or H grips as well as C, the disc
@@ -246,11 +255,11 @@ them.
 
 ## The first test piece
 
-**Not a whole disc.** Strips of channel, each 40 mm long, with an id carved on a tab beside each one
+**Not a whole disc.** Bars of channel, each 40 mm long, with an id carved on a tab beside each one
 and **open at both ends**, so a real cable with plugs lies flat through them. Ids skip B, D, I, M, N
 and O, which look alike when carved small (I reads as 1).
 
-![The test piece: seven straight bars A to J, a curved run K and two stacking coupons L and P](cable-spiral-media/test-piece.png)
+![The test piece: seven straight bars A to J, a curved run K and two small stacking discs L and P](cable-spiral-media/test-piece.png)
 
 | Id | What it is | What it answers |
 |---|---|---|
@@ -262,7 +271,7 @@ and O, which look alike when carved small (I reads as 1).
 | K | A half-loop at the S-bend radius | The tightest curve: does the cable sit in it |
 | L, P | Two small discs, 30 mm across, with the ring, the chamfer and one straight channel across | Does one sit flat on the other and stay lined up, with a length of cable lying in the lower one's channel |
 
-**After the print, for each bar A to K:**
+**After the print, for each bar A to J and the curve K:**
 
 1. Press the cable in with a thumb. Note if it would not go in.
 2. Turn the bar upside down and shake it gently. Note if the cable falls out.
@@ -282,7 +291,7 @@ session[^plates] to lay out and send.
 1. **What does Omar's own cable measure?** Everything scales from d; it is set to 4.0 until then.
 2. **Will the stacking ring print?** It is a triangle 0.4 mm wide at its base, so its top layer is
    about 0.2 mm wide, narrower than one 0.4 mm nozzle line. The slicer may leave it out. Slice
-   coupon L and look before printing; if it vanishes, widen the ring and the chamfer together.
+   the test piece and look at L before printing; if it vanishes, widen the ring and the chamfer together.
 3. **Is 2.5 × d tight enough for the S-bend, or too tight for a stiff braided cable?** K answers
    this for one cable.
 4. **Does the grip last?** PLA creeps; a month in a drawer may loosen it. PETG[^petg] is the usual
@@ -308,8 +317,23 @@ session[^plates] to lay out and send.
 [^research]: **checked research note** — the write-up where a third person re-opened the sources
     behind two independent research passes and settled where they differed. Linked under
     [Where the numbers came from](#where-the-numbers-came-from).
-[^coupon]: **coupon** — a small test print that tries one question (here, the grip and the
-    stacking) without printing the whole object.
+[^coupon]: **coupon** — the model's setting name for the test piece: a small print that tries one
+    question (here, the grip and the stacking) without printing the whole object.
+[^snippet]: **search snippet** — seen only in a search engine's summary of a page, not on the page
+    itself, so the figure is unconfirmed.
+[^layer]: **layer** — the printer builds a part as flat 0.2 mm layers stacked up; plastic is weaker
+    pulled apart across layers than along them.
+[^support]: **support** — throwaway scaffolding the printer adds under an overhang, removed after
+    printing.
+[^snapfit]: **snap-fit** — a plastic catch that bends aside as parts are pushed together, then
+    springs back to hold them.
+[^line]: **line** — one bead of plastic the nozzle lays down, about 0.45 mm wide; a wall "two lines"
+    thick is two beads side by side.
+[^tiphigh]: **tip high** — the lip tips sit above the cable's top; the 6.2 mm disc for a 4 mm cable.
+[^tiplow]: **tip low** — the thin version: the lip tips sit below the cable's top but above its
+    widest point; a 5.0 mm disc for a 4 mm cable.
+[^arm]: **spiral arm** — one of the two channels that wind outward from the S-bend, one for each
+    half of the cable.
 [^id]: **carved id** — a letter cut into the top of each test part, so a question after the print
     can name the part exactly.
 [^sources]: **Sovol, Fictiv, Hubs, Prusa, Bambu** — a printer maker (Sovol), two manufacturing
