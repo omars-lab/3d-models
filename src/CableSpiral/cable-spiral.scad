@@ -167,9 +167,12 @@ module bar(id, mk = mouth_k, low = false, lip = true, wall = wall_t, twin = fals
         union() {
             grooved([for (c = centres) [[-1, c], [bar_len + 1, c]]], d, mk, low, lip)
                 translate([0, -W / 2]) square([bar_len, W]);
-            translate([bar_len - 10, W / 2 - 0.01, 0]) cube([10, tag_w, T]);
+            // The tab stands 1 mm clear of the bar and joins it only at floor height, so the wall
+            // beside it still has open air behind it and bends like the rest of the bar.
+            translate([bar_len - 10, W / 2 - 0.01, 0]) cube([10, 1.02, floor_t]);
+            translate([bar_len - 10, W / 2 + 1, 0]) cube([10, tag_w - 1, T]);
         }
-        translate([bar_len - 5, W / 2 + tag_w / 2, T - 0.6]) linear_extrude(1)
+        translate([bar_len - 5, W / 2 + 1 + (tag_w - 1) / 2, T - 0.6]) linear_extrude(1)
             text(id, size = 4.5, halign = "center", valign = "center", font = "Liberation Sans:style=Bold");
     }
 }

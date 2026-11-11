@@ -40,7 +40,7 @@ The two halves run outward side by side, so **both plugs come out at the edge**,
 
 ![The disc for a 4 mm cable: the S-bend at the centre, two spirals running out, an exit cut through the rim top and bottom](cable-spiral-media/disc.png)
 
-*The disc for a 4 mm cable, 96.7 mm across and 6.2 mm thick (6.6 mm with the stacking ring, which
+*The disc for a 4 mm cable, 96.7 mm across and 6.2 mm thick (6.6 mm with the stacking ring[^ring], which
 sits inside the disc above, so each disc adds 6.2 mm to a pile). It holds 1.0 m of cable. The two
 exits[^exit] are where the channel leaves through the rim[^rim], one at the bottom of the picture
 and one at the top;
@@ -167,18 +167,20 @@ a lone strip when it is one long wall, so **the figure ranks options; it does no
 survives daily use.**
 
 **Those figures hold only where both walls can bend.** On the test bars every wall has open air
-behind it. On the disc, three places do not:
+behind it: each id tab stands 1 mm clear of its bar and joins it only at floor height. On the
+disc, three places do not:
 
 - **The S-bend:** solid plastic on both sides of the channel, so neither wall bends. The cable has to
   squeeze through the 3.2 mm mouth.
-- **The first half-lap of each arm**, beside the solid centre, and **the outermost lap**, beside the
+- **The first half turn of each spiral arm[^arm]** (the two channels winding out from the centre),
+  beside the solid centre, and **the outermost turn**, beside the
   rim: only one wall bends.
 
 If the cable does not squash, one wall alone has to move the whole d − mouth, 0.8 mm for a 4 mm
 cable. By the same rough beam sum that is about 4.5% stretch at d = 4 and 5.5% at d = 3.2, over the
 2 to 4% limit. So the press there is harder than on any test bar, and may not go at all. This is
-[open question 1](#open-questions); the test piece checks it on K (one wall bends) and on P (neither
-does).
+[open question 1](#open-questions); the test piece checks it on K, a curved bar with solid on one side, and on P, a small disc whose
+channel has solid on both sides.
 
 ### The path the cable takes
 
@@ -208,7 +210,9 @@ flowchart LR
   than the S-bend, and leaves the disc about halfway round that turn, crossing the edge at about 45°
   (for d = 4). Leaving along the spiral would cross the rim almost flat and leave a thin sliver of
   rim; turning out first crosses it more steeply, and the notch ends the thin side of the rim in a
-  square cut. The exit is cut the full channel width with no lip, so the cable near the plug lifts
+  square cut. Each exit opens to about 13 mm at the edge, three channel widths: the cut also takes
+  away the rim on the outside of the turn, so no thin point of rim is left. It has no lip, so the
+  cable near the plug lifts
   out freely.
 - **The rim** outside the last turn is at least 2 mm, a guess. The spiral's radius grows as it winds,
   so the rim is 2 mm thin only just before each of the two exits, and about 5 mm at the sides.
@@ -233,8 +237,8 @@ the pile lined up. The right half of the labeled cut above shows both.
   length: 87.3 mm for 1 m at d = 3.2, 96.7 mm at d = 4, 100.2 mm at d = 4.3, and about 128.5 mm
   for 2 m at d = 4. In a mixed pile the ring meets no chamfer. A smaller disc set on a larger one
   leaves the larger disc's outer turns open, held by their lips alone. A larger disc set on a
-  smaller one is worse: it rests on the smaller disc's ring, 0.4 mm up, so it closes none of the
-  smaller disc's channels. So stack like with like, or put the largest disc at the bottom and
+  smaller one is worse: it rests on the smaller disc's ring, 0.4 mm above its walls. The cables still cannot lift out,
+  but nothing keeps the two discs lined up. So stack like with like, or put the largest disc at the bottom and
   accept that the smaller ones above can slide.
 
 ## One disc per cable size
@@ -279,10 +283,10 @@ reaches the 2 to 4% stretch limit (the beam sum, as above):
 | 3.7 | 3.5 to 3.7 | 3.7 to 4.1 | 2.4% | 3.8% | 5.8 |
 | 4.3 | 4.05 to 4.3 | 4.3 to 4.7 | 2.1% | 3.1% | 6.6 |
 
-Three sizes cover the USB-C cables we found figures for, with no gap, from 3.0 mm, which sits just on the edge (Apple 1 m, one
+Three sizes cover the USB-C cables we found figures for, with no gap, from 3.0 mm, just below the smallest disc's range (Apple 1 m, one
 user's measurement on Apple's community forum, not Apple's figure) to 4.7 mm (Anker's stated size).
 **They cover it only just.** The exact lower end of the easy range is 0.8 / 0.85 = 0.941 × d, so the
-3.2 disc starts at 3.01 and Apple's 3.0 mm cable sits on its edge. The 3.2 disc's firm range reaches
+3.2 disc starts at 3.01: Apple's 3.0 mm cable sits 0.01 mm below it, and Apple's 3.5 mm cable only 0.02 mm inside the 3.7 disc's range, so both depend on the mouth test. The 3.2 disc's firm range reaches
 4% stretch at 3.48, exactly where the 3.7 disc's easy range starts, so those two meet with no margin.
 The 3.7 and 4.3 ranges overlap from 4.05 to 4.1, and Anker's 4.7 mm cable sits at the very top of
 the 4.3 disc's range; a thicker cable needs a larger d. All of this assumes the 0.80 mouth: if the
@@ -336,6 +340,11 @@ and O, which look alike when carved small (I reads as 1).
 
 ![The test piece: seven straight bars A to J, a curved run K and two small stacking discs L and P](cable-spiral-media/test-piece.png)
 
+*The test piece: seven straight bars, A to J, each with its id on a tab that stands clear of the bar;
+the curved bar K; and the two stacking discs L and P.*
+
+**In the picture:** carved id[^id]; stacking ring[^ring] (the thin raised edge on L and P); lip[^lip].
+
 | Id | What it is | What it answers |
 |---|---|---|
 | A, C, E | Mouth 0.75, 0.80, 0.85 × d, tip high, 0.8 wall | Which mouth grips with a thumb press and still lets go |
@@ -365,7 +374,7 @@ session[^plates] to lay out and send.
 ## Open questions
 
 1. **Will the cable press in where the walls cannot bend?** This is the biggest risk. The S-bend
-   has solid plastic on both sides, and the laps beside the centre and the rim have it on one
+   has solid plastic on both sides, and the turns beside the centre and the rim have it on one
    (see [How the cable is held](#how-the-cable-is-held)). If P or K will not take the cable,
    untested ways out are: a narrow open slot behind each such wall so it can bend like a test bar's;
    no lip in the S-bend, leaving the disc above to hold the fold; or a wider mouth there only. Each
@@ -420,7 +429,7 @@ session[^plates] to lay out and send.
 [^tiplow]: **tip low** — the thin version: the lip tips sit below the cable's top but above its
     widest point; a 5.0 mm disc for a 4 mm cable.
 [^arm]: **spiral arm** — one of the two channels that wind outward from the S-bend, one for each
-    half of the cable.
+    half of the cable. A *turn* (or lap) is one full circuit of an arm round the centre.
 [^id]: **carved id** — a letter cut into the top of each test part, so a question after the print
     can name the part exactly.
 [^sources]: **Sovol, Fictiv, Hubs, Prusa, Bambu** — a printer maker (Sovol), two manufacturing
@@ -435,8 +444,8 @@ session[^plates] to lay out and send.
     mouth.
 [^leadin]: **lead-in** — the slope above the lip that funnels the cable toward the mouth, so it is
     pressed in rather than caught on a sharp edge.
-[^beam]: **beam sum** — the textbook formula for how far a strip fixed at one end bends under a
-    push at the other, used here to estimate the stretch in the wall.
+[^beam]: **beam sum** — the textbook estimate of the stretch at the foot of a strip fixed at one end
+    when its free end is pushed sideways a set distance: stretch = 1.5 × wall thickness × push ÷ height².
 [^stretch]: **stretch** — how much longer the plastic on the outside of a bend gets, as a percentage
     of its length. Past a limit for each plastic, it cracks.
 [^sbend]: **S-bend** — the S-shaped curve at the centre of the disc where the cable's fold sits.
