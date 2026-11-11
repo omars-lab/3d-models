@@ -426,24 +426,7 @@ goes to the plates-and-feedback session. Nothing in it may risk the printer.
      the two-digit ids, split-01 has room for 11, 12, 14, 15, 17, 71 and 77, though its `id`
      range stops at 9; split-02 has room for none of 10 to 19.
 
-8. **The gBV theme "All Bambu Green" needs shopper wording before the store lists it.**
-    Its name names a filament brand and its mood is a dated working note ("The plate as it
-    went out on 2026-10-04…"), in
-    [`themes.yaml`](../../design/coaster/themes/gbv/themes.yaml) and the theme page
-    [`gbv-themes.md`](../../design/coaster/themes/gbv-themes.md). Until it has a name and
-    mood a shopper could read, it must not go into the store's design-rights list, so no
-    shopper sees it. Handed here by the storefront session on 2026-11-03 (its CS-9 "R fix"
-    note is item 1 above, the nmEjCTzMbDg hold). Low priority: nothing printed or listed
-    rests on it.
-    **Renamed 2026-11-10 to "Emerald green"**, the store name Omar already picked on
-    2026-10-11 (call 8, in the storefront repo's naming file, docs/naming/names.yaml), so the theme has one
-    name in both repos. The mood is now "One bright emerald green for the frame and every
-    piece; the simplest of the set, its pattern traced only by the fine lines between the
-    pieces." The theme's id stays `all-green`, so its picture and its persona review stand
-    (a review is for the coloring, not the name). The store's own shopper copy is a separate
-    field the storefront writes later.
-
-9. **The 13 cup-band coasters have no picture in the pattern catalog; waits on Omar's cup
+8. **The 13 cup-band coasters have no picture in the pattern catalog; waits on Omar's cup
     pick (store-launch call 1-08).** Every catalog sync warns "no Coaster Lab picture for
     `<id>-cup-band.bkr`" for 0ke_GpoBa-s, 7apC5Q9QS-8, 88q-u2eWZqg, GimTvN9hw4U, NtnlGMTElBk,
     bknVRSMcLj0, gBV_JTt3Kxk, jlTmt_279M4, lEfWSogWscs, n3IidKfXE1I, rDuxHF3xMOc,
