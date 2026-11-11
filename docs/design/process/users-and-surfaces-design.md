@@ -9,7 +9,7 @@ produced-by: Claude (Opus 5.5). The 2026-10-08 draft came from a read of this re
 
 This doc says, for the whole 3D-printed coaster business, who the users are, which page or tool each one
 uses, and what each one can and cannot do there. Since 2026-11-11 it also says how the pages for
-designing patterns and printing them become **one application**: one address, one top bar, one
+designing patterns[^pattern] and printing them become **one application**: one address, one top bar, one
 list of everything waiting on Omar (the owner, who designs, sells and prints), and a button for
 every answer he gives.
 
@@ -58,7 +58,7 @@ The second question is about **how the pages hang together**. A survey of every 
 
 - **Omar asked for it** on 2026-11-11, and chose the shape the same day (D-130).
 - **The judging page just grew.** Omar can now leave a comment on each numbered piece in a plate's
-  bed picture (a change to the Print Hub opened 2026-11-11). It is the page he uses most, and it still leads nowhere.
+  bed[^bed] picture (a change to the Print Hub opened 2026-11-11). It is the page he uses most, and it still leads nowhere.
 - **The yes is the slowest step.** A plate cannot print without its yes
   ([D-093](../../working-model/decisions-log.md#d-093--omars-yes-to-a-send-lives-on-the-plate-page-one-per-send)),
   and the yes is the one answer with no button anywhere.
@@ -122,7 +122,7 @@ A buyer wants four gBV coasters[^gbv] in the Ice to navy theme[^theme], with a g
    writes each plate's page, and asks Omar for a yes on each one. *(Built for experiment plates[^grade].
    Today Omar ticks a box in Obsidian; decided: he presses Yes on the plate's row in the Waiting
    list.)*
-4. **Print operator, workshop.** Omar puts the plate on the bed[^bed] and loads the spools. The session
+4. **Print operator, workshop.** Omar puts the plate on the bed and loads the spools. The session
    looks at the bed photo, matches the gold to a loaded spool and asks about any color that does
    not match, then sends on his go. *(The send and the bed look are built. Matching colors at print
    time is decided and not built.)*
@@ -153,7 +153,7 @@ it belongs to. A Claude session picks the yes up from there, as it picks up a ti
 | **Customer** (buyer) | Anyone on the internet | Design a coaster in the Lab, buy in the store, send a share link for a quote | Reach the app, the docs vault or the printer; see a price setting or another buyer |
 | **Owner** | Omar | Designs patterns and sells; decides open calls; says yes or hold to each plate; plans and prices orders | The owner can do anything; the rules below are what he set for the others |
 | **Print operator** | Omar | Loads spools and plates, watches the printer, resumes or stops it, judges the pieces | Send a plate without a yes for that send |
-| **Claude session** | A Claude Code session on Omar's machine | Runs the skills[^skill] and tools: ranks plates, writes pages, slices, sends on his go, watches prints, writes records, changes the tools through pull requests | Write a yes Omar did not give; press a button in the app for him; resume, stop, pause or swap a print; change any printer setting except the two plate switches; put anything private in this public repo |
+| **Claude session** | A Claude Code session on Omar's machine | Runs the skills[^skill] and tools: ranks plates, writes pages, slices[^slicing] them, sends on his go, watches prints, writes records, changes the tools through pull requests | Write a yes Omar did not give; press a button in the app for him; resume, stop, pause or swap a print; change any printer setting except the two plate switches; put anything private in this public repo |
 
 The Claude session's limits are written rules, not habits. Each send needs its own yes, recorded
 on the plate page (D-093). The two plate switches (the printer's checks for a stray object on
@@ -250,9 +250,9 @@ already shipped, so it is in the map now as UC35.
 | # | Journey | Pages, in order | Where the answer is kept | Today |
 |---|---|---|---|---|
 | 1 | Draw a pattern | Home → pattern editor | the pattern store[^store] | Built, in bikar's Studio |
-| 2 | Work a pattern back from a photo | sessions | the sessions folder | Built, in bikar's Studio |
+| 2 | Work a pattern back from a photo | the photo tracing pages[^tracing] | the tracing folder | Built, in bikar's Studio |
 | 3 | Design a coaster | Coaster Lab | the share link | Built; not on the Studio site |
-| 4 | Explore an orb or a brick mosaic | Orb Lab, Lego Lab, breakdown | the link | Built |
+| 4 | Explore an orb or a brick mosaic | Orb Lab, Lego Lab, the breakdown page[^breakdown] | the link | Built |
 | 5 | See what waits on me | Home | — | Partly: the Print Hub's plates page has a "Waiting on you" box for plates only |
 | 6 | Decide which plate prints next and say yes | Waiting → Plates → one plate | an Approvals row on the plate page, by pull request | A tick box in Obsidian |
 | 7 | Judge a finished plate | Waiting → Judge | the Judged table on the plate page, by pull request | Built, on the Print Hub's judge page |
@@ -317,7 +317,7 @@ flowchart LR
 | Decide open calls | Ticks and notes on a calls page in the docs vault | The Design questions page in the app | Today built; the app page decided |
 | Say yes or hold to a plate | A tick box on the plate page in Obsidian, or in chat | Yes and Hold buttons in the app; chat still counts ([call 6](#call-6-does-a-yes-said-in-chat-still-count)) | Today built; buttons decided |
 | Pick color themes for a coaster | Theme pages in the docs vault | Unchanged for now | Built |
-| Plan an order: plates, minutes, filament by color | `bambu order plan` | Order pages, place still open ([call 3](#call-3-where-do-the-order-pages-go)) | Command built |
+| Plan an order: plates, minutes, filament by color | `bambu order plan`[^bambu] | Order pages, place still open ([call 3](#call-3-where-do-the-order-pages-go)) | Command built |
 | Price an order | `bambu order price` | Same | Command built with every price setting empty |
 | Check filament on hand and get a buy list | `bambu shelf show` | Same | Command built |
 | Add a design to an order by its share link | — | Same | Planned |
@@ -370,7 +370,7 @@ This is the print loop, in the order a plate moves through it, plus the work aro
 | Rank the plates waiting and keep each plate's page current | [prioritize-prints](../../../.claude/skills/prioritize-prints/SKILL.md) | Built |
 | Put open calls on a page with pictures and tick boxes, and read the ticks back | [request-feedback](../../../.claude/skills/request-feedback/SKILL.md) | Built. Decided: the same pages, answered from the app |
 | Record a yes or hold Omar gave; reset it when the recipe changes | [manage-approvals](../../../.claude/skills/manage-approvals/SKILL.md) | Built. Decided: the button runs the same script |
-| Check the yes, slice it[^slicing], check the printer is idle, look at the bed photo, set the two plate switches, send | [send-plate](../../../.claude/skills/send-plate/SKILL.md) | Built |
+| Check the yes, slice it, check the printer is idle, look at the bed photo, set the two plate switches, send | [send-plate](../../../.claude/skills/send-plate/SKILL.md) | Built |
 | Match a design's colors to the loaded spools at print time | send-plate, with a read-only printer service | Decided 2026-10-08, not built |
 | Watch the print, a picture every 10 minutes, report a pause or a stall | [monitor-print](../../../.claude/skills/monitor-print/SKILL.md) | Built |
 | Get a finished plate ready to judge and give Omar the link | [judge-page](../../../.claude/skills/judge-page/SKILL.md) | Built |
@@ -808,6 +808,14 @@ It names who uses what, and the shape of the one app. How each part works is in 
 [^x2d]: **X2D** — the Bambu Lab printer these coasters print on. Bambu Lab makes it, and its own
     build plates are called Bambu plates.
 [^bed]: **bed** — the flat plate inside the printer that pieces are printed onto.
+[^pattern]: **pattern** — a geometric tile design, drawn in code, that is cut or printed into a
+    coaster.
+[^tracing]: **photo tracing pages** — bikar pages (named "sessions" in its code) where a pattern
+    is worked back step by step from a photo of a real design; each attempt is saved in a folder.
+[^breakdown]: **breakdown page** — a bikar page that shows an orb's pattern built up step by step,
+    from flat drawing to ball.
+[^bambu]: **bambu** — this repo's command-line tool that talks to the printer and plans and
+    prices orders. Named after the printer's maker.
 [^judge]: **judging a print** — after a plate prints, Omar looks at each piece and marks it keep,
     adjust or drop, with a note; the verdicts are saved to the plate's page.
 [^slicing]: **slicing** — turning a 3D shape into the layer-by-layer instructions the printer
