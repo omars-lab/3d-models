@@ -1,4 +1,4 @@
-import{C as e,S as t,_ as n,b as r,c as i,d as a,f as o,h as ee,i as te,l as ne,m as re,n as s,p as c,r as ie,s as l,t as ae,u as oe,v as se,x as ce}from"./style-C5LHBQ10.js";import"./modulepreload-polyfill-EeOZK34R.js";import{i as le,n as ue,r as de}from"./worker-host-QODNm9_J.js";var u=[{id:`rosette-dodeca`,title:`Rosette · Dodecahedron`,blurb:`10-petal rosettes on 12 pentagonal faces`,source:`# Rosette-Orb — dodecahedral 10-petal rosette sphere.
+import{C as e,S as t,_ as n,b as r,c as i,d as a,f as o,h as ee,i as te,l as ne,m as re,n as s,p as c,r as ie,s as l,t as ae,u as oe,v as se,x as ce}from"./style-kQt_Z09B.js";import"./modulepreload-polyfill-DfS4ul37.js";import{i as le,n as ue,r as de}from"./worker-host-BX_xi83R.js";var u=[{id:`rosette-dodeca`,title:`Rosette · Dodecahedron`,blurb:`10-petal rosettes on 12 pentagonal faces`,source:`# Rosette-Orb — dodecahedral 10-petal rosette sphere.
 # Each of the 12 pentagonal faces carries a classical rosette: 10 kite
 # petals reaching all 5 corners and all 5 edge midpoints (both shared
 # with the neighboring faces, so the lattice closes watertight), joined

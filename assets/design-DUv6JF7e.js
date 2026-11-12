@@ -1,4 +1,9 @@
-import"./modulepreload-polyfill-EeOZK34R.js";/* empty css               */import{n as e,r as t,t as n}from"./note-BIxa1zJp.js";import{P as r,S as i,T as a,b as o,h as s,j as c,m as l,n as u,p as d,t as f,w as p,x as m}from"./dist-BWi0tRDZ.js";import{i as h,r as g}from"./lego-scripts-B4R47PHO.js";var _=6;function v(e,t){let n=Math.cos(t),r=Math.sin(t);return{x:e.x*n-e.y*r,y:e.x*r+e.y*n}}function y(e){return Math.round(e/8)*8}function b(e,t,n){let r=v(t,n),i={x:y(r.x),y:y(r.y)},a=Math.abs(r.x-i.x),o=Math.abs(r.y-i.y);return{label:e,at:r,snap:i,resX:a,resY:o,worstMm:Math.max(a,o)}}function x(e){let t=a(e.basis),n=e.atTheta===`zero`?0:t.thetaDeg,r=n*Math.PI/180,i=e.studsHalf??3,[o,s]=e.basis;return{name:e.name,report:t,thetaDeg:n,vectors:[b(`a₁`,o,r),b(`a₂`,s,r)],points:S(e.basis,r,e.generations??2,i*8),studsHalf:i,unbuildable:e.unbuildable??!1}}function S([e,t],n,r,i){let a=[];for(let o=-r;o<=r;o++)for(let s=-r;s<=r;s++){if(ee.has(`${o},${s}`))continue;let r=v({x:o*e.x+s*t.x,y:o*e.y+s*t.y},n);te(r,i)&&a.push(r)}return a}var ee=new Set([`0,0`,`1,0`,`0,1`]),te=(e,t)=>Math.abs(e.x)<=t&&Math.abs(e.y)<=t;function C(e){return e.replace(/&/g,`&amp;`).replace(/</g,`&lt;`).replace(/>/g,`&gt;`)}function w(e,t=6){let n=e.studsHalf*8,r=2*(n+_)*t,i=e=>(e+n+_)*t,a=e=>(n+_-e)*t,o=e=>Number(e.toFixed(2)).toString(),s=[];for(let t=-e.studsHalf;t<=e.studsHalf;t++){let e=t*8;s.push(`<line class="lat-grid" x1="${o(i(-n))}" y1="${o(a(e))}" x2="${o(i(n))}" y2="${o(a(e))}" />`,`<line class="lat-grid" x1="${o(i(e))}" y1="${o(a(-n))}" x2="${o(i(e))}" y2="${o(a(n))}" />`)}for(let n=-e.studsHalf;n<=e.studsHalf;n++)for(let r=-e.studsHalf;r<=e.studsHalf;r++)s.push(`<circle class="lat-stud" cx="${o(i(n*8))}" cy="${o(a(r*8))}" r="${o(l/2*t)}" />`);for(let n of e.points)s.push(`<circle class="lat-pt" cx="${o(i(n.x))}" cy="${o(a(n.y))}" r="${o(.7*t)}" />`);for(let n of e.vectors)s.push(...ne(n,{X:i,Y:a,n:o,scale:t}));s.push(`<circle class="lat-origin" cx="${o(i(0))}" cy="${o(a(0))}" r="${o(.9*t)}" />`);let c=`${e.name} — grid fit ${e.report.fit===void 0?`n/a`:e.report.fit.toFixed(2)} at ${e.thetaDeg.toFixed(1)} degrees`;return`<svg class="lattice-plan${e.unbuildable?` unbuildable`:``}" viewBox="0 0 ${o(r)} ${o(r)}" role="img" aria-label="${C(c)}" xmlns="http://www.w3.org/2000/svg">${s.join(``)}</svg>`}function ne(e,{X:t,Y:n,n:r,scale:i}){let a=[`<line class="lat-vec" x1="${r(t(0))}" y1="${r(n(0))}" x2="${r(t(e.at.x))}" y2="${r(n(e.at.y))}" />`,`<circle class="lat-tip" cx="${r(t(e.at.x))}" cy="${r(n(e.at.y))}" r="${r(.8*i)}" />`,`<text class="lat-lbl" x="${r(t(e.at.x/2)+6)}" y="${r(n(e.at.y/2)-4)}">${C(e.label)}</text>`],o=e.worstMm<d,s=o?`lat-res ok`:`lat-res`;if(a.push(`<path class="${s}" d="M ${r(t(e.at.x))} ${r(n(e.at.y))} L ${r(t(e.snap.x))} ${r(n(e.at.y))} L ${r(t(e.snap.x))} ${r(n(e.snap.y))}" fill="none" />`),!o){let i=e.resX>=e.resY,o=i?(e.at.x+e.snap.x)/2:e.snap.x,s=i?e.at.y:(e.at.y+e.snap.y)/2;a.push(`<text class="lat-lbl lat-lbl-res" x="${r(t(o))}" y="${r(n(s)-5)}" text-anchor="middle">${e.worstMm.toFixed(2)} mm</text>`)}return a}function re(e,t){return w(x(e),t)}var ie={square:e=>[{x:e,y:0},{x:0,y:e}],hexagonal:e=>[{x:e,y:0},{x:e/2,y:e*Math.sqrt(3)/2}],rhombic72:e=>[{x:e,y:0},{x:e*Math.cos(72*Math.PI/180),y:e*Math.sin(72*Math.PI/180)}],rectangular32:e=>[{x:e,y:0},{x:0,y:1.5*e}]},T={square:{probe:8,best:8},hexagonal:{probe:8,best:17.57},rhombic72:{probe:8,best:6.995},rectangular32:{probe:8,best:16}};function E(e,t,n={}){let r={name:`${e} at ${t} mm`,basis:ie[e](t),studsHalf:n.studsHalf,unbuildable:n.unbuildable};return{model:x(r),svg:re(r)}}function D(e){let t=g(e);if(!t)throw Error(`design note references a preset the Lab does not ship: ${e}`);let n=o(t.source);if(!n.brick3d)throw Error(`${e} compiled to no brick`);return n.brick3d.grid}function O(e){return e.fit===void 0?`n/a`:e.fit.toFixed(2)}function k(e){return e.repeatUnitStuds?.join(` × `)??`n/a`}var A={id:`lattice-basis`,title:`The lattice matrix has a row the grammar cannot build`,eyebrow:`3d-models · docs/design/pieces/lego-lab-design.md · §5.3, §11 Q8`,date:`2026-07-31`,status:`decided`,decision:`<strong>Label the row.</strong> §5.3's table gains an <strong>Authorable</strong>
+import"./modulepreload-polyfill-DfS4ul37.js";import{P as e,S as t,T as n,b as r,h as i,j as a,m as o,n as s,p as c,t as l,w as u,x as d}from"./dist-mJ8zgY4k.js";import{i as f,r as p}from"./lego-scripts-DK7iV77v.js";/* empty css               */var m=6;function h(e,t){let n=Math.cos(t),r=Math.sin(t);return{x:e.x*n-e.y*r,y:e.x*r+e.y*n}}function g(e){return Math.round(e/8)*8}function _(e,t,n){let r=h(t,n),i={x:g(r.x),y:g(r.y)},a=Math.abs(r.x-i.x),o=Math.abs(r.y-i.y);return{label:e,at:r,snap:i,resX:a,resY:o,worstMm:Math.max(a,o)}}function v(e){let t=n(e.basis),r=e.atTheta===`zero`?0:t.thetaDeg,i=r*Math.PI/180,a=e.studsHalf??3,[o,s]=e.basis;return{name:e.name,report:t,thetaDeg:r,vectors:[_(`a₁`,o,i),_(`a₂`,s,i)],points:ee(e.basis,i,e.generations??2,a*8),studsHalf:a,unbuildable:e.unbuildable??!1}}function ee([e,t],n,r,i){let a=[];for(let o=-r;o<=r;o++)for(let s=-r;s<=r;s++){if(y.has(`${o},${s}`))continue;let r=h({x:o*e.x+s*t.x,y:o*e.y+s*t.y},n);te(r,i)&&a.push(r)}return a}var y=new Set([`0,0`,`1,0`,`0,1`]),te=(e,t)=>Math.abs(e.x)<=t&&Math.abs(e.y)<=t;function b(e){return e.replace(/&/g,`&amp;`).replace(/</g,`&lt;`).replace(/>/g,`&gt;`)}function x(e,t=6){let n=e.studsHalf*8,r=2*(n+m)*t,i=e=>(e+n+m)*t,a=e=>(n+m-e)*t,s=e=>Number(e.toFixed(2)).toString(),c=[];for(let t=-e.studsHalf;t<=e.studsHalf;t++){let e=t*8;c.push(`<line class="lat-grid" x1="${s(i(-n))}" y1="${s(a(e))}" x2="${s(i(n))}" y2="${s(a(e))}" />`,`<line class="lat-grid" x1="${s(i(e))}" y1="${s(a(-n))}" x2="${s(i(e))}" y2="${s(a(n))}" />`)}for(let n=-e.studsHalf;n<=e.studsHalf;n++)for(let r=-e.studsHalf;r<=e.studsHalf;r++)c.push(`<circle class="lat-stud" cx="${s(i(n*8))}" cy="${s(a(r*8))}" r="${s(o/2*t)}" />`);for(let n of e.points)c.push(`<circle class="lat-pt" cx="${s(i(n.x))}" cy="${s(a(n.y))}" r="${s(.7*t)}" />`);for(let n of e.vectors)c.push(...S(n,{X:i,Y:a,n:s,scale:t}));c.push(`<circle class="lat-origin" cx="${s(i(0))}" cy="${s(a(0))}" r="${s(.9*t)}" />`);let l=`${e.name} — grid fit ${e.report.fit===void 0?`n/a`:e.report.fit.toFixed(2)} at ${e.thetaDeg.toFixed(1)} degrees`;return`<svg class="lattice-plan${e.unbuildable?` unbuildable`:``}" viewBox="0 0 ${s(r)} ${s(r)}" role="img" aria-label="${b(l)}" xmlns="http://www.w3.org/2000/svg">${c.join(``)}</svg>`}function S(e,{X:t,Y:n,n:r,scale:i}){let a=[`<line class="lat-vec" x1="${r(t(0))}" y1="${r(n(0))}" x2="${r(t(e.at.x))}" y2="${r(n(e.at.y))}" />`,`<circle class="lat-tip" cx="${r(t(e.at.x))}" cy="${r(n(e.at.y))}" r="${r(.8*i)}" />`,`<text class="lat-lbl" x="${r(t(e.at.x/2)+6)}" y="${r(n(e.at.y/2)-4)}">${b(e.label)}</text>`],o=e.worstMm<c,s=o?`lat-res ok`:`lat-res`;if(a.push(`<path class="${s}" d="M ${r(t(e.at.x))} ${r(n(e.at.y))} L ${r(t(e.snap.x))} ${r(n(e.at.y))} L ${r(t(e.snap.x))} ${r(n(e.snap.y))}" fill="none" />`),!o){let i=e.resX>=e.resY,o=i?(e.at.x+e.snap.x)/2:e.snap.x,s=i?e.at.y:(e.at.y+e.snap.y)/2;a.push(`<text class="lat-lbl lat-lbl-res" x="${r(t(o))}" y="${r(n(s)-5)}" text-anchor="middle">${e.worstMm.toFixed(2)} mm</text>`)}return a}function C(e,t){return x(v(e),t)}var ne={square:e=>[{x:e,y:0},{x:0,y:e}],hexagonal:e=>[{x:e,y:0},{x:e/2,y:e*Math.sqrt(3)/2}],rhombic72:e=>[{x:e,y:0},{x:e*Math.cos(72*Math.PI/180),y:e*Math.sin(72*Math.PI/180)}],rectangular32:e=>[{x:e,y:0},{x:0,y:1.5*e}]},w={square:{probe:8,best:8},hexagonal:{probe:8,best:17.57},rhombic72:{probe:8,best:6.995},rectangular32:{probe:8,best:16}};function T(e){return e.status===`open`?`Open — no decision taken`:e.status===`superseded`?`Superseded — ${e.decision??`see the archive`}`:`Decided — ${e.decision??`see the decisions log`}`}function E(e){return e.replace(/&/g,`&amp;`).replace(/</g,`&lt;`).replace(/>/g,`&gt;`).replace(/"/g,`&quot;`)}function D(e){let t=e.overlaid?`<div class="provenance">Overlaid by hand, not compiled: ${E(e.overlaid)}</div>`:``;return`<figure class="figure">
+    ${e.svg}
+    <figcaption>${e.caption}</figcaption>
+    <div class="provenance">Compiled from <b>${E(e.from)}</b> in your browser, just now.</div>
+    ${t}
+  </figure>`}function O(e,t,n={}){let r={name:`${e} at ${t} mm`,basis:ne[e](t),studsHalf:n.studsHalf,unbuildable:n.unbuildable};return{model:v(r),svg:C(r)}}function k(e){let t=p(e);if(!t)throw Error(`design note references a preset the Lab does not ship: ${e}`);let n=r(t.source);if(!n.brick3d)throw Error(`${e} compiled to no brick`);return n.brick3d.grid}function A(e){return e.fit===void 0?`n/a`:e.fit.toFixed(2)}function j(e){return e.repeatUnitStuds?.join(` × `)??`n/a`}var M={id:`lattice-basis`,title:`The lattice matrix has a row the grammar cannot build`,eyebrow:`3d-models · docs/design/pieces/lego-lab-design.md · §5.3, §11 Q8`,date:`2026-07-31`,status:`decided`,decision:`<strong>Label the row.</strong> §5.3's table gains an <strong>Authorable</strong>
     column stating, per row, whether a script can reach that lattice, plus the paragraph naming the
     single assignment site that decides it. The grammar is unchanged and no row is removed.
     The figures moved the argument away from the framing that produced the question: <em>widening
@@ -10,14 +15,14 @@ import"./modulepreload-polyfill-EeOZK34R.js";/* empty css               */import
     it; the <code>tile</code> grammar can only <em>express</em> two of them. So one row of the table
     describes a lattice no <code>.bkr</code> can produce, and a reader has no way to tell which rows
     those are. Below: what the score reads, what scale can and cannot fix, the row with no script —
-    and three ways to close it.`,render(){let t=E(`square`,T.square.probe),n=E(`hexagonal`,T.hexagonal.probe),r=E(`hexagonal`,T.hexagonal.best),i=E(`rectangular32`,T.rectangular32.probe,{studsHalf:4}),a=E(`rectangular32`,T.rectangular32.best,{studsHalf:4}),o=E(`rhombic72`,T.rhombic72.best,{unbuildable:!0}),s=D(`hex-field-tile`),c=D(`rational-repeat-tile`),l=o.model.vectors[0].worstMm.toFixed(2),u=o.model.vectors[1].worstMm.toFixed(2);return`
+    and three ways to close it.`,render(){let e=O(`square`,w.square.probe),t=O(`hexagonal`,w.hexagonal.probe),n=O(`hexagonal`,w.hexagonal.best),r=O(`rectangular32`,w.rectangular32.probe,{studsHalf:4}),i=O(`rectangular32`,w.rectangular32.best,{studsHalf:4}),a=O(`rhombic72`,w.rhombic72.best,{unbuildable:!0}),o=k(`hex-field-tile`),s=k(`rational-repeat-tile`),c=a.model.vectors[0].worstMm.toFixed(2),l=a.model.vectors[1].worstMm.toFixed(2);return`
 <section class="panel stack">
   <h2>What the score actually reads</h2>
 
   <div class="split">
-    ${e({svg:t.svg,caption:`A square basis at one stud pitch. Both repeat vectors end on a stud centre, both
-        residual legs are zero, and the score is <b>${O(t.model.report)}</b> with a repeat
-        unit of <b>${k(t.model.report)}</b> studs.`,from:"gridFit(), on the family scripts/sweep-lattice-matrix.ts calls `square`"})}
+    ${D({svg:e.svg,caption:`A square basis at one stud pitch. Both repeat vectors end on a stud centre, both
+        residual legs are zero, and the score is <b>${A(e.model.report)}</b> with a repeat
+        unit of <b>${j(e.model.report)}</b> studs.`,from:"gridFit(), on the family scripts/sweep-lattice-matrix.ts calls `square`"})}
 
     <div class="stack">
       <p>
@@ -54,27 +59,27 @@ import"./modulepreload-polyfill-EeOZK34R.js";/* empty css               */import
   </p>
 
   <div class="pair">
-    ${e({svg:i.svg,caption:`A 3 : 2 rectangular lattice at ${T.rectangular32.probe} mm scores
-        <b>${O(i.model.report)}</b>. Nothing is wrong with the lattice; it is the wrong
+    ${D({svg:r.svg,caption:`A 3 : 2 rectangular lattice at ${w.rectangular32.probe} mm scores
+        <b>${A(r.model.report)}</b>. Nothing is wrong with the lattice; it is the wrong
         size.`,from:"gridFit(), on the family the sweep calls `rectangular32`"})}
 
-    ${e({svg:a.svg,caption:`The same lattice at ${T.rectangular32.best} mm: every vector lands,
-        <b>${O(a.model.report)}</b>, repeat unit <b>${k(a.model.report)}</b>
+    ${D({svg:i.svg,caption:`The same lattice at ${w.rectangular32.best} mm: every vector lands,
+        <b>${A(i.model.report)}</b>, repeat unit <b>${j(i.model.report)}</b>
         studs. This is <code>Rational-Repeat-Tile</code>, which compiles to
-        <b>${O(c)}</b> on a <b>${k(c)}</b> stud repeat — not square, and
+        <b>${A(s)}</b> on a <b>${j(s)}</b> stud repeat — not square, and
         perfect anyway.`,from:`gridFit(), and patterns/Lego/Rational-Repeat-Tile.bkr compiled alongside it`})}
   </div>
 
   <div class="pair">
-    ${e({svg:n.svg,caption:`The hexagonal lattice at ${T.hexagonal.probe} mm, at the best angle there
-        is (<b>${n.model.thetaDeg.toFixed(1)}°</b>): <b>${O(n.model.report)}</b>.
-        This is <code>Hex-Field-Tile</code>, which compiles to <b>${O(s)}</b> and reports
-        its repeat unit as <b>${k(s)}</b> — a sheared basis has no answer in whole studs,
+    ${D({svg:t.svg,caption:`The hexagonal lattice at ${w.hexagonal.probe} mm, at the best angle there
+        is (<b>${t.model.thetaDeg.toFixed(1)}°</b>): <b>${A(t.model.report)}</b>.
+        This is <code>Hex-Field-Tile</code>, which compiles to <b>${A(o)}</b> and reports
+        its repeat unit as <b>${j(o)}</b> — a sheared basis has no answer in whole studs,
         and withholding one is not the same as scoring zero.`,from:`gridFit(), and patterns/Lego/Hex-Field-Tile.bkr compiled alongside it`})}
 
-    ${e({svg:r.svg,caption:`The best the hexagonal lattice does anywhere in the swept interval —
-        ${T.hexagonal.best} mm at <b>${r.model.thetaDeg.toFixed(1)}°</b>, scoring
-        <b>${O(r.model.report)}</b>. Better, and still short: √3 is irrational, so no scale
+    ${D({svg:n.svg,caption:`The best the hexagonal lattice does anywhere in the swept interval —
+        ${w.hexagonal.best} mm at <b>${n.model.thetaDeg.toFixed(1)}°</b>, scoring
+        <b>${A(n.model.report)}</b>. Better, and still short: √3 is irrational, so no scale
         closes it.`,from:`gridFit(), at the argmax scale of scripts/sweep-lattice-matrix.ts`})}
   </div>
 
@@ -97,10 +102,10 @@ import"./modulepreload-polyfill-EeOZK34R.js";/* empty css               */import
   <h2>The row that has no script</h2>
 
   <div class="split">
-    ${e({svg:o.svg,caption:`Two equal edges at 72°, at the best scale and angle the sweep found
-        (${T.rhombic72.best} mm, <b>${o.model.thetaDeg.toFixed(1)}°</b>): one vector
-        ${l} mm off a stud, the other ${u} mm, scoring
-        <b>${O(o.model.report)}</b>.`,from:"gridFit(), on the family the sweep calls `rhombic72`",overlaid:`nothing here is compiled from a .bkr — no script in the language produces this basis`})}
+    ${D({svg:a.svg,caption:`Two equal edges at 72°, at the best scale and angle the sweep found
+        (${w.rhombic72.best} mm, <b>${a.model.thetaDeg.toFixed(1)}°</b>): one vector
+        ${c} mm off a stud, the other ${l} mm, scoring
+        <b>${A(a.model.report)}</b>.`,from:"gridFit(), on the family the sweep calls `rhombic72`",overlaid:`nothing here is compiled from a .bkr — no script in the language produces this basis`})}
 
     <div class="stack">
       <p>
@@ -288,7 +293,7 @@ import"./modulepreload-polyfill-EeOZK34R.js";/* empty css               */import
   <code>scripts/sweep-lattice-matrix.ts</code>; <code>packages/lab/tests/design-lattice.test.ts</code>
   asserts that against the script itself, so a figure here cannot drift from §5.3's measured matrix
   without a red test.
-</p>`}};function j(e,t){let n=e*e-t*t;return n>0?Math.sqrt(n):0}function M(e,t){let n=t-e.y,r=j(e.outerDiaMm/2,n);if(r===0)return[];if(e.kind===`pin`)return[{x0:e.x-r,x1:e.x+r,what:`pin`}];let i=j(f/2,n);return i===0?[{x0:e.x-r,x1:e.x+r,what:`tube`}]:[{x0:e.x-r,x1:e.x-i,what:`tube`},{x0:e.x+i,x1:e.x+r,what:`tube`}]}function N(e,t={}){let{w:n,ox:r,oy:a}=h(e.cols,e.rows,e.origin),o=e.solution.anchors,l=t.cutY??o[0]?.y??a,u=i(e.fit),d=r-n/2,f=r+n/2,p=[{x0:d,x1:d+u,what:`wall`},...o.flatMap(e=>M(e,l)),{x0:f-u,x1:f,what:`wall`}].sort((e,t)=>e.x0-t.x0),m=c(e,e.solution),{studSpans:g,ghosts:_}=ae(e,m,l),v=[{z0:0,z1:e.engageMm,role:`cavity`,spans:p},{z0:e.engageMm,z1:e.heightMm,role:`ceiling`,spans:[{x0:d,x1:f,what:`ceiling`}]}];return(g.length>0||_.length>0)&&v.push({z0:e.heightMm,z1:e.heightMm+s,role:`stud`,spans:g.sort((e,t)=>e.x0-t.x0)}),{name:e.name,cutY:l,extent:{x0:d,x1:f,z0:0,z1:e.heightMm+(m.length>0?s:0)},bands:v,ghosts:_,dims:t.dims===!1?[]:oe(e,d,f,n),overlays:t.overlays??[],notes:se(e,l)}}function ae(e,t,n){let r=m(e.fit)/2,i=[],a=[];for(let o of t){let t=j(r,n-o.y);t>0?i.push({x0:o.x-t,x1:o.x+t,what:`stud`}):a.push({x0:o.x-r,x1:o.x+r,z0:e.heightMm,z1:e.heightMm+s,what:`stud behind the cut`})}return{studSpans:i,ghosts:a}}function oe(e,t,n,r){let i=e.solution.anchors.find(e=>e.kind===`tube`);return[{axis:`x`,from:t,to:n,at:-2.4,label:`${r.toFixed(1)} mm`},{axis:`z`,from:0,to:e.heightMm,at:n+2.4,label:`${e.heightMm.toFixed(1)} mm`},{axis:`z`,from:0,to:e.engageMm,at:t-2.4,label:`engage ${e.engageMm.toFixed(1)}`},{axis:`z`,from:e.engageMm,to:e.heightMm,at:t-6.4,label:`ceiling ${e.ceilingMm.toFixed(1)}`},...i?[{axis:`x`,from:i.x-i.outerDiaMm/2,to:i.x+i.outerDiaMm/2,at:e.engageMm+2,label:`⌀${i.outerDiaMm.toFixed(3)}`}]:[]]}function se(e,t){let n=[`Section at y = ${t.toFixed(2)} mm through ${e.name}, drawn from the compiled brick.`];return e.clutch!==`none`&&e.fit.ribMm>0&&n.push(`Clutch ribs (${e.fit.ribMm} mm × ${e.fit.ribArcMm} mm arc) sit off this plane and are not drawn.`),n.push(...e.notes),n}var P=10;function F(e){return e.replace(/&/g,`&amp;`).replace(/</g,`&lt;`).replace(/>/g,`&gt;`)}function ce(e,t=8){let{extent:n}=e,r=(n.x1-n.x0+2*P)*t,i=(n.z1-n.z0+2*P)*t,a=e=>(e-n.x0+P)*t,o=e=>(n.z1-e+P)*t,s=e=>Number(e.toFixed(2)).toString(),c=[];for(let n of e.ghosts)c.push(`<rect class="sec-ghost" x="${s(a(n.x0))}" y="${s(o(n.z1))}" width="${s((n.x1-n.x0)*t)}" height="${s((n.z1-n.z0)*t)}"><title>${F(n.what)}</title></rect>`);for(let n of e.bands)for(let e of n.spans)c.push(`<rect class="sec-solid sec-${e.what}" x="${s(a(e.x0))}" y="${s(o(n.z1))}" width="${s((e.x1-e.x0)*t)}" height="${s((n.z1-n.z0)*t)}" data-what="${e.what}" data-x-mm="${s((e.x0+e.x1)/2)}"><title>${F(e.what)}</title></rect>`);c.push(`<line class="sec-bed" x1="${s(a(n.x0-P/2))}" y1="${s(o(0))}" x2="${s(a(n.x1+P/2))}" y2="${s(o(0))}" />`);let l={X:a,Z:o,n:s,scale:t};for(let t of e.dims)c.push(...le(t,l));for(let t of e.overlays)c.push(...I(t,l));return`<svg class="section" viewBox="0 0 ${s(r)} ${s(i)}" role="img" aria-label="${F(e.name)} section at y = ${e.cutY.toFixed(2)} mm" xmlns="http://www.w3.org/2000/svg">${c.join(``)}</svg>`}function le(e,{X:t,Z:n,n:r}){let[i,a,o,s]=e.axis===`x`?[t(e.from),n(e.at),t(e.to),n(e.at)]:[t(e.at),n(e.from),t(e.at),n(e.to)],c=(i+o)/2,l=(a+s)/2;return[`<line class="sec-dim" x1="${r(i)}" y1="${r(a)}" x2="${r(o)}" y2="${r(s)}" />`,e.axis===`x`?`<text class="sec-lbl" x="${r(c)}" y="${r(l-3)}" text-anchor="middle">${F(e.label)}</text>`:`<text class="sec-lbl" x="${r(c)}" y="${r(l)}" text-anchor="middle" transform="rotate(-90 ${r(c)} ${r(l)})">${F(e.label)}</text>`]}function I(e,{X:t,Z:n,n:r,scale:i}){let a=[],o=e.diaMm??3;if(e.kind===`rod`){let s=e.heightMm??12;a.push(`<rect class="sec-rod" x="${r(t(e.xMm-o/2))}" y="${r(n(e.zMm+s))}" width="${r(o*i)}" height="${r(s*i)}" />`)}else e.kind===`phantom`&&a.push(`<circle class="sec-phantom" cx="${r(t(e.xMm))}" cy="${r(n(e.zMm))}" r="${r(o/2*i)}" />`);return e.label&&a.push(`<text class="sec-lbl sec-lbl-note" x="${r(t(e.xMm))}" y="${r(n(e.zMm)-6)}" text-anchor="middle">${F(e.label)}</text>`),a}function L(e,t,n){return ce(N(e,t),n)}function R(e){let t=g(e);if(!t)throw Error(`design note references a preset the Lab does not ship: ${e}`);let n=o(t.source);if(!n.brick3d)throw Error(`${e} compiled to no brick`);return n.brick3d}var z={id:`multi-piece-export`,title:`Multi-piece export needs something to decompose`,eyebrow:`3d-models · docs/design/pieces/lego-lab-design.md · §10 P1`,date:`2026-07-31`,status:`decided`,decision:`<strong>Studs as ports.</strong> Decided 2026-07-31 — 3d-models
+</p>`}};function N(e,t){let n=e*e-t*t;return n>0?Math.sqrt(n):0}function re(e,t){let n=t-e.y,r=N(e.outerDiaMm/2,n);if(r===0)return[];if(e.kind===`pin`)return[{x0:e.x-r,x1:e.x+r,what:`pin`}];let i=N(l/2,n);return i===0?[{x0:e.x-r,x1:e.x+r,what:`tube`}]:[{x0:e.x-r,x1:e.x-i,what:`tube`},{x0:e.x+i,x1:e.x+r,what:`tube`}]}function ie(e,n={}){let{w:r,ox:o,oy:s}=f(e.cols,e.rows,e.origin),c=e.solution.anchors,l=n.cutY??c[0]?.y??s,u=t(e.fit),d=o-r/2,p=o+r/2,m=[{x0:d,x1:d+u,what:`wall`},...c.flatMap(e=>re(e,l)),{x0:p-u,x1:p,what:`wall`}].sort((e,t)=>e.x0-t.x0),h=a(e,e.solution),{studSpans:g,ghosts:_}=ae(e,h,l),v=[{z0:0,z1:e.engageMm,role:`cavity`,spans:m},{z0:e.engageMm,z1:e.heightMm,role:`ceiling`,spans:[{x0:d,x1:p,what:`ceiling`}]}];return(g.length>0||_.length>0)&&v.push({z0:e.heightMm,z1:e.heightMm+i,role:`stud`,spans:g.sort((e,t)=>e.x0-t.x0)}),{name:e.name,cutY:l,extent:{x0:d,x1:p,z0:0,z1:e.heightMm+(h.length>0?i:0)},bands:v,ghosts:_,dims:n.dims===!1?[]:oe(e,d,p,r),overlays:n.overlays??[],notes:se(e,l)}}function ae(e,t,n){let r=d(e.fit)/2,a=[],o=[];for(let s of t){let t=N(r,n-s.y);t>0?a.push({x0:s.x-t,x1:s.x+t,what:`stud`}):o.push({x0:s.x-r,x1:s.x+r,z0:e.heightMm,z1:e.heightMm+i,what:`stud behind the cut`})}return{studSpans:a,ghosts:o}}function oe(e,t,n,r){let i=e.solution.anchors.find(e=>e.kind===`tube`);return[{axis:`x`,from:t,to:n,at:-2.4,label:`${r.toFixed(1)} mm`},{axis:`z`,from:0,to:e.heightMm,at:n+2.4,label:`${e.heightMm.toFixed(1)} mm`},{axis:`z`,from:0,to:e.engageMm,at:t-2.4,label:`engage ${e.engageMm.toFixed(1)}`},{axis:`z`,from:e.engageMm,to:e.heightMm,at:t-6.4,label:`ceiling ${e.ceilingMm.toFixed(1)}`},...i?[{axis:`x`,from:i.x-i.outerDiaMm/2,to:i.x+i.outerDiaMm/2,at:e.engageMm+2,label:`⌀${i.outerDiaMm.toFixed(3)}`}]:[]]}function se(e,t){let n=[`Section at y = ${t.toFixed(2)} mm through ${e.name}, drawn from the compiled brick.`];return e.clutch!==`none`&&e.fit.ribMm>0&&n.push(`Clutch ribs (${e.fit.ribMm} mm × ${e.fit.ribArcMm} mm arc) sit off this plane and are not drawn.`),n.push(...e.notes),n}var P=10;function F(e){return e.replace(/&/g,`&amp;`).replace(/</g,`&lt;`).replace(/>/g,`&gt;`)}function ce(e,t=8){let{extent:n}=e,r=(n.x1-n.x0+2*P)*t,i=(n.z1-n.z0+2*P)*t,a=e=>(e-n.x0+P)*t,o=e=>(n.z1-e+P)*t,s=e=>Number(e.toFixed(2)).toString(),c=[];for(let n of e.ghosts)c.push(`<rect class="sec-ghost" x="${s(a(n.x0))}" y="${s(o(n.z1))}" width="${s((n.x1-n.x0)*t)}" height="${s((n.z1-n.z0)*t)}"><title>${F(n.what)}</title></rect>`);for(let n of e.bands)for(let e of n.spans)c.push(`<rect class="sec-solid sec-${e.what}" x="${s(a(e.x0))}" y="${s(o(n.z1))}" width="${s((e.x1-e.x0)*t)}" height="${s((n.z1-n.z0)*t)}" data-what="${e.what}" data-x-mm="${s((e.x0+e.x1)/2)}"><title>${F(e.what)}</title></rect>`);c.push(`<line class="sec-bed" x1="${s(a(n.x0-P/2))}" y1="${s(o(0))}" x2="${s(a(n.x1+P/2))}" y2="${s(o(0))}" />`);let l={X:a,Z:o,n:s,scale:t};for(let t of e.dims)c.push(...le(t,l));for(let t of e.overlays)c.push(...I(t,l));return`<svg class="section" viewBox="0 0 ${s(r)} ${s(i)}" role="img" aria-label="${F(e.name)} section at y = ${e.cutY.toFixed(2)} mm" xmlns="http://www.w3.org/2000/svg">${c.join(``)}</svg>`}function le(e,{X:t,Z:n,n:r}){let[i,a,o,s]=e.axis===`x`?[t(e.from),n(e.at),t(e.to),n(e.at)]:[t(e.at),n(e.from),t(e.at),n(e.to)],c=(i+o)/2,l=(a+s)/2;return[`<line class="sec-dim" x1="${r(i)}" y1="${r(a)}" x2="${r(o)}" y2="${r(s)}" />`,e.axis===`x`?`<text class="sec-lbl" x="${r(c)}" y="${r(l-3)}" text-anchor="middle">${F(e.label)}</text>`:`<text class="sec-lbl" x="${r(c)}" y="${r(l)}" text-anchor="middle" transform="rotate(-90 ${r(c)} ${r(l)})">${F(e.label)}</text>`]}function I(e,{X:t,Z:n,n:r,scale:i}){let a=[],o=e.diaMm??3;if(e.kind===`rod`){let s=e.heightMm??12;a.push(`<rect class="sec-rod" x="${r(t(e.xMm-o/2))}" y="${r(n(e.zMm+s))}" width="${r(o*i)}" height="${r(s*i)}" />`)}else e.kind===`phantom`&&a.push(`<circle class="sec-phantom" cx="${r(t(e.xMm))}" cy="${r(n(e.zMm))}" r="${r(o/2*i)}" />`);return e.label&&a.push(`<text class="sec-lbl sec-lbl-note" x="${r(t(e.xMm))}" y="${r(n(e.zMm)-6)}" text-anchor="middle">${F(e.label)}</text>`),a}function L(e,t,n){return ce(ie(e,t),n)}function R(e){let t=p(e);if(!t)throw Error(`design note references a preset the Lab does not ship: ${e}`);let n=r(t.source);if(!n.brick3d)throw Error(`${e} compiled to no brick`);return n.brick3d}var z={id:`multi-piece-export`,title:`Multi-piece export needs something to decompose`,eyebrow:`3d-models · docs/design/pieces/lego-lab-design.md · §10 P1`,date:`2026-07-31`,status:`decided`,decision:`<strong>Studs as ports.</strong> Decided 2026-07-31 — 3d-models
     <code>docs/working-model/decisions-log.md</code> D-006. The deciding fact is on the drawings below: the two
     sections in that option contain no line the kernel does not already emit, so it names geometry
     the mesh already has rather than adding any. <em>Refuse the phantom</em> stays correct but
@@ -309,12 +314,12 @@ import"./modulepreload-polyfill-EeOZK34R.js";/* empty css               */import
     settles where the ceiling actually sits.`,standfirst:`P1 lists <strong>multi-piece export</strong> for the Lego Lab. Nothing in the Lego
     catalogue currently decomposes into separately-printed parts, and §1's non-goals rule out the
     joint that normally would. Below: the defect found while scoping it, then the three ways
-    forward, every section drawn from a compiled brick at the same scale.`,render(){let t=R(`classic-brick`),n=t.solution.anchors[0],r=t.solution.engaged[0],i=L(t,{overlays:[{kind:`rod`,xMm:0,zMm:t.heightMm+6,diaMm:3,heightMm:10},{kind:`phantom`,xMm:0,zMm:t.engageMm+t.ceilingMm/2,diaMm:3.15,label:`declared ⌀3.15 — not cut`}]}),a=L(t,{cutY:n.y,dims:!1},6),o=L(t,{cutY:r.y,dims:!1},6),s=L(t,{dims:!1,overlays:[{kind:`phantom`,xMm:0,zMm:t.engageMm+t.ceilingMm/2,diaMm:3.15,label:`material that would be removed`}]}),c=t.solution.anchors[0]?.outerDiaMm.toFixed(3)??`n/a`;return`
+    forward, every section drawn from a compiled brick at the same scale.`,render(){let e=R(`classic-brick`),t=e.solution.anchors[0],n=e.solution.engaged[0],r=L(e,{overlays:[{kind:`rod`,xMm:0,zMm:e.heightMm+6,diaMm:3,heightMm:10},{kind:`phantom`,xMm:0,zMm:e.engageMm+e.ceilingMm/2,diaMm:3.15,label:`declared ⌀3.15 — not cut`}]}),i=L(e,{cutY:t.y,dims:!1},6),a=L(e,{cutY:n.y,dims:!1},6),o=L(e,{dims:!1,overlays:[{kind:`phantom`,xMm:0,zMm:e.engageMm+e.ceilingMm/2,diaMm:3.15,label:`material that would be removed`}]}),s=e.solution.anchors[0]?.outerDiaMm.toFixed(3)??`n/a`;return`
 <section class="panel defect stack">
   <h2>What is true today: a socket the checker validates and the mesh does not have</h2>
 
   <div class="split">
-    ${e({svg:i,caption:`Section through <code>ClassicBrick</code> at the anchor row. Everything drawn solid is
+    ${D({svg:r,caption:`Section through <code>ClassicBrick</code> at the anchor row. Everything drawn solid is
         in the exported mesh; the dashed circle and the rod above it are not.`,from:`patterns/Lego/Classic-Brick.bkr`,overlaid:`the ⌀3.15 socket and the arriving rod — neither is geometry the kernel emits`})}
 
     <div class="stack">
@@ -394,7 +399,7 @@ import"./modulepreload-polyfill-EeOZK34R.js";/* empty css               */import
       <div class="opt-taken">Taken — D-006</div>
     </div>
 
-    ${e({svg:`${a}${o}`,caption:`The same brick cut twice: above, through the anchor row — the ⌀${c} mm tubes that
+    ${D({svg:`${i}${a}`,caption:`The same brick cut twice: above, through the anchor row — the ⌀${s} mm tubes that
         receive. Below, through a stud row — the studs they receive. Both are already in the mesh.`,from:`patterns/Lego/Classic-Brick.bkr, at two cut planes`})}
 
     <div>
@@ -436,7 +441,7 @@ import"./modulepreload-polyfill-EeOZK34R.js";/* empty css               */import
       <h2>Cut the socket, amend the non-goal</h2>
     </div>
 
-    ${e({svg:s,caption:`The bore would be cut through the ceiling and the shell wall — through material this
+    ${D({svg:o,caption:`The bore would be cut through the ceiling and the shell wall — through material this
         section shows is load-bearing, between two tubes the anchor solver placed.`,from:`patterns/Lego/Classic-Brick.bkr`,overlaid:`the bore — this is the geometry the option would add, not geometry that exists`})}
 
     <div>
@@ -537,17 +542,17 @@ import"./modulepreload-polyfill-EeOZK34R.js";/* empty css               */import
   <code>bikar render … --format parts</code> against a scratch two-part assembly and
   <code>patterns/Lego/Classic-Brick.bkr</code> as the control; both binary STL headers report 3764
   triangles. Everything else on this page was compiled when you loaded it.
-</p>`}},B=8/2;function V(e,t,n){let r=p(n);return{axis:e,artMm:t,studs:n,plateMm:r,smallerMm:n>1?p(n-1):r,borderMm:(r-t)/2,nearerSmaller:n>1&&r-t>B+1e-9}}function H(e){if(!e.art?.footprintAuto)return;let t=V(`x`,e.art.bboxMm.width,e.cols),n=V(`y`,e.art.bboxMm.height,e.rows);return{name:e.name,x:t,y:n,rescale:Math.min(t.smallerMm/t.artMm,n.smallerMm/n.artMm)}}var U=4;function ue(e){return e.replace(/&/g,`&amp;`).replace(/</g,`&lt;`).replace(/>/g,`&gt;`)}function de(e,t=5){let n=e.x.plateMm/2,r=e.y.plateMm/2,i=(e.x.plateMm+2*U)*t,a=(e.y.plateMm+2*U)*t,o=e=>(e+n+U)*t,s=e=>(r+U-e)*t,c=e=>Number(e.toFixed(2)).toString(),l=(e,t)=>`M ${c(o(-e/2))} ${c(s(t/2))} H ${c(o(e/2))} V ${c(s(-t/2))} H ${c(o(-e/2))} Z`,u=(e,n,r)=>`<rect class="${e}" x="${c(o(-n/2))}" y="${c(s(r/2))}" width="${c(n*t)}" height="${c(r*t)}" />`,d=[`<path class="brd-dead" fill-rule="evenodd" d="${l(e.x.plateMm,e.y.plateMm)} ${l(e.x.artMm,e.y.artMm)}" />`,u(`brd-plate`,e.x.plateMm,e.y.plateMm),u(`brd-art`,e.x.artMm,e.y.artMm),u(`brd-smaller`,e.x.smallerMm,e.y.smallerMm)];for(let t of[e.x,e.y]){let r=t.axis===`x`,i=r?s(-e.y.plateMm/2+t.borderMm/2):o(-n+t.borderMm/2);d.push(r?`<text class="brd-lbl" x="${c(o(0))}" y="${c(i+3)}" text-anchor="middle">${t.borderMm.toFixed(2)} mm dead</text>`:`<text class="brd-lbl" x="${c(i)}" y="${c(s(0))}" text-anchor="middle" transform="rotate(-90 ${c(i)} ${c(s(0))})">${t.borderMm.toFixed(2)} mm dead</text>`)}let f=`${e.name}: art ${e.x.artMm.toFixed(2)} by ${e.y.artMm.toFixed(2)} mm on a ${e.x.studs} by ${e.y.studs} stud plate`;return`<svg class="border-plan" viewBox="0 0 ${c(i)} ${c(a)}" role="img" aria-label="${ue(f)}" xmlns="http://www.w3.org/2000/svg">${d.join(``)}</svg>`}function fe(e,t){let n=H(e);return n?de(n,t):``}function W(e){let t=i(e.fit),n=p(e.cols)/2,a=p(e.rows)/2,o={x:e.origin.col*8,y:e.origin.row*8};return{name:e.name,plate:{halfW:n,halfH:a},cavity:{halfW:n-t,halfH:a-t},origin:o,shellWallMm:t,anchors:e.solution.anchors.map(e=>({kind:e.kind,x:e.x,y:e.y,rMm:e.outerDiaMm/2,boreRMm:e.kind===`tube`?f/2:void 0})),span:r(e.solution,e.cols,e.rows,e.fit,e.origin),droppedAnchors:e.solution.droppedAnchors,droppedForRelief:e.solution.droppedForRelief}}var G=5;function pe(e){return e.replace(/&/g,`&amp;`).replace(/</g,`&lt;`).replace(/>/g,`&gt;`)}function me(e,t=5){let{plate:n,origin:r}=e,i=(2*n.halfW+2*G)*t,a=(2*n.halfH+2*G)*t,o=e=>(e-r.x+n.halfW+G)*t,s=e=>(n.halfH+G-(e-r.y))*t,c=e=>Number(e.toFixed(2)).toString(),l=(e,n,i)=>`<rect class="${e}" x="${c(o(r.x-n))}" y="${c(s(r.y+i))}" width="${c(2*n*t)}" height="${c(2*i*t)}" />`,u=[l(`cav-plate`,n.halfW,n.halfH),l(`cav-room`,e.cavity.halfW,e.cavity.halfH)];for(let n of e.anchors)u.push(`<circle class="cav-anchor cav-${n.kind}" cx="${c(o(n.x))}" cy="${c(s(n.y))}" r="${c(n.rMm*t)}"><title>${n.kind} at ${n.x.toFixed(2)}, ${n.y.toFixed(2)}</title></circle>`),n.boreRMm!==void 0&&u.push(`<circle class="cav-bore" cx="${c(o(n.x))}" cy="${c(s(n.y))}" r="${c(n.boreRMm*t)}" />`);let{diameterMm:d,centre:f}=e.span;d>0&&u.push(`<circle class="cav-span" cx="${c(o(f.x))}" cy="${c(s(f.y))}" r="${c(d/2*t)}" />`,`<line class="cav-span-dim" x1="${c(o(f.x-d/2))}" y1="${c(s(f.y))}" x2="${c(o(f.x+d/2))}" y2="${c(s(f.y))}" />`,`<text class="cav-lbl" x="${c(o(f.x))}" y="${c(s(f.y)-4)}" text-anchor="middle">${d.toFixed(2)} mm</text>`);let p=`${e.name} underside, largest unsupported run ${d.toFixed(2)} mm across`;return`<svg class="cavity-plan" viewBox="0 0 ${c(i)} ${c(a)}" role="img" aria-label="${pe(p)}" xmlns="http://www.w3.org/2000/svg">${u.join(``)}</svg>`}function he(e){let{droppedAnchors:t,droppedForRelief:n}=e;return t+n===0?`Every anchor candidate survived, so this is the diagonal pocket between four anti-studs — the widest gap an 8 mm pitch can leave.`:`${[t>0?`${t} candidate${t===1?``:`s`} the body test rejected`:``,n>0?`${n} rejected by a relief pocket`:``].filter(Boolean).join(` and `)} — the run is open where those anchors are not.`}function K(e,t){return me(W(e),t)}var q=new Map;function J(e){let t=q.get(e);if(t)return t;let n=g(e);if(!n)throw Error(`design note references a preset the Lab does not ship: ${e}`);let r=o(n.source);if(!r.brick3d)throw Error(`${e} compiled to no brick`);return q.set(e,r.brick3d),r.brick3d}var Y=[`classic-brick`,`pin-rail`,`grid-field-tile`,`rational-repeat-tile`,`edge-stud-tile`,`star-brick`,`hex-field-tile`];function X(){return Y.filter(e=>W(J(e)).span.diameterMm>u).length}function ge(e){let t=J(e),r=W(t),i=r.droppedAnchors+r.droppedForRelief,a=r.span.diameterMm>u;return`<tr>
-    <th scope="row">${n(t.name)}</th>
+</p>`}},B=8/2;function V(e,t,n){let r=u(n);return{axis:e,artMm:t,studs:n,plateMm:r,smallerMm:n>1?u(n-1):r,borderMm:(r-t)/2,nearerSmaller:n>1&&r-t>B+1e-9}}function H(e){if(!e.art?.footprintAuto)return;let t=V(`x`,e.art.bboxMm.width,e.cols),n=V(`y`,e.art.bboxMm.height,e.rows);return{name:e.name,x:t,y:n,rescale:Math.min(t.smallerMm/t.artMm,n.smallerMm/n.artMm)}}var U=4;function ue(e){return e.replace(/&/g,`&amp;`).replace(/</g,`&lt;`).replace(/>/g,`&gt;`)}function de(e,t=5){let n=e.x.plateMm/2,r=e.y.plateMm/2,i=(e.x.plateMm+2*U)*t,a=(e.y.plateMm+2*U)*t,o=e=>(e+n+U)*t,s=e=>(r+U-e)*t,c=e=>Number(e.toFixed(2)).toString(),l=(e,t)=>`M ${c(o(-e/2))} ${c(s(t/2))} H ${c(o(e/2))} V ${c(s(-t/2))} H ${c(o(-e/2))} Z`,u=(e,n,r)=>`<rect class="${e}" x="${c(o(-n/2))}" y="${c(s(r/2))}" width="${c(n*t)}" height="${c(r*t)}" />`,d=[`<path class="brd-dead" fill-rule="evenodd" d="${l(e.x.plateMm,e.y.plateMm)} ${l(e.x.artMm,e.y.artMm)}" />`,u(`brd-plate`,e.x.plateMm,e.y.plateMm),u(`brd-art`,e.x.artMm,e.y.artMm),u(`brd-smaller`,e.x.smallerMm,e.y.smallerMm)];for(let t of[e.x,e.y]){let r=t.axis===`x`,i=r?s(-e.y.plateMm/2+t.borderMm/2):o(-n+t.borderMm/2);d.push(r?`<text class="brd-lbl" x="${c(o(0))}" y="${c(i+3)}" text-anchor="middle">${t.borderMm.toFixed(2)} mm dead</text>`:`<text class="brd-lbl" x="${c(i)}" y="${c(s(0))}" text-anchor="middle" transform="rotate(-90 ${c(i)} ${c(s(0))})">${t.borderMm.toFixed(2)} mm dead</text>`)}let f=`${e.name}: art ${e.x.artMm.toFixed(2)} by ${e.y.artMm.toFixed(2)} mm on a ${e.x.studs} by ${e.y.studs} stud plate`;return`<svg class="border-plan" viewBox="0 0 ${c(i)} ${c(a)}" role="img" aria-label="${ue(f)}" xmlns="http://www.w3.org/2000/svg">${d.join(``)}</svg>`}function fe(e,t){let n=H(e);return n?de(n,t):``}function W(n){let r=t(n.fit),i=u(n.cols)/2,a=u(n.rows)/2,o={x:n.origin.col*8,y:n.origin.row*8};return{name:n.name,plate:{halfW:i,halfH:a},cavity:{halfW:i-r,halfH:a-r},origin:o,shellWallMm:r,anchors:n.solution.anchors.map(e=>({kind:e.kind,x:e.x,y:e.y,rMm:e.outerDiaMm/2,boreRMm:e.kind===`tube`?l/2:void 0})),span:e(n.solution,n.cols,n.rows,n.fit,n.origin),droppedAnchors:n.solution.droppedAnchors,droppedForRelief:n.solution.droppedForRelief}}var G=5;function pe(e){return e.replace(/&/g,`&amp;`).replace(/</g,`&lt;`).replace(/>/g,`&gt;`)}function me(e,t=5){let{plate:n,origin:r}=e,i=(2*n.halfW+2*G)*t,a=(2*n.halfH+2*G)*t,o=e=>(e-r.x+n.halfW+G)*t,s=e=>(n.halfH+G-(e-r.y))*t,c=e=>Number(e.toFixed(2)).toString(),l=(e,n,i)=>`<rect class="${e}" x="${c(o(r.x-n))}" y="${c(s(r.y+i))}" width="${c(2*n*t)}" height="${c(2*i*t)}" />`,u=[l(`cav-plate`,n.halfW,n.halfH),l(`cav-room`,e.cavity.halfW,e.cavity.halfH)];for(let n of e.anchors)u.push(`<circle class="cav-anchor cav-${n.kind}" cx="${c(o(n.x))}" cy="${c(s(n.y))}" r="${c(n.rMm*t)}"><title>${n.kind} at ${n.x.toFixed(2)}, ${n.y.toFixed(2)}</title></circle>`),n.boreRMm!==void 0&&u.push(`<circle class="cav-bore" cx="${c(o(n.x))}" cy="${c(s(n.y))}" r="${c(n.boreRMm*t)}" />`);let{diameterMm:d,centre:f}=e.span;d>0&&u.push(`<circle class="cav-span" cx="${c(o(f.x))}" cy="${c(s(f.y))}" r="${c(d/2*t)}" />`,`<line class="cav-span-dim" x1="${c(o(f.x-d/2))}" y1="${c(s(f.y))}" x2="${c(o(f.x+d/2))}" y2="${c(s(f.y))}" />`,`<text class="cav-lbl" x="${c(o(f.x))}" y="${c(s(f.y)-4)}" text-anchor="middle">${d.toFixed(2)} mm</text>`);let p=`${e.name} underside, largest unsupported run ${d.toFixed(2)} mm across`;return`<svg class="cavity-plan" viewBox="0 0 ${c(i)} ${c(a)}" role="img" aria-label="${pe(p)}" xmlns="http://www.w3.org/2000/svg">${u.join(``)}</svg>`}function he(e){let{droppedAnchors:t,droppedForRelief:n}=e;return t+n===0?`Every anchor candidate survived, so this is the diagonal pocket between four anti-studs — the widest gap an 8 mm pitch can leave.`:`${[t>0?`${t} candidate${t===1?``:`s`} the body test rejected`:``,n>0?`${n} rejected by a relief pocket`:``].filter(Boolean).join(` and `)} — the run is open where those anchors are not.`}function K(e,t){return me(W(e),t)}var q=new Map;function J(e){let t=q.get(e);if(t)return t;let n=p(e);if(!n)throw Error(`design note references a preset the Lab does not ship: ${e}`);let i=r(n.source);if(!i.brick3d)throw Error(`${e} compiled to no brick`);return q.set(e,i.brick3d),i.brick3d}var Y=[`classic-brick`,`pin-rail`,`grid-field-tile`,`rational-repeat-tile`,`edge-stud-tile`,`star-brick`,`hex-field-tile`];function X(){return Y.filter(e=>W(J(e)).span.diameterMm>s).length}function ge(e){let t=J(e),n=W(t),r=n.droppedAnchors+n.droppedForRelief,i=n.span.diameterMm>s;return`<tr>
+    <th scope="row">${E(t.name)}</th>
     <td>${t.cols} × ${t.rows}</td>
-    <td class="${a?`no`:`yes`}">${r.span.diameterMm.toFixed(2)}</td>
-    <td>${r.anchors.length}</td>
-    <td>${i===0?`0`:`${i} (${r.droppedForRelief>0?`relief`:`body`})`}</td>
-  </tr>`}function Z(e,t){return`<code>${n(e.name)}</code> from underneath — the plate, the cavity inside the shell
+    <td class="${i?`no`:`yes`}">${n.span.diameterMm.toFixed(2)}</td>
+    <td>${n.anchors.length}</td>
+    <td>${r===0?`0`:`${r} (${n.droppedForRelief>0?`relief`:`body`})`}</td>
+  </tr>`}function Z(e,t){return`<code>${E(e.name)}</code> from underneath — the plate, the cavity inside the shell
     wall, and every anchor the solver kept. The unfilled circle is the largest empty disc in that
     room: <b>${e.span.diameterMm.toFixed(2)} mm</b>, centred at
     ${e.span.centre.x.toFixed(2)}, ${e.span.centre.y.toFixed(2)} mm.
-    ${n(he(e))} ${t}`}function Q(e,t){let r=e.warnings.filter(e=>e.startsWith(t));return r.length===0?`<div class="flag ok">No ${t} on this brick.</div>`:r.map(e=>`<div class="flag">${n(e)}</div>`).join(``)}var $=[{id:`span-and-border`,title:`The span is not the plate, and the border is not always waste`,eyebrow:`3d-models · docs/design/pieces/lego-lab-design.md · §11 Q4, Q5`,date:`2026-08-01`,status:`decided`,decision:`<strong>V12 warns on the measured run; V13 warns only under
+    ${E(he(e))} ${t}`}function Q(e,t){let n=e.warnings.filter(e=>e.startsWith(t));return n.length===0?`<div class="flag ok">No ${t} on this brick.</div>`:n.map(e=>`<div class="flag">${E(e)}</div>`).join(``)}var $=[{id:`span-and-border`,title:`The span is not the plate, and the border is not always waste`,eyebrow:`3d-models · docs/design/pieces/lego-lab-design.md · §11 Q4, Q5`,date:`2026-08-01`,status:`decided`,decision:`<strong>V12 warns on the measured run; V13 warns only under
     <code>footprint auto</code>.</strong> Resolved 2026-07-31 in
     <code>docs/design/pieces/lego-lab-design.md</code> §11 Q4 and Q5 — there is no <code>D-NNN</code> entry
     because neither was an option between designs; each was a question whose answer a measurement
@@ -562,7 +567,7 @@ import"./modulepreload-polyfill-EeOZK34R.js";/* empty css               */import
     ceiling</strong>; Q5 wanted to know whether <code>footprint auto</code> should round a pattern up
     to the next stud or refuse it. Below: what the presets actually measured, why the first question
     was asking about the wrong dimension, and the one preset V13 is entitled to speak about — every
-    plan compiled from <code>patterns/Lego/</code> when you opened this page.`,render(){let t=J(`pin-rail`),r=J(`grid-field-tile`),i=J(`hex-field-tile`),a=J(`star-brick`),o=J(`edge-stud-tile`),s=W(t),c=W(r),l=W(i),d=W(a),f=K(t,5),p=K(r,5),m=K(i,5),h=fe(a,6),g=H(o),_=u.toFixed(0);return`
+    plan compiled from <code>patterns/Lego/</code> when you opened this page.`,render(){let e=J(`pin-rail`),t=J(`grid-field-tile`),n=J(`hex-field-tile`),r=J(`star-brick`),i=J(`edge-stud-tile`),a=W(e),o=W(t),c=W(n),l=W(r),u=K(e,5),d=K(t,5),f=K(n,5),p=fe(r,6),m=H(i),h=s.toFixed(0);return`
 <section class="panel defect stack">
   <h2>What Q4 asked for, and the sentence that turned out to be wrong</h2>
 
@@ -576,16 +581,16 @@ import"./modulepreload-polyfill-EeOZK34R.js";/* empty css               */import
   </p>
 
   <div class="pair">
-    ${e({svg:f,caption:Z(s,`A 1×8 rail, and the only preset that takes <b>pins</b> rather than tubes.`),from:`patterns/Lego/Pin-Rail.bkr`})}
+    ${D({svg:u,caption:Z(a,`A 1×8 rail, and the only preset that takes <b>pins</b> rather than tubes.`),from:`patterns/Lego/Pin-Rail.bkr`})}
 
-    ${e({svg:p,caption:Z(c,`A 5×5 plate with ${c.anchors.length} anchors — twenty-five times the area of the rail
+    ${D({svg:d,caption:Z(o,`A 5×5 plate with ${o.anchors.length} anchors — twenty-five times the area of the rail
         above, drawn at the same scale, and the same gap.`),from:`patterns/Lego/Grid-Field-Tile.bkr`})}
   </div>
 
   <div class="measure">
-    <div>Pin-Rail, 1 × 8 <b>${s.span.diameterMm.toFixed(2)} mm</b></div>
-    <div>Grid-Field-Tile, 5 × 5 <b>${c.span.diameterMm.toFixed(2)} mm</b></div>
-    <div>difference <b>${Math.abs(s.span.diameterMm-c.span.diameterMm).toFixed(2)} mm</b></div>
+    <div>Pin-Rail, 1 × 8 <b>${a.span.diameterMm.toFixed(2)} mm</b></div>
+    <div>Grid-Field-Tile, 5 × 5 <b>${o.span.diameterMm.toFixed(2)} mm</b></div>
+    <div>difference <b>${Math.abs(a.span.diameterMm-o.span.diameterMm).toFixed(2)} mm</b></div>
   </div>
 
   <p class="cost">
@@ -600,17 +605,17 @@ import"./modulepreload-polyfill-EeOZK34R.js";/* empty css               */import
   <h2>What does move it: an anchor that was never placed</h2>
 
   <p>
-    Every preset that spans more than ${_} mm has the same thing wrong with it, and it is not
+    Every preset that spans more than ${h} mm has the same thing wrong with it, and it is not
     its size. Relief art sitting on a lattice crossing rejects the anchor candidate underneath it,
     and the ceiling has to cross the hole where that anchor would have stood.
   </p>
 
-  ${e({svg:m,caption:Z(l,`The worst case in the catalogue, and a 6×6 — the same footprint as
-      <code>Edge-Stud-Tile</code>, which spans ${W(o).span.diameterMm.toFixed(2)} mm.
-      What separates them is ${l.droppedForRelief} rejected candidates against
-      ${W(o).droppedForRelief}.`),from:`patterns/Lego/Hex-Field-Tile.bkr`})}
+  ${D({svg:f,caption:Z(c,`The worst case in the catalogue, and a 6×6 — the same footprint as
+      <code>Edge-Stud-Tile</code>, which spans ${W(i).span.diameterMm.toFixed(2)} mm.
+      What separates them is ${c.droppedForRelief} rejected candidates against
+      ${W(i).droppedForRelief}.`),from:`patterns/Lego/Hex-Field-Tile.bkr`})}
 
-  ${Q(i,`V12`)}
+  ${Q(n,`V12`)}
 
   <p>
     The figure cannot show the ten candidates that were dropped, and deliberately does not try:
@@ -651,7 +656,7 @@ import"./modulepreload-polyfill-EeOZK34R.js";/* empty css               */import
   <h2>Why it warns and never refuses</h2>
 
   <p>
-    The ${_} mm ceiling is <code>BRIDGE_SPAN_MAX_MM</code>, bet <code>CAL-BRG-01</code>. It is
+    The ${h} mm ceiling is <code>BRIDGE_SPAN_MAX_MM</code>, bet <code>CAL-BRG-01</code>. It is
     Bambu Studio's shipped <code>max_bridge_length</code> — the number a stock slicer stops trusting
     at, rather than the number filament stops spanning at. The appendix that credits it also records
     community bridging at 20–80 mm on tuned machines, so a refusal would be this project asserting a
@@ -660,7 +665,7 @@ import"./modulepreload-polyfill-EeOZK34R.js";/* empty css               */import
   </p>
 
   <div class="measure">
-    <div>ceiling, transcribed <b>${_} mm</b></div>
+    <div>ceiling, transcribed <b>${h} mm</b></div>
     <div>presets over it <b>${X()} of ${Y.length}</b></div>
     <div>presets refused <b>0</b></div>
   </div>
@@ -677,27 +682,27 @@ import"./modulepreload-polyfill-EeOZK34R.js";/* empty css               */import
     harder half wrong, which was <strong>which sources V13 may speak about</strong>.
   </p>
 
-  ${e({svg:h,caption:`<code>${n(a.name)}</code>'s rounding, in plan. The filled ring is the dead border:
+  ${D({svg:p,caption:`<code>${E(r.name)}</code>'s rounding, in plan. The filled ring is the dead border:
       plate minus art. The dashed rectangle is <code>footprintMm(n−1)</code>, the plate one stud
       smaller — drawn <em>inside</em> the art because that is the whole finding. It does not contain
       the art, and V13 fires because of how nearly it does.`,from:`patterns/Lego/Star-Brick.bkr`})}
 
-  ${Q(a,`V13`)}
+  ${Q(r,`V13`)}
 
   <p>
     Run ungated, the first draft of V13 fired on five of the seven presets. Every one of those five
     <em>declares</em> its footprint, and in each the border is a design choice a bounding box cannot
-    see — <code>Edge-Stud-Tile</code>'s ${g===void 0?`wide margin`:`margin`} is its
+    see — <code>Edge-Stud-Tile</code>'s ${m===void 0?`wide margin`:`margin`} is its
     perimeter stud ring, and its own header says so. A typed <code>footprint 6 x 6</code> is a
     decision; <code>auto</code> is an arithmetic result. V13 judges the arithmetic, which is the only
     thing it is entitled to judge, so it is gated on <code>auto</code> and
-    <code>${n(a.name)}</code> is the single preset in the catalogue it can speak about.
+    <code>${E(r.name)}</code> is the single preset in the catalogue it can speak about.
   </p>
 
   <div class="flag ok">
     This page draws no border figure for <code>Edge-Stud-Tile</code>, and the omission is the gate
     rather than an oversight: <code>borderPlanModel</code> returns
-    <code>${g===void 0?`undefined`:`a model`}</code> for it. A figure drawn for a
+    <code>${m===void 0?`undefined`:`a model`}</code> for it. A figure drawn for a
     typed footprint would be arguing that the author's plate is wasteful — the claim the first draft
     made about five presets and had to withdraw.
   </div>
@@ -726,7 +731,7 @@ import"./modulepreload-polyfill-EeOZK34R.js";/* empty css               */import
       <tbody>
         <tr>
           <th scope="row">Fires on</th>
-          <td>measured run &gt; ${_} mm</td>
+          <td>measured run &gt; ${h} mm</td>
           <td>border &gt; half a stud pitch, per axis</td>
         </tr>
         <tr>
@@ -737,7 +742,7 @@ import"./modulepreload-polyfill-EeOZK34R.js";/* empty css               */import
         <tr>
           <th scope="row">Shipped presets it flags</th>
           <td>${X()}</td>
-          <td>${a.warnings.filter(e=>e.startsWith(`V13`)).length} (both axes of one preset)</td>
+          <td>${r.warnings.filter(e=>e.startsWith(`V13`)).length} (both axes of one preset)</td>
         </tr>
         <tr>
           <th scope="row">Number behind it</th>
@@ -766,8 +771,8 @@ import"./modulepreload-polyfill-EeOZK34R.js";/* empty css               */import
   <code>BrickResultProvenance.art</code> carries the bounding box and the <code>auto</code> flag that
   V13 was handed. <code>design-cavity.test.ts</code> holds the drawn diameter to
   <code>BrickProvenance.supportSpanMm</code>, so a picture that disagreed with the message beside it
-  would fail the suite rather than ship. ${d.anchors.length===1?`<code>${n(a.name)}</code> is worth one last look: a 4×4 plate with a single surviving anchor, which is what ${d.droppedForRelief} relief drops out of nine candidates leaves.`:``}
-</p>`}},A,z];function _e(e){return $.find(t=>t.id===e)}function ve(){return`<header class="masthead">
+  would fail the suite rather than ship. ${l.anchors.length===1?`<code>${E(r.name)}</code> is worth one last look: a 4×4 plate with a single surviving anchor, which is what ${l.droppedForRelief} relief drops out of nine candidates leaves.`:``}
+</p>`}},M,z];function _e(e){return $.find(t=>t.id===e)}function ve(){return`<header class="masthead">
       <div class="eyebrow">bikar · design notes</div>
       <h1>Decisions, with the geometry attached</h1>
       <p class="standfirst">
@@ -775,29 +780,28 @@ import"./modulepreload-polyfill-EeOZK34R.js";/* empty css               */import
         drawing on these pages is compiled from a script in <code>patterns/</code> when you open it,
         so a figure and the part it describes cannot quietly disagree.
       </p>
-      <p><a href="./studio.html">&larr; Studio</a> · <a href="./lego.html">Lego Lab</a> · <a href="./lab.html">Orb Lab</a></p>
     </header>
     <section class="notes-list">${$.map(e=>`<a class="panel note-card" href="?n=${encodeURIComponent(e.id)}">
-      <div class="eyebrow">${n(e.date)} · ${n(e.status)}</div>
-      <h2>${n(e.title)}</h2>
+      <div class="eyebrow">${E(e.date)} · ${E(e.status)}</div>
+      <h2>${E(e.title)}</h2>
       <p>${e.standfirst}</p>
     </a>`).join(``)}</section>`}function ye(e){return`<header class="masthead">
-      <div class="eyebrow">${n(e.eyebrow)}</div>
-      <h1>${n(e.title)}</h1>
+      <div class="eyebrow">${E(e.eyebrow)}</div>
+      <h1>${E(e.title)}</h1>
       <p class="standfirst">${e.standfirst}</p>
-      <div class="provenance">${n(e.date)} · ${t(e)}</div>
+      <div class="provenance">${E(e.date)} · ${T(e)}</div>
       <p><a href="./design.html">&larr; All design notes</a></p>
     </header>
     ${e.render()}`}function be(e){return`<header class="masthead">
       <div class="eyebrow">bikar · design notes</div>
-      <h1>No note called “${n(e)}”</h1>
+      <h1>No note called “${E(e)}”</h1>
       <p class="standfirst">
         Notes are never deleted, so a link that does not resolve is a link that was never right.
       </p>
       <p><a href="./design.html">&larr; All design notes</a></p>
-    </header>`}function xe(e,t){let r=t instanceof Error?t.message:String(t);return`<header class="masthead">
-      <div class="eyebrow">${n(e.eyebrow)}</div>
-      <h1>${n(e.title)}</h1>
+    </header>`}function xe(e,t){let n=t instanceof Error?t.message:String(t);return`<header class="masthead">
+      <div class="eyebrow">${E(e.eyebrow)}</div>
+      <h1>${E(e.title)}</h1>
     </header>
     <section class="panel defect stack">
       <h2>This note no longer compiles</h2>
@@ -805,6 +809,6 @@ import"./modulepreload-polyfill-EeOZK34R.js";/* empty css               */import
         Its figures are sections of parts this repo builds, and one of them will not build. The note
         is stale, not the page — read the error, then fix the note or the kernel.
       </p>
-      <pre>${n(r)}</pre>
+      <pre>${E(n)}</pre>
       <p><a href="./design.html">&larr; All design notes</a></p>
     </section>`}function Se(){let e=document.querySelector(`#app`);if(!e)return;let t=new URLSearchParams(window.location.search).get(`n`);if(!t){e.innerHTML=ve(),document.title=`Design notes — bikar`;return}let n=_e(t);if(!n){e.innerHTML=be(t);return}document.title=`${n.title} — bikar design notes`;try{e.innerHTML=ye(n)}catch(t){e.innerHTML=xe(n,t)}}Se();

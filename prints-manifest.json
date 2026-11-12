@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated": "2026-11-08",
+  "generated": "2026-11-12",
   "source": "docs/prints/<run>/index.md, via build/prints_manifest.py",
   "records": [
     {
@@ -8535,6 +8535,155 @@
       },
       "dir": "docs/prints/2026-11-05-hexfit-2",
       "url": "https://github.com/omars-lab/3d-models/blob/master/docs/prints/2026-11-05-hexfit-2"
+    },
+    {
+      "run": "2026-11-07-dragon-egg-1",
+      "plate": "dragon-egg-1 — one small dragon egg, in silk blue",
+      "plate_3mf": "dragon-egg-1.plate.3mf",
+      "status": "printed",
+      "outcome": "no-reading",
+      "profile": {
+        "machine": "Bambu Lab X2D",
+        "material": "PLA Silk, blue #0047BB",
+        "spool": null,
+        "nozzle_mm": 0.4,
+        "nozzle_type": null,
+        "nozzle_side": "left",
+        "layer_mm": 0.2,
+        "slicer_profile": "0.20mm Standard @BBL X2D + Bambu PLA Silk @BBL X2D 0.4 nozzle",
+        "ambient_c": null,
+        "instrument": "none; looked at by hand, answered on the hub"
+      },
+      "pins": {
+        "bikar_ref": "fe6b109e1bdb22fbfe6dbe2863b5dfa4e5b49a0a",
+        "self_ref": null
+      },
+      "objects": [
+        {
+          "entry": "c1",
+          "source": "3d-models:.bambu/imports/mini-twisted-dragon-egg.stl",
+          "source_sha256": "661d14f093b960560e4399648eb4cd4f5584b0a1490dcdac9a7f49533a1fde73",
+          "params": {},
+          "count": 1,
+          "iteration": "it-c32f8973ea83",
+          "verdict": "keep",
+          "notes": [
+            "A downloaded egg mesh (not ours), standing up, no supports",
+            "Row 1, Omar: Clean (the scale tips came out clean; no words added)"
+          ]
+        }
+      ],
+      "photos": [],
+      "readings": [],
+      "feedback": {
+        "lesson": "The Mini Twisted Dragon Egg printed clean standing up with no supports, though the slicer warned about scale tips starting in the air. 0.4 mm nozzle, 0.20 mm layers, Bambu PLA Silk",
+        "decisions": [],
+        "symptom": "Omar: Clean",
+        "cause": "The scale tips overhang little enough to bridge from the layer below; the slicer's warning counts any tip that starts in the air",
+        "next": "Print more eggs as they are: the same file, standing up, no supports"
+      },
+      "dir": "docs/prints/2026-11-07-dragon-egg-1",
+      "url": "https://github.com/omars-lab/3d-models/blob/master/docs/prints/2026-11-07-dragon-egg-1"
+    },
+    {
+      "run": "2026-11-08-fidget-star-1",
+      "plate": "fidget-star-1 — the 8-point fidget star on a plate of its own",
+      "plate_3mf": "fidget-star-1.plate.3mf",
+      "status": "printed",
+      "outcome": "no-reading",
+      "profile": {
+        "machine": "Bambu Lab X2D",
+        "material": "PLA Basic, green #00AE42",
+        "spool": null,
+        "nozzle_mm": 0.4,
+        "nozzle_type": null,
+        "nozzle_side": "left",
+        "layer_mm": 0.2,
+        "slicer_profile": "0.20mm Standard @BBL X2D + Bambu PLA Basic @BBL X2D 0.4 nozzle",
+        "ambient_c": null,
+        "instrument": "none; turned by hand, answered on the hub"
+      },
+      "pins": {
+        "bikar_ref": "fe6b109e1bdb22fbfe6dbe2863b5dfa4e5b49a0a",
+        "self_ref": null
+      },
+      "objects": [
+        {
+          "entry": "c1",
+          "source": "3d-models:.bambu/imports/8pt-fidget-star.stl",
+          "source_sha256": "4ac4e45a65a3336d6098bf1e02a83f63e8cc7b57c87cc8e02f8c971f87c21340",
+          "params": {},
+          "count": 1,
+          "iteration": "it-e613b42a4157",
+          "verdict": "keep",
+          "notes": [
+            "A downloaded print-in-place star (not ours), rings nested, no supports",
+            "Row 1, Omar: Free (the rings turn freely; no words added)",
+            "Not said: whether it moved more easily than toys-1's star, which printed with supports on"
+          ]
+        }
+      ],
+      "photos": [],
+      "readings": [],
+      "feedback": {
+        "lesson": "The 8-point fidget star's nested rings turned freely when printed with no supports; toys-1 printed it with supports on for the whole plate. 0.4 mm nozzle, 0.20 mm layers, Bambu PLA Basic",
+        "decisions": [],
+        "symptom": "Omar: Free",
+        "cause": "With supports off, nothing is printed in the gaps between the rings, so they stay apart",
+        "next": "Print more stars like this, with no supports"
+      },
+      "dir": "docs/prints/2026-11-08-fidget-star-1",
+      "url": "https://github.com/omars-lab/3d-models/blob/master/docs/prints/2026-11-08-fidget-star-1"
+    },
+    {
+      "run": "2026-11-09-ball-1",
+      "plate": "ball-1 — the ping-pong ball alone, supports from the bed only",
+      "plate_3mf": "ball-1.plate.3mf",
+      "status": "printed",
+      "outcome": "no-reading",
+      "profile": {
+        "machine": "Bambu Lab X2D",
+        "material": "PLA Basic, green #00AE42",
+        "spool": null,
+        "nozzle_mm": 0.4,
+        "nozzle_type": null,
+        "nozzle_side": "left",
+        "layer_mm": 0.2,
+        "slicer_profile": "Naqsh supports bed only 0.20mm @BBL X2D + Bambu PLA Basic @BBL X2D 0.4 nozzle",
+        "ambient_c": null,
+        "instrument": "none; looked at by hand, answered on the hub"
+      },
+      "pins": {
+        "bikar_ref": "fe6b109e1bdb22fbfe6dbe2863b5dfa4e5b49a0a",
+        "self_ref": null
+      },
+      "objects": [
+        {
+          "entry": "c1",
+          "source": "3d-models:.bambu/imports/airless-ping-pong-ball-20.stl",
+          "source_sha256": "0b9ba2089962c7e678d6f1c8b568afa3c96c9e9d74a160de06cc43083eff0102",
+          "params": {},
+          "count": 1,
+          "iteration": "it-3efd211b452a",
+          "verdict": "keep",
+          "notes": [
+            "A downloaded ball mesh (not ours), supports only from the bed and a support blocker in the hollow",
+            "Row 1, Omar: \"Ball good.\"",
+            "Read, not said: whether the hollow came out clear and the nubs in the lower windows picked out was not answered one by one; \"good\" is taken as print it like this again"
+          ]
+        }
+      ],
+      "photos": [],
+      "readings": [],
+      "feedback": {
+        "lesson": "A support blocker inside the ball's hollow, with supports only from the bed, gave a ball Omar called good; toys-1's ball had support grown inside it. 0.4 mm nozzle, 0.20 mm layers, Bambu PLA Basic",
+        "decisions": [],
+        "symptom": "Omar: \"Ball good.\"",
+        "cause": "The blocker keeps the slicer from growing support in the hollow; the bed-only setting keeps support off the shell's upper windows",
+        "next": "Print the ball like this again: the same recipe, the blocker and the bed-only supports. No change to try"
+      },
+      "dir": "docs/prints/2026-11-09-ball-1",
+      "url": "https://github.com/omars-lab/3d-models/blob/master/docs/prints/2026-11-09-ball-1"
     }
   ]
 }

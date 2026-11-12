@@ -13,14 +13,66 @@
       name="description"
       content="Decision notes for the bikar geometry engine — every figure a section of a brick compiled in your browser, not a drawing of one."
     />
-    <script type="module" crossorigin src="./assets/design-KkdaS7Bl.js"></script>
-    <link rel="modulepreload" crossorigin href="./assets/modulepreload-polyfill-EeOZK34R.js">
-    <link rel="modulepreload" crossorigin href="./assets/dist-BWi0tRDZ.js">
-    <link rel="modulepreload" crossorigin href="./assets/lego-scripts-B4R47PHO.js">
-    <link rel="modulepreload" crossorigin href="./assets/note-BIxa1zJp.js">
+    <script type="module" crossorigin src="./assets/design-DUv6JF7e.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/modulepreload-polyfill-DfS4ul37.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-mJ8zgY4k.js">
+    <link rel="modulepreload" crossorigin href="./assets/lego-scripts-DK7iV77v.js">
     <link rel="stylesheet" crossorigin href="./assets/tokens-xp9FOvCX.css">
   </head>
   <body>
+    <!-- The one top bar, filled in at build time (src/topbar.ts). -->
+    <style>/*
+ * The app's one set of style tokens: the gold-on-ink look the Studio has had
+ * since the start, and the one-app design's mockup uses (3d-models
+ * `docs/design/process/users-and-surfaces-design.md`, D-130).
+ *
+ * Every name starts `--app-`, because the pages these tokens reach already use
+ * the short names for other things: the Studio's `--ink` is the page
+ * background, while `design/tokens.css` uses `--ink` for body text. A shared
+ * `--ink` would turn one of them unreadable.
+ *
+ * Read by: the top bar on every page (inlined with it at build time, so it is
+ * there on a page whose own stylesheet never loads), and `packages/web`'s
+ * `styles.css`, whose own names point here instead of carrying a second copy.
+ * The Lab pages' own palettes (`style.css`, `design/tokens.css`) move onto
+ * these names page by page; until a page has, it keeps its own look under the
+ * shared bar.
+ */
+:root {
+  --app-gold: #c9a84c;
+  --app-gold-light: #e8c97a;
+  --app-gold-dim: #6a5520;
+  --app-blue: #4a9eff;
+  --app-blue-dim: #1e4a80;
+  --app-ink: #080810;
+  --app-ink-mid: #0f0f1a;
+  --app-ink-panel: #0c0c18;
+  --app-text: #ede8d8;
+  --app-text-dim: #7a7468;
+  --app-green: #4caf7a;
+  --app-red: #f85149;
+  --app-mono: 'Fira Code', 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+  --app-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.appbar{display:flex;flex-wrap:wrap;align-items:center;gap:2px 4px;padding:6px 16px;
+  background:var(--app-ink);border-bottom:1px solid var(--app-gold-dim);
+  font:500 14px/1.2 var(--app-sans);position:relative;z-index:50}
+.appbar a,.appbar summary{color:var(--app-text);text-decoration:none;padding:6px 10px;border-radius:6px;
+  cursor:pointer;white-space:nowrap}
+.appbar a:hover,.appbar summary:hover{background:var(--app-ink-panel);color:var(--app-gold-light)}
+.appbar a:focus-visible,.appbar summary:focus-visible{outline:2px solid var(--app-gold);outline-offset:1px}
+.appbar .appbar-brand{color:var(--app-gold);font-weight:700;letter-spacing:.02em;margin-right:8px}
+.appbar .appbar-here,.appbar [aria-current="page"]{color:var(--app-gold)}
+.appbar-menu{position:relative}
+.appbar-menu summary{list-style:none}
+.appbar-menu summary::-webkit-details-marker{display:none}
+.appbar-menu summary::after{content:" ▾";color:var(--app-text-dim)}
+.appbar-menu ul{position:absolute;left:0;top:100%;margin:4px 0 0;padding:6px;list-style:none;min-width:200px;
+  background:var(--app-ink-panel);border:1px solid var(--app-gold-dim);border-radius:8px;
+  box-shadow:0 8px 24px rgba(0,0,0,.45)}
+.appbar-menu ul a{display:block}
+</style><nav class="appbar" aria-label="Site"><a href="./index.html" class="appbar-brand">Gallery</a><details class="appbar-menu"><summary class="appbar-here">Design</summary><ul><li><a href="./lab.html">Orb Lab</a></li><li><a href="./lego.html">Lego Lab</a></li><li><a href="./breakdown.html">Orb breakdown</a></li><li><a href="./design.html" aria-current="page">Design notes</a></li><li><a href="./coaster.html">Coaster Lab</a></li></ul></details><a href="./prints.html">Print</a></nav>
     <div class="sheet" id="app"></div>
   </body>
 </html>
