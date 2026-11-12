@@ -35,7 +35,9 @@ The backlogs stay where they are; this file points at them:
   session in chat, as he did on 2026-11-11.
 - Every print send needs Omar's own yes. Never send printer commands from this session; plates
   belong to plates-and-feedback.
-- A gallery deploy, or any other public change, needs Omar's yes in this session's chat.
+- A gallery deploy (`make deploy`) has Omar's standing yes since 2026-11-12: deploy as needed
+  ([`docs/raid.md`](../../docs/raid.md) row D1). Any other public change still needs his yes in
+  this session's chat.
 
 ## Where things stand, and what each item waits on
 
@@ -142,9 +144,10 @@ The backlogs stay where they are; this file points at them:
     one set of colors, Coaster Lab and print history in the Studio, the Lab's own `studio.html`
     index removed) shipped 2026-11-12 in bikar #372, checked in a browser at 1280 and 390 px. Its
     paired 3d-models change (`LAB_PAGES`, the site graph, the gallery link, the hub entry, the map
-    pointers) shipped in the PR that carries this line. The gallery picks the bar up at the next
-    `make deploy`, which needs Omar's yes. Next is slice 2, "Waiting on you" on the bar. Slices 2 to 5 change pages the
-    plates-and-feedback session uses daily, so that session hears through its plan file first.
+    pointers) shipped in the PR that carries this line. The gallery deploy of 2026-11-12
+    (gh-pages 9788141d) put the bar live and removed `studio.html`. Next is slice 2, "Waiting on
+    you" on the bar. Slices 2 to 5 change pages the plates-and-feedback session uses daily; the
+    heads-up is in its plan file (section 6, #1029), and slice 2 waits on its reply there.
     The launcher repo (`~/Workspace/git/hubs`) is not to be touched.
 
 ### Open pull requests from this session
