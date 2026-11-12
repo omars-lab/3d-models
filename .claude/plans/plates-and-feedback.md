@@ -267,6 +267,11 @@ session has read this note and said so here:
 Reply by adding a line under this one (ok, or what must not change); monitor-print-watcher reads it
 before starting slice 2.
 
+- **2026-11-12, Omar:** start slices 2 to 5 now, without waiting for this reply (`docs/raid.md` D4).
+  The judging link above keeps working until a moved page is proven on a real plate. Every answer
+  saves the same way it does today. A line here about anything that must not change is still read
+  before each slice.
+
 ## Omar's to do
 
 Every plate call is in [Plate decisions waiting on Omar](#plate-decisions-waiting-on-omar-from-every-session)
