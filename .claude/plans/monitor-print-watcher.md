@@ -138,11 +138,13 @@ The backlogs stay where they are; this file points at them:
     Print Hub's pages into bikar beside the editor and labs, with every answer given in the app.
     Step 0a (two broken links) is done in 3d-models #1017 and hub #37, both merged. Step 0b, the
     design doc, scored 13 of 13 for readability: `docs/design/process/users-and-surfaces-design.md`,
-    D-130, use case UC35, merged in 3d-models #1019. Step 1 (one page list, one top bar, Coaster
-    Lab and print history added) is next, in bikar. As of 2026-11-11 no bikar branch exists for it
-    yet: it was set aside for the cable spiral. Start it on a fresh branch off bikar main in
-    `bikar-else` (free now that #371 has merged). Its paired 3d-models change (`LAB_PAGES`, the map
-    pointer) branches off master. Slices 2 to 5 change pages the
+    D-130, use case UC35, merged in 3d-models #1019. Step 1 (slice 1: one page list, one top bar,
+    one set of colors, Coaster Lab and print history in the Studio, the Lab's own `studio.html`
+    index removed) was built on 2026-11-12 on bikar branch `one-app-page-list` in `bikar-else`,
+    checked in a browser at 1280 and 390 px. Its paired 3d-models change (branch `one-app-bar`:
+    `LAB_PAGES`, the site graph, the gallery link, the hub entry, the map pointers) waits for the
+    bikar PR to merge, so the gallery never vendors a build without `studio.html` while still
+    listing it. Next is slice 2, "Waiting on you" on the bar. Slices 2 to 5 change pages the
     plates-and-feedback session uses daily, so that session hears through its plan file first.
     The launcher repo (`~/Workspace/git/hubs`) is not to be touched.
 

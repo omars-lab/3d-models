@@ -34,18 +34,6 @@ hubs:
       host: github-pages
       deploy: make deploy
 
-  - id: 3d-models-studio
-    name: Studio
-    description: The index of every lab and notes page, who each is for and what you get from it.
-    visibility: public
-    use: published
-    fallback: local
-    local: { runner: 3d-models, path: /studio.html }
-    published:
-      url: https://blog.bytesofpurpose.com/3d-models/studio.html
-      host: github-pages
-      deploy: make deploy
-
   - id: 3d-models-orb-lab
     name: Orb Lab
     description: Turn the knobs on an Islamic geometric orb and download a design that prints.
