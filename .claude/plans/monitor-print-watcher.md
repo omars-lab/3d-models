@@ -140,11 +140,10 @@ The backlogs stay where they are; this file points at them:
     design doc, scored 13 of 13 for readability: `docs/design/process/users-and-surfaces-design.md`,
     D-130, use case UC35, merged in 3d-models #1019. Step 1 (slice 1: one page list, one top bar,
     one set of colors, Coaster Lab and print history in the Studio, the Lab's own `studio.html`
-    index removed) was built on 2026-11-12 on bikar branch `one-app-page-list` in `bikar-else`,
-    checked in a browser at 1280 and 390 px. Its paired 3d-models change (branch `one-app-bar`:
-    `LAB_PAGES`, the site graph, the gallery link, the hub entry, the map pointers) waits for the
-    bikar PR to merge, so the gallery never vendors a build without `studio.html` while still
-    listing it. Next is slice 2, "Waiting on you" on the bar. Slices 2 to 5 change pages the
+    index removed) shipped 2026-11-12 in bikar #372, checked in a browser at 1280 and 390 px. Its
+    paired 3d-models change (`LAB_PAGES`, the site graph, the gallery link, the hub entry, the map
+    pointers) shipped in the PR that carries this line. The gallery picks the bar up at the next
+    `make deploy`, which needs Omar's yes. Next is slice 2, "Waiting on you" on the bar. Slices 2 to 5 change pages the
     plates-and-feedback session uses daily, so that session hears through its plan file first.
     The launcher repo (`~/Workspace/git/hubs`) is not to be touched.
 
