@@ -7,11 +7,11 @@ Generated from [`site-graph.json`](site-graph.json) by
 flowchart LR
   subgraph gallery["gallery — blog.bytesofpurpose.com"]
     G_index["index.html"]
-    G_studio["studio.html"]
     G_lab["lab.html"]
     G_lego["lego.html"]
     G_design["design.html"]
     G_breakdown["breakdown.html"]
+    G_coaster["coaster.html"]
     G_readme["README.md"]
     G_prints["prints.html"]
     G_status["status.html"]
@@ -23,7 +23,6 @@ flowchart LR
     S_sessions["sessions.html"]
     S_404["404.html"]
   end
-  G_index --> G_studio
   G_index --> G_lab
   G_index --> G_lego
   G_index -.-> G_lab
@@ -31,40 +30,57 @@ flowchart LR
   G_readme -->|"blog.bytesofpurpose.com"| G_index
   G_readme -->|"omars-lab.github.io"| G_index
   G_index -->|"sign-in wall"| S_index
-  G_lab --> G_studio
-  G_lab --> G_index
-  G_lego --> G_studio
-  G_lego --> G_index
   G_lab -.->|"sign-in wall"| S_editor
   G_lego -.->|"sign-in wall"| S_editor
-  G_studio -.-> G_lab
-  G_studio -.-> G_lego
-  G_studio -.-> G_design
-  G_design -.-> G_studio
-  G_design -.-> G_lab
-  G_design -.-> G_lego
   S_index --> S_editor
   S_index --> S_sessions
   S_index -->|"blog.bytesofpurpose.com"| G_index
-  S_index -->|"blog.bytesofpurpose.com"| G_lab
-  S_index -->|"blog.bytesofpurpose.com"| G_lego
-  S_editor --> S_index
-  S_sessions --> S_index
   S_404 --> S_index
   S_404 --> S_editor
   S_404 --> S_sessions
   G_index -.-> G_breakdown
-  G_lab --> G_breakdown
-  G_studio -.-> G_breakdown
-  G_breakdown -.-> G_index
-  G_breakdown -.-> G_lab
-  G_breakdown -.-> G_studio
   G_index --> G_prints
   G_index --> G_status
-  G_studio -.-> G_prints
-  G_prints -.-> G_studio
-  G_prints -.-> G_breakdown
-  G_prints -.-> G_lab
+  G_index --> G_coaster
+  G_coaster -.->|"sign-in wall"| S_editor
+  G_lab --> G_index
+  G_lab --> G_lego
+  G_lab --> G_breakdown
+  G_lab --> G_design
+  G_lab --> G_prints
+  G_lab --> G_coaster
+  G_lego --> G_index
+  G_lego --> G_lab
+  G_lego --> G_breakdown
+  G_lego --> G_design
+  G_lego --> G_prints
+  G_lego --> G_coaster
+  G_breakdown --> G_index
+  G_breakdown --> G_lab
+  G_breakdown --> G_lego
+  G_breakdown --> G_design
+  G_breakdown --> G_prints
+  G_breakdown --> G_coaster
+  G_design --> G_index
+  G_design --> G_lab
+  G_design --> G_lego
+  G_design --> G_breakdown
+  G_design --> G_prints
+  G_design --> G_coaster
+  G_prints --> G_index
+  G_prints --> G_lab
+  G_prints --> G_lego
+  G_prints --> G_breakdown
+  G_prints --> G_design
+  G_prints --> G_coaster
+  G_coaster --> G_index
+  G_coaster --> G_lab
+  G_coaster --> G_lego
+  G_coaster --> G_breakdown
+  G_coaster --> G_design
+  G_coaster --> G_prints
+  S_editor --> S_index
+  S_sessions --> S_index
 ```
 
 Solid arrows are links present in the markup. Dotted arrows are computed by
@@ -108,6 +124,8 @@ Two more measurements from the same survey, which is checked in at
   because `studio-main.ts` builds its hrefs by concatenation and no URL literal
   survives minification. `design.html` is reachable only through that path, so
   every crawler run missed it entirely.
+  (Since D-130, 2026-11-12, `studio.html` is gone and every Lab page carries a
+  top bar written into the HTML at build time, so these links are plain anchors.)
 - The URL-scraping proof-of-concept produced a false positive on its first run:
   a URL inside an HTML comment. That is the failure class
   [`design/process/issue-register-evaluation.md`](design/process/issue-register-evaluation.md) measured when it

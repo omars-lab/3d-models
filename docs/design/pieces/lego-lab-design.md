@@ -1694,6 +1694,11 @@ which `lego-presets.test.ts` independently pins to `Star-Brick.bkr` alone.
 
 ## 13. The studio index and the page catalogue
 
+> **Superseded 2026-11-12 (D-130).** `studio.html` is gone. Every Lab and Studio page now carries one
+> top bar built from the same catalogue, so the index page had nothing left to do. The catalogue and
+> its two checks below still stand; the bar reads them. See
+> [the one-app design](../process/users-and-surfaces-design.md).
+
 Four pages is the point at which "which page do I want?" becomes a real question, and the honest
 answer is not a list of filenames — it is *who each page is for and what they walk away with*. That
 is the actor/use-case map's question, already answered, in

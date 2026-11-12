@@ -96,14 +96,6 @@
       "what": "the gallery index"
     },
     {
-      "id": "G.studio",
-      "surface": "gallery",
-      "file": "studio.html",
-      "vendored": true,
-      "inRepo": false,
-      "what": "bikar packages/lab site index"
-    },
-    {
       "id": "G.lab",
       "surface": "gallery",
       "file": "lab.html",
@@ -211,13 +203,6 @@
   "edges": [
     {
       "from": "G.index",
-      "to": "G.studio",
-      "at": "index.html:270",
-      "evidence": "href=\"studio.html\"",
-      "visibility": "static"
-    },
-    {
-      "from": "G.index",
       "to": "G.lab",
       "at": "index.html:306",
       "evidence": "href=\"lab.html\"",
@@ -286,35 +271,6 @@
     },
     {
       "from": "G.lab",
-      "to": "G.studio",
-      "at": "bikar packages/lab/lab.html:22",
-      "repo": "bikar",
-      "visibility": "static"
-    },
-    {
-      "from": "G.lab",
-      "to": "G.index",
-      "at": "bikar packages/lab/lab.html:23",
-      "repo": "bikar",
-      "visibility": "static",
-      "note": "./index.html does not exist in packages/lab — it resolves only after Makefile lab-vendor drops these four pages beside this repo's index.html"
-    },
-    {
-      "from": "G.lego",
-      "to": "G.studio",
-      "at": "bikar packages/lab/lego.html:23",
-      "repo": "bikar",
-      "visibility": "static"
-    },
-    {
-      "from": "G.lego",
-      "to": "G.index",
-      "at": "bikar packages/lab/lego.html:24",
-      "repo": "bikar",
-      "visibility": "static"
-    },
-    {
-      "from": "G.lab",
       "to": "S.editor",
       "at": "bikar packages/lab/src/editor.ts:22",
       "repo": "bikar",
@@ -349,99 +305,26 @@
       }
     },
     {
-      "from": "G.studio",
-      "to": "G.lab",
-      "at": "bikar packages/lab/src/studio-main.ts:56",
-      "repo": "bikar",
-      "visibility": "js-computed"
-    },
-    {
-      "from": "G.studio",
-      "to": "G.lego",
-      "at": "bikar packages/lab/src/studio-main.ts:56",
-      "repo": "bikar",
-      "visibility": "js-computed"
-    },
-    {
-      "from": "G.studio",
-      "to": "G.design",
-      "at": "bikar packages/lab/src/studio-main.ts:56",
-      "repo": "bikar",
-      "visibility": "js-computed",
-      "note": "href built by concatenation, so no URL literal survives minification — this is the only route to G.design and no crawler can see it"
-    },
-    {
-      "from": "G.design",
-      "to": "G.studio",
-      "at": "bikar packages/lab/src/design-main.ts:39",
-      "repo": "bikar",
-      "visibility": "js-computed"
-    },
-    {
-      "from": "G.design",
-      "to": "G.lab",
-      "at": "bikar packages/lab/src/design-main.ts:39",
-      "repo": "bikar",
-      "visibility": "js-computed"
-    },
-    {
-      "from": "G.design",
-      "to": "G.lego",
-      "at": "bikar packages/lab/src/design-main.ts:39",
-      "repo": "bikar",
-      "visibility": "js-computed"
-    },
-    {
       "from": "S.index",
       "to": "S.editor",
-      "at": "bikar packages/web/src/catalog.ts:91",
+      "at": "bikar packages/web/src/catalog.ts:216",
       "repo": "bikar",
       "visibility": "static"
     },
     {
       "from": "S.index",
       "to": "S.sessions",
-      "at": "bikar packages/web/src/catalog.ts:102",
+      "at": "bikar packages/web/src/catalog.ts:228",
       "repo": "bikar",
       "visibility": "static"
     },
     {
       "from": "S.index",
       "to": "G.index",
-      "at": "bikar packages/web/src/catalog.ts:110",
+      "at": "bikar packages/web/src/catalog.ts:297",
       "repo": "bikar",
       "visibility": "static",
       "viaHost": "blog.bytesofpurpose.com"
-    },
-    {
-      "from": "S.index",
-      "to": "G.lab",
-      "at": "bikar packages/web/src/catalog.ts:119",
-      "repo": "bikar",
-      "visibility": "static",
-      "viaHost": "blog.bytesofpurpose.com"
-    },
-    {
-      "from": "S.index",
-      "to": "G.lego",
-      "at": "bikar packages/web/src/catalog.ts:128",
-      "repo": "bikar",
-      "visibility": "static",
-      "viaHost": "blog.bytesofpurpose.com"
-    },
-    {
-      "from": "S.editor",
-      "to": "S.index",
-      "at": "bikar packages/web/editor.html:26",
-      "repo": "bikar",
-      "visibility": "static"
-    },
-    {
-      "from": "S.sessions",
-      "to": "S.index",
-      "at": "bikar packages/web/sessions.html:161",
-      "repo": "bikar",
-      "visibility": "static"
     },
     {
       "from": "S.404",
@@ -473,43 +356,6 @@
       "note": "14 per-orb deep links, breakdown.html?orb=<id>, rendered by the card renderer; every id in ORBS has a directory under build/orb-breakdown, and an id that does not lands on the page's own not-found state"
     },
     {
-      "from": "G.lab",
-      "to": "G.breakdown",
-      "at": "bikar packages/lab/lab.html:28",
-      "repo": "bikar",
-      "visibility": "static"
-    },
-    {
-      "from": "G.studio",
-      "to": "G.breakdown",
-      "at": "bikar packages/lab/src/studio-main.ts:56",
-      "repo": "bikar",
-      "visibility": "js-computed",
-      "note": "the same pageCard renderer that emits the other page links; breakdown.html is in the catalogue, so it is listed without a second edit"
-    },
-    {
-      "from": "G.breakdown",
-      "to": "G.index",
-      "at": "bikar packages/lab/src/breakdown-main.ts:214",
-      "repo": "bikar",
-      "visibility": "js-computed",
-      "note": "./index.html does not exist in packages/lab — it resolves only after Makefile lab-vendor drops the pages beside this repo's index.html, same as the lab.html edge above"
-    },
-    {
-      "from": "G.breakdown",
-      "to": "G.lab",
-      "at": "bikar packages/lab/src/breakdown-main.ts:218",
-      "repo": "bikar",
-      "visibility": "js-computed"
-    },
-    {
-      "from": "G.breakdown",
-      "to": "G.studio",
-      "at": "bikar packages/lab/src/breakdown-main.ts:220",
-      "repo": "bikar",
-      "visibility": "js-computed"
-    },
-    {
       "from": "G.index",
       "to": "G.prints",
       "at": "index.html:271",
@@ -531,49 +377,6 @@
       "visibility": "static"
     },
     {
-      "from": "G.studio",
-      "to": "G.prints",
-      "at": "bikar packages/lab/src/studio-main.ts:56",
-      "repo": "bikar",
-      "visibility": "js-computed"
-    },
-    {
-      "from": "G.prints",
-      "to": "G.studio",
-      "at": "bikar packages/lab/src/prints-main.ts:121",
-      "repo": "bikar",
-      "visibility": "js-computed"
-    },
-    {
-      "from": "G.prints",
-      "to": "G.breakdown",
-      "at": "bikar packages/lab/src/prints-main.ts:123",
-      "repo": "bikar",
-      "visibility": "js-computed"
-    },
-    {
-      "from": "G.prints",
-      "to": "G.lab",
-      "at": "bikar packages/lab/src/prints-main.ts:125",
-      "repo": "bikar",
-      "visibility": "js-computed"
-    },
-    {
-      "from": "G.coaster",
-      "to": "G.studio",
-      "at": "bikar packages/lab/coaster.html:27",
-      "repo": "bikar",
-      "visibility": "static"
-    },
-    {
-      "from": "G.coaster",
-      "to": "G.index",
-      "at": "bikar packages/lab/coaster.html:28",
-      "repo": "bikar",
-      "visibility": "static",
-      "note": "./index.html does not exist in packages/lab — it resolves only after Makefile lab-vendor drops these pages beside this repo's index.html, same as the lab.html and breakdown.html edges"
-    },
-    {
       "from": "G.coaster",
       "to": "S.editor",
       "at": "bikar packages/lab/src/editor.ts:22",
@@ -592,12 +395,278 @@
       }
     },
     {
-      "from": "G.studio",
-      "to": "G.coaster",
-      "at": "bikar packages/lab/src/studio-main.ts:56",
+      "from": "G.lab",
+      "to": "G.index",
+      "at": "bikar packages/lab/src/topbar.ts:50",
       "repo": "bikar",
-      "visibility": "js-computed",
-      "note": "the same pageCard renderer that emits the other page links; coaster.html is in the catalogue (status 'live'), so it is listed without a second edit"
+      "visibility": "static",
+      "note": "the shared top bar, written into the page at build time (D-130); the public build lists only public, live Lab pages, linked relatively, so ./index.html resolves only after Makefile lab-vendor drops the pages beside this repo's index.html"
+    },
+    {
+      "from": "G.lab",
+      "to": "G.lego",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.lab",
+      "to": "G.breakdown",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.lab",
+      "to": "G.design",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.lab",
+      "to": "G.prints",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.lab",
+      "to": "G.coaster",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.lego",
+      "to": "G.index",
+      "at": "bikar packages/lab/src/topbar.ts:50",
+      "repo": "bikar",
+      "visibility": "static",
+      "note": "the shared top bar, written into the page at build time (D-130); the public build lists only public, live Lab pages, linked relatively, so ./index.html resolves only after Makefile lab-vendor drops the pages beside this repo's index.html"
+    },
+    {
+      "from": "G.lego",
+      "to": "G.lab",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.lego",
+      "to": "G.breakdown",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.lego",
+      "to": "G.design",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.lego",
+      "to": "G.prints",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.lego",
+      "to": "G.coaster",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.breakdown",
+      "to": "G.index",
+      "at": "bikar packages/lab/src/topbar.ts:50",
+      "repo": "bikar",
+      "visibility": "static",
+      "note": "the shared top bar, written into the page at build time (D-130); the public build lists only public, live Lab pages, linked relatively, so ./index.html resolves only after Makefile lab-vendor drops the pages beside this repo's index.html"
+    },
+    {
+      "from": "G.breakdown",
+      "to": "G.lab",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.breakdown",
+      "to": "G.lego",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.breakdown",
+      "to": "G.design",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.breakdown",
+      "to": "G.prints",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.breakdown",
+      "to": "G.coaster",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.design",
+      "to": "G.index",
+      "at": "bikar packages/lab/src/topbar.ts:50",
+      "repo": "bikar",
+      "visibility": "static",
+      "note": "the shared top bar, written into the page at build time (D-130); the public build lists only public, live Lab pages, linked relatively, so ./index.html resolves only after Makefile lab-vendor drops the pages beside this repo's index.html"
+    },
+    {
+      "from": "G.design",
+      "to": "G.lab",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.design",
+      "to": "G.lego",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.design",
+      "to": "G.breakdown",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.design",
+      "to": "G.prints",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.design",
+      "to": "G.coaster",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.prints",
+      "to": "G.index",
+      "at": "bikar packages/lab/src/topbar.ts:50",
+      "repo": "bikar",
+      "visibility": "static",
+      "note": "the shared top bar, written into the page at build time (D-130); the public build lists only public, live Lab pages, linked relatively, so ./index.html resolves only after Makefile lab-vendor drops the pages beside this repo's index.html"
+    },
+    {
+      "from": "G.prints",
+      "to": "G.lab",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.prints",
+      "to": "G.lego",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.prints",
+      "to": "G.breakdown",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.prints",
+      "to": "G.design",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.prints",
+      "to": "G.coaster",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.coaster",
+      "to": "G.index",
+      "at": "bikar packages/lab/src/topbar.ts:50",
+      "repo": "bikar",
+      "visibility": "static",
+      "note": "the shared top bar, written into the page at build time (D-130); the public build lists only public, live Lab pages, linked relatively, so ./index.html resolves only after Makefile lab-vendor drops the pages beside this repo's index.html"
+    },
+    {
+      "from": "G.coaster",
+      "to": "G.lab",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.coaster",
+      "to": "G.lego",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.coaster",
+      "to": "G.breakdown",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.coaster",
+      "to": "G.design",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "G.coaster",
+      "to": "G.prints",
+      "at": "bikar packages/lab/src/topbar.ts:51",
+      "repo": "bikar",
+      "visibility": "static"
+    },
+    {
+      "from": "S.editor",
+      "to": "S.index",
+      "at": "bikar packages/web/src/catalog.ts:377",
+      "repo": "bikar",
+      "visibility": "static",
+      "note": "the Studio's top bar (studioBarLinks), Home as its brand (D-130)"
+    },
+    {
+      "from": "S.sessions",
+      "to": "S.index",
+      "at": "bikar packages/web/src/catalog.ts:377",
+      "repo": "bikar",
+      "visibility": "static",
+      "note": "the Studio's top bar (studioBarLinks), Home as its brand (D-130)"
     }
   ],
   "fragileIfProtected": {

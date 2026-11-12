@@ -477,8 +477,8 @@ pattern-sets: bikar-stamp
 # cannot read that one, so a page added there and not here vendors nothing and
 # `lab-smoke` never looks for it. Adding a page is two edits, in two repos, and
 # saying so is cheaper than a cross-repo check that would have to run a build.
-LAB_PAGES = studio.html lab.html lego.html design.html breakdown.html prints.html coaster.html
-# The subset that runs the compile worker. studio.html and design.html render
+LAB_PAGES = lab.html lego.html design.html breakdown.html prints.html coaster.html
+# The subset that runs the compile worker. design.html and prints.html render
 # from static data, so requiring a worker chunk of them would fail a page that
 # is working exactly as designed.
 # breakdown.html is here for its "Turn it yourself" handoff: the page plays
@@ -549,11 +549,11 @@ site:
 		|| echo "note: build/images/web/ missing — gallery images need 'make cookie-cutters orbs bricks web-images'"; \
 	( sleep 1; open "http://localhost:${SITE_PORT}/" ) & \
 	echo "gallery  http://localhost:${SITE_PORT}/"; \
-	echo "studio   http://localhost:${SITE_PORT}/studio.html"; \
 	echo "orb lab  http://localhost:${SITE_PORT}/lab.html"; \
 	echo "lego lab http://localhost:${SITE_PORT}/lego.html"; \
 	echo "notes    http://localhost:${SITE_PORT}/design.html"; \
 	echo "prints   http://localhost:${SITE_PORT}/prints.html"; \
+	echo "coaster  http://localhost:${SITE_PORT}/coaster.html"; \
 	$(PYTHON) -m http.server ${SITE_PORT} --directory ${ROOT_DIR}
 
 # Map of every user-facing experience and the target that starts it.
