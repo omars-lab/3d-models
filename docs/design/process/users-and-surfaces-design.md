@@ -911,5 +911,17 @@ through its plan file. Nothing here sends anything to the printer.
 | 5 | Design questions in the app | 3d-models, Print Hub, bikar | A new tool that lists open questions and writes an answer; question pages get one fixed shape (`## Call N: …` headings, tick lines, a notes line, and `status:` open or closed in the front matter); the request-feedback skill and its template; the CLAUDE.md line about pages "looked at in Obsidian" | The "open in Obsidian" steps | One real answer end to end on the spinner coaster page |
 | 6 | Launcher cards, back links | bikar, Print Hub, youtube, qiyas | Each repo's own `hub.yaml`; a link back from Learn and Check | Held for Omar's word: any card added or removed | The launcher's own check, per repo |
 
-**Who does what.** The monitor-print-watcher session writes slices 0a, 0b and 1. Each later slice
-is a pull request merged by the manager session.
+**Who does what.** The monitor-print-watcher session writes every slice and merges its own pull
+requests under Omar's standing yes. On 2026-11-12 Omar said to start slices 2 to 5 without waiting
+for the plates-and-feedback session's reply (`docs/raid.md` D4). Two limits came with it. The old
+judging link keeps working until a moved page is proven on a real plate. Every answer still saves
+through `after_print.py answer` and the `answers/` pull request.
+
+So slice 2 ships in two parts:
+
+- **2A** adds the new pages beside the old ones. bikar's served mode forwards `/api/print/*` to the
+  Print Hub, and the Print Hub answers at both old and new addresses.
+- **2B** comes after one real judging by Omar reaches its pull request through the new page. It
+  adds the redirects, the deletions and the caller changes.
+
+Slices 4 and 5 still wait on calls 2, 4 and 7 (D5 to D7), asked again with pictures first.
