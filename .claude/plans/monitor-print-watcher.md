@@ -149,7 +149,11 @@ The backlogs stay where they are; this file points at them:
     you" on the bar. Slices 2 to 5 change pages the plates-and-feedback session uses daily; the
     heads-up is in its plan file (section 6, #1029). On 2026-11-12 Omar said to start slices 2 to 5
     without waiting for that reply (`docs/raid.md` D4). Slice 2 ships as 2A first: new pages
-    beside the old ones, and the Print Hub answers at both addresses. Then 2B, after one real
+    beside the old ones. 2A's first bikar PR (branch `one-app-judge`) is the always-on app:
+    `make app-serve` on 127.0.0.1:7136, forwarding `/api/print/<x>` to the Print Hub as `/api/<x>`
+    so the hub needs no change, refusing callers not on this Mac, and a launch agent Omar loads
+    (`docs/raid.md` T1). Checked by serving the real build against a stand-in hub. 2A's second
+    PR is the Judge and Waiting pages. Then 2B, after one real
     judging reaches its PR through the new page: redirects, deletions, callers. Slices 4 and 5
     wait on calls 2, 4 and 7 (D5 to D7).
     The launcher repo (`~/Workspace/git/hubs`) is not to be touched.
