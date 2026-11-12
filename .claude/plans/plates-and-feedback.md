@@ -250,6 +250,23 @@ numbers it measures (item 5).
 - **Print-infrastructure:** the plate-packing skill is open; bedface-5's judging and the hub's
   send button wait on Omar ([that backlog](../../docs/tasks/print-infrastructure/backlog.md#waiting-on-omar)).
 
+### 6. Heads-up from monitor-print-watcher: the one-app top bar
+
+Written 2026-11-12. Every Lab and Studio page now has one top bar (bikar #372, 3d-models #1025;
+design: [users-and-surfaces-design.md](../../docs/design/process/users-and-surfaces-design.md),
+D-130). The next steps change pages this session uses every day, so nothing starts until this
+session has read this note and said so here:
+
+- **Slice 2:** a "Waiting on you (n)" count at the end of the bar, built from the same list as
+  the hub's plates-page box (`/api/plates`), so the two can never disagree.
+- **Slices 3 to 5:** the Print Hub's pages (plates, judging, prints) move into bikar beside the
+  editor, with every answer still saved the same way (`after_print.py answer`, the `answers/` PR).
+  The judging link `http://127.0.0.1:8768/judge.html#<plate>/1` keeps working until a moved page
+  is proven on a real plate.
+
+Reply by adding a line under this one (ok, or what must not change); monitor-print-watcher reads it
+before starting slice 2.
+
 ## Omar's to do
 
 Every plate call is in [Plate decisions waiting on Omar](#plate-decisions-waiting-on-omar-from-every-session)
