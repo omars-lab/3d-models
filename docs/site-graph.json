@@ -4,7 +4,7 @@
     "The link graph of everything this project publishes, and the exposure of every host",
     "it publishes on. Hand-maintained, checked by .claude/gates/site_graph.py.",
     "",
-    "WHY THIS FILE EXISTS. index.html:277 links the gallery to the studio, and both",
+    "WHY THIS FILE EXISTS. index.html:279 links the gallery to the studio, and both",
     "catalogues in bikar describe that as the reciprocal loop closing. It points at",
     "bikar.naqshcoffee.com, which is behind Cloudflare Access — so for every visitor but",
     "the owner it lands on a login wall, while the identical bytes sit public at",

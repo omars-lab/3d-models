@@ -613,7 +613,7 @@ deploy: validate-site-graph web-images lab prints-manifest status-manifest
 	git show-ref --verify --quiet refs/heads/${PAGES_BRANCH} \
 		|| { echo "branch ${PAGES_BRANCH} not found"; exit 1; }; \
 	git worktree add -f ${PAGES_WORKTREE} ${PAGES_BRANCH}; \
-	trap 'git worktree remove --force ${PAGES_WORKTREE} 2>/dev/null || true' EXIT; \
+	trap 'git worktree remove --force ${PAGES_WORKTREE} 2>/dev/null || true' EXIT; for p in ${RETIRED_PATHS}; do rm -rf "${PAGES_WORKTREE}/$$p"; done; \
 	for p in ${DEPLOY_PATHS}; do \
 		rm -rf "${PAGES_WORKTREE}/$$p"; \
 		mkdir -p "$$(dirname "${PAGES_WORKTREE}/$$p")"; \
@@ -1110,3 +1110,11 @@ validate-decision-evidence:
 	$(PYTHON) $(ROOT_DIR)/.claude/gates/decision_evidence.py
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/review-print/scripts/evidence_log.py --self-test
 	$(PYTHON) $(ROOT_DIR)/.claude/skills/review-print/scripts/evidence_log.py
+
+# Pages that left DEPLOY_PATHS but are still on gh-pages from an earlier deploy.
+# `deploy` only overwrites what DEPLOY_PATHS lists, so a page dropped from that
+# list would stay live, frozen at its last deploy; `deploy` deletes each name
+# here from the gh-pages worktree before it copies. Kept down here so adding a
+# name moves no line the use-case map pins. studio.html: the Lab's old page
+# list, gone since every Lab page carries the top bar (D-130).
+RETIRED_PATHS = studio.html
