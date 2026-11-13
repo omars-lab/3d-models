@@ -66,7 +66,10 @@ flowchart LR
 
 There is no user-facing page. The output is text: at session start it goes into the session, and
 tells Claude to ask Omar whether to fix the problem this session or not; at session end it stops
-the session once, with the count.
+the session once, with the count. Both ask or stop only for a broken page on a running site. A site
+that is simply not running gets one quiet line naming it: until the always-on Studio runs (bikar
+#374), the Studio is down on this Mac every session, and a question about it each time would be
+noise (changed 2026-11-13).
 
 ## 5. What it counts
 
