@@ -18,8 +18,12 @@ task list; these wait on Omar or come after them.
 - **Waits on Omar: merge bikar #374**, the always-on app, then run `make app-agent-install`. Until
   then nothing answers on 7136. The Studio's print pages send Omar to the Print Hub meanwhile
   (bikar #379).
-- **In progress: the Studio's side bar, with a light and dark mode** (a bikar PR to come, with
-  its own design note in bikar's features folder). Omar judges it from screenshots before it merges.
+- **Waits on Omar: bikar #380, the Studio's side bar with a light and dark mode.** Built and
+  checked (every bikar check, and the local link check on its build: no new broken link). Omar
+  judges it from the screenshots, then says merge. Three look calls ride with it: the cool grey
+  document pages beside the bar's warm paper in light mode; faint text in dark mode at 4.3:1,
+  under the usual 4.5:1 as it was before; and the editor on a phone, which cuts its code off at
+  the right.
 - **Waits on Omar: calls 2 and 4 before slice 4** (the Yes and Hold buttons in the app), **call 7
   before slice 5**. The calls are in the design's open calls section.
 - **Slice 2B, later:** send the old Print Hub pages to the Studio's, delete them, and move every

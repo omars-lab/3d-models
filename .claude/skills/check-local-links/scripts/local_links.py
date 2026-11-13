@@ -369,6 +369,10 @@ def self_test() -> int:
     assert "AskUserQuestion" in session_start_text(bad)
     # Every site up and clean: silent.
     assert session_start_text(Report(running={"studio": True, "hub": True, "judging": True})) == ""
+    # The Stop hook: a down site alone is a note, a broken page blocks, all clean is silent.
+    assert '"decision"' not in stop_text(down) and "systemMessage" in stop_text(down)
+    assert '"decision": "block"' in stop_text(bad)
+    assert stop_text(Report(running={"studio": True, "hub": True, "judging": True})) == ""
     print("local_links self-test: ok")
     return 0
 
@@ -399,20 +403,28 @@ def stop_hook(a: argparse.Namespace, sites: list[str]) -> int:
     if not edited:
         return 0
     rep = check(sites, a.max_pages, a.timeout, a.workers, a.log)
-    if not any(rep.running.values()):
-        print(json.dumps({"systemMessage": "local-links: no local site was running, so the pages this "
-                          "session changed were not checked."}))
-    elif not real_broken(rep):
-        if down_line(rep):
-            print(json.dumps({"systemMessage": down_line(rep).replace("so not checked", "so the pages "
-                              "this session changed there were not checked")}))
-    else:
-        print(json.dumps({"decision": "block", "reason":
-                          "[local-links] This session changed page files, and the local pages are not "
-                          f"all working:\n{plain(rep, 8)}\n"
-                          "Fix the ones this session caused before handing back, or say in your closing "
-                          f"message which remain and why (full list: {FULL_LIST})."}))
+    text = stop_text(rep)
+    if text:
+        print(text)
     return 0
+
+
+def stop_text(rep: Report) -> str:
+    """What the Stop hook prints after a page edit: a block only for a broken page on a running
+    site, a one-line note when a site is down, nothing when every site runs and is clean."""
+    if not any(rep.running.values()):
+        return json.dumps({"systemMessage": "local-links: no local site was running, so the pages this "
+                           "session changed were not checked."})
+    if real_broken(rep):
+        return json.dumps({"decision": "block", "reason":
+                           "[local-links] This session changed page files, and the local pages are not "
+                           f"all working:\n{plain(rep, 8)}\n"
+                           "Fix the ones this session caused before handing back, or say in your closing "
+                           f"message which remain and why (full list: {FULL_LIST})."})
+    if down_line(rep):
+        return json.dumps({"systemMessage": down_line(rep).replace("so not checked", "so the pages "
+                           "this session changed there were not checked")})
+    return ""
 
 
 def real_broken(rep: Report) -> list[Finding]:
