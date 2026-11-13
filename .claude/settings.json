@@ -21,6 +21,27 @@
             "command": "python3 \"$CLAUDE_PROJECT_DIR/tools/reconstruction_intake.py\" --session 2>/dev/null || true"
           }
         ]
+      },
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/skills/check-local-links/scripts/local_links.py\" --session-start --max-pages 40",
+            "timeout": 180
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/skills/check-local-links/scripts/local_links.py\" --stop --max-pages 80",
+            "timeout": 300
+          }
+        ]
       }
     ],
     "PreToolUse": [

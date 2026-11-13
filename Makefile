@@ -1118,3 +1118,11 @@ validate-decision-evidence:
 # name moves no line the use-case map pins. studio.html: the Lab's old page
 # list, gone since every Lab page carries the top bar (D-130).
 RETIRED_PATHS = studio.html
+
+# Broken links on the local pages Omar opens: the Studio (7136), the Print Hub
+# (4717), the judging pages (8768). Needs the sites running, so it is not part of
+# validate. See .claude/skills/check-local-links/SKILL.md.
+.PHONY: local-links
+local-links:
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/check-local-links/scripts/local_links.py --self-test
+	$(PYTHON) $(ROOT_DIR)/.claude/skills/check-local-links/scripts/local_links.py
