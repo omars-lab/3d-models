@@ -159,7 +159,12 @@ The backlogs stay where they are; this file points at them:
     they show "not reachable" and stay hidden. bikar #376 (merged 2026-11-12) adds page comments
     to the app: `make comments` puts the comment server on 7137 in front of 7136, so the Studio's
     pages take comments before 2B shuts the Print Hub's. Linking the Judge page's bed pins to
-    comment threads is left for later. Then 2B, after one real
+    comment threads is left for later. Slice 3 moved five Print Hub pages into the Studio's Print
+    menu, read-only and reading through the same forward: bikar #377 (merged 2026-11-12) the
+    plates list and one plate page, and bikar #378 the printer page (status and print records
+    only, never a command to the printer), the printed plates gallery and the print words page
+    (the hub's vocabulary page). Each was checked in a browser at 1280 and 390 px against a
+    scratch Print Hub with saving off, and with it stopped. Then 2B, after one real
     judging reaches its PR through the new page: redirects, deletions, callers. Slices 4 and 5
     wait on calls 2, 4 and 7 (D5 to D7).
     The launcher repo (`~/Workspace/git/hubs`) is not to be touched.
