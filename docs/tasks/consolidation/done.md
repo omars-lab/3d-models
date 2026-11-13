@@ -2,6 +2,9 @@
 
 Newest first: date, what was merged or cleaned up, PRs. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-11-13 — The Studio's side bar links to the Naqsh design hub (coffee-house-storefront, `http://127.0.0.1:9494/`): a "Naqsh designs" row under Check, opening in a new tab. This is the Studio's half of Omar's "linked, for now" call, recorded in the storefront's hub-unification design doc; the storefront's pattern pages now open the Studio editor at `/editor#<file name>` (bikar #381, design note in bikar's `docs/features/studio-sidebar.md`)
+- 2026-11-13 — The always-on Studio app is merged: the Studio's built pages served on 7136 by a launch agent, with print requests passed on to the Print Hub on 4717. Its conflict with main's comment-server target was worked by hand, keeping both (bikar #374). What is left is Omar loading the launch agent once (`make app-agent-install`)
+- 2026-11-13 — The Studio's side bar with a light and dark switch replaced the top bar: Make, Study and Print groups, a line, then the other apps; folds to icons; a drawer on a phone (bikar #380, design `docs/features/studio-sidebar.md` in bikar). Merged by Omar
 - 2026-11-13 — The local link check no longer asks Omar every session about a site that is only not running. Until the always-on Studio runs, the Studio is down on this Mac every session, so a down site now gets one quiet line; only a broken page on a running site asks at session start or stops the session at the end (3d-models #1038)
 - 2026-11-13 — A Studio print page that can't reach its data now offers its Print Hub page first, keeping the plate in the link, and the top bar's Print menu points at the Print Hub when the print data is not reachable. This covers the gap until the always-on app runs (bikar #379, design `docs/features/print-pages-fallback.md` in bikar)
 
