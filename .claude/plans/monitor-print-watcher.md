@@ -156,7 +156,10 @@ The backlogs stay where they are; this file points at them:
     (`docs/raid.md` T1). Checked by serving the real build against a stand-in hub. 2A's second
     PR (#375, merged 2026-11-12) is the Judge and Waiting pages, plus a top bar fix: opening
     one menu closes the other. Both pages read through #374's forward, so until #374 merges
-    they show "not reachable" and stay hidden. Then 2B, after one real
+    they show "not reachable" and stay hidden. bikar #376 (merged 2026-11-12) adds page comments
+    to the app: `make comments` puts the comment server on 7137 in front of 7136, so the Studio's
+    pages take comments before 2B shuts the Print Hub's. Linking the Judge page's bed pins to
+    comment threads is left for later. Then 2B, after one real
     judging reaches its PR through the new page: redirects, deletions, callers. Slices 4 and 5
     wait on calls 2, 4 and 7 (D5 to D7).
     The launcher repo (`~/Workspace/git/hubs`) is not to be touched.
