@@ -16,7 +16,10 @@ Print Hub's pages into the bikar Studio. The active items are in the monitor-pri
 task list; these wait on Omar or come after them.
 
 - **Waits on Omar: merge bikar #374**, the always-on app, then run `make app-agent-install`. Until
-  then nothing answers on 7136, and every Studio print page says "can't be reached".
+  then nothing answers on 7136. The Studio's print pages send Omar to the Print Hub meanwhile
+  (bikar #379).
+- **In progress: the Studio's side bar, with a light and dark mode** (a bikar PR to come, with
+  its own design note in bikar's features folder). Omar judges it from screenshots before it merges.
 - **Waits on Omar: calls 2 and 4 before slice 4** (the Yes and Hold buttons in the app), **call 7
   before slice 5**. The calls are in the design's open calls section.
 - **Slice 2B, later:** send the old Print Hub pages to the Studio's, delete them, and move every
