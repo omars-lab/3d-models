@@ -9,6 +9,24 @@ another session is still using, a trap that needs a fix in its own PR.
 
 ## Open
 
+### One app: what waits on Omar or comes later (2026-11-13)
+
+The one-app work (design `docs/design/process/users-and-surfaces-design.md`, D-130) moves the
+Print Hub's pages into the bikar Studio. The active items are in the monitor-print-watcher session's
+task list; these wait on Omar or come after them.
+
+- **Waits on Omar: merge bikar #374**, the always-on app, then run `make app-agent-install`. Until
+  then nothing answers on 7136, and every Studio print page says "can't be reached".
+- **Waits on Omar: calls 2 and 4 before slice 4** (the Yes and Hold buttons in the app), **call 7
+  before slice 5**. The calls are in the design's open calls section.
+- **Slice 2B, later:** send the old Print Hub pages to the Studio's, delete them, and move every
+  caller. Starts only after Omar judges one real plate on the Studio's Judge page.
+- **Later:** link the Judge page's pins on the bed picture to page comment threads.
+- **Waits on Omar: sync the plugin marketplace to public GitHub** (167 commits behind on
+  2026-11-12). Pushing public is his call.
+- **Printing calls (cables-1, closeout-1, toys-1)** belong to the plates-and-feedback session; they
+  are listed in its plan, `.claude/plans/plates-and-feedback.md`.
+
 Last full pass 2026-10-27; state in the
 [`branch-state-across-repos`](../../../.claude/memory/branch-state-across-repos.md) memory.
 
