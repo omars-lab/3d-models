@@ -27,11 +27,12 @@ What counts as broken:
 
 Modes:
 - default: print a plain report, exit 1 when something is broken, 2 when nothing could be checked;
-- ``--session-start``: the SessionStart hook. Prints nothing when every running site is clean,
-  one line when it could not check, and otherwise the count with an instruction to ask Omar;
+- ``--session-start``: the SessionStart hook. Prints nothing when every site runs and is clean,
+  one quiet line when a site is only not running, and the count with an instruction to ask Omar
+  only when a running site has a broken page;
 - ``--stop``: the Stop hook. Reads the hook's JSON on stdin and runs only when the session edited
   a page file (bikar ``packages/web`` or ``packages/lab``, the hub's ``web/``) since the last time
-  it ran; then blocks the stop once with the count.
+  it ran; then blocks the stop once with the count when a running site has a broken page.
 - ``--self-test``: checks the link and transcript readers against fixtures.
 
 Every run logs ``ev=`` lines to ``--log`` (default ``$TMPDIR/local-links/run.log``).
@@ -357,6 +358,17 @@ def self_test() -> int:
         t.write_text(json.dumps(other) + "\n" + json.dumps(edit) + "\n" + json.dumps(other) + "\n")
         assert edited_pages_since(t, 0) == (True, 3)
         assert edited_pages_since(t, 2) == (False, 3)
+    # A down Studio alone: one quiet line, no question.
+    down = Report(running={"studio": False, "hub": True, "judging": True},
+                  findings=[Finding("down-site", "http://127.0.0.1:7136/judge", "http://127.0.0.1:4717/")])
+    text = session_start_text(down)
+    assert text.startswith("[local-links] Not running") and "AskUserQuestion" not in text, text
+    # A broken page on a running site still asks, even with the Studio down.
+    bad = Report(running=dict(down.running), findings=down.findings +
+                 [Finding("status", "http://127.0.0.1:4717/x", "http://127.0.0.1:4717/", "404")])
+    assert "AskUserQuestion" in session_start_text(bad)
+    # Every site up and clean: silent.
+    assert session_start_text(Report(running={"studio": True, "hub": True, "judging": True})) == ""
     print("local_links self-test: ok")
     return 0
 
@@ -390,7 +402,11 @@ def stop_hook(a: argparse.Namespace, sites: list[str]) -> int:
     if not any(rep.running.values()):
         print(json.dumps({"systemMessage": "local-links: no local site was running, so the pages this "
                           "session changed were not checked."}))
-    elif rep.broken or not all(rep.running.values()):
+    elif not real_broken(rep):
+        if down_line(rep):
+            print(json.dumps({"systemMessage": down_line(rep).replace("so not checked", "so the pages "
+                              "this session changed there were not checked")}))
+    else:
         print(json.dumps({"decision": "block", "reason":
                           "[local-links] This session changed page files, and the local pages are not "
                           f"all working:\n{plain(rep, 8)}\n"
@@ -399,16 +415,35 @@ def stop_hook(a: argparse.Namespace, sites: list[str]) -> int:
     return 0
 
 
-def session_start(rep: Report) -> int:
-    """The SessionStart hook: quiet when clean, one line when it could not check, else ask Omar."""
+def real_broken(rep: Report) -> list[Finding]:
+    """Broken pages on a running site. A site that is only not running is not one: that is a fact about
+    this Mac (the always-on Studio waits on bikar #374), and asking about it every session is noise."""
+    return [f for f in rep.findings if f.kind != "down-site"]
+
+
+def down_line(rep: Report) -> str:
+    down = [SITE_WORDS[n] for n, r in rep.running.items() if not r]
+    return f"[local-links] Not running, so not checked: {'; '.join(down)}." if down else ""
+
+
+def session_start_text(rep: Report) -> str:
+    """What the SessionStart hook prints: nothing when clean, one quiet line per down site, and a
+    question for Omar only when a running site has broken pages."""
     if not any(rep.running.values()):
-        print("[local-links] Could not check the local pages: none of the Studio (7136), the Print Hub "
-              "(4717) or the judging pages (8768) is running.")
-    elif rep.broken or not all(rep.running.values()):
-        print("[local-links] The local pages Omar opens have problems right now:\n" + plain(rep, 8) +
-              "\nBefore other work, ask Omar with AskUserQuestion whether to fix these this session or "
-              "not this session. Give each option what it costs and what stays broken. Full list: "
-              + FULL_LIST)
+        return ("[local-links] Could not check the local pages: none of the Studio (7136), the Print Hub "
+                "(4717) or the judging pages (8768) is running.")
+    if real_broken(rep):
+        return ("[local-links] The local pages Omar opens have problems right now:\n" + plain(rep, 8) +
+                "\nBefore other work, ask Omar with AskUserQuestion whether to fix these this session or "
+                "not this session. Give each option what it costs and what stays broken. Full list: "
+                + FULL_LIST)
+    return down_line(rep)
+
+
+def session_start(rep: Report) -> int:
+    text = session_start_text(rep)
+    if text:
+        print(text)
     return 0
 
 
