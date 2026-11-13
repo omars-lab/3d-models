@@ -44,7 +44,7 @@ Only GETs are sent and nothing is clicked. Every write on these pages sits behin
 | When | What it does | Silent when |
 |---|---|---|
 | Session start (hook) | Checks all three sites. A site that is only not running gets one quiet line naming it, with no question. A broken page on a running site prints the count and tells Claude to ask Omar whether to fix it this session | every site runs and is clean |
-| Session end (Stop hook) | Only when this session edited a page file (bikar `packages/web` or `packages/lab`, the hub's `web/`) since it last ran. Blocks the stop once with the count when a running site has a broken page; a down site only gets a one-line note | no page file was edited, or nothing is broken |
+| Session end (Stop hook) | Only when this session edited a page file (bikar `packages/web` or `packages/lab`, the hub's `web/`) since it last ran. Blocks the stop once with the count when a running site has a broken page; a down site only gets a one-line note | no page file was edited, or every site runs and is clean |
 | By hand | The full list | — |
 
 When none of the three sites is running, the session-start check says it could not check rather
