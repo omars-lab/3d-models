@@ -2,6 +2,9 @@
 
 Newest first: date, what was merged or cleaned up, PRs. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-11-13 — The local link check no longer asks Omar every session about a site that is only not running. Until the always-on Studio runs, the Studio is down on this Mac every session, so a down site now gets one quiet line; only a broken page on a running site asks at session start or stops the session at the end (3d-models #1038)
+- 2026-11-13 — A Studio print page that can't reach its data now offers its Print Hub page first, keeping the plate in the link, and the top bar's Print menu points at the Print Hub when the print data is not reachable. This covers the gap until the always-on app runs (bikar #379, design `docs/features/print-pages-fallback.md` in bikar)
+
 - 2026-11-13 — A check that opens the local pages and counts broken links, after Omar found the Studio's print pages showing "can't be reached" by hand. It follows every link between the Studio (7136), the Print Hub (4717) and the judging pages (8768), opens the Studio and Print Hub pages in a hidden Chrome, and counts pages that fail, pages that show the "can't be reached" sentence, and links into a site that is down. It runs at session start and, after a session that changed page files, at session end. Skill `check-local-links`, design `docs/design/process/local-link-check-design.md`, `make local-links` (3d-models #1036)
 - 2026-11-12 — One app, slice 3: five more Print Hub pages readable in the Studio, read-only: the plates list and one plate's page (bikar #377), the printer, printed plates and print words pages (bikar #378). Plan updated in 3d-models #1035
 - 2026-11-12 — Page comments on the Studio's always-on app: `make comments` starts a comment server on 7137 in front of the app on 7136; threads saved in `.page-comments/threads/`, screenshots in iCloud (bikar #376). Retro note `docs/retros/2026-11-12-one-app-judge-page.md` (3d-models #1034)
