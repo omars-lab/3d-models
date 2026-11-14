@@ -19,6 +19,14 @@ plate, then anything you can't see before sending, then config ergonomics.
    per print, and nothing more. Packing by hand has come up once (sheets-04d, rows), so per
    the [skill precedent](../../design/process/dsl-extension-skill-evaluation.md) a second plate
    that wants packing comes before the skill. Session task board, 2026-10-03.
+2. **Bring the live gallery's Lab pages up to date.** The gallery was last deployed on
+   2026-11-12 (gh-pages from master 6a0b28e5) with the Lab pages built from bikar 702fab93.
+   Four bikar Lab changes have merged since (#375, #379, #380 and #381), the side bar with its
+   light and dark switch among them, so public visitors still see the old top bar. Nothing in
+   3d-models' own gallery files has changed since. The public build of the side bar leaves out
+   the links to pages that run only on Omar's Mac (the side bar's file in bikar's Lab, appbar.ts, under
+   "The public gallery"), but look at the built pages at 1280 and 390 px before `make deploy`, since a
+   deploy is published. Found 2026-11-13.
 
 ## Waiting on Omar
 
