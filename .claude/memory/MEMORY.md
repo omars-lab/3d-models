@@ -26,7 +26,7 @@
 - [Studio folder store](studio-folder-store.md) — root is an absent key never `''`; `.folders.json` is a three-state dev-only overlay; a folder is a label
 - [d3 integration decisions](d3-integration-decisions.md) — Q-HOME/Q-SHELL/Q-VOCAB/Q-DATA settled; the ring is the join key, two id namespaces, join lives in the overlay
 - [Rosette explorer findings](rosette-explorer-findings.md) — run the real kernel, measure roster preconditions per entry, param bleed throws, plates are data, cap keeps the thickest wall
-- [Branch state across repos](branch-state-across-repos.md) — branch and worktree inventory across repos, last re-verified 2026-11-03 (every PR merged, bikar clear); read it with `branch_inventory.py inventory --commands`; what is left for Omar
+- [Branch state across repos](branch-state-across-repos.md) — branch and worktree inventory across repos, last re-verified 2026-11-13 (3d-models and bikar cleaned, the rest inventoried; hifth still Omar's); read it with `branch_inventory.py inventory --commands`; what is left for Omar
 - [Owner-gated and on hold](owner-gated-and-on-hold.md) — Omar's: `print send --yes` per send, resume/stop, `schema-v*` publish, Cloudflare/GHCR, `options set` (bar `for-bed`, D-108); past send errors
 - [Omar's working preferences](omar-working-preferences.md) — decides via options, faithful over safe, deliverables before polish, PR everything, delete merged branches, memory holds facts not to-dos
 - [Plain reports by problem](plain-reports-by-problem.md) — Omar 2026-09-30: one section per problem, the problem as the header, a summary paragraph then a detail paragraph, plain words, ids only in a "yours to do" list at the end
