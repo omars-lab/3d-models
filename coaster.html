@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
+<script>(function(){var d=document.documentElement,p,f;try{p=localStorage.getItem('bikar-theme');f=localStorage.getItem('bikar-appbar-folded')}catch(e){}if(p!=='light'&&p!=='dark')p='auto';d.setAttribute('data-theme-pref',p);if(!d.hasAttribute('data-theme-locked')){if(p==='auto')d.removeAttribute('data-theme');else d.setAttribute('data-theme',p)}if(f==='1')d.setAttribute('data-appbar-folded','')})();</script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Served by the studio at /coaster once `scripts/vendor-labs.mjs` copies
@@ -16,17 +17,17 @@
       name="description"
       content="Tune a 3D-printable rosette coaster with sliders — the structural CV validators run live beside the mesh gate, each showing the measured number against the print floor it is held to."
     />
-    <script type="module" crossorigin src="./assets/coaster-BFrf-SFt.js"></script>
+    <script type="module" crossorigin src="./assets/coaster-syUk00MP.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/dist-mJ8zgY4k.js">
-    <link rel="modulepreload" crossorigin href="./assets/style-kQt_Z09B.js">
+    <link rel="modulepreload" crossorigin href="./assets/style-DzCesTNH.js">
     <link rel="modulepreload" crossorigin href="./assets/modulepreload-polyfill-DfS4ul37.js">
     <link rel="modulepreload" crossorigin href="./assets/dom-B98cRdtB.js">
     <link rel="modulepreload" crossorigin href="./assets/worker-host-BX_xi83R.js">
-    <link rel="stylesheet" crossorigin href="./assets/style-CZwYABcV.css">
-    <link rel="stylesheet" crossorigin href="./assets/coaster-DyVeGlfO.css">
+    <link rel="stylesheet" crossorigin href="./assets/style-Bwx-9qHx.css">
+    <link rel="stylesheet" crossorigin href="./assets/coaster-DdbSsc5v.css">
   </head>
   <body>
-    <!-- The one top bar, filled in at build time (src/topbar.ts). -->
+    <!-- The one side bar, filled in at build time (src/appbar.ts). -->
     <style>/*
  * The app's one set of style tokens: the gold-on-ink look the Studio has had
  * since the start, and the one-app design's mockup uses (3d-models
@@ -37,48 +38,216 @@
  * background, while `design/tokens.css` uses `--ink` for body text. A shared
  * `--ink` would turn one of them unreadable.
  *
- * Read by: the top bar on every page (inlined with it at build time, so it is
+ * Read by: the side bar on every page (inlined with it at build time, so it is
  * there on a page whose own stylesheet never loads), and `packages/web`'s
  * `styles.css`, whose own names point here instead of carrying a second copy.
  * The Lab pages' own palettes (`style.css`, `design/tokens.css`) move onto
  * these names page by page; until a page has, it keeps its own look under the
  * shared bar.
+ *
+ * Two sets, dark and light, in the pattern `design/tokens.css` and the decomp,
+ * orb-instrument and rosette-explorer pages already follow: dark on `:root`
+ * (what the Studio has always been, and what a browser with no color-scheme
+ * support gets), light under `prefers-color-scheme: light`, and both again
+ * under `:root[data-theme='light'|'dark']`, so the side bar's Auto / Light /
+ * Dark switch beats the system's choice either way. The switch sets
+ * `data-theme` before the first paint (`src/appbar.ts`). Nothing is colored
+ * inside the media query, only the names are set, or the switch would have
+ * nothing to override.
+ *
+ * The light set is warm paper with a darker gold. `tests/theme-tokens.test.ts`
+ * holds its gold, text and dim text to 4.5:1 against the page and panel
+ * backgrounds, and the dark set's gold and text too, so a retune that loses
+ * contrast fails. (The dark dim text, #7a7468, is 4.3:1 on the ink and was so
+ * before the light set came; it is left as it was.)
  */
 :root {
   --app-gold: #c9a84c;
   --app-gold-light: #e8c97a;
   --app-gold-dim: #6a5520;
+  /* The current page's faint background on the side bar. */
+  --app-gold-soft: rgba(201, 168, 76, 0.14);
   --app-blue: #4a9eff;
   --app-blue-dim: #1e4a80;
   --app-ink: #080810;
   --app-ink-mid: #0f0f1a;
   --app-ink-panel: #0c0c18;
+  /* Hairlines: the side bar's edge, its divider, card borders. */
+  --app-line: #2a2a3a;
   --app-text: #ede8d8;
   --app-text-dim: #7a7468;
   --app-green: #4caf7a;
   --app-red: #f85149;
+  /* A shadow under a panel that floats over the page. */
+  --app-shadow: rgba(0, 0, 0, 0.45);
+  --app-scrim: rgba(0, 0, 0, 0.55);
+  color-scheme: dark;
   --app-mono: 'Fira Code', 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
   --app-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-.appbar{display:flex;flex-wrap:wrap;align-items:center;gap:2px 4px;padding:6px 16px;
-  background:var(--app-ink);border-bottom:1px solid var(--app-gold-dim);
-  font:500 14px/1.2 var(--app-sans);position:relative;z-index:50}
-.appbar a,.appbar summary{color:var(--app-text);text-decoration:none;padding:6px 10px;border-radius:6px;
-  cursor:pointer;white-space:nowrap}
-.appbar a:hover,.appbar summary:hover{background:var(--app-ink-panel);color:var(--app-gold-light)}
-.appbar a:focus-visible,.appbar summary:focus-visible{outline:2px solid var(--app-gold);outline-offset:1px}
-.appbar .appbar-brand{color:var(--app-gold);font-weight:700;letter-spacing:.02em;margin-right:8px}
-.appbar .appbar-here,.appbar [aria-current="page"]{color:var(--app-gold)}
-.appbar-menu{position:relative}
-.appbar-menu summary{list-style:none}
-.appbar-menu summary::-webkit-details-marker{display:none}
-.appbar-menu summary::after{content:" ▾";color:var(--app-text-dim)}
-.appbar-menu ul{position:absolute;left:0;top:100%;margin:4px 0 0;padding:6px;list-style:none;min-width:200px;
-  background:var(--app-ink-panel);border:1px solid var(--app-gold-dim);border-radius:8px;
-  box-shadow:0 8px 24px rgba(0,0,0,.45)}
-.appbar-menu ul a{display:block}
-</style><nav class="appbar" aria-label="Site"><a href="./index.html" class="appbar-brand">Gallery</a><details class="appbar-menu"><summary class="appbar-here">Design</summary><ul><li><a href="./lab.html">Orb Lab</a></li><li><a href="./lego.html">Lego Lab</a></li><li><a href="./breakdown.html">Orb breakdown</a></li><li><a href="./design.html">Design notes</a></li><li><a href="./coaster.html" aria-current="page">Coaster Lab</a></li></ul></details><a href="./prints.html">Print</a></nav>
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    --app-gold: #7a5f12;
+    --app-gold-light: #5c460c;
+    --app-gold-dim: #cdb77a;
+    --app-gold-soft: rgba(122, 95, 18, 0.12);
+    --app-blue: #1f5fbf;
+    --app-blue-dim: #b9cdee;
+    --app-ink: #f6f1e4;
+    --app-ink-mid: #ece4d0;
+    --app-ink-panel: #fffcf4;
+    --app-line: #d9cfb6;
+    --app-text: #1f1b14;
+    --app-text-dim: #5f584b;
+    --app-green: #276b43;
+    --app-red: #b3261e;
+    --app-shadow: rgba(60, 45, 10, 0.18);
+    --app-scrim: rgba(31, 27, 20, 0.4);
+    color-scheme: light;
+  }
+}
+
+:root[data-theme='dark'] {
+  --app-gold: #c9a84c;
+  --app-gold-light: #e8c97a;
+  --app-gold-dim: #6a5520;
+  /* The current page's faint background on the side bar. */
+  --app-gold-soft: rgba(201, 168, 76, 0.14);
+  --app-blue: #4a9eff;
+  --app-blue-dim: #1e4a80;
+  --app-ink: #080810;
+  --app-ink-mid: #0f0f1a;
+  --app-ink-panel: #0c0c18;
+  /* Hairlines: the side bar's edge, its divider, card borders. */
+  --app-line: #2a2a3a;
+  --app-text: #ede8d8;
+  --app-text-dim: #7a7468;
+  --app-green: #4caf7a;
+  --app-red: #f85149;
+  /* A shadow under a panel that floats over the page. */
+  --app-shadow: rgba(0, 0, 0, 0.45);
+  --app-scrim: rgba(0, 0, 0, 0.55);
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --app-gold: #7a5f12;
+  --app-gold-light: #5c460c;
+  --app-gold-dim: #cdb77a;
+  --app-gold-soft: rgba(122, 95, 18, 0.12);
+  --app-blue: #1f5fbf;
+  --app-blue-dim: #b9cdee;
+  --app-ink: #f6f1e4;
+  --app-ink-mid: #ece4d0;
+  --app-ink-panel: #fffcf4;
+  --app-line: #d9cfb6;
+  --app-text: #1f1b14;
+  --app-text-dim: #5f584b;
+  --app-green: #276b43;
+  --app-red: #b3261e;
+  --app-shadow: rgba(60, 45, 10, 0.18);
+  --app-scrim: rgba(31, 27, 20, 0.4);
+  color-scheme: light;
+}
+
+:root{--appbar-w:240px;--appbar-top:0px}
+:root:is([data-appbar-folded],:has(#appbar-fold:checked)){--appbar-w:64px}
+body{padding-left:var(--appbar-w)}
+.appbar-fold-box{position:fixed;top:0;left:0;width:1px;height:1px;margin:0;opacity:0;pointer-events:none}
+.appbar-strip{display:none}
+.appbar,.appbar *{box-sizing:border-box}
+.appbar{position:fixed;inset:0 auto 0 0;z-index:1000;display:flex;flex-direction:column;width:var(--appbar-w);
+  height:100vh;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;
+  border-right:1px solid var(--app-line);background:var(--app-ink);color:var(--app-text);
+  font:500 14px/1.2 var(--app-sans);overflow:visible;text-align:left}
+.appbar-head{display:flex;align-items:center;flex:none;height:56px;border-bottom:1px solid var(--app-line)}
+.appbar-nav{flex:1 1 auto;min-height:0;overflow-x:hidden;overflow-y:auto;padding:6px 0}
+.appbar-foot{flex:none;padding:6px 0;border-top:1px solid var(--app-line)}
+.appbar-row{display:flex;align-items:center;gap:12px;width:calc(100% - 16px);min-height:40px;margin:2px 8px;
+  padding:0 12px 0 15px;border:0;border-radius:8px;background:none;color:var(--app-text);font:inherit;
+  text-align:left;text-decoration:none;white-space:nowrap;cursor:pointer;
+  transition:background-color .12s,color .12s}
+.appbar-row[hidden]{display:none}
+.appbar-row:hover{background:var(--app-ink-mid);color:var(--app-gold-light)}
+.appbar-row:focus-visible,.appbar-btn:focus-visible,.appbar-strip-brand:focus-visible,
+.appbar-fold-box:focus-visible~.appbar .appbar-foldbtn{outline:2px solid var(--app-gold);outline-offset:-2px}
+.appbar-icon,.appbar-chev,.appbar-ext{flex:none;display:block}
+.appbar-label{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.appbar-brand{margin:0 8px;font-weight:700;letter-spacing:.02em;color:var(--app-gold)}
+.appbar [aria-current="page"],.appbar-group:not([open])>summary.appbar-here{color:var(--app-gold);
+  background:var(--app-gold-soft);box-shadow:inset 3px 0 0 var(--app-gold)}
+.appbar-group>summary{list-style:none}
+.appbar-group>summary::-webkit-details-marker{display:none}
+.appbar-chev{color:var(--app-text-dim);transition:transform .15s}
+.appbar-group[open]>summary .appbar-chev{transform:rotate(180deg)}
+.appbar-count{flex:none;color:var(--app-text-dim);font-size:12px;font-weight:400}
+.appbar-group:not([open]) .appbar-count::after{content:attr(data-count)}
+.appbar-list{list-style:none;margin:0;padding:0}
+.appbar-sub{padding-left:45px;font-weight:400}
+.appbar-flyhead{display:none}
+.appbar-line{height:0;margin:8px 16px;border:0;border-top:1px solid var(--app-line)}
+.appbar-ext{margin-left:auto;color:var(--app-text-dim)}
+.appbar-theme>[data-pref]{display:none}
+:root[data-theme-pref="auto"] .appbar-theme>[data-pref="auto"],
+:root[data-theme-pref="light"] .appbar-theme>[data-pref="light"],
+:root[data-theme-pref="dark"] .appbar-theme>[data-pref="dark"]{display:block}
+.appbar-theme:disabled{cursor:default;color:var(--app-text-dim)}
+.appbar-fold-open{display:none}
+:root:is([data-appbar-folded],:has(#appbar-fold:checked)) .appbar-fold-open{display:block}
+:root:is([data-appbar-folded],:has(#appbar-fold:checked)) .appbar-fold-shut{display:none}
+.appbar-btn{display:inline-flex;align-items:center;justify-content:center;flex:none;width:44px;height:44px;
+  margin:0;padding:0;border:0;border-radius:8px;background:none;color:var(--app-text);cursor:pointer}
+.appbar-btn:hover{background:var(--app-ink-mid);color:var(--app-gold-light)}
+.appbar-close{display:none}
+@media (min-width:641px){
+  :root:is([data-appbar-folded],:has(#appbar-fold:checked)) .appbar-head .appbar-label,:root:is([data-appbar-folded],:has(#appbar-fold:checked)) .appbar-nav>.appbar-row .appbar-label,
+  :root:is([data-appbar-folded],:has(#appbar-fold:checked)) .appbar-group>summary .appbar-label,:root:is([data-appbar-folded],:has(#appbar-fold:checked)) .appbar-foot .appbar-label{position:absolute;width:1px;height:1px;
+    overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  :root:is([data-appbar-folded],:has(#appbar-fold:checked)) .appbar-chev,:root:is([data-appbar-folded],:has(#appbar-fold:checked)) .appbar-count,:root:is([data-appbar-folded],:has(#appbar-fold:checked)) .appbar-ext{display:none}
+  :root:is([data-appbar-folded],:has(#appbar-fold:checked)) .appbar-nav{overflow:visible}
+  :root:is([data-appbar-folded],:has(#appbar-fold:checked)) .appbar-group{position:relative}
+  :root:is([data-appbar-folded],:has(#appbar-fold:checked)) .appbar-group>.appbar-list{position:absolute;top:0;left:100%;z-index:1;min-width:210px;margin-left:8px;
+    padding:6px 0;background:var(--app-ink-panel);border:1px solid var(--app-line);border-radius:8px;
+    box-shadow:0 8px 24px var(--app-shadow)}
+  :root:is([data-appbar-folded],:has(#appbar-fold:checked)) .appbar-group>.appbar-list::before{content:"";position:absolute;top:0;bottom:0;left:-9px;width:9px}
+  :root:is([data-appbar-folded],:has(#appbar-fold:checked)) .appbar-flyhead{display:block;padding:6px 14px 4px;color:var(--app-text-dim);font-size:11px;
+    font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+  :root:is([data-appbar-folded],:has(#appbar-fold:checked)) .appbar-group>.appbar-list .appbar-sub{padding-left:14px;margin:2px 6px;width:calc(100% - 12px)}
+}
+@media (max-width:640px){
+  :root{--appbar-w:0px;--appbar-top:52px}
+  :root:is([data-appbar-folded],:has(#appbar-fold:checked)){--appbar-w:0px}
+  .appbar-fold-box,.appbar-foldbtn{display:none}
+  .appbar-strip{display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:999;
+    height:52px;padding:0 4px 0 8px;background:var(--app-ink);border-bottom:1px solid var(--app-line);
+    font:700 15px/1.2 var(--app-sans);box-sizing:border-box}
+  .appbar-strip-brand{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 8px;border-radius:8px;
+    color:var(--app-gold);text-decoration:none;letter-spacing:.02em}
+  .appbar{width:min(300px,85vw);transform:translateX(-100%);visibility:hidden;
+    box-shadow:0 0 32px var(--app-shadow);transition:transform .15s ease,visibility 0s linear .15s}
+  .appbar:popover-open{transform:none;visibility:visible;transition:transform .15s ease}
+  .appbar::backdrop{background:var(--app-scrim)}
+  .appbar-head{padding-right:4px}
+  .appbar-brand{flex:1 1 auto;width:auto}
+  .appbar-close{display:inline-flex}
+}
+@media (prefers-reduced-motion:reduce){
+  .appbar,.appbar:popover-open,.appbar-row,.appbar-chev{transition:none}
+}
+</style><input type="checkbox" id="appbar-fold" class="appbar-fold-box" aria-label="Fold the side bar to icons"><div class="appbar-strip"><a href="./index.html" class="appbar-strip-brand"><svg class="appbar-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg><span>Gallery</span></a><button type="button" class="appbar-btn" popovertarget="appbar-side" aria-label="Open the menu"><svg class="appbar-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="4" x2="20" y1="12" y2="12" /><line x1="4" x2="20" y1="6" y2="6" /><line x1="4" x2="20" y1="18" y2="18" /></svg></button></div><aside id="appbar-side" class="appbar" popover aria-label="Side bar"><div class="appbar-head"><a href="./index.html" class="appbar-row appbar-brand" title="Gallery"><svg class="appbar-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg><span class="appbar-label">Gallery</span></a><button type="button" class="appbar-btn appbar-close" popovertarget="appbar-side" popovertargetaction="hide" aria-label="Close the menu"><svg class="appbar-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg></button></div><nav class="appbar-nav" aria-label="Site"><details class="appbar-menu appbar-group" name="appbar-menu" open><summary class="appbar-row appbar-here" title="Make"><svg class="appbar-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m15 12-8.373 8.373a1 1 0 1 1-3-3L12 9" /><path d="m18 15 4-4" /><path d="m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172V7l-2.26-2.26a6 6 0 0 0-4.202-1.756L9 2.96l.92.82A6.18 6.18 0 0 1 12 8.4V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5" /></svg><span class="appbar-label">Make</span><span class="appbar-count" data-count="3"></span><svg class="appbar-chev" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6" /></svg></summary><ul class="appbar-list" aria-label="Make"><li class="appbar-flyhead" aria-hidden="true">Make</li><li><a href="./lab.html" class="appbar-row appbar-sub"><span class="appbar-label">Orb Lab</span></a></li><li><a href="./lego.html" class="appbar-row appbar-sub"><span class="appbar-label">Lego Lab</span></a></li><li><a href="./coaster.html" class="appbar-row appbar-sub" aria-current="page"><span class="appbar-label">Coaster Lab</span></a></li></ul></details><details class="appbar-menu appbar-group" name="appbar-menu"><summary class="appbar-row" title="Study"><svg class="appbar-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m10.065 12.493-6.18 1.318a.934.934 0 0 1-1.108-.702l-.537-2.15a1.07 1.07 0 0 1 .691-1.265l13.504-4.44" /><path d="m13.56 11.747 4.332-.924" /><path d="m16 21-3.105-6.21" /><path d="M16.485 5.94a2 2 0 0 1 1.455-2.425l1.09-.272a1 1 0 0 1 1.212.727l1.515 6.06a1 1 0 0 1-.727 1.213l-1.09.272a2 2 0 0 1-2.425-1.455z" /><path d="m6.158 8.633 1.114 4.456" /><path d="m8 21 3.105-6.21" /><circle cx="12" cy="13" r="2" /></svg><span class="appbar-label">Study</span><span class="appbar-count" data-count="2"></span><svg class="appbar-chev" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6" /></svg></summary><ul class="appbar-list" aria-label="Study"><li class="appbar-flyhead" aria-hidden="true">Study</li><li><a href="./breakdown.html" class="appbar-row appbar-sub"><span class="appbar-label">Orb breakdown</span></a></li><li><a href="./design.html" class="appbar-row appbar-sub"><span class="appbar-label">Design notes</span></a></li></ul></details><a href="./prints.html" class="appbar-row" title="Print"><svg class="appbar-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" /><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65" /><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65" /></svg><span class="appbar-label">Print</span></a></nav><div class="appbar-foot"><button type="button" class="appbar-row appbar-theme" hidden><svg class="appbar-icon" data-pref="auto" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="20" height="14" x="2" y="3" rx="2" /><line x1="8" x2="16" y1="21" y2="21" /><line x1="12" x2="12" y1="17" y2="21" /></svg><span class="appbar-label" data-pref="auto">Colors: Auto</span><svg class="appbar-icon" data-pref="light" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></svg><span class="appbar-label" data-pref="light">Colors: Light</span><svg class="appbar-icon" data-pref="dark" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></svg><span class="appbar-label" data-pref="dark">Colors: Dark</span></button><label for="appbar-fold" class="appbar-row appbar-foldbtn" title="Fold or unfold the side bar"><svg class="appbar-icon appbar-fold-shut" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M9 3v18" /><path d="m16 15-3-3 3-3" /></svg><svg class="appbar-icon appbar-fold-open" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M9 3v18" /><path d="m14 9 3 3-3 3" /></svg><span class="appbar-label">Fold the side bar</span></label></div></aside><script>(function(){var d=document.documentElement,bar=document.getElementById('appbar-side'),box=document.getElementById('appbar-fold');if(!bar||!box)return;
+function keep(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function shut(){bar.querySelectorAll('details[open]').forEach(function(x){x.open=false})}
+function folded(){return box.checked&&window.matchMedia('(min-width: 641px)').matches}
+box.checked=d.hasAttribute('data-appbar-folded');if(box.checked)shut();
+box.addEventListener('change',function(){if(box.checked){d.setAttribute('data-appbar-folded','');shut()}else d.removeAttribute('data-appbar-folded');keep('bikar-appbar-folded',box.checked?'1':'0')});
+var btn=bar.querySelector('.appbar-theme'),order=["auto","light","dark"],names={auto:'Auto',light:'Light',dark:'Dark'};
+function say(){var p=d.getAttribute('data-theme-pref')||'auto',n=order[(order.indexOf(p)+1)%3];
+if(d.hasAttribute('data-theme-locked')){btn.disabled=true;btn.title='This page has one color set for now';btn.setAttribute('aria-label','Colors: this page has one color set for now');return}
+btn.title='Colors: '+names[p]+(p==='auto'?' (follows your system)':'')+'. Press for '+names[n]+'.';btn.setAttribute('aria-label',btn.title)}
+if(btn){btn.hidden=false;say();btn.addEventListener('click',function(){var p=d.getAttribute('data-theme-pref')||'auto',n=order[(order.indexOf(p)+1)%3];d.setAttribute('data-theme-pref',n);if(n==='auto')d.removeAttribute('data-theme');else d.setAttribute('data-theme',n);keep('bikar-theme',n);say()})}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&folded())shut()});
+document.addEventListener('click',function(e){if(folded()&&!bar.contains(e.target))shut()})})();</script>
     <header class="lab-header">
       <h1>Coaster Lab</h1>
       <p class="tagline">
