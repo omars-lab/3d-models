@@ -15,14 +15,15 @@ The one-app work (design `docs/design/process/users-and-surfaces-design.md`, D-1
 Print Hub's pages into the bikar Studio. The active items are in the monitor-print-watcher session's
 task list; these wait on Omar or come after them.
 
-- **Waits on Omar: run `make app-agent-install` once** (in the 3d-models checkout). bikar #374,
-  the always-on app, is merged; until the launch agent is loaded nothing answers on 7136, and the
-  Studio's print pages send Omar to the Print Hub meanwhile (bikar #379).
+- **Waits on Omar: re-run `make -C ~/Workspace/git/bikar app-agent-install` once** after the bikar
+  PR that adds the comment server's launch agent merges. That loads the second agent, so the
+  Comment button (press C) on http://127.0.0.1:7137/ stays up at login beside the app on 7136.
 - **Three look calls on the side bar (bikar #380, merged):** the cool grey document pages beside
   the bar's warm paper in light mode; faint text in dark mode at 4.3:1, under the usual 4.5:1 as it
   was before; and the editor on a phone, which cuts its code off at the right.
-- **Waits on Omar: calls 2 and 4 before slice 4** (the Yes and Hold buttons in the app), **call 7
-  before slice 5**. The calls are in the design's open calls section.
+- **Before slice 5: read the 2026-10-06 calls page back** into the decisions log with
+  `request-feedback`, then close it (call 7, decided 2026-11-16). Slice 4 can start: calls 2 and 4
+  were decided the same day (guards only; one PR per sitting).
 - **Slice 2B, later:** send the old Print Hub pages to the Studio's, delete them, and move every
   caller. Starts only after Omar judges one real plate on the Studio's Judge page.
 - **Later:** link the Judge page's pins on the bed picture to page comment threads.

@@ -744,6 +744,9 @@ changed), and ask this as a real question with pictures before slice 4 starts. T
 the yes something only Omar's finger can give, at the cost of a step on every yes and no yes from
 the phone without its own check.
 
+**Decided 2026-11-16:** guards only for slice 4, no Touch ID. Omar picked "Guards only
+(Recommended)" in the question box (raid log D5).
+
 ### Call 3: where do the order pages go?
 
 D-112 put Plan, Price and Stock in the Print Hub. With its pages moving, **suggested:** pages in the
@@ -754,6 +757,9 @@ reading the iCloud folder) still holds that way, since the server stays where it
 
 A yes counts only once its pull request is merged. **Suggested:** one pull request per sitting, all
 the yeses pressed together, merged by the session that owns plates, as judging answers are today.
+
+**Decided 2026-11-16:** as suggested. Omar picked "One PR per sitting (Recommended)" in the
+question box (raid log D6).
 
 ### Call 5: does the launcher's health check for the Print Hub change?
 
@@ -770,6 +776,9 @@ slice 2 of [Appendix B](#appendix-b-build-order)), so the suggestion is to chang
 
 **Suggested:** read it back with `request-feedback` before slice 5 (design questions in the app),
 then close it, so the first Design questions page does not open on a backlog.
+
+**Decided 2026-11-16:** as suggested. Omar picked "Read it back, then close it (Recommended)" in
+the question box (raid log D7).
 
 ## 13. What this doc is not
 
