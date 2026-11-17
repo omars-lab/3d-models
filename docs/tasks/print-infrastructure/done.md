@@ -2,6 +2,7 @@
 
 Newest first: date, what shipped, PR. Backlog: [`backlog.md`](backlog.md).
 
+- 2026-11-16 — The public gallery's Lab pages are up to date: deployed to gh-pages as 49cec511 from master acd89659, with the Lab built from bikar main 0b909a16, so visitors now get the side bar with its light and dark switch (bikar #375, #379, #380, #381) instead of the old top bar. Before the deploy, the Orb, Coaster, Prints, Design and Breakdown pages were looked at in a browser at 1280 and 390 px: no console errors, and no link to a page that runs only on Omar's Mac
 - 2026-11-09 — The hub's judging page shows the plate named in its address right away, instead of a blank page until the slower list of waiting plates comes back; switching plates quickly by the address now always ends on the last one picked. Checked in a browser at 1280 and 390 px, and on the comments link Omar had found empty (3d-model-hub #34)
 - 2026-11-09 — The hub's judging page lists the plates waiting on Omar under "Pending feedback" and the judged ones under "Completed", with a bar above each question to ask for a reprint (3d-model-hub #33)
 - 2026-11-09 — Plate pages take a note on the whole plate and a reprint request, and the hub's judging page has a box for each; an answers send now waits out slow commit hooks instead of failing (3d-models #981, 3d-model-hub #32)
